@@ -1,8 +1,10 @@
 package de.hdm.itprojektss18.team01.sontact.shared.bo;
 
+import de.hdm.itprojektss18.team01.sontact.shared.bo.BusinessObject;
+
 import java.io.Serializable;
 
-public class Nutzer implements Serializable {
+public class Nutzer extends BusinessObject implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -12,8 +14,8 @@ public class Nutzer implements Serializable {
 	private String emailAddress;
 
 	/**
-	 * Gibt TRUE zurück, wenn ein Nutzer angemeldet ist andernfalls wird FALSE
-	 * zurückgegeben.
+	 * Gibt TRUE zurï¿½ck, wenn ein Nutzer angemeldet ist andernfalls wird FALSE
+	 * zurï¿½ckgegeben.
 	 */
 
 	public boolean isLoggedIn() {

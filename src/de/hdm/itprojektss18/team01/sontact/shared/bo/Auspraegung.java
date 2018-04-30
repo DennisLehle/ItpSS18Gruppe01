@@ -3,6 +3,7 @@ package de.hdm.itprojektss18.team01.sontact.shared.bo;
 /**
  * Realisierung einer exemplarischen Auspraegungsklasse.
  */
+//TODO implements Participation
 public class Auspraegung extends BusinessObject {
 
 	private static final long serialVersionUID = 1L;

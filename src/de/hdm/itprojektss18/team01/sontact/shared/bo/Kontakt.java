@@ -92,4 +92,9 @@ public class Kontakt extends BusinessObject implements Participation {
 		this.berechtigung = berechtigung;
 	}
 
+	@Override
+	public int getOwner() {
+		return ownerId;
+	}
+
 }

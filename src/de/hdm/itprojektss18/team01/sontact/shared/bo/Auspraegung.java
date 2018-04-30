@@ -3,8 +3,8 @@ package de.hdm.itprojektss18.team01.sontact.shared.bo;
 /**
  * Realisierung einer exemplarischen Auspraegungsklasse.
  */
-//TODO implements Participation
-public class Auspraegung extends BusinessObject {
+
+public class Auspraegung extends BusinessObject implements Participation {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -14,6 +14,7 @@ public class Auspraegung extends BusinessObject {
 	private String wert;
 	int eigenschaftId;
 	int kontaktId;
+	private Berechtigung berechtigung;
 	
 	/**
 	 * Getter- und Setter-Methoden zum Setzen und Auslesen der Werte
@@ -41,6 +42,25 @@ public class Auspraegung extends BusinessObject {
 	
 	public void setKontaktId (int kontaktId) {
 		this.kontaktId = kontaktId;
+	}
+
+	@Override
+	public char getObjectType() {
+		return 'a';
+	}
+
+	@Override
+	public Berechtigung getBerechtigung() {
+		return berechtigung;
+	}
+	
+	public void setBerechtigung(Berechtigung berechtigung) {
+		this.berechtigung = berechtigung;
+	}
+	
+	@Override
+	public int getOwner() {
+		return kontaktId; 
 	}
 	
 }

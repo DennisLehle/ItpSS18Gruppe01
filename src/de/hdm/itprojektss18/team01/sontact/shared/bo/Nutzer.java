@@ -9,9 +9,10 @@ public class Nutzer extends BusinessObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private boolean loggedIn = false;
-	private String loginUrl;
-	private String logoutUrl;
-	private String emailAddress;
+	private String loginUrl = "";
+	private String logoutUrl =" ";
+	private String emailAddress ="";
+	private String nickname ="";
 
 	/**
 	 * Gibt TRUE zur�ck, wenn ein Nutzer angemeldet ist andernfalls wird FALSE
@@ -28,7 +29,7 @@ public class Nutzer extends BusinessObject implements Serializable {
 	 * @return loggedIn
 	 */
 
-	public boolean getLoginStatus() {
+	public boolean getLoginIn() {
 		return loggedIn;
 	}
 
@@ -38,7 +39,7 @@ public class Nutzer extends BusinessObject implements Serializable {
 	 * @return loggedIn
 	 */
 
-	public void setLoginStatus(boolean loggedIn) {
+	public void setLoginIn(boolean loggedIn) {
 		this.loggedIn = loggedIn;
 	}
 
@@ -100,5 +101,13 @@ public class Nutzer extends BusinessObject implements Serializable {
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
+	
+	/**
+	 * Setzen des Nicknamens des Google Users.
+	 * @param nickname
+	 */
+	public void setNickname(String nickname) {
+	    this.nickname = nickname;
+	  }
 
 }

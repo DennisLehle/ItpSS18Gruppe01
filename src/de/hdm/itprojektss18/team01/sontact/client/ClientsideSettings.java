@@ -8,6 +8,11 @@ import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorService;
 import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorServiceAsync;
 
+/**
+ * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
+ * 
+ */
+
 public class ClientsideSettings{
   /**
    * Remote Service Proxy zur Verbindungsaufnahme mit dem Server-seitgen Dienst

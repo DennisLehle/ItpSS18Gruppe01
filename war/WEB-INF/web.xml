@@ -27,13 +27,14 @@
   </servlet-mapping>
 
  <servlet>
-    <servlet-name>loginServlet</servlet-name>
+    <servlet-name>loginService</servlet-name>
     <servlet-class>de.hdm.itprojektss18.team01.sontact.server.LoginServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>reportServlet</servlet-name>
+    <servlet-name>loginService</servlet-name>
     <url-pattern>/sontact/login</url-pattern>
+     <url-pattern>/sontact/loginReport</url-pattern>
   </servlet-mapping>
 
 

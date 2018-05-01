@@ -44,11 +44,26 @@ h1 {
 	
 
 }
+.box {
+     float: left;
+     width: 30%;
+     margin-right: 3.33333%;
+     padding: 20px;
+     background: #eee;
+     box-sizing: border-box;
+}
+
 #content {
 	width: 77%;
 	min-height: 500px;
-	float: left;
+	float: right;
 	padding-left: 10px;
+	padding-top: 25px;
+	padding-left: 30px;
+}
+
+#navigator{
+	float: left;
 }
 
 
@@ -69,7 +84,20 @@ h1 {
 .ButtonStyle {
 	color: #125485;
 	text-align: center;
+	border-radius: 10px;
 	font: 
-	
-	
 }
+
+.ButtonStyleSuche {
+	color: #125485;
+	text-align: center;
+	font: 
+}	
+.ButtonStyleKontaktliste{
+	color: #125485;
+	border-radius: 12px;
+	text-align: center;
+	
+	font: 
+}
+

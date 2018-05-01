@@ -44,8 +44,8 @@ public class Sontact implements EntryPoint {
 
 			@Override
 			public void onFailure(Throwable error) {
-				Window.alert("Fehler Login: " + error.toString());
-				
+				//Window.alert("Fehler Login: " + error.toString());
+				start();
 
 			}
 

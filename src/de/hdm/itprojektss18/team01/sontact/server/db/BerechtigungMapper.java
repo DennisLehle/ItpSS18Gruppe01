@@ -1,11 +1,14 @@
 package de.hdm.itprojektss18.team01.sontact.server.db;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import com.google.cloud.sql.jdbc.Statement;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 
 /** 
  * *Die Mapper-Klasse <code>Berechtigung</code> gehört der Datenbankschicht
@@ -197,7 +200,7 @@ public void deleteBerechtigung(Berechtigung b) {
 
 
 /**
- * Erteilt den Befehl ein bestimmtes Berechtigung-Objekt aus der Datenbankzu zu suchen.
+ * Erteilt den Befehl ein bestimmtes Berechtigung-Objekt aus der Datenbank zu suchen.
  * @param b
  * @return void 
  */ 
@@ -237,6 +240,97 @@ public Berechtigung findBerechtigungById(int id) {
 		}
 	return null;
 	}
+
+/**
+ * Ruft einen Liste auf die alle Kontakte aufzeigt die ein Nutzer 
+ * <code>senderId</code> mit anderen Nutzern <code>userId</code> geteilt hat.
+ * @param userId
+ * @param senderId
+ * @param objectType
+ * @param objectId
+ * 
+ * @return
+ */
+
+public Vector<Berechtigung> findAllSharedKontakteWith(int userId, int senderId, int objectId,
+		char objectType){
+	Connection con = DBConnection.connection();
+	Vector<Berechtigung> result = new Vector<Berechtigung>();
+	
+	try{
+		java.sql.Statement stmt = con.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT userId, senderId, objectId, objectType FROM Berechtigung" 
+		+ "WHERE userId=" + userId + "objectType=" + objectType);
+		
+		/**
+		 * Jeder Treffer erzeugt eine neue Instanz als Suchergebnis. 
+		 */
+		while (rs.next()){
+			Berechtigung b = new Berechtigung();
+			b.setUserId(rs.getInt("userId"));
+			b.setObjectType(rs.getChar("objectType"));
+			
+			/**
+			 * Hinzufügen des neuen Objekts zum Ergebnisvektor
+			 */
+			result.addElement(b);
+		}
+	}
+	catch (SQLException e2){
+		e2.printStackTrace();
+	}
+	
+	/**
+	 * Rückgabe des Ergebnisvektors 
+	 */
+	return result;
+}
+
+
+/**
+ * Ruft einen Liste auf die alle Kontakte aufzeigt die ein Nutzer 
+ * <code>userId</code> durch einen anderen Nutzer <code>senderId</code> 
+ * geteilt bekommen hat.
+ * @param userId
+ * @param senderId
+ * @param objectId
+ * @return
+ */
+
+public Vector<Berechtigung> findAllSharedKontakteFrom(int userId, int senderId, int objectId,
+		char objectType){
+	Connection con = DBConnection.connection();
+	Vector<Berechtigung> result = new Vector<Berechtigung>();
+	
+	try{
+		java.sql.Statement stmt = con.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT userId, senderId, objektId, objectType FROM Berechtigung" 
+		+ "WHERE senderId=" + senderId + "objectType=" + objectType);
+		
+		/**
+		 * Jeder Treffer erzeugt eine neue Instanz als Suchergebnis. 
+		 */
+		while (rs.next()){
+			Berechtigung b = new Berechtigung();
+			b.setSenderId(rs.getInt("senderId"));
+			b.getObjectType(rs.getChar("objectType"));
+			
+			/**
+			 * Hinzufügen des neuen Objekts zum Ergebnisvektor
+			 */
+			result.addElement(b);
+		}
+	}
+	catch (SQLException e2){
+		e2.printStackTrace();
+	}
+	
+	/**
+	 * Rückgabe des Ergebnisvektors 
+	 */
+	return result;
+}
+		
 
 }
 	

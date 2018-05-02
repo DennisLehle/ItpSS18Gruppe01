@@ -32,3 +32,16 @@ h1 {
 #closeButton {
   margin: 15px 6px 6px;
 }
+
+#footer {
+	background-color: blue;
+	color: white;
+	font: 'Gotham';
+	font-weight: lighter !important;
+	font-variant: small-caps;
+	letter-spacing: 10px;
+	text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+	clear: both;
+	text-align: center;
+	padding: 5px; 
+}

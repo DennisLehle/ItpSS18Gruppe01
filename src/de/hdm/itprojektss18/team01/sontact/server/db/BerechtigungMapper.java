@@ -148,9 +148,24 @@ public class BerechtigungMapper {
 			 * Benoetigte SQL-Anweisung, die den Datensatz des uebergebenen Objekts 
 			 * in der Datenbank aktualisiert. 
 			 */
-			stmt.executeUpdate("UPDATE berechtigung SET berechtigungsstufe")
-		}
+			stmt.executeUpdate("UPDATE berechtigung SET berechtigungsstufe= " 
+			 + b.getBerechtigungsstufe() + ", senderId= '" + b.getSenderId()
+			 + ", userId= '" + b.getUserId() + ", objectId= '" + b.getObjectId() 
+			 + "WHERE id= " + b.getId());
+			
+			/**
+			 * Bei einem Aufruf des <code>printStackTrace</code> wird gewährleistet, dass
+			 * Fehler konkreter analysiert werden. Dies wird durch die Funktion unterstützt,
+			 * die Informationen über den genauen Fehlerstandort und der Herkunft vermittelt. 
+			 */
+				
+			} catch (SQLException e2) {
+			e2.printStackTrace();
+			}
+			return b;
+			}
+			
 	}
-}
+
 	
 	

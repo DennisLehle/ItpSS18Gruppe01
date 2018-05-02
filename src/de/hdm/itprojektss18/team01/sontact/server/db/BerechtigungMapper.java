@@ -1,6 +1,12 @@
 package de.hdm.itprojektss18.team01.sontact.server.db;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+
+import com.google.cloud.sql.jdbc.ResultSet;
+import com.google.cloud.sql.jdbc.Statement;
+
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 
 /** 
  * *Die Mapper-Klasse <code>Berechtigung</code> gehört der Datenbankschicht
@@ -62,7 +68,7 @@ public class BerechtigungMapper {
 	}
 	
 	/**
-	 * Ein Berechtigung-Objekt der Datenbank hinzufuegen.
+	 * Ein neues Berechtigung-Objekt der Datenbank hinzufuegen.
 	 * 
 	 * @param berechtigung, mit einem zugeteilten <code>enum</code>, dieser die 
 	 * 		  berechtigungsstufe aufweist    
@@ -70,6 +76,49 @@ public class BerechtigungMapper {
 	 * @return Nutzer-Objekt, der eine Berechtigung auf ein Objekt erhält
 	 */
 	
-	
-
+	public Berechtigung insertBerechtigung(Berechtigung b) {
+		/**
+		 * Herstellung einer Datenbankverbindung.
+		 */
+		Connection con = DBConnection.connection();
+		
+		try {
+			/**
+			 * Anlegen eines leeren SQL-Statements, mittels der Java-Datenbankkonektivitaet 
+			 * (JDBC), welches eine Anwendungsprogrammierschnittstelle, die es ermöglicht 
+			 * eine Verbindung zur Datenbank herzustellen.
+			 */
+			Statement stmt = (Statement) con.createStatement();
+			/**
+			 * Abfrage des zuletzt hinzugefügten Primärschlüssels. Hierbei wird die
+			 * aktuelle id um eins erhoeht (+1), um dann das Statement ausfuellen 
+			 * und als Query an die Datenbank zu senden.
+			 */
+			ResultSet rs = stmt.executeQuery("SELECT MAX (id) AS maxid FROM berechtigung");
+			
+			if(rs.next()) {
+				b.setId(rs.getInt("maxid") + 1);
+			}
+			stmt = (Statement) con.createStatement();
+			
+			/**
+			 * SQL-Anweisung zum Einfuegen des neuen Berechtigung-Tupels in die Datenbank.
+			 */
+			stmt.executeUpdate("INSERT INTO b(id, senderId, userId, objectId, objectType)"
+					+ "VALUES ("+b.getId() + ",'"+b.getSenderId() + "', "+b.getObjectId() 
+					+ "', +" +b.getObjectType() + ")");
+			
+		/**
+		 * Bei einem Aufruf des <code>printStackTrace</code> wird gewährleistet, dass
+		 * Fehler konkreter analysiert werden. Dies wird durch die Funktion unterstützt,
+		 * die Informationen über den genauen Fehlerstandort und der Herkunft vermittelt. 
+		 */
+			
+		} catch (SQLException e2) {
+		e2.printStackTrace();
+		}
+		return b;
+		}
 }
+	
+	

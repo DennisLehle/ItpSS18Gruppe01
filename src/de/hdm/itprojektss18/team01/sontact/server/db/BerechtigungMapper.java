@@ -2,11 +2,15 @@ package de.hdm.itprojektss18.team01.sontact.server.db;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import com.google.cloud.sql.jdbc.ResultSet;
 import com.google.cloud.sql.jdbc.Statement;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
+import de.pitchMen.server.db.DBConnection;
+import de.pitchMen.shared.bo.Participation;
 
 /** 
  * *Die Mapper-Klasse <code>Berechtigung</code> gehört der Datenbankschicht
@@ -192,12 +196,50 @@ public void deleteBerechtigung(Berechtigung b) {
 			} catch (SQLException e2) {
 			e2.printStackTrace();
 			}
-			
 			}
+			
 
 
 
-	}
+/**
+ * Erteilt den Befehl ein bestimmtes Berechtigung-Objekt aus der Datenbankzu zu suchen.
+ * @param b
+ * @return void 
+ */ 
+public Berechtigung findBerechtigungById(int id) {
+	Connection con = DBConnection.connection();
 
-	
+	try {
+		java.sql.Statement stmt = con.createStatement();
+		/**
+		 * Benoetigte SQL-Anweisung, die den Datensatz des uebergebenen Objekts 
+		 * in der Datenbank sucht. 
+		 */
+		java.sql.ResultSet rs = stmt.executeQuery("SELECT id, berechtigungsstufe, objectId FROM berechtigung WHERE id=" + id);
+		
+		/**
+		 * Ein bestimmter Primärschlüssel befindet sich nur einmalig als Tupel
+		 * in der Datenbank. Das führt dazu, dass nur eine id zurückgegeben wird.
+		 * Mit der If-Abfrage wird sichergestellt, ob es den Primärschlüssel gibt
+		 *
+		 */
+		if (rs.next()) {
+			Berechtigung b = new Berechtigung();
+			b.setId(rs.getInt("id"));
+			b.setObjectId(rs.getInt("object"));
+			
+			return b;
+		}
+		/**
+		 * Bei einem Aufruf des <code>printStackTrace</code> wird gewährleistet, dass
+		 * Fehler konkreter analysiert werden. Dies wird durch die Funktion unterstützt,
+		 * die Informationen über den genauen Fehlerstandort und der Herkunft vermittelt. 
+		 */
+			
+		} 
+	catch (SQLException e2) {
+		e2.printStackTrace();
+		}
+}
+}
 	

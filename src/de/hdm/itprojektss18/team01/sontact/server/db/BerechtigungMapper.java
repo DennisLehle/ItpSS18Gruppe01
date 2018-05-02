@@ -2,15 +2,10 @@ package de.hdm.itprojektss18.team01.sontact.server.db;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Vector;
 
-import com.google.cloud.sql.jdbc.ResultSet;
 import com.google.cloud.sql.jdbc.Statement;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
-import de.pitchMen.server.db.DBConnection;
-import de.pitchMen.shared.bo.Participation;
 
 /** 
  * *Die Mapper-Klasse <code>Berechtigung</code> gehört der Datenbankschicht
@@ -240,6 +235,7 @@ public Berechtigung findBerechtigungById(int id) {
 	catch (SQLException e2) {
 		e2.printStackTrace();
 		}
+	return null;
 	}
 
 }

@@ -240,6 +240,7 @@ public Berechtigung findBerechtigungById(int id) {
 	catch (SQLException e2) {
 		e2.printStackTrace();
 		}
-}
+	}
+
 }
 	

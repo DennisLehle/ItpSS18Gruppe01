@@ -72,8 +72,9 @@ public class BerechtigungMapper {
 	 * 
 	 * @param berechtigung, mit einem zugeteilten <code>enum</code>, dieser die 
 	 * 		  berechtigungsstufe aufweist    
-	 * @param objekt, das ausgewählte BusinessObjekt, welches einem Nutzer zugewiesen wird. 
-	 * @return Nutzer-Objekt, der eine Berechtigung auf ein Objekt erhält
+	 * @param sender, der Nutzer als Sender
+	 * @param nutzer, der Nutzer als Empfaenger  
+	 * @return b, hinzugefügtes Berechtigung-Objekt.
 	 */
 	
 	public Berechtigung insertBerechtigung(Berechtigung b) {
@@ -84,29 +85,41 @@ public class BerechtigungMapper {
 		
 		try {
 			/**
-			 * Anlegen eines leeren SQL-Statements, mittels der Java-Datenbankkonektivitaet 
+			 * Anlegen eines leeren SQL-Statements, mittels der Java-Datenbankkonnektivitaet 
 			 * (JDBC), welches eine Anwendungsprogrammierschnittstelle, die es ermöglicht 
 			 * eine Verbindung zur Datenbank herzustellen.
 			 */
-			Statement stmt = (Statement) con.createStatement();
+			java.sql.Statement stmt = con.createStatement();
+			java.sql.Statement stmtSender =  con.createStatement();
+			java.sql.Statement stmtUser =  con.createStatement();
 			/**
 			 * Abfrage des zuletzt hinzugefügten Primärschlüssels. Hierbei wird die
 			 * aktuelle id um eins erhoeht (+1), um dann das Statement ausfuellen 
 			 * und als Query an die Datenbank zu senden.
 			 */
-			ResultSet rs = stmt.executeQuery("SELECT MAX (id) AS maxid FROM berechtigung");
+			java.sql.ResultSet rs = stmt.executeQuery("SELECT MAX (id) AS maxid FROM berechtigung");
 			
 			if(rs.next()) {
 				b.setId(rs.getInt("maxid") + 1);
 			}
 			stmt = (Statement) con.createStatement();
-			
+			stmtSender =  con.createStatement();
+			stmtUser = con.createStatement();
+						
 			/**
 			 * SQL-Anweisung zum Einfuegen des neuen Berechtigung-Tupels in die Datenbank.
 			 */
-			stmt.executeUpdate("INSERT INTO b(id, senderId, userId, objectId, objectType)"
+			stmt.executeUpdate("INSERT INTO berechtigung(id, senderId, userId, objectId, objectType, berechtigungsstufe)"
 					+ "VALUES ("+b.getId() + ",'"+b.getSenderId() + "', "+b.getObjectId() 
-					+ "', +" +b.getObjectType() + ")");
+					+ "', +" +b.getObjectType() + "', " +b.getBerechtigungsstufe() + ")");
+			
+			stmtSender.executeUpdate("INSERT INTO sender_berechtigungsobjekt(id, senderId, objectId, objectType, berechtigungsstufe)"
+					+ "VALUES ("+b.getId() + ",'"+b.getSenderId() + "', "+b.getObjectId() 
+					+ "', +" +b.getObjectType() + "', " +b.getBerechtigungsstufe() + ")");
+			
+			stmtUser.executeUpdate("INSERT INTO user_berechtigungsobjekt(id, userId, objectId, objectType, berechtigungsstufe)"
+					+ "VALUES ("+b.getId() + ",'"+b.getSenderId() + "', "+b.getObjectId() 
+					+ "', +" +b.getObjectType() + "', " +b.getBerechtigungsstufe() + ")");
 			
 		/**
 		 * Bei einem Aufruf des <code>printStackTrace</code> wird gewährleistet, dass
@@ -119,6 +132,25 @@ public class BerechtigungMapper {
 		}
 		return b;
 		}
+	/**
+	 * Aktualisiert ein Berechtigung-Objekt in der Datenbank. 
+	 * 
+	 * @param berechtigung
+	 * @return b 
+	 */
+	public Berechtigung saveBerechtigung(Berechtigung b) {
+		
+		Connection con = DBConnection.connection();
+		
+		try {
+			Statement stmt = con.createStatement();
+			/**
+			 * Benoetigte SQL-Anweisung, die den Datensatz des uebergebenen Objekts 
+			 * in der Datenbank aktualisiert. 
+			 */
+			stmt.executeUpdate("UPDATE berechtigung SET berechtigungsstufe")
+		}
+	}
 }
 	
 	

@@ -76,7 +76,7 @@ public class Berechtigung extends BusinessObject {
 		this.objectId = objectId;
 	}
 	
-	public char getObjectTyoe() {
+	public char getObjectType() {
 		return objectType;
 	}
 	public void setObjectType(char objectType) {

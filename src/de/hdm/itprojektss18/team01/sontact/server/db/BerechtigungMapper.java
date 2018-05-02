@@ -136,14 +136,14 @@ public class BerechtigungMapper {
 	 * Aktualisiert ein Berechtigung-Objekt in der Datenbank. 
 	 * 
 	 * @param berechtigung
-	 * @return b 
+	 * @return berechtigung
 	 */
-	public Berechtigung saveBerechtigung(Berechtigung b) {
+	public Berechtigung updateBerechtigung(Berechtigung b) {
 		
 		Connection con = DBConnection.connection();
 		
 		try {
-			Statement stmt = con.createStatement();
+			java.sql.Statement stmt = con.createStatement();
 			/**
 			 * Benoetigte SQL-Anweisung, die den Datensatz des uebergebenen Objekts 
 			 * in der Datenbank aktualisiert. 
@@ -164,7 +164,39 @@ public class BerechtigungMapper {
 			}
 			return b;
 			}
+	
+	/**
+	 * Erteilt den Befehl ein Berechtigung-Objekt aus der Datenbankzu löschen.
+	 * @param b
+	 * @return void 
+	 */ 
+
+public void deleteBerechtigung(Berechtigung b) {
+		
+		Connection con = DBConnection.connection();
+		
+		try {
+			java.sql.Statement stmt = con.createStatement();
+			/**
+			 * Benoetigte SQL-Anweisung, die den Datensatz des uebergebenen Objekts 
+			 * in der Datenbank löscht. 
+			 */
+			stmt.executeUpdate("DELETE FROM berechtigung WHERE id=" + b.getId());
 			
+			/**
+			 * Bei einem Aufruf des <code>printStackTrace</code> wird gewährleistet, dass
+			 * Fehler konkreter analysiert werden. Dies wird durch die Funktion unterstützt,
+			 * die Informationen über den genauen Fehlerstandort und der Herkunft vermittelt. 
+			 */
+				
+			} catch (SQLException e2) {
+			e2.printStackTrace();
+			}
+			
+			}
+
+
+
 	}
 
 	

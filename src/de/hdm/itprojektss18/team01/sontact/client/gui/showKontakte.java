@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class showKontakte {
 
-	private Button createKontaktBtn = new Button("Kontakt ertellen");
+	private Button createKontaktBtn = new Button("Kontakt erstellen");
 	private Button removeKontaktBtn = new Button("Kontakt l\u00f6schen");
 	Button searchBtn = new Button("Suche");
 	TextBox searchTextBox = new TextBox();

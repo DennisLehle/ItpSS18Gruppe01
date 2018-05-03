@@ -113,6 +113,8 @@ public class EigenschaftMapper {
 			Eigenschaft eigenschaft = new Eigenschaft();
 			eigenschaft.setId(result.getInt("id"));
 			eigenschaft.setBezeichnung(result.getString("bezeichnung"));
+			
+			eigenschaften.add(eigenschaft);
 		}
 		
 		return eigenschaften;

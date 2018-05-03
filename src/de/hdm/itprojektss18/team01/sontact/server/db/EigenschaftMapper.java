@@ -80,13 +80,13 @@ public class EigenschaftMapper {
 		ResultSet result = prestmt.executeQuery();
 		
 		// Ergebnistuppel in Objekt umwandeln 
-		Eigenschaft eigenschaft = new Eigenschaft();
+		Eigenschaft e = new Eigenschaft();
 		while (result.next()){
-			eigenschaft.setId(result.getInt("id"));
-			eigenschaft.setBezeichnung(result.getString("bezeichnung"));
+			e.setId(result.getInt("id"));
+			e.setBezeichnung(result.getString("bezeichnung"));
 		}
 
-		return eigenschaft;
+		return e;
 	}
 	
 	/**
@@ -108,13 +108,12 @@ public class EigenschaftMapper {
 		// Vector anlegen
 		Vector <Eigenschaft> eigenschaften = new Vector <Eigenschaft>();
 		
-		// Ergebnistuppeln in Objekt umwandeln 
+		// Ergebnistuppeln in Objekte umwandeln 
 		while (result.next()) {
-			Eigenschaft eigenschaft = new Eigenschaft();
-			eigenschaft.setId(result.getInt("id"));
-			eigenschaft.setBezeichnung(result.getString("bezeichnung"));
-			
-			eigenschaften.add(eigenschaft);
+			Eigenschaft e = new Eigenschaft();
+			e.setId(result.getInt("id"));
+			e.setBezeichnung(result.getString("bezeichnung"));
+			eigenschaften.add(e);
 		}
 		
 		return eigenschaften;

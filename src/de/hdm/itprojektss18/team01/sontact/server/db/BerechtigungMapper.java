@@ -1,336 +1,262 @@
 package de.hdm.itprojektss18.team01.sontact.server.db;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Vector;
 
-import com.google.cloud.sql.jdbc.Statement;
-
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 
-/** 
- * *Die Mapper-Klasse <code>Berechtigung</code> gehört der Datenbankschicht
- *  an und stellt eine objektorientierten Sicht der Applikationslogik auf 
- *  die relationale Datenbank dar. Die Mapperklasse verfügt über Methoden 
- *  die es ermöglichen Objekte zu erstellen, bearbeiten, suchen oder zu 
- *  löschen (insert, update, search, delete). Zusätzlich können aus 
- *  Datenbank-Tupel Java-Instanzen erzeugt werden und umgekehrt 
- *  --> bidirektional.
+/**
+ * Die Klasse <code>BerechtigungMapper</code> mappt auf der Datenbank alle
+ * Berechtigungen eines Nutzers zu den eigenen oder geteilten Kontakt-Objekten.
+ * Für weitere Informationen:
  * 
+ * @see NutzerMapper
  * @author Miescha
- *
  */
 
 public class BerechtigungMapper {
-	
-/**
- * Die Klasse BerechtigungMapper wird nur einmalig instanziiert, weshalb 
- * von der <b>Singleton</b>-Eigenschaft gesprochen wird. Ein Singleton, gilt als 
- * Entwurfsmuster uns stellt sicher, dass von einer Klasse genau ein Objekt 
- * existiert. 
- * <p>
- * Diese Variable ist durch den Bezeichner <code>static</code> nur einmal fuer 
- * saemtliche eventuellen Instanzen dieser Klasse vorhanden. Sie speichert
- * die einzige Instanz dieser Klasse.
- * 
- * @see berechtigungMapper()
- * 
- *  @author Thies
- * 
- */
+
 	private static BerechtigungMapper berechtigungMapper = null;
-	
-	/**
-	 * Geschuetzer Konstruktor - verhindert die Möglichkeit, mit <code>new</code>
-	 * neue Instanzen dieser Klasse zu erzeugen.
-	 */
-	protected BerechtigungMapper () {
+
+	protected BerechtigungMapper() {
 	}
-	
-	/**
-	 * Diese statische Methode kann aufgrufen werden durch
-	 * <code>BerechtigungMapper.berechtigungMapper()</code>. Sie stellt die
-	 * Singleton-Eigenschaft sicher, indem Sie dafür sorgt, dass nur eine einzige
-	 * Instanz von <code>BerechtigungMapper</code> existiert.
-	 * <p>
-	 * 
-	 * <b>Fazit:</b> BerechtigungMapper sollte nicht mittels <code>new</code>
-	 * instantiiert werden, sondern stets durch Aufruf dieser statischen Methode.
-	 * 
-	 * @return DAS <code>BerechtigungMapper</code>-Objekt.
-	 * @see BerechtigungMapper
-	 */
+
 	public static BerechtigungMapper berechtigungMapper() {
 		if (berechtigungMapper == null) {
 			berechtigungMapper = new BerechtigungMapper();
 		}
 		return berechtigungMapper;
 	}
-	
+
 	/**
-	 * Ein neues Berechtigung-Objekt der Datenbank hinzufuegen.
-	 * 
-	 * @param berechtigung, mit einem zugeteilten <code>enum</code>, dieser die 
-	 * 		  berechtigungsstufe aufweist    
-	 * @param sender, der Nutzer als Sender
-	 * @param nutzer, der Nutzer als Empfaenger  
-	 * @return b, hinzugefügtes Berechtigung-Objekt.
-	 */
-	
-	public Berechtigung insertBerechtigung(Berechtigung b) {
-		/**
-		 * Herstellung einer Datenbankverbindung.
-		 */
-		Connection con = DBConnection.connection();
-		
-		try {
-			/**
-			 * Anlegen eines leeren SQL-Statements, mittels der Java-Datenbankkonnektivitaet 
-			 * (JDBC), welches eine Anwendungsprogrammierschnittstelle, die es ermöglicht 
-			 * eine Verbindung zur Datenbank herzustellen.
-			 */
-			java.sql.Statement stmt = con.createStatement();
-			java.sql.Statement stmtSender =  con.createStatement();
-			java.sql.Statement stmtUser =  con.createStatement();
-			/**
-			 * Abfrage des zuletzt hinzugefügten Primärschlüssels. Hierbei wird die
-			 * aktuelle id um eins erhoeht (+1), um dann das Statement ausfuellen 
-			 * und als Query an die Datenbank zu senden.
-			 */
-			java.sql.ResultSet rs = stmt.executeQuery("SELECT MAX (id) AS maxid FROM berechtigung");
-			
-			if(rs.next()) {
-				b.setId(rs.getInt("maxid") + 1);
-			}
-			stmt = (Statement) con.createStatement();
-			stmtSender =  con.createStatement();
-			stmtUser = con.createStatement();
-						
-			/**
-			 * SQL-Anweisung zum Einfuegen des neuen Berechtigung-Tupels in die Datenbank.
-			 */
-			stmt.executeUpdate("INSERT INTO berechtigung(id, senderId, userId, objectId, objectType, berechtigungsstufe)"
-					+ "VALUES ("+b.getId() + ",'"+b.getSenderId() + "', "+b.getObjectId() 
-					+ "', +" +b.getObjectType() + "', " +b.getBerechtigungsstufe() + ")");
-			
-			stmtSender.executeUpdate("INSERT INTO sender_berechtigungsobjekt(id, senderId, objectId, objectType, berechtigungsstufe)"
-					+ "VALUES ("+b.getId() + ",'"+b.getSenderId() + "', "+b.getObjectId() 
-					+ "', +" +b.getObjectType() + "', " +b.getBerechtigungsstufe() + ")");
-			
-			stmtUser.executeUpdate("INSERT INTO user_berechtigungsobjekt(id, userId, objectId, objectType, berechtigungsstufe)"
-					+ "VALUES ("+b.getId() + ",'"+b.getSenderId() + "', "+b.getObjectId() 
-					+ "', +" +b.getObjectType() + "', " +b.getBerechtigungsstufe() + ")");
-			
-		/**
-		 * Bei einem Aufruf des <code>printStackTrace</code> wird gewährleistet, dass
-		 * Fehler konkreter analysiert werden. Dies wird durch die Funktion unterstützt,
-		 * die Informationen über den genauen Fehlerstandort und der Herkunft vermittelt. 
-		 */
-			
-		} catch (SQLException e2) {
-		e2.printStackTrace();
-		}
-		return b;
-		}
-	/**
-	 * Aktualisiert ein Berechtigung-Objekt in der Datenbank. 
+	 * Einfügen eines Berechtigung-Objekts in die Datenbank.
 	 * 
 	 * @param berechtigung
-	 * @return berechtigung
+	 * @return Berechtigung
 	 */
-	public Berechtigung updateBerechtigung(Berechtigung b) {
-		
+	public Berechtigung insert(Berechtigung b) {
+
+		// DBConnection herstellen
 		Connection con = DBConnection.connection();
-		
+
 		try {
-			java.sql.Statement stmt = con.createStatement();
-			/**
-			 * Benoetigte SQL-Anweisung, die den Datensatz des uebergebenen Objekts 
-			 * in der Datenbank aktualisiert. 
-			 */
-			stmt.executeUpdate("UPDATE berechtigung SET berechtigungsstufe= " 
-			 + b.getBerechtigungsstufe() + ", senderId= '" + b.getSenderId()
-			 + ", userId= '" + b.getUserId() + ", objectId= '" + b.getObjectId() 
-			 + "WHERE id= " + b.getId());
-			
-			/**
-			 * Bei einem Aufruf des <code>printStackTrace</code> wird gewährleistet, dass
-			 * Fehler konkreter analysiert werden. Dies wird durch die Funktion unterstützt,
-			 * die Informationen über den genauen Fehlerstandort und der Herkunft vermittelt. 
-			 */
-				
-			} catch (SQLException e2) {
+			// Leeres SQL Statement anlegen
+			Statement stmt = con.createStatement();
+
+			// Statement als Query an die DB schicken
+			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Berechtigung");
+
+			// Rückgabe beinhaltet nur eine Tupel
+			if (rs.next()) {
+
+				// b enthält den bisher maximalen, nun um 1 inkrementierten Primärschlüssel
+				b.setId(rs.getInt("maxid") + 1);
+
+				// INSERT-Statement anlegen
+				PreparedStatement prestmt = con
+						.prepareStatement("INSERT INTO Berechtigung (id, holderid, receiverid, objectid, "
+								+ "type, berechtigungsstufe) VALUES('" 
+								+ b.getId() + "', '" 
+								+ b.getHolderId() + "', '"
+								+ b.getReceiverId() + "', '" 
+								+ b.getObjectId() + "', '" 
+								+ b.getType() + "', '"
+								+ b.getBerechtigungsstufe() + "')");
+
+				// INSERT-Statement ausführen
+				prestmt.execute();
+			}
+		} catch (SQLException e2) {
 			e2.printStackTrace();
-			}
-			return b;
-			}
-	
-	/**
-	 * Erteilt den Befehl ein Berechtigung-Objekt aus der Datenbankzu löschen.
-	 * @param b
-	 * @return void 
-	 */ 
-
-public void deleteBerechtigung(Berechtigung b) {
-		
-		Connection con = DBConnection.connection();
-		
-		try {
-			java.sql.Statement stmt = con.createStatement();
-			/**
-			 * Benoetigte SQL-Anweisung, die den Datensatz des uebergebenen Objekts 
-			 * in der Datenbank löscht. 
-			 */
-			stmt.executeUpdate("DELETE FROM berechtigung WHERE id=" + b.getId());
-			
-			/**
-			 * Bei einem Aufruf des <code>printStackTrace</code> wird gewährleistet, dass
-			 * Fehler konkreter analysiert werden. Dies wird durch die Funktion unterstützt,
-			 * die Informationen über den genauen Fehlerstandort und der Herkunft vermittelt. 
-			 */
-				
-			} catch (SQLException e2) {
-			e2.printStackTrace();
-			}
-			}
-			
-
-
-
-/**
- * Erteilt den Befehl ein bestimmtes Berechtigung-Objekt aus der Datenbank zu suchen.
- * @param b
- * @return void 
- */ 
-public Berechtigung findBerechtigungById(int id) {
-	Connection con = DBConnection.connection();
-
-	try {
-		java.sql.Statement stmt = con.createStatement();
-		/**
-		 * Benoetigte SQL-Anweisung, die den Datensatz des uebergebenen Objekts 
-		 * in der Datenbank sucht. 
-		 */
-		java.sql.ResultSet rs = stmt.executeQuery("SELECT id, berechtigungsstufe, objectId FROM berechtigung WHERE id=" + id);
-		
-		/**
-		 * Ein bestimmter Primärschlüssel befindet sich nur einmalig als Tupel
-		 * in der Datenbank. Das führt dazu, dass nur eine id zurückgegeben wird.
-		 * Mit der If-Abfrage wird sichergestellt, ob es den Primärschlüssel gibt
-		 *
-		 */
-		if (rs.next()) {
-			Berechtigung b = new Berechtigung();
-			b.setId(rs.getInt("id"));
-			b.setObjectId(rs.getInt("object"));
-			
-			return b;
 		}
-		/**
-		 * Bei einem Aufruf des <code>printStackTrace</code> wird gewährleistet, dass
-		 * Fehler konkreter analysiert werden. Dies wird durch die Funktion unterstützt,
-		 * die Informationen über den genauen Fehlerstandort und der Herkunft vermittelt. 
-		 */
+		return b;
+	}
+
+	/**
+	 * Aktualisierung eines Berechtigung-Objekts in der Datenbank.
+	 * 
+	 * @param berechtigung
+	 * @return Berechtigung
+	 */
+	public Berechtigung update(Berechtigung b) throws SQLException {
+
+		// DBConnection herstellen
+		Connection con = DBConnection.connection();
+		
+		try {
+
+			// Dem SQL Statement wird der lokalen Variable übergeben
+			PreparedStatement prestmt = con.prepareStatement(
+					"UPDATE Berechtigung SET " 
+					+ "id = '" + b.getId() + "', "
+					+ "berechtigungsstufe = '" + b.getBerechtigungsstufe() + "', "
+					+ "holderid = '" + b.getHolderId() + "', "
+					+ "receiverid = '" + b.getReceiverId() + "', "
+					+ "objectid = '" + b.getObjectId() + "')");
+
+			// INSERT-Statement ausführen
+			prestmt.execute();
+
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		return b;
+	}
+
+	/**
+	 * Löschen eines Berechtigung-Objekts aus der Datenbank.
+	 * 
+	 * @param berechtigung
+	 * @return void
+	 */
+
+	public void delete(Berechtigung b) {
+
+		// DBConnection herstellen
+		Connection con = DBConnection.connection();
+
+		try {
+
+			// Dem SQL Statement wird der lokalen Variable übergeben
+			PreparedStatement prestmt = con.prepareStatement(
+					"DELETE FROM Berechtigung WHERE id = "
+					+ b.getId());
 			
+			// DELETE-Statement ausführen
+			prestmt.execute();
+			
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+	}
+
+	/**
+	 * Findet ein bestimmtes Berechtigung-Objekt aus der Datenbank.
+	 * 
+	 * @param berechtigung
+	 * @return void
+	 */
+	public Berechtigung findById(int id) {
+
+		// DBConnection herstellen
+		Connection con = DBConnection.connection();
+
+		try {
+			
+			// SQL-Statement anlegen
+			PreparedStatement prestmt = con.prepareStatement(
+					"SELECT * FROM Berechtigung WHERE id = " + id);
+						
+			// SQL Statement wird als Query an die DB geschickt und 
+			//in die Rückgabe von rs gespeichert 
+			ResultSet rs = prestmt.executeQuery();
+			
+			Berechtigung b = new Berechtigung();
+			
+			// Ergebnis-Tupel in Objekt umwandeln
+			if (rs.next()) {
+				b.setId(rs.getInt("id"));
+				b.setBerechtigungsstufe(rs.getInt("berechtigungsstufe"));
+				b.setObjectId(rs.getInt("object"));
+				b.setType(rs.getString("type").charAt(0));
+				b.setHolderId(rs.getInt("holderid"));
+				b.setReceiverId(rs.getInt("receiverid"));		
+			}
+			
+			return b;
 		} 
-	catch (SQLException e2) {
-		e2.printStackTrace();
-		}
-	return null;
-	}
-
-/**
- * Ruft einen Liste auf die alle Kontakte aufzeigt die ein Nutzer 
- * <code>senderId</code> mit anderen Nutzern <code>userId</code> geteilt hat.
- * @param userId
- * @param senderId
- * @param objectType
- * @param objectId
- * 
- * @return
- */
-
-public Vector<Berechtigung> findAllSharedKontakteWith(int userId, int senderId, int objectId,
-		char objectType){
-	Connection con = DBConnection.connection();
-	Vector<Berechtigung> result = new Vector<Berechtigung>();
-	
-	try{
-		java.sql.Statement stmt = con.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT userId, senderId, objectId, objectType FROM Berechtigung" 
-		+ "WHERE userId=" + userId + "objectType=" + objectType);
-		
-		/**
-		 * Jeder Treffer erzeugt eine neue Instanz als Suchergebnis. 
-		 */
-		while (rs.next()){
-			Berechtigung b = new Berechtigung();
-			b.setUserId(rs.getInt("userId"));
-			b.setObjectType(rs.getChar("objectType"));
-			
-			/**
-			 * Hinzufügen des neuen Objekts zum Ergebnisvektor
-			 */
-			result.addElement(b);
+		catch (SQLException e2) {
+			e2.printStackTrace();
+			return null;
 		}
 	}
-	catch (SQLException e2){
-		e2.printStackTrace();
-	}
-	
+
 	/**
-	 * Rückgabe des Ergebnisvektors 
+	 * Ruft eine Liste auf die alle Kontakte aufzeigt die ein Nutzer
+	 * <code>holderId</code> mit anderen Nutzern <code>receiverId</code> geteilt hat.
+	 * 
+	 * @param holderId
+	 * @return Berechtigungen
 	 */
-	return result;
-}
 
+	public Vector<Berechtigung> findAllSharedKontakteWith(int holderId) {
 
-/**
- * Ruft einen Liste auf die alle Kontakte aufzeigt die ein Nutzer 
- * <code>userId</code> durch einen anderen Nutzer <code>senderId</code> 
- * geteilt bekommen hat.
- * @param userId
- * @param senderId
- * @param objectId
- * @return
- */
-
-public Vector<Berechtigung> findAllSharedKontakteFrom(int userId, int senderId, int objectId,
-		char objectType){
-	Connection con = DBConnection.connection();
-	Vector<Berechtigung> result = new Vector<Berechtigung>();
-	
-	try{
-		java.sql.Statement stmt = con.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT userId, senderId, objektId, objectType FROM Berechtigung" 
-		+ "WHERE senderId=" + senderId + "objectType=" + objectType);
+		// DBConnection herstellen
+		Connection con = DBConnection.connection();
 		
-		/**
-		 * Jeder Treffer erzeugt eine neue Instanz als Suchergebnis. 
-		 */
-		while (rs.next()){
-			Berechtigung b = new Berechtigung();
-			b.setSenderId(rs.getInt("senderId"));
-			b.getObjectType(rs.getChar("objectType"));
+		Vector<Berechtigung> result = new Vector<Berechtigung>();
+
+		try {
 			
-			/**
-			 * Hinzufügen des neuen Objekts zum Ergebnisvektor
-			 */
-			result.addElement(b);
-		}
-	}
-	catch (SQLException e2){
-		e2.printStackTrace();
-	}
-	
-	/**
-	 * Rückgabe des Ergebnisvektors 
-	 */
-	return result;
-}
-		
+			// SQL-Statement anlegen
+			PreparedStatement prestmt = con.prepareStatement(
+			"SELECT * FROM Berechtigung WHERE holderid=" + holderId); //+ "AND type= 'k'");
 
+			ResultSet rs = prestmt.executeQuery();
+			//Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
+			while (rs.next()) {
+				Berechtigung b = new Berechtigung();
+				b.setId(rs.getInt("id"));
+				b.setHolderId(rs.getInt("holderid"));
+				b.setReceiverId(rs.getInt("receiverid"));
+				b.setObjectId(rs.getInt("objectid"));
+				b.setType(rs.getString("type").charAt(0));
+
+				// Hinzufügen des neuen Objekts zum Ergebnisvektor
+				 result.addElement(b);
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+
+		// Rückgabe des Ergebnisvektors
+		return result;
+	}
+
+	/**
+	 * Ruft einen Liste auf die alle Kontakte aufzeigt die ein Nutzer
+	 * <code>receiverId</code> durch einen anderen Nutzer <code>holderId</code> geteilt
+	 * bekommen hat.
+	 * 
+	 * @param receiverId
+	 * @return Berechtigungen
+	 */
+
+	public Vector<Berechtigung> findAllSharedKontakteFrom(int receiverId) {
+		// DBConnection herstellen
+				Connection con = DBConnection.connection();
+				
+				Vector<Berechtigung> result = new Vector<Berechtigung>();
+		try {
+			
+			// SQL-Statement anlegen
+						PreparedStatement prestmt = con.prepareStatement(
+								"SELECT * FROM Berechtigung WHERE receiverid=" + receiverId); //+ "AND type= 'k'
+						
+						ResultSet rs = prestmt.executeQuery();
+
+			//Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
+			while (rs.next()) {
+				Berechtigung b = new Berechtigung();
+				b.setId(rs.getInt("id"));
+				b.setHolderId(rs.getInt("holderid"));
+				b.setReceiverId(rs.getInt("receiverid"));
+				b.setObjectId(rs.getInt("objectid"));
+				b.setType(rs.getString("type").charAt(0));
+				
+
+				// Hinzufügen des neuen Objekts zum Ergebnisvektor
+				result.addElement(b);
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+
+		//Rückgabe des Ergebnisvektors
+		return result;
+	}
 }
-	

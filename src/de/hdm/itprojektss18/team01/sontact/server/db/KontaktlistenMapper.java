@@ -11,10 +11,11 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 
 /**
  * * Die Mapper-Klasse stellt Methoden zur Verfügung die
- * <code>Kontaktlisten</code>-Objekte auf eine relationale Datenbank abbildet. Die
- * Methoden bieten die Möglichkeit Objekte aus der Datenbank zu suchen, sie zu
- * erzeugen und zu löschen. Das Mapping ist bidirektional. D.h., Objekte können
- * in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+ * <code>Kontaktlisten</code>-Objekte auf eine relationale Datenbank abbildet. 
+ * Die Methoden bieten die Möglichkeit Objekte aus der Datenbank zu suchen, 
+ * sie zu erzeugen und zu löschen. Das Mapping ist bidirektional. D.h., 
+ * Objekte können in DB-Strukturen und DB-Strukturen in Objekte umgewandelt 
+ * werden.
  * 
  * Diese Mapper-Klasse besitzt Singleton-Eigenschaften und wird nur einmal
  * mithilfe der Methode <code>kontaktlistenMapper()</code> initialisiert. Der
@@ -37,7 +38,8 @@ private static KontaktlistenMapper kontaktlistenMapper = null;
 	
 	/**
 	 * Prüfung ob diese Klasse schon existiert.
-	 * Und Methoden dieser Klasse sollen nur über diese statische Methode aufgerufen werden
+	 * Und Methoden dieser Klasse sollen nur über diese statische Methode 
+	 * aufgerufen werden
 	 * @return kontaktlistenMapper
 	 * @see kontaktlistenMapper
 	 */
@@ -50,8 +52,8 @@ private static KontaktlistenMapper kontaktlistenMapper = null;
 	}
 	
 	 /**
-     * Einfuegen eines <code>Kontaktlisten</code>-Objekts in die Datenbank. Dabei wird
-     * auch der Primaerschluessel des uebergebenen Objekts geprueft und ggf.
+     * Einfuegen eines <code>Kontaktlisten</code>-Objekts in die Datenbank. Dabei 
+     * wird auch der Primaerschluessel des uebergebenen Objekts geprueft und ggf.
      * berichtigt.
      *
      * @param pro das zu speichernde Objekt

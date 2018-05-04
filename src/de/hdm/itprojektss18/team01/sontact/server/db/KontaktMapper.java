@@ -13,9 +13,10 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 	/**
 	 * Mapper-Klasse, die <code>Kontakt</code>-Objekte auf eine relationale
 	 * Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
-	 * gestellt, mit deren Hilfe z.B. Objekte gesucht, erzeugt, modifiziert und
-	 * gelöscht werden können. Das Mapping ist bidirektional. D.h., Objekte können
-	 * in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+	 * gestellt, mit deren Hilfe z.B. Objekte gesucht, erzeugt, modifiziert 
+	 * und gelöscht werden können. Das Mapping ist bidirektional. D.h., 
+	 * Objekte können in DB-Strukturen und DB-Strukturen in Objekte umgewandelt 
+	 * werden.
 	 * 
 	 * @author Thies
 	 */
@@ -75,7 +76,8 @@ public class KontaktMapper {
 	 * wird genau ein Objekt zurückgegeben.
 	 * 
 	 * @param id Primärschlüsselattribut (->DB)
-	 * @return Konto-Objekt, das dem übergebenen Schlüssel entspricht, null bei nicht vorhandenem DB-Tupel.
+	 * @return Konto-Objekt, das dem übergebenen Schlüssel entspricht, null bei nicht 
+	 * vorhandenem DB-Tupel.
 	 */
 	
 	public Kontakt findKontaktById (int id) {
@@ -120,12 +122,15 @@ public class KontaktMapper {
 	
 	
 	/**
-	 * Auslesen aller Kontakte eines durch ein weiteres Attribut (Name) gegebenen Kontakts.
+	 * Auslesen aller Kontakte eines durch ein weiteres Attribut (Name) 
+	 * gegebenen Kontakts.
 	 * 
 	 * @see findKontaktByName
 	 * @param String name für zugehörige Kontakte
-	 * @return ein Vektor mit Kontakt-Objekten, die durch den gegebenen Namen repräsentiert werden. 
-	 * Bei evtl. Exceptions wird ein partiell gefüllter oder ggf. auch leerer Vektor zurückgeliefert.
+	 * @return ein Vektor mit Kontakt-Objekten, die durch den gegebenen Namen 
+	 * repräsentiert werden. 
+	 * Bei evtl. Exceptions wird ein partiell gefüllter oder ggf. auch leerer 
+	 * Vektor zurückgeliefert.
 	 * 
 	 */
 	
@@ -247,7 +252,8 @@ public class KontaktMapper {
 
 	
 	/**
-	 * Einfügen eins <code>Kontakt</code> in die Datenbank. Dabei wird auch der Primärschlüssel des übergebenen Objekt geprüft und ggf. berichtigt.
+	 * Einfügen eins <code>Kontakt</code> in die Datenbank. Dabei wird auch der 
+	 * Primärschlüssel des übergebenen Objekt geprüft und ggf. berichtigt.
 	 * @param k das zu speichernde Objekt
 	 * @return das bereits übergebene Objekt, jedoch mit ggf. korrigierter <code>id</code>.
 	 */

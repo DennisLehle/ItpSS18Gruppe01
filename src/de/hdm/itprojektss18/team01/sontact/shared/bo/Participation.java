@@ -16,9 +16,9 @@ public interface Participation extends Serializable {
 	// Gibt den Ursprünglichen Eigentuemer des Objekts zurueck.
 	int getOwner();
 	
-	// Gibt den Typ des geteilten Objekts zurueck.
-	char getObjectType();
-	
+	// Gibt den Typ des geteilten Obejkts zurück.
+	char getType();
+		
 	// Gibt die Berechtigungsfreigabe zurück, welches die aktuellen Befugnisse eines Nutzers zu diesem Objekt darstellt.
 	Berechtigung getBerechtigung();
 	

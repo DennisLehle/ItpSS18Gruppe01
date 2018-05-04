@@ -45,11 +45,6 @@ public class Auspraegung extends BusinessObject implements Participation {
 	}
 
 	@Override
-	public char getObjectType() {
-		return 'a';
-	}
-
-	@Override
 	public Berechtigung getBerechtigung() {
 		return berechtigung;
 	}
@@ -61,6 +56,11 @@ public class Auspraegung extends BusinessObject implements Participation {
 	@Override
 	public int getOwner() {
 		return kontaktId; 
+	}
+
+	@Override
+	public char getType() {
+		return 'a';
 	}
 	
 }

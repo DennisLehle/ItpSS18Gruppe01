@@ -35,7 +35,7 @@ public class EigenschaftMapper {
 	 */
 	public Eigenschaft findEigenschaftById(int id) throws SQLException {
 		// DBConnection holen
-		Connection con = (Connection) DBConnection.connection();
+		Connection con = DBConnection.connection();
 		
 		// SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement(
@@ -91,5 +91,50 @@ public class EigenschaftMapper {
 	public Eigenschaft findEigenschaftForAuspraegung() {
 		 return null;
 	}
+	
+	
+	/**
+	 * 
+	 * DUPLIKAT DUPLIKAT DUPLIKAT DUPLIKAT DUPLIKAT DUPLIKAT DUPLIKAT DUPLIKAT
+	 * 
+	 */
+	
+	
+	/**
+	 * Auslesen einer Eigenschaft anhand Id.
+	 * 
+	 * @param id
+	 * @return Eigenschaft
+	 * @throws SQLException
+	 */
+	public Eigenschaft findEigenschaftByIdd(int id) throws SQLException {
+		// DBConnection holen
+		Connection con = (Connection) DBConnection.connection();
+		
+		try {
+			// SQL Statement anlegen
+			PreparedStatement prestmt = con.prepareStatement(
+					"SELECT id, bezeichnung FROM Eigenschaft where id = " + id);
+			
+			// Statement als Query an die DB schicken
+			ResultSet result = prestmt.executeQuery();
+			
+			// Da Id Primaerschluessel, besteht Rückgabe aus nur einer Tuppel
+			if (result.next()) {
+				// Ergebnistuppel in Objekt umwandeln 
+				Eigenschaft e = new Eigenschaft();
+				e.setId(result.getInt("id"));
+				e.setBezeichnung(result.getString("bezeichnung"));
+				return e;			
+			}
+		}
+		catch (SQLException e2) {
+			e2.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+	
+	
 	
 }

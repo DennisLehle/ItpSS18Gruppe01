@@ -12,7 +12,7 @@ public class Nutzer extends BusinessObject implements Serializable {
 	private String loginUrl = "";
 	private String logoutUrl =" ";
 	private String emailAddress ="";
-	private String nickname ="";
+	private String name ="";
 
 	/**
 	 * Gibt TRUE zur�ck, wenn ein Nutzer angemeldet ist andernfalls wird FALSE
@@ -104,10 +104,10 @@ public class Nutzer extends BusinessObject implements Serializable {
 	
 	/**
 	 * Setzen des Nicknamens des Google Users.
-	 * @param nickname
+	 * @param name
 	 */
-	public void setNickname(String nickname) {
-	    this.nickname = nickname;
+	public void setNickname(String name) {
+	    this.name = name;
 	  }
 
 }

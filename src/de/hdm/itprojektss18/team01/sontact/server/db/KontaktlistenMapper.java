@@ -6,101 +6,167 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 
-
 /**
- * * Die Mapper-Klasse stellt Methoden zur VerfÃ¼gung die
- * <code>Kontaktlisten</code>-Objekte auf eine relationale Datenbank abbildet. 
- * Die Methoden bieten die MÃ¶glichkeit Objekte aus der Datenbank zu suchen, 
- * sie zu erzeugen und zu lÃ¶schen. Das Mapping ist bidirektional. D.h., 
- * Objekte kÃ¶nnen in DB-Strukturen und DB-Strukturen in Objekte umgewandelt 
- * werden.
+ * Die Klasse <code>BerechtigungMapper</code> mappt auf der Datenbank alle
+ * Berechtigungen eines Nutzers zu den eigenen oder geteilten Kontakt-Objekten.
+ * Für weitere Informationen:
  * 
- * Diese Mapper-Klasse besitzt Singleton-Eigenschaften und wird nur einmal
- * mithilfe der Methode <code>kontaktlistenMapper()</code> initialisiert. Der
- * Konstruktor ist bewusst durch <code>protected</code> geschÃ¼tzt, damit nur
- * eine einzige Instanz der Klasse exisitert.
- * 
+ * @see NutzerMapper
  * @author Ugur
- *
  */
+
+
 public class KontaktlistenMapper {
 	
-private static KontaktlistenMapper kontaktlistenMapper = null;
+	private static KontaktlistenMapper kontaktlistenMapper = null;
 	
-	/**
-	 * GeschÃ¼tzter Konstruktor - verhindert die MÃ¶glichkeit, mit "new" 
-	 * neue Instanzen dieser Klasse zu erzeugen.
-	 */
 	protected KontaktlistenMapper(){	
-	};
+	}
 	
-	/**
-	 * PrÃ¼fung ob diese Klasse schon existiert.
-	 * Und Methoden dieser Klasse sollen nur Ã¼ber diese statische Methode 
-	 * aufgerufen werden
-	 * @return kontaktlistenMapper
-	 * @see kontaktlistenMapper
-	 */
 	public static KontaktlistenMapper kontaktlistenMapper(){
 		if (kontaktlistenMapper == null){
 			kontaktlistenMapper = new KontaktlistenMapper();
 		}
-		
 		return kontaktlistenMapper;
 	}
 	
-	 /**
-     * Einfuegen eines <code>Kontaktlisten</code>-Objekts in die Datenbank. Dabei 
-     * wird auch der Primaerschluessel des uebergebenen Objekts geprueft und ggf.
-     * berichtigt.
-     *
-     * @param pro das zu speichernde Objekt
-     * @return das bereits uebergebene Objekt, jedoch mit ggf. korrigierter
-     * <code>id</code>.
-     */
+	/**
+	 * Einfügen eines Kontaktlisten-Objekts in die Datenbank.
+	 * 
+	 * @param kontaktliste
+	 * @return Kontaktliste
+	 */
 	 public Kontaktliste insert(Kontaktliste kl){
-			/**
-			 * Aufbau der DB Connection
-			 */
+			
+			// DBConnection herstellen
 			Connection con = DBConnection.connection();
-			/**
-			 * Try und Catch gehÃ¶ren zum Exception Handling 
-			 * Try = Versuch erst dies 
-			 * Catch = Wenn Try nicht geht versuch es so ..
-			 */
+			
 			try {
-			      Statement stmt = con.createStatement();
-			      	/**
-					 * Was ist der momentan hÃ¶chste PrimÃ¤rschlÃ¼ssel
-					 */
-			      ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid "
-			              + "FROM kontaktliste ");
-			     	
-			      if(rs.next()){
-			    	  	/**
-						 * Varaible merk erhÃ¤lt den hÃ¶chsten PrimÃ¤rschlÃ¼ssel inkrementiert um 1
-						 */
-			    	  	kl.setId(rs.getInt("maxid") + 1);	    	  	
-			    	  	/**
-			    	  	 * DurchfÃ¼hren der EinfÃ¼ge Operation via Prepared Statement
-			    	  	 */
-			    	  		PreparedStatement stmt1 = con.prepareStatement(
-			    	  				"INSERT INTO kontaktliste (, , ) "
-			    	  				+ "VALUES (?,?,?) ",
-			    	  				Statement.RETURN_GENERATED_KEYS);
-			    	  				stmt1.setInt(1, kl.getId());
-			    	 
-	    	  				
-			    	  				stmt1.executeUpdate();
-			      }
-			}
-			catch(SQLException e2){
+				// Leeres SQL Statement anlegen
+			    Statement stmt = con.createStatement();
+
+				// Statement als Query an die DB schicken
+			    ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Kontaktliste ");
+			     
+				// Rückgabe beinhaltet nur eine Tupel
+			    if(rs.next()){
+			    	  	
+			    	// kl enthält den bisher maximalen, nun um 1 inkrementierten Primärschlüssel
+			    	kl.setId(rs.getInt("maxid") + 1);	    	  	
+			    	
+					// INSERT-Statement anlegen
+			    	PreparedStatement prestmt = con.
+			    			prepareStatement("INSERT INTO Kontaktliste (id, titel, ownerid) "
+			    	  				+ "VALUES ('"
+			    	  				+ kl.getId() + "', '" 
+									+ kl.getTitel() + "', '"
+									+ kl.getOwnerId() + "')");
+
+			    	// INSERT-Statement ausführen
+					prestmt.execute();
+				}
+			} catch (SQLException e2) {
 				e2.printStackTrace();
 			}
 			return kl;
-			
 		}
+	 
+		/**
+		 * Aktualisierung eines Kontaktlisten-Objekts in der Datenbank.
+		 * 
+		 * @param kontaktliste
+		 * @return Kontaktliste
+		 */
+		public Kontaktliste update(Kontaktliste kl) throws SQLException {
 
+			// DBConnection herstellen
+			Connection con = DBConnection.connection();
+			
+			try {
+
+				// Dem SQL Statement wird der lokalen Variable übergeben
+				PreparedStatement prestmt = con.prepareStatement(
+						"UPDATE Kontaktliste SET " 
+						+ "id = '" + kl.getId() + "', "
+						+ "titel = '" + kl.getTitel() + "', "
+						+ "ownerid = '" + kl.getOwnerId() + "')");
+
+				// INSERT-Statement ausführen
+				prestmt.execute();
+
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+			return kl;
+		}
+		
+		/**
+		 * Löschen eines Kontaktlisten-Objekts aus der Datenbank.
+		 * 
+		 * @param kontaktliste
+		 * @return void
+		 */
+
+		public void delete(Kontaktliste kl) {
+
+			// DBConnection herstellen
+			Connection con = DBConnection.connection();
+
+			try {
+
+				// Dem SQL Statement wird der lokalen Variable übergeben
+				PreparedStatement prestmt = con.prepareStatement(
+						"DELETE FROM Kontaktliste WHERE id = "
+						+ kl.getId());
+				
+				// DELETE-Statement ausführen
+				prestmt.execute();
+				
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+		}
+		
+		/**
+		 * Findet ein bestimmtes Kontaktlisten-Objekt aus der Datenbank.
+		 * 
+		 * @param kontaktliste
+		 * @return void
+		 */
+		public Kontaktliste findById(int id) {
+
+			// DBConnection herstellen
+			Connection con = DBConnection.connection();
+
+			try {
+				
+				// SQL-Statement anlegen
+				PreparedStatement prestmt = con.prepareStatement(
+						"SELECT * FROM Kontaktliste WHERE id = " + id);
+							
+				// SQL Statement wird als Query an die DB geschickt und 
+				//in die Rückgabe von rs gespeichert 
+				ResultSet rs = prestmt.executeQuery();
+				
+				Kontaktliste kl = new Kontaktliste();
+				
+				// Ergebnis-Tupel in Objekt umwandeln
+				if (rs.next()) {
+					kl.setId(rs.getInt("id"));
+					kl.setTitel(rs.getString("titel"));
+					kl.setOwnerId(rs.getInt("object"));		
+				}
+				
+				return kl;
+			} 
+			catch (SQLException e2) {
+				e2.printStackTrace();
+				return null;
+			}
+		}
+	 
 }
+

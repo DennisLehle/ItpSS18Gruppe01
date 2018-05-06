@@ -16,7 +16,7 @@ public class DBConnection{
 
 	private static Connection con = null;
 	private static String googleUrl = "jdbc:google:mysql://NameDeployAppEngine:europe-west:LinkDeploy?user=root&password=1234";
-	private static String localUrl = "jdbc:mysql://localhost:3306/DbName?user=root&password=";
+	private static String localUrl = "jdbc:mysql://localhost:3306/sontact?user=root&password=";
 //	private static String localUrl = "jdbc:mysql://localhost:3308/itproj?user=root&password=";
 
      /**
@@ -44,8 +44,8 @@ public class DBConnection{
                 	/**
                  * Local MySQL instance to use during development.
                  */
-                 Class.forName("com.mysql.jdbc.GoogleDriver");
-                 url = googleUrl;   
+                 Class.forName("com.mysql.jdbc.Driver");
+                 url = localUrl;   
                  }
             	
                 /**
@@ -56,8 +56,8 @@ public class DBConnection{
                  * Diese Verbindung wird dann in der statischen Variable con
                  * abgespeichert und fortan verwendet.
                  */
-                con = (Connection) DriverManager.getConnection(url);
-                
+            	con = DriverManager.getConnection(url);     
+            	
            /**
             * con = (Connection) DriverManager.getConnection(googleUrl);
             */

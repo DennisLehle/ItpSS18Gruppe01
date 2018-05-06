@@ -79,7 +79,7 @@ public class Kontakt extends BusinessObject implements Participation {
 	}
 
 	@Override
-	public char getObjectType() {
+	public char getType() {
 		return 'k';
 	}
 

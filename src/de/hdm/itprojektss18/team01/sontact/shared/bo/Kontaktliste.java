@@ -37,7 +37,7 @@ public class Kontaktliste extends BusinessObject implements Participation {
 		return this.id;
 	}
 	@Override
-	public char getObjectType() {
+	public char getType() {
 		return 'l';
 	}
 	@Override

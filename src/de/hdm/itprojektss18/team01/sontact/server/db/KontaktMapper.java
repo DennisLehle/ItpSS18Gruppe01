@@ -307,8 +307,7 @@ public class KontaktMapper {
 				+ "nachname =" + k.getNachname() + ","
 				+ "modifikationsdatum =" + k.getModDat() + ","
 				+ "ownerId=\"" + k.getOwnerId() + ","
-				+ "kontaktlisteid =" + k.getKontaktlisteId() + ","
-				+ "berechtigung =" + k.getBerechtigung());
+				+ "kontaktlisteid =" + k.getKontaktlisteId());
 		
 		//Statement als Query an die DB schicken
 		prestmt.executeQuery();

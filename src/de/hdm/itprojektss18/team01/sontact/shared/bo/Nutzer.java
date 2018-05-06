@@ -12,7 +12,8 @@ public class Nutzer extends BusinessObject implements Serializable {
 	private String loginUrl = "";
 	private String logoutUrl =" ";
 	private String emailAddress ="";
-	private String name ="";
+	private String vorname ="";
+	private String nachname ="";
 
 	/**
 	 * Gibt TRUE zur�ck, wenn ein Nutzer angemeldet ist andernfalls wird FALSE
@@ -101,13 +102,37 @@ public class Nutzer extends BusinessObject implements Serializable {
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
+
+	/**
+	 * AUslesen des Vornamens.
+	 * @return
+	 */
+	public String getVorname() {
+		return vorname;
+	}
+
+	/**
+	 * Setzen des Vornamens.
+	 * @param vorname
+	 */
+	public void setVorname(String vorname) {
+		this.vorname = vorname;
+	}
 	
 	/**
-	 * Setzen des Nicknamens des Google Users.
-	 * @param name
+	 * Auslesen des Nachnamens
+	 * @return
 	 */
-	public void setNickname(String name) {
-	    this.name = name;
-	  }
+	public String getNachname() {
+		return nachname;
+	}
+
+	/**
+	 * Setzen des Nachnamens
+	 * @param nachname
+	 */
+	public void setNachname(String nachname) {
+		this.nachname = nachname;
+	}
 
 }

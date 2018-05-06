@@ -5,13 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Vector;
 
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 
 /**
- * Die Klasse <code>BerechtigungMapper</code> mappt auf der Datenbank alle
- * Berechtigungen eines Nutzers zu den eigenen oder geteilten Kontakt-Objekten.
+ * Die Klasse <code>KontaklistenMapper</code> mappt auf der Datenbank alle
+ * Kontaktlisten eines Nutzers.
  * Für weitere Informationen:
  * 
  * @see NutzerMapper
@@ -80,7 +80,7 @@ public class KontaktlistenMapper {
 		 * @param kontaktliste
 		 * @return Kontaktliste
 		 */
-		public Kontaktliste update(Kontaktliste kl) throws SQLException {
+		public Kontaktliste update(Kontaktliste kl)  {
 
 			// DBConnection herstellen
 			Connection con = DBConnection.connection();
@@ -174,7 +174,7 @@ public class KontaktlistenMapper {
 		 * @param kontaktliste
 		 * @return void
 		 */
-		public Kontaktliste findByNutzerId(int id) {
+		public Kontaktliste findByNutzerId(int ownerId) {
 
 			// DBConnection herstellen
 			Connection con = DBConnection.connection();
@@ -183,7 +183,7 @@ public class KontaktlistenMapper {
 				
 				// SQL-Statement anlegen
 				PreparedStatement prestmt = con.prepareStatement(
-						"SELECT * FROM Kontaktliste WHERE id = " + id);
+						"SELECT * FROM Kontaktliste WHERE ownerid = " + ownerId);
 							
 				// SQL Statement wird als Query an die DB geschickt und 
 				//in die Rückgabe von rs gespeichert 
@@ -205,6 +205,42 @@ public class KontaktlistenMapper {
 				return null;
 			}
 		}
-	 
-}
+		
+		/**
+		 * Ruft eine Liste auf die alle Kontaktlisten aufzeigt.
+		 * 		 
+		 * @return Kontaktliste
+		 */
 
+		public Vector<Kontaktliste> findAll() {
+
+			// DBConnection herstellen
+			Connection con = DBConnection.connection();
+			
+			Vector<Kontaktliste> result = new Vector<Kontaktliste>();
+
+			try {
+				
+				// SQL-Statement anlegen
+				PreparedStatement prestmt = con.prepareStatement(
+				"SELECT * FROM Kontaktliste " + "ORDER BY id");
+
+				ResultSet rs = prestmt.executeQuery();
+				//Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
+				while (rs.next()) {
+					Kontaktliste kl = new Kontaktliste();
+					kl.setId(rs.getInt("id"));
+					kl.setTitel(rs.getString("titel"));
+					kl.setOwnerId(rs.getInt("ownerid"));
+
+					// Hinzufügen des neuen Objekts zum Ergebnisvektor
+					 result.addElement(kl);
+				}
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+
+			// Rückgabe des Ergebnisvektors
+			return result;
+		}
+}

@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
@@ -84,6 +83,7 @@ public class KontaktMapper {
 		//DBConnection holen		
 		Connection con = (Connection) DBConnection.connection();
 		
+		try {
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement("SELECT id, vorname, nachname FROM Kontakt where id=" + id);
 		
@@ -97,9 +97,9 @@ public class KontaktMapper {
 			k.setVorname(result.getString("vorname"));
 			k.setNachname(result.getString("nachname"));
 		}
+
+		return k;
 		
-		try {
-			prestmt.executeQuery();
 		}
 		catch (SQLException e2){
 			e2.printStackTrace();
@@ -124,32 +124,30 @@ public class KontaktMapper {
 	
 	public Vector<Kontakt> findKontaktByName (String nachname, String vorname) throws SQLException {
 		Connection con = DBConnection.connection();
-		Vector<Kontakt> result = new Vector<Kontakt>();
+		
+		try {
+		Vector<Kontakt> list = new Vector<Kontakt>();
 		
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement("SELECT vorname, nachname FROM Kontakt WHERE nachname=" + nachname + "vorname=" + vorname + "ORDER BY nachname");
 		
 		//Statement als Query an die DB schicken
-		ResultSet result1 = prestmt.executeQuery();
+		ResultSet result = prestmt.executeQuery();
 		
 		//Ergebnistuppel in Objekt umwandeln
 		Kontakt k = new Kontakt();
-		while (result1.next()){
-			k.setVorname(result1.getString("vorname"));
-			k.setNachname(result1.getString("nachname"));
-		}
+		while (result.next()){
+			k.setVorname(result.getString("vorname"));
+			k.setNachname(result.getString("nachname"));
+			}	
 		
-		try {
-			prestmt.executeQuery();
+		return list;
+		
 		}
 		catch (SQLException e2){
 			e2.printStackTrace();
 		}
-		
-		/**
-		 * Ergebnisvektor zurückgeben
-		 */
-		return result;
+		return null;
 	}
 	
 	
@@ -165,31 +163,29 @@ public class KontaktMapper {
 	
 	public Vector<Kontakt> findKontaktByKontaktliste (int kontaktlisteId) throws SQLException{
 		Connection con = DBConnection.connection();
-		Vector<Kontakt> result = new Vector<Kontakt>();
-		
-		//SQL Statement anlegen
-		PreparedStatement prestmt = con.prepareStatement("SELECT kontaktlisteId FROM Kontakt" + "WHERE kontaktlisteId=" + kontaktlisteId);
-		
-		//Statement als Query an die DB schicken
-		ResultSet result1 = prestmt.executeQuery();
-		
-		//Ergebnistuppel in Objekt umwandeln
-		Kontakt k = new Kontakt();
-		while (result1.next()){
-			k.setId(result1.getInt("id"));
-		}
 		
 		try {
-			prestmt.executeQuery();
-		}
-		catch (SQLException e2){
-			e2.printStackTrace();
-		}
+			Vector<Kontakt> list = new Vector<Kontakt>();
 		
-		/**
-		 * Ergebnisvektor zurückgeben
-		 */
-		return result;
+			//SQL Statement anlegen
+			PreparedStatement prestmt = con.prepareStatement("SELECT kontaktlisteId FROM Kontakt" + "WHERE kontaktlisteId=" + kontaktlisteId);
+		
+			//Statement als Query an die DB schicken
+			ResultSet result = prestmt.executeQuery();
+		
+			//Ergebnistuppel in Objekt umwandeln
+			Kontakt k = new Kontakt();
+			while (result.next()){
+				k.setId(result.getInt("id"));
+			}
+		
+			return list;
+			
+			}
+			catch (SQLException e2){
+				e2.printStackTrace();
+			}
+		return null;
 	}
 	
 	
@@ -205,31 +201,30 @@ public class KontaktMapper {
 	
 	public Vector<Kontakt> findKontaktByNutzerId (int ownerId) throws SQLException {
 		Connection con = DBConnection.connection();
-		Vector<Kontakt> result = new Vector<Kontakt>();
+		
+		try {
+		Vector<Kontakt> list = new Vector<Kontakt>();
 		
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement("SELECT ownerId FROM Kontakt" + "WHERE ownerId=" + ownerId);
 		
 		//Statement als Query an die DB schicken
-		ResultSet result1 = prestmt.executeQuery();
+		ResultSet result = prestmt.executeQuery();
 		
 		//Ergebnistuppel in Objekt umwandeln
 		Kontakt k = new Kontakt();
-		while (result1.next()){
-			k.setOwnerId(result1.getInt("id"));
+		while (result.next()){
+			k.setOwnerId(result.getInt("id"));
 		}
+			
+		return list;
 		
-		try {
-			prestmt.executeQuery();
 		}
 		catch (SQLException e2){
 			e2.printStackTrace();
 		}
 		
-		/**
-		 * Ergebnisvektor zurückgeben
-		 */
-		return result;
+		return null;
 	}
 
 	
@@ -244,28 +239,23 @@ public class KontaktMapper {
 		Connection con = DBConnection.connection();
 		
 		try {
-			Statement stmt = con.createStatement();
+			//SQL Statement anlegen
+			PreparedStatement prestmt = con.prepareStatement("SELECT MAX(id) AS maxid" + "FROM Kontakt");
 			
-			/**
-			 * Zunächst wird geprüft, welches der momentan höchste Primärschlüsselwert ist.
-			 */
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid" + "FROM Kontakt");
+			//Statement als Query an die DB schicken
+			prestmt.executeQuery();
 			
-			/**
-			 * Wenn etwas zurückgegeben wird, kann dies nur einzeilig sein
-			 */
+			//Zunächst wird geprüft, welches der momentan höchste Primärschlüsselwert ist.
+			ResultSet rs = prestmt.executeQuery();
+			
+			//Wenn etwas zurückgegeben wird, kann dies nur einzeilig sein
 			if (rs.next()){
-				/**
-				 * k erhält den bisher maximalen, nun um 1 inkrementierten Primärschlüssel.
-				 */
+				
+				//k erhält den bisher maximalen, nun um 1 inkrementierten Primärschlüssel.
 				k.setId(rs.getInt("maxid")+1);
 				
-				stmt = con.createStatement();
-				
-				/**
-				 * Jetzt erst erfolgt die tatsächliche Einfügeoperation
-				 */
-				stmt.executeUpdate("INSERT INTO Kontakt (id, ownerId) " + "VALUES (" + k.getId() + "," + k.getOwnerId() + ")");
+				//Jetzt erst erfolgt die tatsächliche Einfügeoperation
+				prestmt.executeUpdate();
 			}
 		}
 		catch (SQLException e2) {
@@ -294,15 +284,14 @@ public class KontaktMapper {
 	public Kontakt update (Kontakt k) throws SQLException {
 		Connection con = DBConnection.connection();
 		
+		try {
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement("UPDATE Kontakt" + "SET ownerId=\"" + k.getOwnerId() + "\" " + "WHERE id =" + k.getId());
 		
 		//Statement als Query an die DB schicken
 		prestmt.executeQuery();
-		
-		try {
-			prestmt.executeQuery();
 		}
+		
 		catch (SQLException e2){
 			e2.printStackTrace();
 		}
@@ -321,15 +310,14 @@ public class KontaktMapper {
 	public void deleteKontakt(Kontakt k) throws SQLException {
 		Connection con = DBConnection.connection();
 		
+		try {
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement("DELETE FROM Kontakt " + "WHERE id=" + k.getId());
 		
 		//Statement als Query an die DB schicken
 		prestmt.executeQuery();
-		
-		try {
-			prestmt.executeQuery();
 		}
+		
 		catch (SQLException e2){
 			e2.printStackTrace();
 		}
@@ -344,15 +332,14 @@ public class KontaktMapper {
 	public void insertKontaktToKontaktliste(Kontakt k, int kontaktlisteId) throws SQLException {
 		Connection con = DBConnection.connection();
 		
+		try {
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement("INSERT INTO Kontakt(kontaktlisteId) WHERE id=" + k.getId() + "VALUES (" + kontaktlisteId + ")");
 		
 		//Statement als Query an die DB schicken
 		prestmt.executeQuery();
-		
-		try {
-			prestmt.executeQuery();
 		}
+		
 		catch (SQLException e2){
 			e2.printStackTrace();
 		}
@@ -367,15 +354,14 @@ public class KontaktMapper {
 	public void deleteKontaktFromKontaktliste(Kontakt k, int kontaktlisteId) throws SQLException {
 		Connection con = DBConnection.connection();
 		
+		try {
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement("DELETE FROM Kontakt(kontaktlisteId) WHERE id=" + k.getId() + "VALUES (" + kontaktlisteId + ")");
 		
 		//Statement als Query an die DB schicken
 		prestmt.executeQuery();
-		
-		try {
-			prestmt.executeQuery();
 		}
+		
 		catch (SQLException e2){
 			e2.printStackTrace();
 		}

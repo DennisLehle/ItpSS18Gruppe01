@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 
@@ -50,58 +52,135 @@ public class NutzerMapper {
 	}
 	
 	 /**
-     * Einfuegen eines <code>Profil</code>-Objekts in die Datenbank. Dabei wird
+     * Einfuegen eines <code>Nutzer</code>-Objekts in die Datenbank. Dabei wird
      * auch der Primaerschluessel des uebergebenen Objekts geprueft und ggf.
      * berichtigt.
      *
-     * @param pro das zu speichernde Objekt
+     * @param n das zu speichernde Objekt
      * @return das bereits uebergebene Objekt, jedoch mit ggf. korrigierter
      * <code>id</code>.
      * 
      * @author thies
      */
 	 public Nutzer insert(Nutzer n){
-			/**
-			 * Aufbau der DB Connection
-			 */
+			
+		 // DbConnection herstellen
 			Connection con = DBConnection.connection();
+			
 			/**
 			 * Try und Catch gehören zum Exception Handling 
 			 * Try = Versuch erst dies 
 			 * Catch = Wenn Try nicht geht versuch es so ..
 			 */
 			try {
+				//Anglegen eines leeren Statements
 			      Statement stmt = con.createStatement();
-			      	/**
-					 * Was ist der momentan höchste Primärschlüssel
-					 */
+			      
+			      //Statement als Query an die DB schicken
 			      ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid "
-			              + "FROM merkzettel ");
+			              + "FROM nutzer ");
 			     	
+			      //RÜckgabe enthält nur ein Tupel 
 			      if(rs.next()){
-			    	  	/**
-						 * Varaible merk erhält den höchsten Primärschlüssel inkrementiert um 1
-						 */
-			    	  	n.setId(rs.getInt("maxid") + 1);	    	  	
-			    	  	/**
-			    	  	 * Durchführen der Einfüge Operation via Prepared Statement
-			    	  	 */
-			    	  		PreparedStatement stmt1 = con.prepareStatement(
-			    	  				"INSERT INTO nutzer (, , ) "
-			    	  				+ "VALUES (?,?,?) ",
-			    	  				Statement.RETURN_GENERATED_KEYS);
-			    	  				stmt1.setInt(1, n.getId());
 			    	 
-	    	  				
-			    	  				stmt1.executeUpdate();
+			    	  	//Enthält den maximalen, nun um 1 inkrementierten Primärschlüssel
+			    	  	n.setId(rs.getInt("maxid") + 1);	    	  	
+			    	  	
+			    	  		PreparedStatement  prestmt = con
+									.prepareStatement("INSERT INTO Nutzer (id, email "
+											+ ") VALUES('" 
+											+ n.getId() + "', '" 
+											+ n.getEmailAddress() + "')");
+
+							// INSERT-Statement ausf�hren
+							prestmt.execute();
 			      }
 			}
 			catch(SQLException e2){
 				e2.printStackTrace();
 			}
 			return n;
-			
 		}
+	 
+	 /**
+	  * Anhand dieser Methode werden Nutzer die sich einloggen mit ihrer
+	  * Email Identifiziert und zurückgegeben. 
+	  * @param emailadress
+	  * @return
+	  */
+	 public Nutzer findUserByGMail(String emailadress) {
+		 
+			// DBConnection herstellen
+			Connection con = DBConnection.connection();
+
+			try {
+				
+				// SQL-Statement anlegen
+				PreparedStatement prestmt = con.prepareStatement(
+						"SELECT * FROM nutzer WHERE email = " + emailadress);
+							
+				// SQL Statement wird als Query an die DB geschickt und 
+				//in die R�ckgabe von rs gespeichert 
+				ResultSet rs = prestmt.executeQuery();
+					
+				// Ergebnis-Tupel in Objekt umwandeln
+				if (rs.next()) {
+					Nutzer n = new Nutzer();
+					n.setId(rs.getInt("id"));
+					n.setEmailAddress(rs.getString("emailadress"));
+						
+					return n;
+				
+				}
+			
+			} 
+			catch (SQLException e2) {
+				e2.printStackTrace();
+				
+			}
+			return null;
+	 }
+	 
+	 	/**
+	 	 * Löschen eines Nutzer-Objekts aus der Datenbank.
+	 	 * @param n
+	 	 */
+		public void delete(Nutzer n) {
+
+			// DBConnection herstellen
+			Connection con = DBConnection.connection();
+
+			try {
+
+				// Dem SQL Statement wird der lokalen Variable �bergeben
+				PreparedStatement prestmt = con.prepareStatement(
+						"DELETE FROM Berechtigung WHERE id = "
+						+ n.getId());
+				
+				// DELETE-Statement ausf�hren
+				prestmt.execute();
+				
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+		}
+	 
+//	 /**
+//	  * Auslesen des dazugehörigen Kontakt Objekts des jeweiligen Nutzers der sich
+//	  * in das System einloggt.
+//	  * @param n
+//	  * @return
+//	  */
+//	 public Kontakt getNutzerAsKontakt(Nutzer n) {
+//		 
+//		 /*
+//		  *  Wir greifen auf den <code>KontaktMapper</code> zurück
+//		  *  der uns zum Nutzer der sich einloggt den passenden Kontakt (Sich selbst)
+//		  *  zurückgibt.
+//		  */
+//		 
+//		 return KontaktMapper.kontaktMapper().findKontaktById()
+//	 }
 
 }
 	

@@ -12,8 +12,9 @@ public class Auspraegung extends BusinessObject implements Participation {
 	 * Instanzvariablen der Klasse Auspraegung
 	 */
 	private String wert;
-	int eigenschaftId;
-	int kontaktId;
+	private int eigenschaftId;
+	private int kontaktId;
+	private int ownerid;
 	private Berechtigung berechtigung;
 	
 	/**
@@ -51,6 +52,14 @@ public class Auspraegung extends BusinessObject implements Participation {
 	
 	public void setBerechtigung(Berechtigung berechtigung) {
 		this.berechtigung = berechtigung;
+	}
+	
+	public int getOwnerid() {
+		return ownerid;
+	}
+
+	public void setOwnerid(int ownerid) {
+		this.ownerid = ownerid;
 	}
 	
 	@Override

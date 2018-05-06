@@ -157,7 +157,45 @@ public class KontaktlistenMapper {
 				if (rs.next()) {
 					kl.setId(rs.getInt("id"));
 					kl.setTitel(rs.getString("titel"));
-					kl.setOwnerId(rs.getInt("object"));		
+					kl.setOwnerId(rs.getInt("ownerid"));		
+				}
+				
+				return kl;
+			} 
+			catch (SQLException e2) {
+				e2.printStackTrace();
+				return null;
+			}
+		}
+		
+		/**
+		 * Findet ein bestimmtes Kontaktlisten-Objekt aus der Datenbank.
+		 * 
+		 * @param kontaktliste
+		 * @return void
+		 */
+		public Kontaktliste findByNutzerId(int id) {
+
+			// DBConnection herstellen
+			Connection con = DBConnection.connection();
+
+			try {
+				
+				// SQL-Statement anlegen
+				PreparedStatement prestmt = con.prepareStatement(
+						"SELECT * FROM Kontaktliste WHERE id = " + id);
+							
+				// SQL Statement wird als Query an die DB geschickt und 
+				//in die Rückgabe von rs gespeichert 
+				ResultSet rs = prestmt.executeQuery();
+				
+				Kontaktliste kl = new Kontaktliste();
+				
+				// Ergebnis-Tupel in Objekt umwandeln
+				if (rs.next()) {
+					kl.setId(rs.getInt("id"));
+					kl.setTitel(rs.getString("titel"));
+					kl.setOwnerId(rs.getInt("ownerid"));		
 				}
 				
 				return kl;

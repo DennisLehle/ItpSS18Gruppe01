@@ -247,7 +247,7 @@ public class KontaktMapper {
 	 * @return das bereits übergebene Objekt, jedoch mit ggf. korrigierter <code>id</code>.
 	 */
 	
-	public Kontakt insertKontakt (Kontakt k) throws SQLException {
+	public Kontakt insertKontakt (Kontakt k) {
 		Connection con = DBConnection.connection();
 		
 		try {

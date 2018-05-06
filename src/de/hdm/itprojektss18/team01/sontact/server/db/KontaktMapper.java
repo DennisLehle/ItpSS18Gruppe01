@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
@@ -79,7 +80,7 @@ public class KontaktMapper {
 	 * vorhandenem DB-Tupel.
 	 */
 	
-	public Kontakt findKontaktById (int id) throws SQLException {
+	public Kontakt findKontaktById (int id) {
 		//DBConnection holen		
 		Connection con = (Connection) DBConnection.connection();
 		
@@ -124,7 +125,7 @@ public class KontaktMapper {
 	 * 
 	 */
 	
-	public Vector<Kontakt> findKontaktByName (String nachname, String vorname) throws SQLException {
+	public Vector<Kontakt> findKontaktByName (String nachname, String vorname) {
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -168,7 +169,7 @@ public class KontaktMapper {
 	 * 
 	 */
 	
-	public Vector<Kontakt> findKontaktByKontaktliste (int kontaktlisteId) throws SQLException{
+	public Vector<Kontakt> findKontaktByKontaktliste (int kontaktlisteId) {
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -208,7 +209,7 @@ public class KontaktMapper {
 	 * 
 	 */
 	
-	public Vector<Kontakt> findKontaktByNutzerId (int ownerId) throws SQLException {
+	public Vector<Kontakt> findKontaktByNutzerId (int ownerId) {
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -251,42 +252,40 @@ public class KontaktMapper {
 		Connection con = DBConnection.connection();
 		
 		try {
-			//SQL Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement(
-					"SELECT MAX(id) AS maxid " 
-					+ "FROM kontakt");
-			
-			//Statement als Query an die DB schicken
-			prestmt.executeQuery();
-			
-			//Zunächst wird geprüft, welches der momentan höchste Primärschlüsselwert ist.
-			ResultSet rs = prestmt.executeQuery();
-			
-			//Wenn etwas zurückgegeben wird, kann dies nur einzeilig sein
-			if (rs.next()){
+			// Leeres SQL Statement anlegen
+			Statement stmt = con.createStatement();
+
+			// Statement als Query an die DB schicken
+			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM kontakt");
+
+			// Rückgabe beinhaltet nur eine Tupel
+			if (rs.next()) {
+
+				// b enthält den bisher maximalen, nun um 1 inkrementierten Primärschlüssel
+				k.setId(rs.getInt("maxid") + 1);;
 				
-				//k erhält den bisher maximalen, nun um 1 inkrementierten Primärschlüssel.
-				k.setId(rs.getInt("maxid")+1);
+				//SQL Statement anlegen
+				PreparedStatement prestmt = con.prepareStatement(
+						"INSERT INTO kontakt (id, vorname, nachname, modifikationsdatum, ownerid, kontaktlisteid)"
+						+ "VALUES ( "
+						+ k.getId() + ","
+						+ k.getVorname() + ","
+						+ k.getNachname() + ","
+						+ k.getModDat() + ","
+						+ k.getOwnerId() + ","
+						+ k.getKontaktlisteId());
 				
 				//Jetzt erst erfolgt die tatsächliche Einfügeoperation
-				prestmt.executeUpdate();
+				prestmt.executeQuery();
+				}
+		}
+			catch (SQLException e2) {
+				e2.printStackTrace();
 			}
-		}
-		catch (SQLException e2) {
-			e2.printStackTrace();
-		}
 		
-		/**
-		 * Rückgabe des evtl. korrigierten Accounts.
-		 * 
-		 * HINWEIS: Da in Java nur Referenzen auf Objekte und keine physischen Objekte übergeben werden, wäre die Anpassung
-		 * des Kontakt-Objekts auch ohne diese explizite Rückgabe außerhalb dieser Methode sichtbar. Die explizite
-		 * Rückgabe von k ist eher ein Stilmittel, um zu signalisieren, dass sich das Objekt evtl. im Laufe der Methode 
-		 * verändert hat.
-		 */
-		return k;
-	}
-	
+			return k;
+		}
+
 	
 	/**
 	 * Wiederholtes Schreiben eines Objekts in die Datenbank.
@@ -295,7 +294,7 @@ public class KontaktMapper {
 	 * @return das als Parameter übergebene Objekt
 	 */
 	
-	public Kontakt update (Kontakt k) throws SQLException {
+	public Kontakt update (Kontakt k) {
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -328,7 +327,7 @@ public class KontaktMapper {
 	 * @param k das aus der DB zu löschende "Objekt"
 	 */
 	
-	public void deleteKontakt(Kontakt k) throws SQLException {
+	public void deleteKontakt(Kontakt k) {
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -353,7 +352,7 @@ public class KontaktMapper {
 	 * @param k das einzufügende Objekt, kl die betreffende Kontaktliste
 	 */
 	
-	public void insertKontaktToKontaktliste(Kontakt k, int kontaktlisteId) throws SQLException {
+	public void insertKontaktToKontaktliste(Kontakt k, int kontaktlisteId) {
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -380,7 +379,7 @@ public class KontaktMapper {
 	 * @param k das zu entfernende Objekt, kl die betreffende Kontaktliste
 	 */
 	
-	public void deleteKontaktFromKontaktliste(Kontakt k, int kontaktlisteId) throws SQLException {
+	public void deleteKontaktFromKontaktliste(Kontakt k, int kontaktlisteId) {
 		Connection con = DBConnection.connection();
 		
 		try {

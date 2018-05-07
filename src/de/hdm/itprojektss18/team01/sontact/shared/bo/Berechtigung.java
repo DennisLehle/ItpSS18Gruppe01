@@ -15,6 +15,10 @@ public class Berechtigung extends BusinessObject {
 	private int objectId;
 	private char type;
 	private int berechtigungsstufe;
+	
+	private int kontaktid;
+	private int kontaktlisteid;
+	private int auspraegungid;
 
 	/**
 	 * Konstruktoren
@@ -119,6 +123,38 @@ public class Berechtigung extends BusinessObject {
 	public String toString() {
 		return "Berechtigung [id=" + id + ", senderId=" + holderId + ", userId=" + receiverId + ", objectId=" + objectId
 				+ ", type= " + type + "berechtigungsstufe= " + berechtigungsstufe + "]";
+	}
+
+	
+	
+	
+	
+	
+	
+	
+// Getter und Setter gesetzt für Test...
+	public int getKontaktid() {
+		return kontaktid;
+	}
+
+	public void setKontaktid(int kontaktid) {
+		this.kontaktid = kontaktid;
+	}
+
+	public int getKontaktlisteid() {
+		return kontaktlisteid;
+	}
+
+	public void setKontaktlisteid(int kontaktlisteid) {
+		this.kontaktlisteid = kontaktlisteid;
+	}
+
+	public int getAuspraegungid() {
+		return auspraegungid;
+	}
+
+	public void setAuspraegungid(int auspraegungid) {
+		this.auspraegungid = auspraegungid;
 	}
 
 }

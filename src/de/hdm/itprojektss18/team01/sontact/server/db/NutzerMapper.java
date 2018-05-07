@@ -78,7 +78,7 @@ public class NutzerMapper {
 			      
 			      //Statement als Query an die DB schicken
 			      ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid "
-			              + "FROM nutzer ");
+			              + "FROM Nutzer ");
 			     	
 			      //RÜckgabe enthält nur ein Tupel 
 			      if(rs.next()){

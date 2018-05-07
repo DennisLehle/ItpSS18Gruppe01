@@ -12,7 +12,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 /**
  * Die Klasse <code>BerechtigungMapper</code> mappt auf der Datenbank alle
  * Berechtigungen eines Nutzers zu den eigenen oder geteilten Kontakt-Objekten.
- * Für weitere Informationen:
+ * Fï¿½r weitere Informationen:
  * 
  * @see NutzerMapper
  * @author Miescha
@@ -33,7 +33,7 @@ public class BerechtigungMapper {
 	}
 
 	/**
-	 * Einfügen eines Berechtigung-Objekts in die Datenbank.
+	 * Einfï¿½gen eines Berechtigung-Objekts in die Datenbank.
 	 * 
 	 * @param berechtigung
 	 * @return Berechtigung
@@ -50,24 +50,28 @@ public class BerechtigungMapper {
 			// Statement als Query an die DB schicken
 			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Berechtigung");
 
-			// Rückgabe beinhaltet nur eine Tupel
+			// Rï¿½ckgabe beinhaltet nur eine Tupel
 			if (rs.next()) {
 
-				// b enthält den bisher maximalen, nun um 1 inkrementierten Primärschlüssel
+				// b enthï¿½lt den bisher maximalen, nun um 1 inkrementierten Primï¿½rschlï¿½ssel
 				b.setId(rs.getInt("maxid") + 1);
 
 				// INSERT-Statement anlegen
 				PreparedStatement prestmt = con
-						.prepareStatement("INSERT INTO Berechtigung (id, holderid, receiverid, objectid, "
-								+ "type, berechtigungsstufe) VALUES('" 
+						.prepareStatement("INSERT INTO Berechtigung (id, holderid, receiverid, "
+								+ "type, berechtigungsstufe, kontaktid, kontaktlisteid, auspraegungid) VALUES('" 
 								+ b.getId() + "', '" 
 								+ b.getHolderId() + "', '"
 								+ b.getReceiverId() + "', '" 
-								+ b.getObjectId() + "', '" 
+							
 								+ b.getType() + "', '"
-								+ b.getBerechtigungsstufe() + "')");
+								+ b.getBerechtigungsstufe() + "', '" 
+								+ b.getKontaktid() + "', '"
+								+ b.getKontaktlisteid() + "', '"
+								+ b.getAuspraegungid() + "')");
+								
 
-				// INSERT-Statement ausführen
+				// INSERT-Statement ausfï¿½hren
 				prestmt.execute();
 			}
 		} catch (SQLException e2) {
@@ -89,7 +93,7 @@ public class BerechtigungMapper {
 		
 		try {
 
-			// Dem SQL Statement wird der lokalen Variable übergeben
+			// Dem SQL Statement wird der lokalen Variable ï¿½bergeben
 			PreparedStatement prestmt = con.prepareStatement(
 					"UPDATE Berechtigung SET " 
 					+ "id = '" + b.getId() + "', "
@@ -98,7 +102,7 @@ public class BerechtigungMapper {
 					+ "receiverid = '" + b.getReceiverId() + "', "
 					+ "objectid = '" + b.getObjectId() + "')");
 
-			// INSERT-Statement ausführen
+			// INSERT-Statement ausfï¿½hren
 			prestmt.execute();
 
 		} catch (SQLException e2) {
@@ -108,7 +112,7 @@ public class BerechtigungMapper {
 	}
 
 	/**
-	 * Löschen eines Berechtigung-Objekts aus der Datenbank.
+	 * Lï¿½schen eines Berechtigung-Objekts aus der Datenbank.
 	 * 
 	 * @param berechtigung
 	 * @return void
@@ -121,12 +125,12 @@ public class BerechtigungMapper {
 
 		try {
 
-			// Dem SQL Statement wird der lokalen Variable übergeben
+			// Dem SQL Statement wird der lokalen Variable ï¿½bergeben
 			PreparedStatement prestmt = con.prepareStatement(
 					"DELETE FROM Berechtigung WHERE id = "
 					+ b.getId());
 			
-			// DELETE-Statement ausführen
+			// DELETE-Statement ausfï¿½hren
 			prestmt.execute();
 			
 		} catch (SQLException e2) {
@@ -152,7 +156,7 @@ public class BerechtigungMapper {
 					"SELECT * FROM Berechtigung WHERE id = " + id);
 						
 			// SQL Statement wird als Query an die DB geschickt und 
-			//in die Rückgabe von rs gespeichert 
+			//in die Rï¿½ckgabe von rs gespeichert 
 			ResultSet rs = prestmt.executeQuery();
 			
 			Berechtigung b = new Berechtigung();
@@ -206,14 +210,14 @@ public class BerechtigungMapper {
 				b.setObjectId(rs.getInt("objectid"));
 				b.setType(rs.getString("type").charAt(0));
 
-				// Hinzufügen des neuen Objekts zum Ergebnisvektor
+				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
 				 result.addElement(b);
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
 
-		// Rückgabe des Ergebnisvektors
+		// Rï¿½ckgabe des Ergebnisvektors
 		return result;
 	}
 
@@ -249,14 +253,14 @@ public class BerechtigungMapper {
 				b.setType(rs.getString("type").charAt(0));
 				
 
-				// Hinzufügen des neuen Objekts zum Ergebnisvektor
+				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
 				result.addElement(b);
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
 
-		//Rückgabe des Ergebnisvektors
+		//Rï¿½ckgabe des Ergebnisvektors
 		return result;
 	}
 }

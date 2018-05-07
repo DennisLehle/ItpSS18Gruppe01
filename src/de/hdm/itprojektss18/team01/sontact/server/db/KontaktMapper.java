@@ -12,10 +12,10 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 
 	/**
 	 * Mapper-Klasse, die <code>Kontakt</code>-Objekte auf eine relationale
-	 * Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
+	 * Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfï¿½gung
 	 * gestellt, mit deren Hilfe z.B. Objekte gesucht, erzeugt, modifiziert 
-	 * und gelöscht werden können. Das Mapping ist bidirektional. D.h., 
-	 * Objekte können in DB-Strukturen und DB-Strukturen in Objekte umgewandelt 
+	 * und gelï¿½scht werden kï¿½nnen. Das Mapping ist bidirektional. D.h., 
+	 * Objekte kï¿½nnen in DB-Strukturen und DB-Strukturen in Objekte umgewandelt 
 	 * werden.
 	 * 
 	 * @author Thies
@@ -28,8 +28,8 @@ public class KontaktMapper {
 	 * Die Klasse KontaktMapper wird nur einmal instantiiert. Man spricht hierbei
 	 * von einem sogenannten <b>Singleton</b>.
 	 * <p>
-	 * Diese Variable ist durch den Bezeichner <code>static</code> nur einmal für
-	 * sämtliche eventuellen Instanzen dieser Klasse vorhanden. Sie speichert die
+	 * Diese Variable ist durch den Bezeichner <code>static</code> nur einmal fï¿½r
+	 * sï¿½mtliche eventuellen Instanzen dieser Klasse vorhanden. Sie speichert die
 	 * einzige Instanz dieser Klasse.
 	 * 
 	 * @see kontaktMapper()
@@ -39,7 +39,7 @@ public class KontaktMapper {
 	
 	
 	/**
-	 * Geschützter Konstruktor - verhindert die Möglichkeit, mit "new" 
+	 * Geschï¿½tzter Konstruktor - verhindert die Mï¿½glichkeit, mit "new" 
 	 * neue Instanzen dieser Klasse zu erzeugen
 	 */
 	
@@ -51,7 +51,7 @@ public class KontaktMapper {
 	/**
 	 * Diese statische Methode kann aufgrufen werden durch
 	 * <code>KontaktMapper.kontaktMapper()</code>. Sie stellt die
-	 * Singleton-Eigenschaft sicher, indem Sie dafür sorgt, dass nur eine einzige
+	 * Singleton-Eigenschaft sicher, indem Sie dafï¿½r sorgt, dass nur eine einzige
 	 * Instanz von <code>KontaktMapper</code> existiert.
 	 * <p>
 	 * 
@@ -73,10 +73,10 @@ public class KontaktMapper {
 	
 	/**
 	 * Suchen eines Kontaktes mit vorgegebener KontaktID. Da diese eindeutig ist, 
-	 * wird genau ein Objekt zurückgegeben.
+	 * wird genau ein Objekt zurï¿½ckgegeben.
 	 * 
-	 * @param id Primärschlüsselattribut (->DB)
-	 * @return Konto-Objekt, das dem übergebenen Schlüssel entspricht, null bei nicht 
+	 * @param id Primï¿½rschlï¿½sselattribut (->DB)
+	 * @return Konto-Objekt, das dem ï¿½bergebenen Schlï¿½ssel entspricht, null bei nicht 
 	 * vorhandenem DB-Tupel.
 	 */
 	
@@ -117,11 +117,11 @@ public class KontaktMapper {
 	 * gegebenen Kontakts.
 	 * 
 	 * @see findKontaktByName
-	 * @param String name für zugehörige Kontakte
+	 * @param String name fï¿½r zugehï¿½rige Kontakte
 	 * @return ein Vektor mit Kontakt-Objekten, die durch den gegebenen Namen 
-	 * repräsentiert werden. 
-	 * Bei evtl. Exceptions wird ein partiell gefüllter oder ggf. auch leerer 
-	 * Vektor zurückgeliefert.
+	 * reprï¿½sentiert werden. 
+	 * Bei evtl. Exceptions wird ein partiell gefï¿½llter oder ggf. auch leerer 
+	 * Vektor zurï¿½ckgeliefert.
 	 * 
 	 */
 	
@@ -160,12 +160,12 @@ public class KontaktMapper {
 	
 	
 	/**
-	 * Auslesen aller Kontakte eines durch Fremdschlüssel (kontaktlistenId) gegebenen Kontakts.
+	 * Auslesen aller Kontakte eines durch Fremdschlï¿½ssel (kontaktlistenId) gegebenen Kontakts.
 	 * 
 	 * @see findKontaktByKontaktliste
-	 * @param int kontaktlistenId für zugehörige Kontakte
-	 * @return ein Vektor mit Kontakt-Objekten, die durch die gegebene Kontaktliste repräsentiert werden. 
-	 * Bei evtl. Exceptions wird ein partiell gefüllter oder ggf. auch leerer Vektor zurückgeliefert.
+	 * @param int kontaktlistenId fï¿½r zugehï¿½rige Kontakte
+	 * @return ein Vektor mit Kontakt-Objekten, die durch die gegebene Kontaktliste reprï¿½sentiert werden. 
+	 * Bei evtl. Exceptions wird ein partiell gefï¿½llter oder ggf. auch leerer Vektor zurï¿½ckgeliefert.
 	 * 
 	 */
 	
@@ -200,12 +200,12 @@ public class KontaktMapper {
 	
 	
 	/**
-	 * Auslesen aller Kontakte eines durch Fremdschlüssel (ownerId) gegebenen Kontakts.
+	 * Auslesen aller Kontakte eines durch Fremdschlï¿½ssel (ownerId) gegebenen Kontakts.
 	 * 
 	 * @see findKontaktByNutzerId
-	 * @param int ownerId für zugehörige Kontakte
-	 * @return ein Vektor mit Kontakt-Objekten, die durch den gegebenen Nutzer repräsentiert werden. 
-	 * Bei evtl. Exceptions wird ein partiell gefüllter oder ggf. auch leerer Vektor zurückgeliefert.
+	 * @param int ownerId fï¿½r zugehï¿½rige Kontakte
+	 * @return ein Vektor mit Kontakt-Objekten, die durch den gegebenen Nutzer reprï¿½sentiert werden. 
+	 * Bei evtl. Exceptions wird ein partiell gefï¿½llter oder ggf. auch leerer Vektor zurï¿½ckgeliefert.
 	 * 
 	 */
 	
@@ -242,10 +242,10 @@ public class KontaktMapper {
 
 	
 	/**
-	 * Einfügen eins <code>Kontakt</code> in die Datenbank. Dabei wird auch der 
-	 * Primärschlüssel des übergebenen Objekt geprüft und ggf. berichtigt.
+	 * Einfï¿½gen eins <code>Kontakt</code> in die Datenbank. Dabei wird auch der 
+	 * Primï¿½rschlï¿½ssel des ï¿½bergebenen Objekt geprï¿½ft und ggf. berichtigt.
 	 * @param k das zu speichernde Objekt
-	 * @return das bereits übergebene Objekt, jedoch mit ggf. korrigierter <code>id</code>.
+	 * @return das bereits ï¿½bergebene Objekt, jedoch mit ggf. korrigierter <code>id</code>.
 	 */
 	
 	public Kontakt insertKontakt (Kontakt k) {
@@ -256,27 +256,30 @@ public class KontaktMapper {
 			Statement stmt = con.createStatement();
 
 			// Statement als Query an die DB schicken
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM kontakt");
+			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Kontakt");
 
-			// Rückgabe beinhaltet nur eine Tupel
+			// Rï¿½ckgabe beinhaltet nur eine Tupel
 			if (rs.next()) {
 
-				// b enthält den bisher maximalen, nun um 1 inkrementierten Primärschlüssel
+				// b enthï¿½lt den bisher maximalen, nun um 1 inkrementierten Primï¿½rschlï¿½ssel
 				k.setId(rs.getInt("maxid") + 1);;
 				
-				//SQL Statement anlegen
-				PreparedStatement prestmt = con.prepareStatement(
-						"INSERT INTO kontakt (id, vorname, nachname, modifikationsdatum, ownerid, kontaktlisteid)"
-						+ "VALUES ( "
-						+ k.getId() + ","
-						+ k.getVorname() + ","
-						+ k.getNachname() + ","
-						+ k.getModDat() + ","
-						+ k.getOwnerId() + ","
-						+ k.getKontaktlisteId());
 				
-				//Jetzt erst erfolgt die tatsächliche Einfügeoperation
-				prestmt.executeQuery();
+				PreparedStatement  prestmt = con
+						.prepareStatement("INSERT INTO Kontakt (id, vorname, nachname, ownerid, kontaktlisteid "
+								+ ") VALUES('" 
+								+ k.getId() + "', '" 
+								+ k.getVorname() + "', '"
+								+ k.getNachname() + "', '" 
+								//+ k.getErstellDat() + "', '" 
+							//	+ k.getModDat() + "', '" 
+								+ k.getOwnerId() + "', '" 
+								+ k.getKontaktlisteId() + "')");
+							
+
+				// INSERT-Statement ausfï¿½hren
+				prestmt.execute();
+				
 				}
 		}
 			catch (SQLException e2) {
@@ -291,7 +294,7 @@ public class KontaktMapper {
 	 * Wiederholtes Schreiben eines Objekts in die Datenbank.
 	 * 
 	 * @param k das Objekt, das in die DB geschrieben werden soll
-	 * @return das als Parameter übergebene Objekt
+	 * @return das als Parameter ï¿½bergebene Objekt
 	 */
 	
 	public Kontakt update (Kontakt k) {
@@ -316,15 +319,15 @@ public class KontaktMapper {
 			e2.printStackTrace();
 		}
 		/**
-		 * Um Analogie zu insertKontakt(Kontakt k) zu wahren, geben wir k zurück
+		 * Um Analogie zu insertKontakt(Kontakt k) zu wahren, geben wir k zurï¿½ck
 		 */
 		return k;
 	}
 	
 	
 	/**
-	 * Löschen der Daten eines <code>Kontakt</code>-Objekts aus der Datenbank.
-	 * @param k das aus der DB zu löschende "Objekt"
+	 * Lï¿½schen der Daten eines <code>Kontakt</code>-Objekts aus der Datenbank.
+	 * @param k das aus der DB zu lï¿½schende "Objekt"
 	 */
 	
 	public void deleteKontakt(Kontakt k) {
@@ -348,8 +351,8 @@ public class KontaktMapper {
 
 	
 	/**
-	 * Einfügen eines <code>Kontakt</code>-Objekts in eine <code>Kontaktliste</code>. 
-	 * @param k das einzufügende Objekt, kl die betreffende Kontaktliste
+	 * Einfï¿½gen eines <code>Kontakt</code>-Objekts in eine <code>Kontaktliste</code>. 
+	 * @param k das einzufï¿½gende Objekt, kl die betreffende Kontaktliste
 	 */
 	
 	public void insertKontaktToKontaktliste(Kontakt k, int kontaktlisteId) {

@@ -13,7 +13,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 /**
  * Die Klasse <code>AuspraegungMapper</code> mappt auf der Datenbank alle
  * Auspraegungen einer Eigenschaft.
- * Für weitere Informationen:
+ * Fï¿½r weitere Informationen:
  * 
  * @see NutzerMapper
  * @author Kevin Batista
@@ -24,7 +24,7 @@ public class AuspraegungMapper {
 	private static AuspraegungMapper auspraegungMapper = null;
 
 	/**
-	 * Geschützter Konstruktor
+	 * Geschï¿½tzter Konstruktor
 	 */
 	protected AuspraegungMapper() {
 
@@ -46,9 +46,9 @@ public class AuspraegungMapper {
 	}
 	
 	/**
-	 * Einfügen eines Auspraegung-Objekts in die Datenbank.
+	 * Einfï¿½gen eines Auspraegung-Objekts in die Datenbank.
 	 * @param a das zu speichernde Objekt
-	 * @return das bereits übergebene Objekt, 
+	 * @return das bereits ï¿½bergebene Objekt, 
 	 * jedoch mit ggf. korrigierter <code>id</code>.
 	 */	
 	public Auspraegung insert(Auspraegung a) {
@@ -67,7 +67,7 @@ public class AuspraegungMapper {
 				
 				// INSERT-Statement anlegen
 				PreparedStatement prestmt = con
-						.prepareStatement("INSERT INTO Auspraegung (id, wert, eigenschaftit, kontaktid, ownerid) "
+						.prepareStatement("INSERT INTO Auspraegung (id, wert, eigenschaftid, kontaktid, ownerid) "
 								+ "VALUES('" 
 								+ a.getId() + "', '" 
 								+ a.getWert() + "', '"
@@ -75,7 +75,7 @@ public class AuspraegungMapper {
 								+ a.getKontaktId() + "', '" 
 								+ a.getOwnerid() + "')");
 		
-				// INSERT-Statement ausführen
+				// INSERT-Statement ausfï¿½hren
 				prestmt.execute();
 				
 			}
@@ -91,7 +91,7 @@ public class AuspraegungMapper {
 	/**
 	 * Aktualisierung eines Auspraegung-Objekts in der Datenbank.
 	 * @param a das Objekt, das in die DB geschrieben werden soll
-	 * @return das als Parameter übergebene Objekt
+	 * @return das als Parameter ï¿½bergebene Objekt
 	 */
 	public Auspraegung update(Auspraegung a) {
 		 Connection con = DBConnection.connection();
@@ -106,7 +106,7 @@ public class AuspraegungMapper {
 						+ "kontaktid = '" + a.getKontaktId() + "', "
 						+ "ownerid = '" + a.getOwnerid() + "')");
 			
-			 // INSERT-Statement ausführen
+			 // INSERT-Statement ausfï¿½hren
 			 prestmt.execute();
 			
 		} catch (Exception e) {
@@ -117,7 +117,7 @@ public class AuspraegungMapper {
 	}
 	
 	/**
-	 * Löschen eines Auspraegung-Objekts aus der Datenbank.
+	 * Lï¿½schen eines Auspraegung-Objekts aus der Datenbank.
 	 * @param a
 	 */
 	public void delete(Auspraegung a){
@@ -129,7 +129,7 @@ public class AuspraegungMapper {
 			PreparedStatement prestmt = con.prepareStatement("DELETE FROM Auspraegung "
 					+ "WHERE id = " + a.getId());
 			
-			// DELETE-Statement ausführen
+			// DELETE-Statement ausfï¿½hren
 			prestmt.execute();
 					
 			
@@ -151,7 +151,7 @@ public class AuspraegungMapper {
 			PreparedStatement prestmt = con.prepareStatement(
 					"SELECT * FROM Auspraegung WHERE id = " + id);
 			
-		    // Statement ausführen
+		    // Statement ausfï¿½hren
 		    ResultSet rs = prestmt.executeQuery();
 		    
 		    if (rs.next()) {
@@ -188,7 +188,7 @@ public class AuspraegungMapper {
 			PreparedStatement prestmt = con.prepareStatement(
 					"SELECT * FROM Auspraegung WHERE eigenschaftid = " + e.getId() + "AND kontaktid " + k.getId());
 			
-		    // Statement ausführen
+		    // Statement ausfï¿½hren
 		    ResultSet rs = prestmt.executeQuery();
 		    
 		    while (rs.next()) {
@@ -199,7 +199,7 @@ public class AuspraegungMapper {
 				a.setKontaktId(rs.getInt("kontaktid"));
 				a.setOwnerid(rs.getInt("ownerid"));
 				
-		        // Hinzufügen des neuen Objekts zum Ergebnisvektor
+		        // Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
 		        result.addElement(a);
 				
 			}

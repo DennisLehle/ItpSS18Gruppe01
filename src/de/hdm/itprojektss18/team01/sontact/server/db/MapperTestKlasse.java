@@ -106,6 +106,16 @@ public class MapperTestKlasse {
 //		BerechtigungMapper.berechtigungMapper().insert(b);
 //		
 //		
+//		
+		Kontakt k = new Kontakt();
+		
+		k.setId(2);
+		k.setNachname("Bayrak");
+		k.setOwnerId(1);
+		k.setKontaktlisteId(1);
+		
+		KontaktMapper.kontaktMapper().update(k);
+		
 		
 		
 		

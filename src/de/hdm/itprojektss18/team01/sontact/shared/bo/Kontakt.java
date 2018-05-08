@@ -17,8 +17,8 @@ public class Kontakt extends BusinessObject implements Participation {
 	private String nachname;
 	private DateTimeFormat erstellDat;
 	private DateTimeFormat modDat;
-	int ownerId;
-	int kontaktlisteId = 0;
+	private int ownerId;
+	private int kontaktlisteId;
 	private Berechtigung berechtigung;
 
 	/**

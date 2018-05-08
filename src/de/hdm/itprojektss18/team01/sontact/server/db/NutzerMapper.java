@@ -154,8 +154,7 @@ public class NutzerMapper {
 
 				// Dem SQL Statement wird der lokalen Variable �bergeben
 				PreparedStatement prestmt = con.prepareStatement(
-						"DELETE FROM Berechtigung WHERE id = "
-						+ n.getId());
+						"DELETE FROM Nutzer WHERE id= " + n.getId());
 				
 				// DELETE-Statement ausf�hren
 				prestmt.execute();

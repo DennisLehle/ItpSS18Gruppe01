@@ -297,22 +297,44 @@ public class KontaktMapper {
 	 * @return das als Parameter �bergebene Objekt
 	 */
 	
-	public Kontakt update (Kontakt k) {
+	public Kontakt update(Kontakt k) {
+		String sql = "UPDATE Kontakt SET  vorname=?, nachname=?, ownerid=?, kontaktlisteid=? WHERE id=?";
+		
 		Connection con = DBConnection.connection();
 		
 		try {
+			PreparedStatement stmt = con.prepareStatement(sql);
+	    	
+	   
+	    	stmt.setString(1, k.getVorname());
+	    	stmt.setString(2, k.getNachname());
+	    	stmt.setInt(3, k.getOwnerId());
+	    	stmt.setInt(4, k.getKontaktlisteId());
+	   
+	    	stmt.setInt(5, k.getId());
+	    	stmt.executeUpdate();
+	    	
+	    	System.out.println("Updated");
+	   
+			
+			
+			
+			
+			
+			
 		//SQL Statement anlegen
-		PreparedStatement prestmt = con.prepareStatement(
-				"UPDATE kontakt SET "
-				+ "id =" + k.getId() + ","
-				+ "vorname =" + k.getVorname() + ","
-				+ "nachname =" + k.getNachname() + ","
-				+ "modifikationsdatum =" + k.getModDat() + ","
-				+ "ownerId=\"" + k.getOwnerId() + ","
-				+ "kontaktlisteid =" + k.getKontaktlisteId());
-		
+		//PreparedStatement prestmt = con.prepareStatement(sql);
+//				"UPDATE `Kontakt` SET "
+//				+ "`id` =" + k.getId() + ", "
+//				+ "`vorname` =" + k.getVorname() + ", "
+//				+ "`nachname` =" + k.getNachname() + ", "
+//			//	+ "modifikationsdatum =" + k.getModDat() + ","
+//				+ "`ownerid` =" + k.getOwnerId() + ", "
+//				+ "`kontaktlisteid` =" + k.getKontaktlisteId() + ", "
+//				+ "WHERE " + k.getId());
+//		
 		//Statement als Query an die DB schicken
-		prestmt.executeQuery();
+//		prestmt.execute();
 		}
 		
 		catch (SQLException e2){
@@ -336,12 +358,11 @@ public class KontaktMapper {
 		try {
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement(
-				"DELETE FROM Kontakt " 
-				+ "WHERE id=" 
+				"DELETE FROM Kontakt WHERE id=" 
 				+ k.getId());
 		
 		//Statement als Query an die DB schicken
-		prestmt.executeQuery();
+		prestmt.execute();
 		}
 		
 		catch (SQLException e2){

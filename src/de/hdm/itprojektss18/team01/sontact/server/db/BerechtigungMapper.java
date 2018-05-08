@@ -66,9 +66,9 @@ public class BerechtigungMapper {
 							
 								+ b.getType() + "', '"
 								+ b.getBerechtigungsstufe() + "', '" 
-								+ b.getKontaktid() + "', '"
-								+ b.getKontaktlisteid() + "', '"
-								+ b.getAuspraegungid() + "')");
+								+ b.getKontaktId() + "', '"
+								+ b.getKontaktlisteId() + "', '"
+								+ b.getAuspraegungId() + "')");
 								
 
 				// INSERT-Statement ausf�hren
@@ -86,24 +86,29 @@ public class BerechtigungMapper {
 	 * @param berechtigung
 	 * @return Berechtigung
 	 */
-	public Berechtigung update(Berechtigung b) throws SQLException {
-
+	public Berechtigung update(Berechtigung b) {
+		String sql = "UPDATE Berechtigung SET  kontaktid=?, kontaktlisteid=?, auspraegungid=?, holderid=?, receiverid=?, type=?, berechtigungsstufe=? WHERE id=?";
+		
 		// DBConnection herstellen
 		Connection con = DBConnection.connection();
 		
 		try {
-
-			// Dem SQL Statement wird der lokalen Variable �bergeben
-			PreparedStatement prestmt = con.prepareStatement(
-					"UPDATE Berechtigung SET " 
-					+ "id = '" + b.getId() + "', "
-					+ "berechtigungsstufe = '" + b.getBerechtigungsstufe() + "', "
-					+ "holderid = '" + b.getHolderId() + "', "
-					+ "receiverid = '" + b.getReceiverId() + "', "
-					+ "objectid = '" + b.getObjectId() + "')");
-
-			// INSERT-Statement ausf�hren
-			prestmt.execute();
+		// Angelegten String sql dem PreparedStatement übergeben.
+		PreparedStatement stmt = con.prepareStatement(sql);
+	    	
+	   
+	    	stmt.setInt(1, b.getKontaktId());
+	    	stmt.setInt(2, b.getKontaktlisteId());
+	    	stmt.setInt(3, b.getAuspraegungId());
+	    	stmt.setInt(4, b.getHolderId());
+	    	stmt.setInt(5, b.getReceiverId());
+	    	stmt.setInt(6, b.getType());
+	    	stmt.setInt(7, b.getBerechtigungsstufe());
+	   
+	    	stmt.setInt(8, b.getId());
+	    	stmt.executeUpdate();
+	    	
+	    	System.out.println("Updated");
 
 		} catch (SQLException e2) {
 			e2.printStackTrace();

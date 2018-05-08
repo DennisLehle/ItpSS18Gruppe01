@@ -14,11 +14,10 @@ public class Berechtigung extends BusinessObject {
 	private int receiverId;
 	private int objectId;
 	private char type;
-	private int berechtigungsstufe;
-	
-	private int kontaktid;
-	private int kontaktlisteid;
-	private int auspraegungid;
+	private int berechtigungsstufe;	
+	private int kontaktId;
+	private int kontaktlisteId;
+	private int auspraegungId;
 
 	/**
 	 * Konstruktoren
@@ -58,18 +57,6 @@ public class Berechtigung extends BusinessObject {
 			return null;
 		}
 	}
-
-	/**
-	 * Enumerator
-	 *
-	 * public enum Berechtigungsstufe {
-	 * 
-	 * NONE(0), READ(10), EDIT(20), DELETE(30);
-	 * 
-	 * private int wert;
-	 * 
-	 * Berechtigungsstufe(int b) { wert = b; } }
-	 **/
 
 	/**
 	 * Getter- und Setter-Methoden zum Setzen und Auslesen der Werte
@@ -125,36 +112,29 @@ public class Berechtigung extends BusinessObject {
 				+ ", type= " + type + "berechtigungsstufe= " + berechtigungsstufe + "]";
 	}
 
-	
-	
-	
-	
-	
-	
-	
 // Getter und Setter gesetzt für Test...
-	public int getKontaktid() {
-		return kontaktid;
+	public int getKontaktId() {
+		return kontaktId;
 	}
 
-	public void setKontaktid(int kontaktid) {
-		this.kontaktid = kontaktid;
+	public void setKontaktid(int kontaktId) {
+		this.kontaktId = kontaktId;
 	}
 
-	public int getKontaktlisteid() {
-		return kontaktlisteid;
+	public int getKontaktlisteId() {
+		return kontaktlisteId;
 	}
 
-	public void setKontaktlisteid(int kontaktlisteid) {
-		this.kontaktlisteid = kontaktlisteid;
+	public void setKontaktlisteId(int kontaktlisteId) {
+		this.kontaktlisteId = kontaktlisteId;
 	}
 
-	public int getAuspraegungid() {
-		return auspraegungid;
+	public int getAuspraegungId() {
+		return auspraegungId;
 	}
 
-	public void setAuspraegungid(int auspraegungid) {
-		this.auspraegungid = auspraegungid;
+	public void setAuspraegungId(int auspraegungId) {
+		this.auspraegungId = auspraegungId;
 	}
 
 }

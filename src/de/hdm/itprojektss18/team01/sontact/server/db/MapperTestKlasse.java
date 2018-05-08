@@ -1,5 +1,7 @@
 package de.hdm.itprojektss18.team01.sontact.server.db;
 
+import java.sql.SQLException;
+
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
@@ -107,14 +109,16 @@ public class MapperTestKlasse {
 //		
 //		
 //		
-		Kontakt k = new Kontakt();
 		
-		k.setId(2);
-		k.setNachname("Bayrak");
-		k.setOwnerId(1);
-		k.setKontaktlisteId(1);
+		Kontaktliste kl = new Kontaktliste();
 		
-		KontaktMapper.kontaktMapper().update(k);
+		kl.setId(1);
+		kl.setOwnerId(2);
+	
+		
+		
+		KontaktlistenMapper.kontaktlistenMapper().update(kl);
+
 		
 		
 		

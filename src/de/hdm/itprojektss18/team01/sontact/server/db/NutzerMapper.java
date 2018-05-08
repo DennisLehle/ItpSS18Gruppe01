@@ -102,67 +102,63 @@ public class NutzerMapper {
 			return n;
 		}
 	 
-	 /**
-	  * Anhand dieser Methode werden Nutzer die sich einloggen mit ihrer
-	  * Email Identifiziert und zurückgegeben. 
-	  * @param emailadress
-	  * @return
-	  */
-	 public Nutzer findUserByGMail(String emailadress) {
-		 
-			// DBConnection herstellen
+	 public void delete(Nutzer n) {
 			Connection con = DBConnection.connection();
-
-			try {
-				
-				// SQL-Statement anlegen
-				PreparedStatement prestmt = con.prepareStatement(
-						"SELECT * FROM nutzer WHERE email = " + emailadress);
-							
-				// SQL Statement wird als Query an die DB geschickt und 
-				//in die R�ckgabe von rs gespeichert 
-				ResultSet rs = prestmt.executeQuery();
-					
-				// Ergebnis-Tupel in Objekt umwandeln
-				if (rs.next()) {
-					Nutzer n = new Nutzer();
-					n.setId(rs.getInt("id"));
-					n.setEmailAddress(rs.getString("emailadress"));
-						
-					return n;
-				
-				}
 			
-			} 
-			catch (SQLException e2) {
-				e2.printStackTrace();
-				
-			}
-			return null;
-	 }
-	 
-	 	/**
-	 	 * Löschen eines Nutzer-Objekts aus der Datenbank.
-	 	 * @param n
-	 	 */
-		public void delete(Nutzer n) {
-
-			// DBConnection herstellen
-			Connection con = DBConnection.connection();
-
 			try {
-
-				// Dem SQL Statement wird der lokalen Variable �bergeben
-				PreparedStatement prestmt = con.prepareStatement(
-						"DELETE FROM Nutzer WHERE id= " + n.getId());
-				
-				// DELETE-Statement ausf�hren
-				prestmt.execute();
-				
-			} catch (SQLException e2) {
+			//SQL Statement anlegen
+			PreparedStatement prestmt = con.prepareStatement(
+					"DELETE FROM Nutzer WHERE id=" 
+					+ n.getId());
+			
+			//Statement als Query an die DB schicken
+			prestmt.execute();
+			}
+			
+			catch (SQLException e2){
 				e2.printStackTrace();
 			}
 		}
+		
+		 /**
+		  * Anhand dieser Methode werden Nutzer die sich einloggen mit ihrer
+		  * Email Identifiziert und zurückgegeben. 
+		  * @param emailadress
+		  * @return
+		  */
+		 public Nutzer findUserByGMail(String emailadress) {
+			 
+				// DBConnection herstellen
+				Connection con = DBConnection.connection();
+
+				try {
+					
+					// SQL-Statement anlegen
+					PreparedStatement prestmt = con.prepareStatement(
+							"SELECT * FROM nutzer WHERE email = " + emailadress);
+								
+					// SQL Statement wird als Query an die DB geschickt und 
+					//in die R�ckgabe von rs gespeichert 
+					ResultSet rs = prestmt.executeQuery();
+						
+					// Ergebnis-Tupel in Objekt umwandeln
+					if (rs.next()) {
+						Nutzer n = new Nutzer();
+						n.setId(rs.getInt("id"));
+						n.setEmailAddress(rs.getString("emailadress"));
+							
+						return n;
+					
+					}
+				
+				} 
+				catch (SQLException e2) {
+					e2.printStackTrace();
+					
+				}
+				return null;
+		 }
+		 		
 	 
 //	 /**
 //	  * Auslesen des dazugehörigen Kontakt Objekts des jeweiligen Nutzers der sich

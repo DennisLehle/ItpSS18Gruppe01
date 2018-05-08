@@ -94,7 +94,7 @@ public class AuspraegungMapper {
 	 * @return das als Parameter ï¿½bergebene Objekt
 	 */
 	public Auspraegung update(Auspraegung a) {
-		String sql = "UPDATE Kontakt SET  wert=?, eigenschaftid=?, kontaktid=?, ownerid=? WHERE id=?"; 
+		String sql = "UPDATE Auspraegung SET  wert=?, eigenschaftid=?, kontaktid=?, ownerid=? WHERE id=?"; 
 		Connection con = DBConnection.connection();
 		 
 		 try {
@@ -107,7 +107,7 @@ public class AuspraegungMapper {
 		     stmt.setInt(4, a.getOwnerId());
 		   	 stmt.setInt(5, a.getId());
 		   	 
-		   	 //UPDATE Statement ausführen
+		   	 //UPDATE Statement ausfï¿½hren
 		   	 stmt.executeUpdate();
 			
 		} catch (Exception e) {

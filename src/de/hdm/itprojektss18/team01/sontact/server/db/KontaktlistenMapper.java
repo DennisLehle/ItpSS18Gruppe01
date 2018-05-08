@@ -81,28 +81,37 @@ public class KontaktlistenMapper {
 		 * @return Kontaktliste
 		 */
 		public Kontaktliste update(Kontaktliste kl)  {
-
+			String sql = "UPDATE Kontaktliste SET titel=?, ownerid=? WHERE id=?";
+			
 			// DBConnection herstellen
 			Connection con = DBConnection.connection();
 			
 			try {
+				PreparedStatement stmt = con.prepareStatement(sql);
+		    	
+		    	stmt.setString(1, kl.getTitel());
+		    	stmt.setInt(2, kl.getOwnerId());
+		    	stmt.setInt(3, kl.getId());
+		    	stmt.executeUpdate();
+		    	
+		    	System.out.println("Updated");
 
 				// Dem SQL Statement wird der lokalen Variable übergeben
-				PreparedStatement prestmt = con.prepareStatement(
-						"UPDATE Kontaktliste SET " 
-						+ "id = '" + kl.getId() + "', "
-						+ "titel = '" + kl.getTitel() + "', "
-						+ "ownerid = '" + kl.getOwnerId() + "')");
+	//			PreparedStatement prestmt = con.prepareStatement(
+	//					"UPDATE Kontaktliste SET " 
+	//					+ "id = '" + kl.getId() + "', "
+	//					+ "titel = '" + kl.getTitel() + "', "
+	//					+ "ownerid = '" + kl.getOwnerId() + "')");
 
 				// INSERT-Statement ausführen
-				prestmt.execute();
+	//			prestmt.execute();
 
 			} catch (SQLException e2) {
 				e2.printStackTrace();
 			}
 			return kl;
 		}
-		
+
 		/**
 		 * Löschen eines Kontaktlisten-Objekts aus der Datenbank.
 		 * 

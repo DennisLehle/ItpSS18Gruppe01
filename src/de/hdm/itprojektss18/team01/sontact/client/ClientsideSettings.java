@@ -3,6 +3,7 @@ import java.util.logging.Logger;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import de.hdm.itprojektss18.team01.sontact.shared.CommonSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorService;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorService;
@@ -13,7 +14,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorServiceAsync;
  * 
  */
 
-public class ClientsideSettings{
+public class ClientsideSettings extends CommonSettings {
   /**
    * Remote Service Proxy zur Verbindungsaufnahme mit dem Server-seitgen Dienst
    * namens <code>EditorService</code>.

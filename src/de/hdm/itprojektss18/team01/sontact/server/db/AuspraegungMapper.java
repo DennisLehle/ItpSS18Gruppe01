@@ -94,20 +94,21 @@ public class AuspraegungMapper {
 	 * @return das als Parameter ï¿½bergebene Objekt
 	 */
 	public Auspraegung update(Auspraegung a) {
-		 Connection con = DBConnection.connection();
+		String sql = "UPDATE Kontakt SET  wert=?, eigenschaftid=?, kontaktid=?, ownerid=? WHERE id=?"; 
+		Connection con = DBConnection.connection();
 		 
 		 try {
 			// UPDATE-Statement anlegen
-			 PreparedStatement prestmt = con.prepareStatement(
-						"UPDATE Auspraegung SET " 
-						+ "id = '" + a.getId() + "', "
-						+ "wert = '" + a.getWert() + "', "
-						+ "eigenschaftid = '" + a.getEigenschaftId() + "', "
-						+ "kontaktid = '" + a.getKontaktId() + "', "
-						+ "ownerid = '" + a.getOwnerId() + "')");
+			 PreparedStatement stmt = con.prepareStatement(sql);
 			
-			 // INSERT-Statement ausfï¿½hren
-			 prestmt.execute();
+			 stmt.setString(1, a.getWert());
+		     stmt.setInt(2, a.getEigenschaftId());
+		     stmt.setInt(3, a.getKontaktId());
+		     stmt.setInt(4, a.getOwnerId());
+		   	 stmt.setInt(5, a.getId());
+		   	 
+		   	 //UPDATE Statement ausführen
+		   	 stmt.executeUpdate();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

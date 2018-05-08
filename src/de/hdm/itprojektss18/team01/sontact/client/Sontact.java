@@ -80,7 +80,7 @@ public class Sontact implements EntryPoint {
 		signInLink.setHref(loginInfo.getLoginUrl());
 		loginPanel.add(loginLabel);
 		loginPanel.add(signInLink);
-		RootPanel.get("content").add(loginPanel);
+		RootPanel.get("login").add(loginPanel);
 	}
 
 }

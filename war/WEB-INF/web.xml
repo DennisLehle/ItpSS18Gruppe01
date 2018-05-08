@@ -34,7 +34,7 @@
   <servlet-mapping>
     <servlet-name>loginService</servlet-name>
     <url-pattern>/sontact/login</url-pattern>
-     <url-pattern>/sontact/loginReport</url-pattern>
+   <!--   <url-pattern>/sontact/loginReport</url-pattern> -->
   </servlet-mapping>
 
 

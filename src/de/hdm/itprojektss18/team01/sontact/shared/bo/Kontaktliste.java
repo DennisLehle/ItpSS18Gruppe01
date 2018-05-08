@@ -12,7 +12,7 @@ public class Kontaktliste extends BusinessObject implements Participation {
 	 * Instanzvariablen der Klasse Kontaktliste
 	 */
 	private String titel;
-	int ownerId;
+	private int ownerId;
 	private Berechtigung berechtigung;
 
 	/**

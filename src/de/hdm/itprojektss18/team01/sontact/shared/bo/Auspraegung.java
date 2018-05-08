@@ -14,7 +14,7 @@ public class Auspraegung extends BusinessObject implements Participation {
 	private String wert;
 	private int eigenschaftId;
 	private int kontaktId;
-	private int ownerid;
+	private int ownerId;
 	private Berechtigung berechtigung;
 	
 	/**
@@ -54,12 +54,12 @@ public class Auspraegung extends BusinessObject implements Participation {
 		this.berechtigung = berechtigung;
 	}
 	
-	public int getOwnerid() {
-		return ownerid;
+	public int getOwnerId() {
+		return ownerId;
 	}
 
-	public void setOwnerid(int ownerid) {
-		this.ownerid = ownerid;
+	public void setOwnerId(int ownerId) {
+		this.ownerId = ownerId;
 	}
 	
 	@Override

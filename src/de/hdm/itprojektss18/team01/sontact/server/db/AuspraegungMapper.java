@@ -73,7 +73,7 @@ public class AuspraegungMapper {
 								+ a.getWert() + "', '"
 								+ a.getEigenschaftId() + "', '" 
 								+ a.getKontaktId() + "', '" 
-								+ a.getOwnerid() + "')");
+								+ a.getOwnerId() + "')");
 		
 				// INSERT-Statement ausf�hren
 				prestmt.execute();
@@ -104,7 +104,7 @@ public class AuspraegungMapper {
 						+ "wert = '" + a.getWert() + "', "
 						+ "eigenschaftid = '" + a.getEigenschaftId() + "', "
 						+ "kontaktid = '" + a.getKontaktId() + "', "
-						+ "ownerid = '" + a.getOwnerid() + "')");
+						+ "ownerid = '" + a.getOwnerId() + "')");
 			
 			 // INSERT-Statement ausf�hren
 			 prestmt.execute();
@@ -160,7 +160,7 @@ public class AuspraegungMapper {
 				a.setWert(rs.getString("wert"));
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
 				a.setKontaktId(rs.getInt("kontaktid"));
-				a.setOwnerid(rs.getInt("ownerid"));
+				a.setOwnerId(rs.getInt("ownerid"));
 				
 			}
 			
@@ -197,7 +197,7 @@ public class AuspraegungMapper {
 				a.setWert(rs.getString("wert"));
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
 				a.setKontaktId(rs.getInt("kontaktid"));
-				a.setOwnerid(rs.getInt("ownerid"));
+				a.setOwnerId(rs.getInt("ownerid"));
 				
 		        // Hinzuf�gen des neuen Objekts zum Ergebnisvektor
 		        result.addElement(a);

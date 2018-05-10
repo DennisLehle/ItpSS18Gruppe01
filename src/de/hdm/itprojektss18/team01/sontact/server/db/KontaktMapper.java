@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 
 
 	/**
@@ -118,8 +119,53 @@ public class KontaktMapper {
 		
 			return k;
 		}
-
 	
+	
+	/**
+	 * Enfügen eines <code>Kontakt</code>-Objekts in eine spezifische <code>Kontaktliste</code>. 
+	 
+	 * @param k der <code>Kontakt</code>, kl die <code>Kontaktliste</code> in welche der Kontakt gepeischert werden soll.
+	 */
+	public Kontakt insertIntoKontaktliste(Kontakt k, Kontaktliste kl) {
+		Connection con = DBConnection.connection();
+		
+		try {
+			// Leeres SQL Statement anlegen
+			Statement stmt = con.createStatement();
+
+			// Statement als Query an die DB schicken
+			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Kontakt");
+
+			// R�ckgabe beinhaltet nur eine Tupel
+			if (rs.next()) {
+
+				// b enth�lt den bisher maximalen, nun um 1 inkrementierten Prim�rschl�ssel
+				k.setId(rs.getInt("maxid") + 1);;
+				
+				
+				PreparedStatement  prestmt = con
+						.prepareStatement("INSERT INTO Kontakt (id, vorname, nachname, ownerid, kontaktlisteid "
+								+ ") VALUES('" 
+								+ k.getId() + "', '" 
+								+ k.getVorname() + "', '"
+								+ k.getNachname() + "', '" 
+								//+ k.getErstellDat() + "', '" 
+							//	+ k.getModDat() + "', '" 
+								+ k.getOwnerId() + "', '" 
+								+ kl.getId() + "')");
+							
+
+				// INSERT-Statement ausf�hren
+				prestmt.execute();
+				
+				}
+		}
+			catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+		
+			return k;
+		}
 	/**
 	 * Wiederholtes Schreiben eines Objekts in die Datenbank.
 	 * 
@@ -181,8 +227,88 @@ public class KontaktMapper {
 		}
 	}
 
+	/**
+	 * Filtert Kontakte einer Kontaktliste heraus 
+	 * Benötigt werden hier die 2 Fremdschlüssel ownerId und kontaktlisteId.
+	 *
+	 * Diese Methode dient als Erweitrung für die Methode im <code>KontaktlistenMapper</code> <code>getKontakte()</code>
+	 * und von <code>getKontakte</code>.
+	 * @param ownerId
+	 * @param kontaktlisteId
+	 * @return
+	 */
+	 public Vector<Kontakt> findKontakteVonOwner(int ownerId, int kontaktlisteId) {
+		 
+		    Connection con = DBConnection.connection();
+		    Vector<Kontakt> result = new Vector<Kontakt>();
+
+		    try {
+		    	PreparedStatement stmt = con.prepareStatement("SELECT * FROM `Kontakt` WHERE `ownerid`="+ ownerId + " AND `kontaktlisteid`="+ kontaktlisteId);
+
+		      ResultSet rs = stmt.executeQuery();
+
+		      // Für jeden Eintrag im Suchergebnis wird nun ein Account-Objekt erstellt.
+		      while (rs.next()) {
+		        Kontakt k = new Kontakt();
+		        k.setId(rs.getInt("id"));
+		        k.setVorname(rs.getString("vorname"));
+		        k.setNachname(rs.getString("nachname"));
+		        k.setKontaktlisteId(rs.getInt("kontaktlisteid"));
+		        k.setOwnerId(rs.getInt("ownerid"));
+		     
+
+		        // Hinzufügen des neuen Objekts zum Ergebnisvektor
+		        result.addElement(k);
+		      }
+		    }
+		    catch (SQLException e2) {
+		      e2.printStackTrace();
+		    }
+
+		    // Ergebnisvektor zurückgeben
+		    return result;
+		  }
+	
+		/**
+		 * Entfernen eines <code>Kontakt</code>-Objekts aus einer <code>Kontaktliste</code>. 
+		 * 
+		 * @param Id des Kontakts, kontaktlisteId der Kontaktliste in welche der Kontakt gespeichert ist.
+		 */
+		public void deleteKontaktFromKontaktliste(int kontaktlisteId, int kontaktId) {
+			Connection con = DBConnection.connection();
+			
+			try {
+			//SQL Statement anlegen
+			PreparedStatement prestmt = con.prepareStatement(
+					"DELETE FROM Kontakt WHERE id=" + kontaktId + " AND kontaktlisteid=" +kontaktlisteId);
+			
+			//Statement als Query an die DB schicken
+			prestmt.execute();
+			}
+			
+			catch (SQLException e2){
+				e2.printStackTrace();
+			}
+		}
 	
 	
+	
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	
 // Methoden checken ob sie funktionieren und ob benötigt wird.....!!
 	
@@ -354,62 +480,5 @@ public class KontaktMapper {
 		
 		return null;
 	}
-
-	
-	
-	/**
-	 * Einf�gen eines <code>Kontakt</code>-Objekts in eine <code>Kontaktliste</code>. 
-	 * @param k das einzuf�gende Objekt, kl die betreffende Kontaktliste
-	 */
-	
-	public void insertKontaktToKontaktliste(Kontakt k, int kontaktlisteId) {
-		Connection con = DBConnection.connection();
-		
-		try {
-		//SQL Statement anlegen
-		PreparedStatement prestmt = con.prepareStatement(
-				"INSERT INTO Kontakt(kontaktlisteId) WHERE id=" 
-				+ k.getId() 
-				+ " VALUES (" 
-				+ kontaktlisteId 
-				+ ")");
-		
-		//Statement als Query an die DB schicken
-		prestmt.executeQuery();
-		}
-		
-		catch (SQLException e2){
-			e2.printStackTrace();
-		}
-	}
-	
-	
-	/**
-	 * Entfernen eines <code>Kontakt</code>-Objekts aus einer <code>Kontaktliste</code>. 
-	 * @param k das zu entfernende Objekt, kl die betreffende Kontaktliste
-	 */
-	
-	public void deleteKontaktFromKontaktliste(Kontakt k, int kontaktlisteId) {
-		Connection con = DBConnection.connection();
-		
-		try {
-		//SQL Statement anlegen
-		PreparedStatement prestmt = con.prepareStatement(
-				"DELETE FROM Kontakt(kontaktlisteId) WHERE id=" 
-				+ k.getId() 
-				+ " VALUES (" 
-				+ kontaktlisteId 
-				+ ")");
-		
-		//Statement als Query an die DB schicken
-		prestmt.executeQuery();
-		}
-		
-		catch (SQLException e2){
-			e2.printStackTrace();
-		}
-	}
-	
-	
 }
 

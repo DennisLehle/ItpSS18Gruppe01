@@ -1,5 +1,8 @@
 package de.hdm.itprojektss18.team01.sontact.server;
 
+import java.sql.Date;
+import java.util.Vector;
+
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import de.hdm.itprojektss18.team01.sontact.server.db.*;
@@ -122,14 +125,21 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   * ABSCHNITT, Beginn: Methoden fuer Kontakt-Objekte
 	   * ***************************************************************************
 	   */
+	
+	/**
+	 * Erzeugen eines neuen Kontakts.
+	 * 
+	 */
 	public Kontakt createKontakt (String vorname, String nachname, DateTimeFormat erstellDat,
 			DateTimeFormat modDat, int ownerId, int kontaktlisteId, Berechtigung berechtigung)
 					throws IllegalArgumentException {
 		
+		Date currentDate = new Date(System.currentTimeMillis());
+		
 		Kontakt kontakt = new Kontakt();
 		kontakt.setNachname(nachname);
-		kontakt.setErstellDat(erstellDat);
-		kontakt.setModDat(modDat);
+		kontakt.setErstellDat(currentDate);
+		kontakt.setModDat(currentDate);
 		kontakt.setOwnerId(ownerId);
 		kontakt.setKontaktlisteId(kontaktlisteId);
 		kontakt.setBerechtigung(berechtigung);
@@ -137,9 +147,61 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		
 		kontakt.setId(1);
 		return this.kMapper.insert(kontakt);
-		
-	
 	}
+	
+	/**
+	 * Speichern eines modifizierten Kontakts
+	 * 
+	 */
+	public Kontakt saveKontakt (Kontakt k) throws IllegalArgumentException {
+
+		Date currentDate = new Date(System.currentTimeMillis());
+		k.setModDat(currentDate);
+		
+		return kMapper.update(k);
+	}
+	
+	/**
+	 * Loeschen eines Kontakts
+	 * 
+	 */
+	public void deleteKontakt (Kontakt k) throws IllegalArgumentException {
+		
+		// Zunaechst alle Auspraegungen des Kontakts aus der DB entfernen.
+		Vector <Auspraegung> deleteAllAuspraegungen = getAllAuspraegungenByKontakt(k);
+		if (deleteAllAuspraegungen != null) {
+			for (Auspraegung a : deleteAllAuspraegungen) {
+				this.aMapper.delete(a);
+			}
+		}
+		
+		this.kMapper.delete(k);
+	}
+	
+	/**
+	 * Auslesen eines Kontakts anhand seiner id
+	 * 
+	 */
+	public Kontakt getKontaktById(int id) throws IllegalArgumentException {
+		return this.kMapper.findKontaktById(id);
+	}
+	
+	/**
+	 * Auslesen der Kontakte anhand des Namens.
+	 */
+	public Vector<Kontakt> getKontaktByName(String name) throws IllegalArgumentException {
+		return this.kMapper.findKontaktByName(name);
+	}
+	
+	/**
+	 * Auslesen aller Kontakte welche im Eigentum sind.
+	 * 
+	 */
+	public Vector<Kontakt> getAllKontakteByOwner (Nutzer n) throws IllegalArgumentException {
+		return this.kMapper.findKontaktByNutzerId(n.getId()); 
+	}
+
+	
 	/*
 	   * ***************************************************************************
 	   * ABSCHNITT, Ende: Methoden fuer Kontakt-Objekte
@@ -178,6 +240,18 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   * ABSCHNITT, Beginn: Methoden fuer Auspraegung-Objekte
 	   * ***************************************************************************
 	   */
+	
+	
+	
+	/**
+	 * Gibt alle Auspraegungen eines Kontakts zurück.
+	 * 
+	 */
+	public Vector<Auspraegung> getAllAuspraegungenByKontakt(Kontakt k) {
+		return this.aMapper.findAuspraegungByKontakt(k);
+	}
+	
+	
 	/*
 	   * ***************************************************************************
 	   * ABSCHNITT, Ende: Methoden fuer Auspraegung-Objekte

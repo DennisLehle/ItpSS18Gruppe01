@@ -213,4 +213,36 @@ public class AuspraegungMapper {
 		
 	}
 
+	public Vector<Auspraegung> findAuspraegungByKontakt(Kontakt k){
+		Connection con = DBConnection.connection();
+		Vector<Auspraegung> result = new Vector<Auspraegung>();
+		
+		try {
+			// SQL-Statement anlegen
+			PreparedStatement prestmt = con.prepareStatement(
+					"SELECT * FROM Auspraegung WHERE kontaktid = " + k.getId());
+			
+		    // Statement ausf�hren
+		    ResultSet rs = prestmt.executeQuery();
+		    
+		    while (rs.next()) {
+		    	Auspraegung a = new Auspraegung();
+				a.setId(rs.getInt("id"));
+				a.setWert(rs.getString("wert"));
+				a.setEigenschaftId(rs.getInt("eigenschaftid"));
+				a.setKontaktId(rs.getInt("kontaktid"));
+				a.setOwnerId(rs.getInt("ownerid"));
+				
+		        // Hinzuf�gen des neuen Objekts zum Ergebnisvektor
+		        result.addElement(a);
+				
+			}
+			
+		} catch (Exception exeception) {
+			exeception.printStackTrace();
+		}
+		
+		return result;
+		
+	}
 }

@@ -1,5 +1,7 @@
 package de.hdm.itprojektss18.team01.sontact.shared.bo;
 
+import java.sql.Date;
+
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 /**
@@ -15,8 +17,8 @@ public class Kontakt extends BusinessObject implements Participation {
 	 */
 	private String vorname;
 	private String nachname;
-	private DateTimeFormat erstellDat;
-	private DateTimeFormat modDat;
+	private Date erstellDat;
+	private Date modDat;
 	private int ownerId;
 	private int kontaktlisteId;
 	private Berechtigung berechtigung;
@@ -41,19 +43,19 @@ public class Kontakt extends BusinessObject implements Participation {
 		this.nachname = nachname;
 	}
 
-	public DateTimeFormat getErstellDat() {
+	public Date getErstellDat() {
 		return erstellDat;
 	}
 
-	public void setErstellDat(DateTimeFormat erstellDat) {
+	public void setErstellDat(Date erstellDat) {
 		this.erstellDat = erstellDat;
 	}
 
-	public DateTimeFormat getModDat() {
+	public Date getModDat() {
 		return modDat;
 	}
 
-	public void setModDat(DateTimeFormat modDat) {
+	public void setModDat(Date modDat) {
 		this.modDat = modDat;
 	}
 

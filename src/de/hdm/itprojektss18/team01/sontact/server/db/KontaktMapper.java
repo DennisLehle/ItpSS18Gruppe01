@@ -366,7 +366,7 @@ public class KontaktMapper {
 	 * 
 	 */
 	
-	public Vector<Kontakt> findKontaktByName (String nachname, String vorname) {
+	public Vector<Kontakt> findKontaktByName (String name) {
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -374,10 +374,10 @@ public class KontaktMapper {
 		
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement(
-				"SELECT vorname, nachname FROM Kontakt WHERE nachname=" 
-				+ nachname 
-				+ "vorname=" 
-				+ vorname + 
+				"SELECT * FROM Kontakt WHERE nachname like" 
+				+ name 
+				+ "OR vorname like" 
+				+ name + 
 				" ORDER BY nachname");
 		
 		//Statement als Query an die DB schicken
@@ -458,7 +458,7 @@ public class KontaktMapper {
 		
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement(
-				"SELECT ownerid FROM kontakt "
+				"SELECT * FROM kontakt "
 				+ "WHERE ownerid=" 
 				+ ownerId);
 		

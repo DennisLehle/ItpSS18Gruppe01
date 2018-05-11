@@ -67,6 +67,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   * ABSCHNITT, Beginn: Initialisierung
 	   * ***************************************************************************
 	   */
+	
 	/**
 	 * Vollstaendiger Satz von Mappern mit deren Hilfe EditorServiceImpl
 	 * mit der Datenbank kommunizieren kann.
@@ -85,7 +86,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   * ABSCHNITT, Ende: Initialisierung
 	   * ***************************************************************************
 	   */
-	
 	/*
 	   * ***************************************************************************
 	   * ABSCHNITT, Beginn: Methoden fuer Nutzer-Objekte
@@ -113,13 +113,25 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public void deleteNutzer(Kontakt kontakt) {
 		
+		// Alle Auspraegungen der Kontakte des Nutzers aus der DB entfernen
+		
+		// Alle Kontakte des Nutzers aus der DB entfernen 
+		
+		// Alle Auspraegungen des Nuters entfernen 
+		
+		// Den Nutzer als eigener Kontakt aus der DB entfernen 
+		
+		// Den Nutzer selbst aus der DB entfernen
+		
+		// (?)
+		
 	}
+	
 	/*
 	   * ***************************************************************************
 	   * ABSCHNITT, Ende: Methoden fuer Nutzer-Objekte
 	   * ***************************************************************************
 	   */
-	
 	/*
 	   * ***************************************************************************
 	   * ABSCHNITT, Beginn: Methoden fuer Kontakt-Objekte
@@ -132,7 +144,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public Kontakt createKontakt (String vorname, String nachname, DateTimeFormat erstellDat,
 			DateTimeFormat modDat, int ownerId, int kontaktlisteId, Berechtigung berechtigung)
-					throws IllegalArgumentException {
+					throws IllegalArgumentException { // muessten wir hier nicht ein KontaktObjekt uebergeben? 
 		
 		Date currentDate = new Date(System.currentTimeMillis());
 		
@@ -165,7 +177,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Loeschen eines Kontakts
 	 * 
 	 */
-	public void deleteKontakt (Kontakt k) throws IllegalArgumentException {
+	public void removeKontakt (Kontakt k) throws IllegalArgumentException {
 		
 		// Zunaechst alle Auspraegungen des Kontakts aus der DB entfernen.
 		Vector <Auspraegung> deleteAllAuspraegungen = getAllAuspraegungenByKontakt(k);
@@ -179,7 +191,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 	
 	/**
-	 * Auslesen eines Kontakts anhand seiner id
+	 * Auslesen eines Kontakts anhand seiner id (?)
 	 * 
 	 */
 	public Kontakt getKontaktById(int id) throws IllegalArgumentException {
@@ -202,39 +214,62 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	
+	// addKontaktToKontaktliste()
+	
+	
+	// removeKontaktFromKontaktliste()
+	
+	
 	/*
 	   * ***************************************************************************
 	   * ABSCHNITT, Ende: Methoden fuer Kontakt-Objekte
 	   * ***************************************************************************
 	   */
-	
-	
 	/*
 	   * ***************************************************************************
 	   * ABSCHNITT, Beginn: Methoden fuer Kontaktlisten-Objekte
 	   * ***************************************************************************
 	   */
 	
+	
+	// createKontaktliste()
+	
+	
+	// saveKontatliste()
+	
+	
+	// removeKontaktliste()
+	
+	
+	// gellAllKontaktlistenByOwner()
+	
+	
+	// getAllKontakteByKontaktliste() // gettAllKontakteByKontaktlisteId()
+
+	
 	/*
 	   * ***************************************************************************
 	   * ABSCHNITT, Ende: Methoden fuer Kontaktlisten-Objekte
 	   * ***************************************************************************
 	   */
-	
-	
-	
 	/*
 	   * ***************************************************************************
 	   * ABSCHNITT, Beginn: Methoden fuer Eigenschaft-Objekte
 	   * ***************************************************************************
 	   */
+	
+	
+	// ...
+	
+	
+	// ...
+	
+	
 	/*
 	   * ***************************************************************************
 	   * ABSCHNITT, Ende: Methoden fuer Eigenschaft-Objekte
 	   * ***************************************************************************
 	   */
-	
-	
 	/*
 	   * ***************************************************************************
 	   * ABSCHNITT, Beginn: Methoden fuer Auspraegung-Objekte
@@ -242,14 +277,34 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   */
 	
 	
+	// createAuspraegung()
+
 	
+	// saveAuspraegung()
+	
+	
+	// removeAuspraegung()
+	
+	
+	
+	/**
+	 * Auslesen einer bestimmten Auspraegung anhand der id.
+	 * 
+	 */
+	public Auspraegung getAuspraegungById(Auspraegung a) throws IllegalArgumentException {
+		return this.aMapper.findAuspraegungById(a.getId());
+	}
+
 	/**
 	 * Gibt alle Auspraegungen eines Kontakts zurück.
 	 * 
 	 */
-	public Vector<Auspraegung> getAllAuspraegungenByKontakt(Kontakt k) {
+	public Vector<Auspraegung> getAllAuspraegungenByKontakt(Kontakt k) throws IllegalArgumentException {
 		return this.aMapper.findAuspraegungByKontakt(k);
 	}
+	
+	
+	// getAllAuspraegungenByEigenschaft (?)
 	
 	
 	/*
@@ -257,18 +312,68 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   * ABSCHNITT, Ende: Methoden fuer Auspraegung-Objekte
 	   * ***************************************************************************
 	   */
-	
-	
 	/*
 	   * ***************************************************************************
 	   * ABSCHNITT, Beginn: Methoden fuer Berechtigung-Objekte
 	   * ***************************************************************************
 	   */
+	
+	// createBerechtigung()
+	
+	
+	// removeBerechtigung()
+	
+	
 	/*
 	   * ***************************************************************************
 	   * ABSCHNITT, Ende: Methoden fuer Berechtigung-Objekte
 	   * ***************************************************************************
 	   */
+	/*
+	   * ***************************************************************************
+	   * ABSCHNITT, Beginn: Abruf der geteilten Objekte
+	   * ***************************************************************************
+	   */
+	
+	
+	// getAllSharedKontakteWith()
+	
+	
+	// getAllSharedKontakteFrom()
+	
+	
+	// getAllSharedKontaktlistenWith()
+	
+	
+	// getAllSharedKontaktlistenFrom()
+	
+	
+	/*
+	   * ***************************************************************************
+	   * ABSCHNITT, Ende: Abruf der geteilten Objekte
+	   * ***************************************************************************
+	   */
+	/*
+	   * ***************************************************************************
+	   * ABSCHNITT, Beginn: Share-Methoden
+	   * ***************************************************************************
+	   */
+	
+	
+	// shareObjectWith()
+	
+	
+	
+	// removeSharedObjectWith()
+	
+	
+	
+	/*
+	   * ***************************************************************************
+	   * ABSCHNITT, Ende: Share-Methoden
+	   * ***************************************************************************
+	   */
+	
 	
 }
 

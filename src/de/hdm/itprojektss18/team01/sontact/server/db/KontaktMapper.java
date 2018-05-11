@@ -332,14 +332,16 @@ public class KontaktMapper {
 				+ id);
 		
 		//Statement als Query an die DB schicken
-		ResultSet result = prestmt.executeQuery();
+		ResultSet rs = prestmt.executeQuery();
 		
 		//Ergebnistuppel in Objekt umwandeln
 		Kontakt k = new Kontakt();
-		while (result.next()){
-			k.setId(result.getInt("id"));
-			k.setVorname(result.getString("vorname"));
-			k.setNachname(result.getString("nachname"));
+		while (rs.next()){
+	        k.setId(rs.getInt("id"));
+	        k.setVorname(rs.getString("vorname"));
+	        k.setNachname(rs.getString("nachname"));
+	        k.setKontaktlisteId(rs.getInt("kontaktlisteid"));
+	        k.setOwnerId(rs.getInt("ownerid"));
 		}
 
 		return k;
@@ -374,11 +376,11 @@ public class KontaktMapper {
 		
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement(
-				"SELECT * FROM Kontakt WHERE nachname like" 
+				"SELECT * FROM Kontakt WHERE nachname like'" 
 				+ name 
-				+ "OR vorname like" 
+				+ "' OR vorname like '" 
 				+ name + 
-				" ORDER BY nachname");
+				"' ORDER BY nachname");
 		
 		//Statement als Query an die DB schicken
 		ResultSet result = prestmt.executeQuery();
@@ -386,8 +388,11 @@ public class KontaktMapper {
 		//Ergebnistuppel in Objekt umwandeln
 		Kontakt k = new Kontakt();
 		while (result.next()){
-			k.setVorname(result.getString("vorname"));
-			k.setNachname(result.getString("nachname"));
+	        k.setId(result.getInt("id"));
+	        k.setVorname(result.getString("vorname"));
+	        k.setNachname(result.getString("nachname"));
+	        k.setKontaktlisteId(result.getInt("kontaktlisteid"));
+	        k.setOwnerId(result.getInt("ownerid"));
 			}	
 		
 		return list;
@@ -418,7 +423,7 @@ public class KontaktMapper {
 		
 			//SQL Statement anlegen
 			PreparedStatement prestmt = con.prepareStatement(
-					"SELECT kontaktlisteid FROM kontakt WHERE kontaktlisteid=" 
+					"SELECT * FROM kontakt WHERE kontaktlisteid=" 
 					+ kontaktlisteId);
 		
 			//Statement als Query an die DB schicken
@@ -427,7 +432,11 @@ public class KontaktMapper {
 			//Ergebnistuppel in Objekt umwandeln
 			Kontakt k = new Kontakt();
 			while (result.next()){
-				k.setKontaktlisteId(result.getInt("kontaktlisteid"));
+		        k.setId(result.getInt("id"));
+		        k.setVorname(result.getString("vorname"));
+		        k.setNachname(result.getString("nachname"));
+		        k.setKontaktlisteId(result.getInt("kontaktlisteid"));
+		        k.setOwnerId(result.getInt("ownerid"));
 			}
 		
 			return list;
@@ -468,7 +477,11 @@ public class KontaktMapper {
 		//Ergebnistuppel in Objekt umwandeln
 		Kontakt k = new Kontakt();
 		while (result.next()){
-			k.setOwnerId(result.getInt("ownerid"));
+	        k.setId(result.getInt("id"));
+	        k.setVorname(result.getString("vorname"));
+	        k.setNachname(result.getString("nachname"));
+	        k.setKontaktlisteId(result.getInt("kontaktlisteid"));
+	        k.setOwnerId(result.getInt("ownerid"));
 		}
 			
 		return list;

@@ -213,12 +213,21 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return this.kMapper.findKontaktByNutzerId(n.getId()); 
 	}
 
+	/**
+	 * Setzten der Zuordnung eines Kontakts zur einer Kontaktliste
+	 * 
+	 */
+	public void addKontaktToKontaktliste(Kontakt k, Kontaktliste kl) {
+		this.kMapper.addKontaktToKontaktliste(k, kl);
+	}
 	
-	// addKontaktToKontaktliste()
-	
-	
-	// removeKontaktFromKontaktliste()
-	
+	/**
+	 * Aufhebung der Zuordnung eines Kontakts zur einer Kontaktliste 
+	 * @param k
+	 */
+	public void removeKontaktFromKontaktliste(Kontakt k) {
+		this.kMapper.deleteKontaktFromKontaktliste(k);
+	}
 	
 	/*
 	   * ***************************************************************************

@@ -301,7 +301,7 @@ public class KontaktlistenMapper {
 		 */
 		public void insertKontakt(Kontakt k, Kontaktliste kl) {
 			
-			KontaktMapper.kontaktMapper().insertIntoKontaktliste(k,kl);
+			KontaktMapper.kontaktMapper().addKontaktToKontaktliste(k, kl);
 		
 		}
 		
@@ -310,9 +310,9 @@ public class KontaktlistenMapper {
 		 * 
 		 * @param kl aus der der Kontakt entfertn werden soll.
 		 */
-		public void deleteKontakt(Kontakt k, Kontaktliste kl) {
-		
-			KontaktMapper.kontaktMapper().deleteKontaktFromKontaktliste(kl.getId(), k.getId());
+		public void deleteKontakt(Kontakt k) {
+			
+			KontaktMapper.kontaktMapper().deleteKontaktFromKontaktliste(k);
 			
 		}
 		

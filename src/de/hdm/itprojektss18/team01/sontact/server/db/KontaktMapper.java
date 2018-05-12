@@ -97,15 +97,14 @@ public class KontaktMapper {
 				
 				
 				PreparedStatement  prestmt = con
-						.prepareStatement("INSERT INTO Kontakt (id, vorname, nachname, erstellungsdatum, modifikationsdatum, ownerid, kontaktlisteid "
+						.prepareStatement("INSERT INTO Kontakt (id, vorname, nachname, erstellungsdatum, modifikationsdatum, ownerid "
 								+ ") VALUES('" 
 								+ k.getId() + "', '" 
 								+ k.getVorname() + "', '"
 								+ k.getNachname() + "', '" 
 								+ k.getErstellDat() + "', '" 
 								+ k.getModDat() + "', '" 
-								+ k.getOwnerId() + "', '" 
-								+ k.getKontaktlisteId() + "')");
+								+ k.getOwnerId() + "')");
 							
 
 				// INSERT-Statement ausfï¿½hren
@@ -223,7 +222,57 @@ public class KontaktMapper {
 		    // Ergebnisvektor zurÃ¼ckgeben
 		    return result;
 		  }
-	
+	 
+		/**
+		 * EnfÃ¼gen eines <code>Kontakt</code>-Objekts in eine spezifische <code>Kontaktliste</code>. 
+		
+		 * @param k der <code>Kontakt</code>, kl die <code>Kontaktliste</code> in welche der Kontakt gepeischert werden soll.
+		 */
+		public Kontakt addKontaktToKontaktliste(Kontakt k, Kontaktliste kl) {
+			Connection con = DBConnection.connection();
+			
+			try {
+				
+					PreparedStatement  prestmt = con  // Statements auf Update Kontakt angepasst - evtl Methode Updatekonform gestalten (?)
+							.prepareStatement("UPDATE `Kontakt` SET`kontaktlisteid` ="+kl.getId() +" WHERE `id` ="
+									+ k.getId());
+			
+					// Statement ausfï¿½hren
+					prestmt.execute();
+					
+					
+			}
+				catch (SQLException e2) {
+					e2.printStackTrace();
+				}
+			return k;
+			
+			}
+
+		/**
+		 * Entfernen eines <code>Kontakt</code>-Objekts aus einer <code>Kontaktliste</code>. 
+		 * 
+		 * @param Id des Kontakts, kontaktlisteId der Kontaktliste in welche der Kontakt gespeichert ist.
+		 */
+		public void removeKontaktFromKontaktliste(Kontakt k) {
+			Connection con = DBConnection.connection();
+			
+			try {
+				PreparedStatement  prestmt = con  
+						.prepareStatement("UPDATE `Kontakt` SET`kontaktlisteid` =NULL WHERE `id` ="
+								+ k.getId());
+		
+				// Statement ausfï¿½hren
+				prestmt.execute();
+				
+			//Statement als Query an die DB schicken
+			prestmt.execute();
+			}
+			
+			catch (SQLException e2){
+				e2.printStackTrace();
+			}
+		}
 		
 	
 	
@@ -431,11 +480,11 @@ public class KontaktMapper {
 
 	
 	/*
-	 * Notiz für die nachstehenden beiden Mehtoden: 
+	 * Notiz fï¿½r die nachstehenden beiden Mehtoden: 
 	 * 
 	 * InsertKontaktIntoKontaktliste() und deleteKontaktFromKontaktliste() sind jeweils nur
 	 * UPDATE-operationen auf der Datenbank, die das Fremdschluessel-Attribut 'kontaktlisteid' 
-	 * in der Tabelle 'Kontakt' für die KontaktID xy setzten oder loeschen. 
+	 * in der Tabelle 'Kontakt' fï¿½r die KontaktID xy setzten oder loeschen. 
 	 * 
 	 * Habe die SQL-Statements angepasst:
 	 * Evtl die Methode "Updatekonform" umschreiben, damit sie funktioniert. MaxID usw. nicht noetig .. 
@@ -443,66 +492,5 @@ public class KontaktMapper {
 	 * @author kankup
 	 */
 	
-
-	/**
-	 * EnfÃ¼gen eines <code>Kontakt</code>-Objekts in eine spezifische <code>Kontaktliste</code>. 
-	
-	 * @param k der <code>Kontakt</code>, kl die <code>Kontaktliste</code> in welche der Kontakt gepeischert werden soll.
-	 */
-	public Kontakt addKontaktToKontaktliste(Kontakt k, Kontaktliste kl) {
-		Connection con = DBConnection.connection();
-		
-		try {
-			// Leeres SQL Statement anlegen
-			Statement stmt = con.createStatement();
-	
-			// Statement als Query an die DB schicken
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Kontakt");
-	
-			// Rï¿½ckgabe beinhaltet nur eine Tupel
-			if (rs.next()) {
-	
-				// b enthï¿½lt den bisher maximalen, nun um 1 inkrementierten Primï¿½rschlï¿½ssel
-				k.setId(rs.getInt("maxid") + 1);;
-				
-				
-				PreparedStatement  prestmt = con  // Statements auf Update Kontakt angepasst - evtl Methode Updatekonform gestalten (?)
-						.prepareStatement("UPDATE Kontakt SET kontaktlisteid = " + kl.getId() + " WHERE id = "
-								+ k.getId());
-		
-				// Statement ausfï¿½hren
-				prestmt.execute();
-				
-				}
-		}
-			catch (SQLException e2) {
-				e2.printStackTrace();
-			}
-		
-			return k;
-		}
-
-
-	/**
-	 * Entfernen eines <code>Kontakt</code>-Objekts aus einer <code>Kontaktliste</code>. 
-	 * 
-	 * @param Id des Kontakts, kontaktlisteId der Kontaktliste in welche der Kontakt gespeichert ist.
-	 */
-	public void removeKontaktFromKontaktliste(Kontakt k) {
-		Connection con = DBConnection.connection();
-		
-		try {
-		//SQL Statement anlegen
-		PreparedStatement prestmt = con.prepareStatement( // Statements auf Update Kontakt angepasst - evtl Methode Updatekonform gestalten (?)
-				"UPDATE Kontakt SET kontaktlisteid= '' WHERE id=" + k.getId());
-		
-		//Statement als Query an die DB schicken
-		prestmt.execute();
-		}
-		
-		catch (SQLException e2){
-			e2.printStackTrace();
-		}
-	}
 }
 

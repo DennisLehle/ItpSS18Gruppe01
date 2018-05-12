@@ -151,7 +151,7 @@ public class KontaktlistenMapper {
 		 * @return 
 		 * @return void
 		 */
-		 public Vector<Kontaktliste> findOwnersKontaktliste(Kontaktliste kl) {
+		 public Vector<Kontaktliste> findOwnersKontaktliste(int ownerId) {
 			 
 			    Connection con = DBConnection.connection();
 			    Vector<Kontaktliste> result = new Vector<Kontaktliste>();
@@ -334,4 +334,47 @@ public class KontaktlistenMapper {
 		     */
 		    return KontaktMapper.kontaktMapper().findKontakteVonOwner(kl.getOwnerId(), kl.getId()); 
 		  }
+		
+		/**
+		 * Diese Methode gibt Kontaktlisten anhand ihrem Titel aus.
+		 * 
+		 * @see findById
+		 * @param titel
+		 * @return 
+		 * @return Kontaktliste
+		 */
+
+		public Vector <Kontaktliste> findByTitel(String titel) {
+			
+			// DBConnection herstellen
+			Connection con = DBConnection.connection();
+
+			try {
+				Vector<Kontaktliste> list = new Vector<Kontaktliste>();
+							
+				// SQL-Statement anlegen
+				PreparedStatement prestmt = con.prepareStatement(
+				"SELECT * FROM Kontaktliste WHERE titel =" + titel);
+										
+				// SQL Statement wird als Query an die DB geschickt und 
+				//in die R�ckgabe von rs gespeichert 
+				ResultSet rs = prestmt.executeQuery();
+							
+							
+				// Ergebnis-Tupel in Objekt umwandeln
+				Kontaktliste kl = new Kontaktliste(); 
+				while (rs.next()) {
+					kl.setId(rs.getInt("id"));
+					kl.setTitel(rs.getString("titel"));
+					kl.setOwnerId(rs.getInt("ownerid"));		
+				}
+							
+				return list;
+			} 
+				
+			catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+			return null;
+		}
 }

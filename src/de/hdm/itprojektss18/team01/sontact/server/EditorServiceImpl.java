@@ -118,7 +118,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		
 		// Alle Kontakte des Nutzers aus der DB entfernen 
 		
-		// Alle Auspraegungen des Nuters entfernen 
+		// Alle Auspraegungen des Nutzers entfernen 
 		
 		// Den Nutzer als eigener Kontakt aus der DB entfernen 
 		
@@ -146,7 +146,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Kontakt createKontakt (String vorname, String nachname, Date erstellDat,
 			Date modDat, int ownerId, int kontaktlisteId, Berechtigung berechtigung)
 					throws IllegalArgumentException { 
-		// muessten wir hier nicht ein KontaktObjekt uebergeben? 
+		// muessten wir hier nicht ein KontaktObjekt uebergeben? Antwort Melanie: ich glaube auch
 		
 		Date currentDate = new Date(System.currentTimeMillis());
 		
@@ -243,19 +243,88 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   */
 	
 	
-	// createKontaktliste()
+	/**
+	 * Erzeugen einer neuen Kontaktliste.
+	 * 
+	 */
+	
+	public Kontaktliste createKontaktliste (String titel, int ownerId, Berechtigung berechtigung)
+					throws IllegalArgumentException { 
+		
+	
+		//Date currentDate = new Date(System.currentTimeMillis()); --> brauchen wir kein Erstelldatum für eine Kontaktliste?
+	
+		
+		Kontaktliste kontaktliste = new Kontaktliste();
+		kontaktliste.setTitel(titel);
+		//kontaktliste.setErstellDat(currentDate);
+		//kontaktliste.setModDat(currentDate);
+		kontaktliste.setOwnerId(ownerId);
+		kontaktliste.setBerechtigung(berechtigung);
+		
+		
+		kontaktliste.setId(1);
+		return this.klMapper.insert(kontaktliste);
+	}
 	
 	
-	// saveKontatliste()
+	
+	/**
+	 * Speichern einer modifizierten Kontaktliste
+	 * 
+	 */
+	public Kontaktliste saveKontaktliste (Kontaktliste kl) throws IllegalArgumentException {
+
+		//Date currentDate = new Date(System.currentTimeMillis());
+		//kl.setModDat(currentDate);
+		
+		return klMapper.update(kl);
+	}
 	
 	
-	// removeKontaktliste()
+	/**
+	 * Loeschen einer Kontaktliste.
+	 * 
+	 */
+	public void deleteKontaktliste (Kontaktliste kl) throws IllegalArgumentException {
+		
+		// Zunaechst alle Kontakte der Kontaktliste aus der DB entfernen.
+		Vector <Kontakt> removeAllKontakte = klMapper.getKontakte(kl);
+		if (removeAllKontakte != null) {
+			for (Kontakt k : removeAllKontakte) {
+				this.kMapper.removeKontaktFromKontaktliste(k);
+			}
+		}
+		
+
+		this.klMapper.delete(kl);
+	}
 	
 	
-	// gellAllKontaktlistenByOwner()
+	
+	/**
+	 * Alle Kontaktlisten eines Nutzers anhand OwnerId
+	 * 
+	 */
+	public Vector<Kontaktliste> getAllKontaktlisteByOwner (int ownerId) throws IllegalArgumentException {
+		return this.klMapper.findOwnersKontaktliste(ownerId);
+	}
 	
 	
 	// getAllKontakteByKontaktliste() // gettAllKontakteByKontaktlisteId()
+	
+	public Vector <Kontakt> getAllKontakteByKontaktliste (Kontaktliste kl) throws IllegalArgumentException {
+		return this.klMapper.getKontakte(kl);
+		
+	}
+
+	/**
+	 * Alle Kontaktlisten anhand ihrem Titel
+	 */
+	
+	public Vector <Kontaktliste> findKontaktlisteByTitel (String titel) throws IllegalArgumentException {
+		return this.klMapper.findByTitel(titel);
+	}
 
 	
 	/*

@@ -1,9 +1,9 @@
 package de.hdm.itprojektss18.team01.sontact.server;
 
+
 import java.sql.Date;
 import java.util.Vector;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import de.hdm.itprojektss18.team01.sontact.server.db.*;
 import de.hdm.itprojektss18.team01.sontact.shared.*;
@@ -13,8 +13,9 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.*;
 
 
 public class EditorServiceImpl extends RemoteServiceServlet implements EditorService{
+	
 	public EditorServiceImpl() throws IllegalArgumentException {
-}
+	}
 
 	/**
 	 * Serialisierung 
@@ -111,7 +112,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Nutzer-Objekt wird entfernt und aus der Datenbank gelöscht.
 	 */
-	public void deleteNutzer(Kontakt kontakt) {
+	public void deleteNutzer(Kontakt kontakt) throws IllegalArgumentException {
 		
 		// Alle Auspraegungen der Kontakte des Nutzers aus der DB entfernen
 		
@@ -142,9 +143,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Erzeugen eines neuen Kontakts.
 	 * 
 	 */
-	public Kontakt createKontakt (String vorname, String nachname, DateTimeFormat erstellDat,
-			DateTimeFormat modDat, int ownerId, int kontaktlisteId, Berechtigung berechtigung)
-					throws IllegalArgumentException { // muessten wir hier nicht ein KontaktObjekt uebergeben? 
+	public Kontakt createKontakt (String vorname, String nachname, Date erstellDat,
+			Date modDat, int ownerId, int kontaktlisteId, Berechtigung berechtigung)
+					throws IllegalArgumentException { 
+		// muessten wir hier nicht ein KontaktObjekt uebergeben? 
 		
 		Date currentDate = new Date(System.currentTimeMillis());
 		
@@ -217,7 +219,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Setzten der Zuordnung eines Kontakts zur einer Kontaktliste
 	 * 
 	 */
-	public void addKontaktToKontaktliste(Kontakt k, Kontaktliste kl) {
+	public void addKontaktToKontaktliste(Kontakt k, Kontaktliste kl) throws IllegalArgumentException {
 		this.kMapper.addKontaktToKontaktliste(k, kl);
 	}
 	
@@ -225,8 +227,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Aufhebung der Zuordnung eines Kontakts zur einer Kontaktliste 
 	 * @param k
 	 */
-	public void removeKontaktFromKontaktliste(Kontakt k) {
-		this.kMapper.deleteKontaktFromKontaktliste(k);
+	public void removeKontaktFromKontaktliste(Kontakt k) throws IllegalArgumentException {
+		this.kMapper.removeKontaktFromKontaktliste(k);
 	}
 	
 	/*
@@ -311,6 +313,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Vector<Auspraegung> getAllAuspraegungenByKontakt(Kontakt k) throws IllegalArgumentException {
 		return this.aMapper.findAuspraegungByKontakt(k);
 	}
+
 	
 	
 	// getAllAuspraegungenByEigenschaft (?)

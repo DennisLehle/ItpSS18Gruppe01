@@ -488,7 +488,7 @@ public class KontaktMapper {
 	 * 
 	 * @param Id des Kontakts, kontaktlisteId der Kontaktliste in welche der Kontakt gespeichert ist.
 	 */
-	public void deleteKontaktFromKontaktliste(Kontakt k) {
+	public void removeKontaktFromKontaktliste(Kontakt k) {
 		Connection con = DBConnection.connection();
 		
 		try {

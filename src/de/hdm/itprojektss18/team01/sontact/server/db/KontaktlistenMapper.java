@@ -312,7 +312,7 @@ public class KontaktlistenMapper {
 		 */
 		public void deleteKontakt(Kontakt k) {
 			
-			KontaktMapper.kontaktMapper().deleteKontaktFromKontaktliste(k);
+			KontaktMapper.kontaktMapper().removeKontaktFromKontaktliste(k);
 			
 		}
 		

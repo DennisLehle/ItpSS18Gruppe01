@@ -156,7 +156,7 @@ public class KontaktlistenMapper {
 
 				// Dem SQL Statement wird der lokalen Variable �bergeben
 				PreparedStatement prestmt = con.prepareStatement(
-						"DELETE * FROM Kontaktliste WHERE ownerid = "
+						"DELETE FROM Kontaktliste WHERE ownerid = "
 						+ ownerId);
 				
 				// DELETE-Statement ausf�hren

@@ -122,7 +122,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 				this.aMapper.delete(a);
 			}
 		}
-				this.kMapper.deleteAll(k);
+		//Wie werden Eigenschaften berücksichtigt beim Löschen?		
+		this.kMapper.deleteAll(k);
 				
 		this.klMapper.deleteAll(k.getOwnerId());
 		
@@ -349,11 +350,41 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   */
 	
 	
-	// ...
+	/**
+	 * Erzeugen einer Eigenschaft.
+	 */
+	
+	public Eigenschaft createEigenschaft (String bezeichnung)
+			throws IllegalArgumentException { 
+		
+		Eigenschaft e = new Eigenschaft();
+		e.setBezeichnung(bezeichnung);
+		
+		e.setId(1);
+		
+		return this.eMapper.insert(e);
+	}
 	
 	
-	// ...
+	/**
+	 * Speichern einer modifizierten Eigenschaft.
+	 * 
+	 */
+	public Eigenschaft saveEigenschaft (Eigenschaft e) throws IllegalArgumentException {
+
+		return eMapper.update(e);
+	}	
 	
+	
+	/**
+	 *Loeschen einer Eigenschaft.
+	 * 
+	 */
+	public void deleteEigenschaft (Eigenschaft e) throws IllegalArgumentException {
+
+		this.eMapper.delete(e);
+	}
+
 	
 	/*
 	   * ***************************************************************************

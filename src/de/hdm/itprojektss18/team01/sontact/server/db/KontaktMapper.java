@@ -169,7 +169,7 @@ public class KontaktMapper {
 		try {
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement(
-				"DELETE FROM Kontakt WHERE id=" 
+				"DELETE * FROM Kontakt WHERE id=" 
 				+ k.getId());
 		
 		//Statement als Query an die DB schicken
@@ -180,6 +180,30 @@ public class KontaktMapper {
 			e2.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Loeschen aller <code>Kontakt</code>-Objekte die einem <code>Owner</code> zugewiesen sind. 
+	 * @param k das aus der DB zu loeschende "Objekt"
+	 */
+	
+	public void deleteAll(Kontakt k) {
+		Connection con = DBConnection.connection();
+		
+		try {
+		//SQL Statement anlegen
+		PreparedStatement prestmt = con.prepareStatement(
+				"DELETE * FROM Kontakt WHERE ownerid=" 
+				+ k.getOwnerId());
+		
+		//Statement als Query an die DB schicken
+		prestmt.execute();
+		}
+		
+		catch (SQLException e2){
+			e2.printStackTrace();
+		}
+	}
+	
 
 	/**
 	 * Filtert Kontakte einer Kontaktliste heraus 

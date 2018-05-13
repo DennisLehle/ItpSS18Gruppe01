@@ -121,7 +121,6 @@ public class KontaktlistenMapper {
 		 * @param kontaktliste
 		 * @return void
 		 */
-
 		public void delete(Kontaktliste kl) {
 
 			// DBConnection herstellen
@@ -133,6 +132,32 @@ public class KontaktlistenMapper {
 				PreparedStatement prestmt = con.prepareStatement(
 						"DELETE FROM Kontaktliste WHERE id = "
 						+ kl.getId());
+				
+				// DELETE-Statement ausf�hren
+				prestmt.execute();
+				
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+		}
+		
+		/**
+		 * Loeschen aller <code>Kontaktlisten</code>-Objekte die einem <code>Owner</code> zugewiesen sind. 
+		 * 
+		 * @param ownerId
+		 * @return void
+		 */
+		public void deleteAll(int ownerId) {
+
+			// DBConnection herstellen
+			Connection con = DBConnection.connection();
+
+			try {
+
+				// Dem SQL Statement wird der lokalen Variable �bergeben
+				PreparedStatement prestmt = con.prepareStatement(
+						"DELETE * FROM Kontaktliste WHERE ownerid = "
+						+ ownerId);
 				
 				// DELETE-Statement ausf�hren
 				prestmt.execute();

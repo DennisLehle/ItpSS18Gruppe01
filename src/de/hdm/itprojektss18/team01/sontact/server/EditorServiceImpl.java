@@ -176,6 +176,18 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 	
 	/**
+	 * Beim löschen dieser Methode wird ein Fehler geworfen 
+	 * Für die Erstellung der Klasse EditorServiceImpl wird die Methode mit diesen Übergabeparametern benötigt
+	 * Wie lösen wir das?
+	 */
+	@Override
+	public Kontakt createKontakt(String vorname, String nachname, Date erstellDat, Date modDat, int ownerId,
+			int kontaktlisteId, Berechtigung berechtigung) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**
 	 * Speichern eines modifizierten Kontakts
 	 * 
 	 */
@@ -354,13 +366,42 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   * ***************************************************************************
 	   */
 	
-	// createAuspraegung()
+	/**
+	 * Erzeugen einer neuen Auspraegung.
+	 * 
+	 */
+	
+	public Auspraegung createAuspraegung (String wert, int eigenschaftId, int kontaktId, int ownerId, Berechtigung berechtigung) throws IllegalArgumentException { 
+		
+		Auspraegung a = new Auspraegung();
+		a.setWert(wert);
+		a.setEigenschaftId(eigenschaftId);
+		a.setKontaktId(kontaktId);
+		a.setOwnerId(nutzer.getId());
+		a.setBerechtigung(berechtigung);
+		
+		a.setId(1);
+		return this.aMapper.insert(a);
+	}
 
 	
-	// saveAuspraegung()
+	/**
+	 * Speichern einer modifizierten Auspraegung.
+	 * 
+	 */
+	public Auspraegung saveAuspraegung (Auspraegung a) throws IllegalArgumentException {
+
+		return aMapper.update(a);
+	}
 	
-	
-	// removeAuspraegung()
+	/**
+	 *Loeschen einer Auspraegung.
+	 * 
+	 */
+	public void deleteAuspraegung (Auspraegung a) throws IllegalArgumentException {
+
+		this.aMapper.delete(a);
+	}
 	
 	/**
 	 * Auslesen einer bestimmten Auspraegung anhand der id.
@@ -379,13 +420,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return this.aMapper.findAuspraegungByKontakt(k);
 	}
 
-	@Override
-	public Kontakt createKontakt(String vorname, String nachname, Date erstellDat, Date modDat, int ownerId,
-			int kontaktlisteId, Berechtigung berechtigung) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	
 	
 	// getAllAuspraegungenByEigenschaft (?)
@@ -402,10 +436,45 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   * ***************************************************************************
 	   */
 	
-	// createBerechtigung()
+	/**
+	 * Wie lösen wir das mit den Übergabeparameter für Kontakt, Kontaktliste oder Ausprägung? Müssen diese überhaupt übergeben werden?
+	 * @param holderId
+	 * @param receiverId
+	 * @param objectId
+	 * @param type
+	 * @param berechtigungsstufe
+	 * @param kontaktId
+	 * @param kontaktlisteId
+	 * @param auspraegungId
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
+	
+	public Berechtigung createBerechtigung (int holderId, int receiverId, int objectId, char type, int berechtigungsstufe) throws IllegalArgumentException { 
+		
+		Berechtigung b = new Berechtigung();
+		
+		b.setHolderId(holderId);
+		b.setReceiverId(receiverId);
+		b.setObjectId(objectId);
+		b.setType(type);
+		b.setBerechtigungsstufe(berechtigungsstufe);
+		
+		b.setId(1);
+		return this.bMapper.insert(b);
+	}
 	
 	
-	// removeBerechtigung()
+	/**
+	 * Das Loeschen einer Berechtigung.
+	 * @param b
+	 * @throws IllegalArgumentException
+	 */
+	
+	public void deleteBerechtigung (Berechtigung b) throws IllegalArgumentException {
+
+		this.bMapper.delete(b);
+	}
 	
 	
 	/*

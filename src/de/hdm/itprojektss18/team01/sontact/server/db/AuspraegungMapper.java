@@ -75,7 +75,7 @@ public class AuspraegungMapper {
 								+ a.getKontaktId() + "', '" 
 								+ a.getOwnerId() + "')");
 		
-				// INSERT-Statement ausf�hren
+				// INSERT-Statement ausfuehren
 				prestmt.execute();
 				
 			}
@@ -127,7 +127,7 @@ public class AuspraegungMapper {
 		
 		try {
 			// DELETE-Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("DELETE FROM Auspraegung "
+			PreparedStatement prestmt = con.prepareStatement("DELETE * FROM Auspraegung "
 					+ "WHERE id = " + a.getId());
 			
 			// DELETE-Statement ausf�hren

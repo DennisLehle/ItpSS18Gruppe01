@@ -169,7 +169,7 @@ public class KontaktMapper {
 		try {
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement(
-				"DELETE FROM Kontakt WHERE id=" 
+				"DELETE * FROM Kontakt WHERE id=" 
 				+ k.getId());
 		
 		//Statement als Query an die DB schicken

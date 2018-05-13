@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class Hauptansicht extends Composite {
 	VerticalPanel vPanel = new VerticalPanel();
+	Navigation nav;
 	
 	
 	public Hauptansicht() {
@@ -21,8 +22,9 @@ public class Hauptansicht extends Composite {
 		 * Zuweisung der Navigation der Hauptansicht. 
 		 */
 		Navigation nav = new Navigation();
-		 vPanel.add(nav);
-		 RootPanel.get("navigator").add(vPanel);
+		vPanel.clear(); 
+		vPanel.add(nav);
+		RootPanel.get("navigator").add(vPanel);
 	}
 }
 

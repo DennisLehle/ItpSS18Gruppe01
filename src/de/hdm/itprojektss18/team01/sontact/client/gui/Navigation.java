@@ -16,45 +16,41 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  *
  */
 
-public class Navigation extends Composite {
+public class Navigation extends VerticalPanel {
 
-	VerticalPanel vPanel = new VerticalPanel();
 
-	Button kbtn = new Button("<image src='group-512.png' width='20px' height='20px' />Meine Kontakte");
-	Button klbtn = new Button("<image src='Kontakt.png' width='20px' height='20px' /> Meine Kontaktliste");
-	Button rpbtn = new Button("<image src='reportGenerator.png' width='15px' height='15px' />Report Generator");
-
-	Tree t = new Tree();
-	TreeItem root = new TreeItem();
-
+	Button ownerbtn = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' /> Eigener Kontakt");
+	Button kbtn = new Button("<image src='/images/kontakte.png' width='20px' height='20px' align='center' /> Kontakte");
+	Button klbtn = new Button("<image src='/images/kontaktliste.png' width='20px' height='20px' align='center' /> Kontaktliste");
+	Button logOutButton = new Button("<image src='/images/logout.png' width='20px' height='20px' align='center' /> Abmelden");
+	Button rpbtn = new Button("<image src='/images/report.png' width='20px' height='20px' align='center' /> Report Generator");
 	public Navigation() {
-
-		initWidget(vPanel);
-
-		/**
-		 * Baum zur Navigation erstellen
-		 */
-		root.setText("Max Mustermann");
-		root.addItem(kbtn);
-		root.addItem(klbtn);
-		root.addItem(rpbtn);
-
+	
 		/**
 		 * Styling der Buttons
 		 */
 		kbtn.setStyleName("ButtonStyle");
 		klbtn.setStyleName("ButtonStyle");
 		rpbtn.setStyleName("ButtonStyle");
-		kbtn.setPixelSize(200, 40);
-		klbtn.setPixelSize(200, 40);
-		rpbtn.setPixelSize(200, 40);
+		ownerbtn.setStyleName("ButtonStyle");
+		logOutButton.setStyleName("ButtonStyle");
+		kbtn.setPixelSize(150, 40);
+		klbtn.setPixelSize(150, 40);
+		rpbtn.setPixelSize(150, 40);
+		logOutButton.setPixelSize(150, 40);
+		ownerbtn.setPixelSize(150, 40);
+		
+		
 
 		/**
-		 * Bauminhalt wird dem Baum hinzugef�gt und dem VerticalPanel
-		 * hinzugefuegt.
+		 * Button zur Anzeige der Navigation anheften
 		 */
-		t.addItem(root);
-		vPanel.add(t);
+		this.add(ownerbtn);
+		this.add(kbtn);
+		this.add(klbtn);
+		this.add(logOutButton);
+		this.add(rpbtn);
+
 
 
 		/**

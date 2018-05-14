@@ -1,6 +1,7 @@
 package de.hdm.itprojektss18.team01.sontact.server.db;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -128,7 +129,7 @@ public class KontaktMapper {
 	 */
 	
 	public Kontakt update(Kontakt k) {
-		String sql = "UPDATE Kontakt SET  vorname=?, nachname=?, ownerid=?, kontaktlisteid=? WHERE id=?";
+		String sql = "UPDATE Kontakt SET  vorname=?, nachname=?, ownerid=?, moddatum=? WHERE id=?";
 		
 		Connection con = DBConnection.connection();
 		
@@ -139,12 +140,9 @@ public class KontaktMapper {
 	    	stmt.setString(1, k.getVorname());
 	    	stmt.setString(2, k.getNachname());
 	    	stmt.setInt(3, k.getOwnerId());
-	    	stmt.setInt(4, k.getKontaktlisteId());
-	   
+	    	stmt.setDate(4, new Date(System.currentTimeMillis()));
 	    	stmt.setInt(5, k.getId());
 	    	stmt.executeUpdate();
-	    	
-	    	System.out.println("Updated");
 	   
 		}
 		
@@ -312,7 +310,7 @@ public class KontaktMapper {
 		try {
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement(
-				"SELECT id, vorname, nachname FROM kontakt where id=" 
+				"SELECT * FROM Kontakt WHERE id=" 
 				+ id);
 		
 		//Statement als Query an die DB schicken
@@ -363,7 +361,8 @@ public class KontaktMapper {
 				"SELECT * FROM Kontakt WHERE nachname like'" 
 				+ name 
 				+ "' OR vorname like '" 
-				+ name + 
+				+ name + " WHERE ownerid = "
+				+ // id des owner? // + JOIN auf Berechtigung und zurueck auf Kontakt -> + 
 				"' ORDER BY nachname");
 		
 		//Statement als Query an die DB schicken

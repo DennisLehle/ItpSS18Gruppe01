@@ -84,7 +84,7 @@ public class KontaktlistenMapper {
 		 * @return Kontaktliste
 		 */
 		public Kontaktliste update(Kontaktliste kl)  {
-			String sql = "UPDATE Kontaktliste SET titel=?, ownerid=? WHERE id=?";
+			String sql = "UPDATE Kontaktliste SET titel=? WHERE id=?";
 			
 			// DBConnection herstellen
 			Connection con = DBConnection.connection();
@@ -93,8 +93,7 @@ public class KontaktlistenMapper {
 				PreparedStatement stmt = con.prepareStatement(sql);
 		    	
 		    	stmt.setString(1, kl.getTitel());
-		    	stmt.setInt(2, kl.getOwnerId());
-		    	stmt.setInt(3, kl.getId());
+		    	stmt.setInt(2, kl.getId());
 		    	stmt.executeUpdate();
 		    	
 		    	System.out.println("Updated");

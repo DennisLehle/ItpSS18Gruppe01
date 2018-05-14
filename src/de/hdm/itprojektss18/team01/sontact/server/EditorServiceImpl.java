@@ -2,6 +2,7 @@ package de.hdm.itprojektss18.team01.sontact.server;
 
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Vector;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -100,34 +101,34 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		Nutzer nutzer = new Nutzer();
 		nutzer.setEmailAddress(emailAddress);
 		
-		/* Es wird eine vorläufige Id gesetzt die anschließend in der Datenbank
-		 * nach Verfügbarkeit angepasst wird.
+		/* Es wird eine vorlï¿½ufige Id gesetzt die anschlieï¿½end in der Datenbank
+		 * nach Verfï¿½gbarkeit angepasst wird.
 		 */
 		nutzer.setId(1);
-		
-		//Einfügen und Speichern in der Datenbank.
+		init();
+		//Einfï¿½gen und Speichern in der Datenbank.
 		return this.nMapper.insert(nutzer);
 		
 	}
 	
 	/**
-	 * Ein Nutzer wird mit all seinen Objekten aus der Datenbank gelöscht.
+	 * Ein Nutzer wird mit all seinen Objekten aus der Datenbank gelï¿½scht.
 	 */
 	public void deleteNutzer(Kontakt k) throws IllegalArgumentException {
 	
-		// Löschen der Berechtigungsstufe muss berrücksichtigt werden.
+		// Lï¿½schen der Berechtigungsstufe muss berrï¿½cksichtigt werden.
 		Vector <Auspraegung> deleteAllAuspraegungen = getAllAuspraegungenByKontakt(k);
 		if (deleteAllAuspraegungen != null) {
 			for (Auspraegung a : deleteAllAuspraegungen) {
 				this.aMapper.delete(a);
 			}
 		}
-		//Wie werden Eigenschaften berücksichtigt beim Löschen?		
+		//Wie werden Eigenschaften berï¿½cksichtigt beim Lï¿½schen?		
 		this.kMapper.deleteAll(k);
 				
 		this.klMapper.deleteAll(k.getOwnerId());
 		
-		//Übergabe des CurrentUsers
+		//ï¿½bergabe des CurrentUsers
 		this.nMapper.delete(nutzer);
 				}
 			
@@ -163,16 +164,17 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Kontakt createKontakt (String vorname, String nachname, Nutzer nutzer)
 					throws IllegalArgumentException { 
 		
-		Date currentDate = new Date(System.currentTimeMillis());
+		//Date currentDate = new Date(System.currentTimeMillis());
 		
 		Kontakt kontakt = new Kontakt();
 		kontakt.setVorname(vorname);
 		kontakt.setNachname(nachname);
-		kontakt.setErstellDat(currentDate);
-		kontakt.setModDat(currentDate);
+		kontakt.setErstellDat(new Timestamp(System.currentTimeMillis()));
+		kontakt.setModDat(new Timestamp(System.currentTimeMillis()));
 		kontakt.setOwnerId(nutzer.getId());
 		
 		kontakt.setId(1);
+		
 		return this.kMapper.insert(kontakt);
 	}
 	
@@ -181,7 +183,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Kontakt saveKontakt (Kontakt k) throws IllegalArgumentException {
-
 		return kMapper.update(k);
 	}
 	
@@ -263,7 +264,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		Kontaktliste kontaktliste = new Kontaktliste();
 		kontaktliste.setTitel(titel);
 		
-		//CurrentUser übergeben
+		//CurrentUser ï¿½bergeben
 		kontaktliste.setOwnerId(ownerId);
 		
 		kontaktliste.setId(1);
@@ -307,7 +308,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	// getAllKontakteByKontaktliste() // gettAllKontakteByKontaktlisteId()
 	
 	/**
-	 * Filtert für eine spezielle Kontaktliste, dessen Kontakte heraus. 
+	 * Filtert fï¿½r eine spezielle Kontaktliste, dessen Kontakte heraus. 
 	 * @param kl
 	 * @return
 	 * @throws IllegalArgumentException
@@ -431,7 +432,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
-	 * Gibt alle Auspraegungen eines Kontakts zurück.
+	 * Gibt alle Auspraegungen eines Kontakts zurï¿½ck.
 	 * 
 	 */
 	public Vector<Auspraegung> getAllAuspraegungenByKontakt(Kontakt k) throws IllegalArgumentException {
@@ -456,7 +457,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   */
 	
 	/**
-	 * Wie lösen wir das mit den Übergabeparameter für Kontakt, Kontaktliste oder Ausprägung? Müssen diese überhaupt übergeben werden?
+	 * Wie lï¿½sen wir das mit den ï¿½bergabeparameter fï¿½r Kontakt, Kontaktliste oder Ausprï¿½gung? Mï¿½ssen diese ï¿½berhaupt ï¿½bergeben werden?
 	 * @param holderId
 	 * @param receiverId
 	 * @param objectId

@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Vector;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
@@ -129,7 +130,7 @@ public class KontaktMapper {
 	 */
 	
 	public Kontakt update(Kontakt k) {
-		String sql = "UPDATE Kontakt SET  vorname=?, nachname=?, ownerid=?, moddatum=? WHERE id=?";
+		String sql = "UPDATE Kontakt SET  vorname=?, nachname=?, ownerid=?, modifikationsdatum=? WHERE id=?";
 		
 		Connection con = DBConnection.connection();
 		
@@ -140,7 +141,7 @@ public class KontaktMapper {
 	    	stmt.setString(1, k.getVorname());
 	    	stmt.setString(2, k.getNachname());
 	    	stmt.setInt(3, k.getOwnerId());
-	    	stmt.setDate(4, new Date(System.currentTimeMillis()));
+	    	stmt.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
 	    	stmt.setInt(5, k.getId());
 	    	stmt.executeUpdate();
 	   

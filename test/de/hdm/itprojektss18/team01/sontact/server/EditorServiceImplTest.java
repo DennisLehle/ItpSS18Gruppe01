@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import com.google.gwt.junit.client.GWTTestCase;
 
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 
@@ -92,6 +93,24 @@ class EditorServiceImplTest extends GWTTestCase {
 		EditorServiceImpl editor = new EditorServiceImpl();
 		//Ich erstelle einen Kontakt und übergebe einen Nutzer in dem Fall mich selbst.
 		editor.createKontakt("Hans", "Peter", n);
+	}
+	
+	/**
+	 * Test Case für das Updaten eines Kontakts.
+	 * CHECK
+	 */
+	@Test
+	public void updateKontakt() {
+		
+		Kontakt k = new Kontakt();
+		k.setId(19);
+		k.setVorname("Martin");
+		k.setOwnerId(1);
+
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		editor.saveKontakt(k);
+		
 	}
 	
 	/*

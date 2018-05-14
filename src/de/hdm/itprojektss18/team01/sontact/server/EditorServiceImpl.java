@@ -177,18 +177,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 	
 	/**
-	 * Beim löschen dieser Methode wird ein Fehler geworfen 
-	 * Für die Erstellung der Klasse EditorServiceImpl wird die Methode mit diesen Übergabeparametern benötigt
-	 * Wie lösen wir das?
-	 */
-	@Override
-	public Kontakt createKontakt(String vorname, String nachname, Date erstellDat, Date modDat, int ownerId,
-			int kontaktlisteId, Berechtigung berechtigung) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	/**
 	 * Speichern eines modifizierten Kontakts
 	 * 
 	 */

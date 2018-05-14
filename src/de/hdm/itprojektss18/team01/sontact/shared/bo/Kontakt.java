@@ -18,8 +18,8 @@ public class Kontakt extends BusinessObject implements Participation {
 	 */
 	private String vorname;
 	private String nachname;
-	private Timestamp erstellDat;
-	private Timestamp modDat;
+	private Date erstellDat;
+	private Date modDat;
 	private int ownerId;
 	private int kontaktlisteId;
 	private Berechtigung berechtigung;
@@ -44,19 +44,19 @@ public class Kontakt extends BusinessObject implements Participation {
 		this.nachname = nachname;
 	}
 
-	public Timestamp getErstellDat() {
+	public Date getErstellDat() {
 		return erstellDat;
 	}
 
-	public void setErstellDat(Timestamp erstellDat) {
+	public void setErstellDat(Date erstellDat) {
 		this.erstellDat = erstellDat;
 	}
 
-	public Timestamp getModDat() {
+	public Date getModDat() {
 		return modDat;
 	}
 
-	public void setModDat(Timestamp modDat) {
+	public void setModDat(Date modDat) {
 		this.modDat = modDat;
 	}
 

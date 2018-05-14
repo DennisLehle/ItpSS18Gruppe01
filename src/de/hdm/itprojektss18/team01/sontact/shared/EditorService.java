@@ -1,13 +1,11 @@
 package de.hdm.itprojektss18.team01.sontact.shared;
 
 
-import java.sql.Date;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
@@ -25,9 +23,9 @@ public interface EditorService extends RemoteService{
 	public Nutzer createNutzer(String emailAddress) throws IllegalArgumentException;
 	
 	public void deleteNutzer(Kontakt kontakt) throws IllegalArgumentException;
-
-	public Kontakt createKontakt (String vorname, String nachname, Date erstellDat, Date modDat,
-			int ownerId, int kontaktlisteId, Berechtigung berechtigung) throws IllegalArgumentException;
+	
+	public Kontakt createKontakt (String vorname, String nachname, Nutzer nutzer)
+			throws IllegalArgumentException;
 	
 	public Kontakt saveKontakt (Kontakt k) throws IllegalArgumentException;
 	

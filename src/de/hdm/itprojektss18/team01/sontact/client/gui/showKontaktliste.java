@@ -16,8 +16,8 @@ import com.google.gwt.user.client.ui.TextBox;
 
 public class showKontaktliste {
 	
-	Button createListBtn = new Button("Kontaktliste +");
-	Button removeListBtn = new Button("Kontaktliste -");
+	Button createListBtn = new Button("Kontaktliste erstellen");
+	Button removeListBtn = new Button("Kontaktliste entfernen");
 	Button searchBtn = new Button("Suche");
 	TextBox tb = new TextBox();
 	

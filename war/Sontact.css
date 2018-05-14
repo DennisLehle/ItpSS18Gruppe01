@@ -30,6 +30,7 @@ h1 {
 #closeButton {
 	margin: 15px 6px 6px;
 }
+
 #header {
 	display: block;
 	background-color: #125485;
@@ -40,17 +41,16 @@ h1 {
 	text-align: center;
 	padding-top: 10px;
 	padding-bottom: 20px;
-
-	
-
+	font-size: 20px;
 }
+
 .box {
-     float: left;
-     width: 30%;
-     margin-right: 3.33333%;
-     padding: 20px;
-     background: #eee;
-     box-sizing: border-box;
+	float: left;
+	width: 30%;
+	margin-right: 3.33333%;
+	padding: 20px;
+	background: #eee;
+	box-sizing: border-box;
 }
 
 #content {
@@ -62,14 +62,12 @@ h1 {
 	padding-left: 30px;
 }
 
-#navigator{
+#navigator {
 	float: left;
 }
 
-
-
 #footer {
-	background-color: blue;
+	background-color: #125485;
 	color: white;
 	font: 'Gotham';
 	font-weight: lighter !important;
@@ -85,27 +83,26 @@ h1 {
 	color: #125485;
 	text-align: center;
 	border-radius: 10px;
-	font: 
+	margin: 3px;
+	text-align: center;
 }
 
 .ButtonStyleSuche {
 	color: #125485;
+	margin: 3px;
 	text-align: center;
-	font: 
-}	
-.ButtonStyleKontaktliste{
+}
+
+.ButtonStyleKontaktliste {
 	color: #125485;
 	border-radius: 12px;
 	text-align: center;
-	
-	font: 
+	margin: 3px;
 }
 
-.ButtonStyleKontakte{
+.ButtonStyleKontakte {
 	color: #125485;
 	border-radius: 12px;
 	text-align: center;
-	
-	font: 
+	margin: 3px;
 }
-

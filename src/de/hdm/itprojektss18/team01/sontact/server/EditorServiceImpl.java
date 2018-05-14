@@ -107,13 +107,30 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		
 		//Einfügen und Speichern in der Datenbank.
 		return this.nMapper.insert(nutzer);
+		
 	}
 	
 	/**
-	 * Nutzer-Objekt wird entfernt und aus der Datenbank gelöscht.
+	 * Ein Nutzer wird mit all seinen Objekten aus der Datenbank gelöscht.
 	 */
-	public void deleteNutzer(Kontakt kontakt) throws IllegalArgumentException {
+	public void deleteNutzer(Kontakt k) throws IllegalArgumentException {
+	
+		// Löschen der Berechtigungsstufe muss berrücksichtigt werden.
+		Vector <Auspraegung> deleteAllAuspraegungen = getAllAuspraegungenByKontakt(k);
+		if (deleteAllAuspraegungen != null) {
+			for (Auspraegung a : deleteAllAuspraegungen) {
+				this.aMapper.delete(a);
+			}
+		}
+		//Wie werden Eigenschaften berücksichtigt beim Löschen?		
+		this.kMapper.deleteAll(k);
+				
+		this.klMapper.deleteAll(k.getOwnerId());
 		
+		//Übergabe des CurrentUsers
+		this.nMapper.delete(nutzer);
+				}
+			
 		// Alle Auspraegungen der Kontakte des Nutzers aus der DB entfernen
 		
 		// Alle Kontakte des Nutzers aus der DB entfernen 
@@ -126,7 +143,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		
 		// (?)
 		
-	}
+	
 	
 	/*
 	   * ***************************************************************************
@@ -143,24 +160,32 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Erzeugen eines neuen Kontakts.
 	 * 
 	 */
-	public Kontakt createKontakt (String vorname, String nachname, Date erstellDat,
-			Date modDat, int ownerId, int kontaktlisteId, Berechtigung berechtigung)
+	public Kontakt createKontakt (String vorname, String nachname, Nutzer nutzer)
 					throws IllegalArgumentException { 
-		// muessten wir hier nicht ein KontaktObjekt uebergeben? Antwort Melanie: ich glaube auch
 		
 		Date currentDate = new Date(System.currentTimeMillis());
 		
 		Kontakt kontakt = new Kontakt();
+		kontakt.setVorname(vorname);
 		kontakt.setNachname(nachname);
 		kontakt.setErstellDat(currentDate);
 		kontakt.setModDat(currentDate);
-		kontakt.setOwnerId(ownerId);
-		kontakt.setKontaktlisteId(kontaktlisteId);
-		kontakt.setBerechtigung(berechtigung);
-		
+		kontakt.setOwnerId(nutzer.getId());
 		
 		kontakt.setId(1);
 		return this.kMapper.insert(kontakt);
+	}
+	
+	/**
+	 * Beim löschen dieser Methode wird ein Fehler geworfen 
+	 * Für die Erstellung der Klasse EditorServiceImpl wird die Methode mit diesen Übergabeparametern benötigt
+	 * Wie lösen wir das?
+	 */
+	@Override
+	public Kontakt createKontakt(String vorname, String nachname, Date erstellDat, Date modDat, int ownerId,
+			int kontaktlisteId, Berechtigung berechtigung) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	/**
@@ -169,9 +194,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public Kontakt saveKontakt (Kontakt k) throws IllegalArgumentException {
 
-		Date currentDate = new Date(System.currentTimeMillis());
-		k.setModDat(currentDate);
-		
 		return kMapper.update(k);
 	}
 	
@@ -247,60 +269,44 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Erzeugen einer neuen Kontaktliste.
 	 * 
 	 */
-	
-	public Kontaktliste createKontaktliste (String titel, int ownerId, Berechtigung berechtigung)
+	public Kontaktliste createKontaktliste (String titel, int ownerId)
 					throws IllegalArgumentException { 
-		
-	
-		//Date currentDate = new Date(System.currentTimeMillis()); --> brauchen wir kein Erstelldatum für eine Kontaktliste?
-	
-		
+				
 		Kontaktliste kontaktliste = new Kontaktliste();
 		kontaktliste.setTitel(titel);
-		//kontaktliste.setErstellDat(currentDate);
-		//kontaktliste.setModDat(currentDate);
-		kontaktliste.setOwnerId(ownerId);
-		kontaktliste.setBerechtigung(berechtigung);
 		
+		//CurrentUser übergeben
+		kontaktliste.setOwnerId(ownerId);
 		
 		kontaktliste.setId(1);
 		return this.klMapper.insert(kontaktliste);
 	}
-	
-	
 	
 	/**
 	 * Speichern einer modifizierten Kontaktliste
 	 * 
 	 */
 	public Kontaktliste saveKontaktliste (Kontaktliste kl) throws IllegalArgumentException {
-
-		//Date currentDate = new Date(System.currentTimeMillis());
-		//kl.setModDat(currentDate);
 		
 		return klMapper.update(kl);
 	}
-	
-	
+		
 	/**
 	 * Loeschen einer Kontaktliste.
 	 * 
 	 */
 	public void deleteKontaktliste (Kontaktliste kl) throws IllegalArgumentException {
 		
-		// Zunaechst alle Kontakte der Kontaktliste aus der DB entfernen.
+		// Alle Kontakte der Kontaktliste aus der DB entfernen.
 		Vector <Kontakt> removeAllKontakte = klMapper.getKontakte(kl);
 		if (removeAllKontakte != null) {
 			for (Kontakt k : removeAllKontakte) {
 				this.kMapper.removeKontaktFromKontaktliste(k);
 			}
 		}
-		
 
 		this.klMapper.delete(kl);
 	}
-	
-	
 	
 	/**
 	 * Alle Kontaktlisten eines Nutzers anhand OwnerId
@@ -310,9 +316,14 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return this.klMapper.findOwnersKontaktliste(ownerId);
 	}
 	
-	
 	// getAllKontakteByKontaktliste() // gettAllKontakteByKontaktlisteId()
 	
+	/**
+	 * Filtert für eine spezielle Kontaktliste, dessen Kontakte heraus. 
+	 * @param kl
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
 	public Vector <Kontakt> getAllKontakteByKontaktliste (Kontaktliste kl) throws IllegalArgumentException {
 		return this.klMapper.getKontakte(kl);
 		
@@ -339,11 +350,41 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   */
 	
 	
-	// ...
+	/**
+	 * Erzeugen einer Eigenschaft.
+	 */
+	
+	public Eigenschaft createEigenschaft (String bezeichnung)
+			throws IllegalArgumentException { 
+		
+		Eigenschaft e = new Eigenschaft();
+		e.setBezeichnung(bezeichnung);
+		
+		e.setId(1);
+		
+		return this.eMapper.insert(e);
+	}
 	
 	
-	// ...
+	/**
+	 * Speichern einer modifizierten Eigenschaft.
+	 * 
+	 */
+	public Eigenschaft saveEigenschaft (Eigenschaft e) throws IllegalArgumentException {
+
+		return eMapper.update(e);
+	}	
 	
+	
+	/**
+	 *Loeschen einer Eigenschaft.
+	 * 
+	 */
+	public void deleteEigenschaft (Eigenschaft e) throws IllegalArgumentException {
+
+		this.eMapper.delete(e);
+	}
+
 	
 	/*
 	   * ***************************************************************************
@@ -356,16 +397,42 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   * ***************************************************************************
 	   */
 	
+	/**
+	 * Erzeugen einer neuen Auspraegung.
+	 * 
+	 */
 	
-	// createAuspraegung()
+	public Auspraegung createAuspraegung (String wert, int eigenschaftId, int kontaktId, int ownerId, Berechtigung berechtigung) throws IllegalArgumentException { 
+		
+		Auspraegung a = new Auspraegung();
+		a.setWert(wert);
+		a.setEigenschaftId(eigenschaftId);
+		a.setKontaktId(kontaktId);
+		a.setOwnerId(nutzer.getId());
+		a.setBerechtigung(berechtigung);
+		
+		a.setId(1);
+		return this.aMapper.insert(a);
+	}
 
 	
-	// saveAuspraegung()
+	/**
+	 * Speichern einer modifizierten Auspraegung.
+	 * 
+	 */
+	public Auspraegung saveAuspraegung (Auspraegung a) throws IllegalArgumentException {
+
+		return aMapper.update(a);
+	}
 	
-	
-	// removeAuspraegung()
-	
-	
+	/**
+	 *Loeschen einer Auspraegung.
+	 * 
+	 */
+	public void deleteAuspraegung (Auspraegung a) throws IllegalArgumentException {
+
+		this.aMapper.delete(a);
+	}
 	
 	/**
 	 * Auslesen einer bestimmten Auspraegung anhand der id.
@@ -380,6 +447,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Vector<Auspraegung> getAllAuspraegungenByKontakt(Kontakt k) throws IllegalArgumentException {
+	
 		return this.aMapper.findAuspraegungByKontakt(k);
 	}
 
@@ -399,10 +467,45 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   * ***************************************************************************
 	   */
 	
-	// createBerechtigung()
+	/**
+	 * Wie lösen wir das mit den Übergabeparameter für Kontakt, Kontaktliste oder Ausprägung? Müssen diese überhaupt übergeben werden?
+	 * @param holderId
+	 * @param receiverId
+	 * @param objectId
+	 * @param type
+	 * @param berechtigungsstufe
+	 * @param kontaktId
+	 * @param kontaktlisteId
+	 * @param auspraegungId
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
+	
+	public Berechtigung createBerechtigung (int holderId, int receiverId, int objectId, char type, int berechtigungsstufe) throws IllegalArgumentException { 
+		
+		Berechtigung b = new Berechtigung();
+		
+		b.setHolderId(holderId);
+		b.setReceiverId(receiverId);
+		b.setObjectId(objectId);
+		b.setType(type);
+		b.setBerechtigungsstufe(berechtigungsstufe);
+		
+		b.setId(1);
+		return this.bMapper.insert(b);
+	}
 	
 	
-	// removeBerechtigung()
+	/**
+	 * Das Loeschen einer Berechtigung.
+	 * @param b
+	 * @throws IllegalArgumentException
+	 */
+	
+	public void deleteBerechtigung (Berechtigung b) throws IllegalArgumentException {
+
+		this.bMapper.delete(b);
+	}
 	
 	
 	/*

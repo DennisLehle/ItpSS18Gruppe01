@@ -114,6 +114,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param n
 	 */
 	public void setNutzer(Nutzer n) throws IllegalArgumentException {
+		init();
 		nutzer = n;
 	}
 	
@@ -155,6 +156,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public Kontakt createKontakt(String vorname, String nachname)
 					throws IllegalArgumentException { 
+		init();
 				
 		Kontakt kontakt = new Kontakt();
 		kontakt.setVorname(vorname);
@@ -164,7 +166,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		kontakt.setOwnerId(nutzer.getId());
 		
 		kontakt.setId(1);
-		
 		return this.kMapper.insert(kontakt);
 	}
 	
@@ -173,6 +174,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Kontakt saveKontakt(Kontakt k) throws IllegalArgumentException {
+		init();
+
 		return kMapper.update(k);
 	}
 	
@@ -387,6 +390,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		a.setOwnerId(nutzer.getId());
 		
 		a.setId(1);
+		init();
 		return this.aMapper.insert(a);
 	}
 
@@ -396,7 +400,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Auspraegung saveAuspraegung (Auspraegung a) throws IllegalArgumentException {
-
+		init();
 		return aMapper.update(a);
 	}
 	
@@ -405,7 +409,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public void deleteAuspraegung (Auspraegung a) throws IllegalArgumentException {
-
+		init();
 		this.aMapper.delete(a);
 	}
 	

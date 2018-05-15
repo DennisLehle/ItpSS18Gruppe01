@@ -123,7 +123,7 @@ public class AuspraegungMapper {
 		   	 stmt.executeUpdate();
 		   	 
 			// Modifikationsdatum des dazugehörigen Kontakts aktualisieren
-			String sql2 = "UPDATE Kontakt SET moddatum=? WHERE id=?";
+			String sql2 = "UPDATE Kontakt SET modifikationsdatum=? WHERE id=?";
 			PreparedStatement prestmt2 = con.prepareStatement(sql2);
 
 			prestmt2.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
@@ -147,7 +147,7 @@ public class AuspraegungMapper {
 		
 		try {
 			// Modifikationsdatum des dazugehörigen Kontakts aktualisieren
-			String sql = "UPDATE Kontakt SET moddatum=? WHERE id=?";
+			String sql = "UPDATE Kontakt SET modifikationsdatum=? WHERE id=?";
 			PreparedStatement prestmt1 = con.prepareStatement(sql);
 			
 			prestmt1.setTimestamp(1, new Timestamp (System.currentTimeMillis()));

@@ -3,12 +3,14 @@ package de.hdm.itprojektss18.team01.sontact.server.db;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Vector;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 
 /**
@@ -271,4 +273,23 @@ public class AuspraegungMapper {
 		return result;
 		
 	}
+	
+	public void deleteAllByOwner(Nutzer n) {
+		Connection con = DBConnection.connection();
+		
+		try {
+		//SQL Statement anlegen
+		PreparedStatement prestmt = con.prepareStatement(
+				"DELETE FROM Auspraegung WHERE ownerid=" 
+				+ n.getId());
+		
+		//Statement als Query an die DB schicken
+		prestmt.execute();
+		}
+		
+		catch (SQLException e2){
+			e2.printStackTrace();
+		}
+	}
+	
 }

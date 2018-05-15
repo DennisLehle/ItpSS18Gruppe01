@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 
 
@@ -98,16 +99,6 @@ public class KontaktlistenMapper {
 		    	
 		    	System.out.println("Updated");
 
-				// Dem SQL Statement wird der lokalen Variable �bergeben
-	//			PreparedStatement prestmt = con.prepareStatement(
-	//					"UPDATE Kontaktliste SET " 
-	//					+ "id = '" + kl.getId() + "', "
-	//					+ "titel = '" + kl.getTitel() + "', "
-	//					+ "ownerid = '" + kl.getOwnerId() + "')");
-
-				// INSERT-Statement ausf�hren
-	//			prestmt.execute();
-
 			} catch (SQLException e2) {
 				e2.printStackTrace();
 			}
@@ -146,7 +137,7 @@ public class KontaktlistenMapper {
 		 * @param ownerId
 		 * @return void
 		 */
-		public void deleteAll(int ownerId) {
+		public void deleteAllByOwner(Nutzer n) {
 
 			// DBConnection herstellen
 			Connection con = DBConnection.connection();
@@ -156,7 +147,7 @@ public class KontaktlistenMapper {
 				// Dem SQL Statement wird der lokalen Variable �bergeben
 				PreparedStatement prestmt = con.prepareStatement(
 						"DELETE FROM Kontaktliste WHERE ownerid = "
-						+ ownerId);
+						+ n.getId());
 				
 				// DELETE-Statement ausf�hren
 				prestmt.execute();
@@ -175,13 +166,14 @@ public class KontaktlistenMapper {
 		 * @return 
 		 * @return void
 		 */
-		 public Vector<Kontaktliste> findOwnersKontaktliste(int ownerId) {
+		 public Vector<Kontaktliste> findKontaktlistenByOwner(int ownerId) {
 			 
 			    Connection con = DBConnection.connection();
 			    Vector<Kontaktliste> result = new Vector<Kontaktliste>();
 
 			    try {
-			    	PreparedStatement stmt = con.prepareStatement("SELECT * FROM `Kontaktliste` WHERE `ownerid` AND NOT `titel` = 'DefaultKl'");
+			    	PreparedStatement stmt = con.prepareStatement("SELECT * FROM Kontaktliste WHERE ownerid = "
+			    			+ ownerId );
 
 			      ResultSet rs = stmt.executeQuery();
 
@@ -350,7 +342,7 @@ public class KontaktlistenMapper {
 		 * @param kl
 		 * @return
 		 */
-		public Vector<Kontakt> getKontakte(Kontaktliste kl) {
+		public Vector<Kontakt> getKontakteByKontaktliste(Kontaktliste kl) {
 		    /*
 		     * Wir spechen hier den KontaktMapper an um darüber für die Kontaktliste die ausgewähöt wurde
 		     * die passenden Kontakte herauszufiltern. Dies wird für die Default Kontaktliste und für die 
@@ -364,7 +356,6 @@ public class KontaktlistenMapper {
 		 * 
 		 * @see findById
 		 * @param titel
-		 * @return 
 		 * @return Kontaktliste
 		 */
 

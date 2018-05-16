@@ -166,6 +166,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		kontakt.setOwnerId(nutzer.getId());
 		
 		kontakt.setId(1);
+		
 		return this.kMapper.insert(kontakt);
 	}
 	
@@ -175,7 +176,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public Kontakt saveKontakt(Kontakt k) throws IllegalArgumentException {
 		init();
-
+		this.saveModifikationsdatum(k.getId());
 		return kMapper.update(k);
 	}
 	
@@ -391,7 +392,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		
 		a.setId(1);
 		init();
+		
+		this.saveModifikationsdatum(a.getKontaktId());
 		return this.aMapper.insert(a);
+	
 	}
 
 	
@@ -401,6 +405,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public Auspraegung saveAuspraegung (Auspraegung a) throws IllegalArgumentException {
 		init();
+		this.saveModifikationsdatum(a.getKontaktId());
 		return aMapper.update(a);
 	}
 	
@@ -410,6 +415,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public void deleteAuspraegung (Auspraegung a) throws IllegalArgumentException {
 		init();
+		this.saveModifikationsdatum(a.getKontaktId());
 		this.aMapper.delete(a);
 	}
 	
@@ -535,6 +541,24 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   * ABSCHNITT, Ende: Share-Methoden
 	   * ***************************************************************************
 	   */
+	/*
+	   * ***************************************************************************
+	   * ABSCHNITT, Beginn: Sonsitges
+	   * ***************************************************************************
+	   */
+	
+	public int saveModifikationsdatum(int id) {
+		return kMapper.updateModifikationsdatum(id);
+		
+	}
+	
+	
+	/*
+	   * ***************************************************************************
+	   * ABSCHNITT, Ende: Sonsitges
+	   * ***************************************************************************
+	   */
+	
 	
 	
 }

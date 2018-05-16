@@ -92,7 +92,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		//Ich erstelle einen Kontakt und übergebe einen Nutzer in dem Fall mich selbst.
-		editor.createKontakt("Hans", "Peter", n);
+		editor.createKontakt("Hans", "Peter");
 	}
 	
 	/**

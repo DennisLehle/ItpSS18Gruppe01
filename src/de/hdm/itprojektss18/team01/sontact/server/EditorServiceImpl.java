@@ -175,6 +175,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Kontakt saveKontakt(Kontakt k) throws IllegalArgumentException {
+		init();
 		k.setModDat(new Timestamp(System.currentTimeMillis()));
 		return kMapper.update(k);
 	}
@@ -335,7 +336,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	public Eigenschaft createEigenschaft (String bezeichnung)
 			throws IllegalArgumentException { 
-		
+		init();
 		Eigenschaft e = new Eigenschaft();
 		e.setBezeichnung(bezeichnung);
 		
@@ -383,6 +384,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	public Auspraegung createAuspraegung (String wert, int eigenschaftId, int kontaktId, int ownerId) throws IllegalArgumentException { 
 		
+		init();
+		
 		Auspraegung a = new Auspraegung();
 		a.setWert(wert);
 		a.setEigenschaftId(eigenschaftId);
@@ -390,8 +393,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		a.setOwnerId(nutzer.getId());
 		
 		a.setId(1);
-		init();
-		
+				
 		this.saveModifikationsdatum(a.getKontaktId());
 		return this.aMapper.insert(a);
 	
@@ -547,6 +549,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   */
 	
 	public int saveModifikationsdatum(int id) {
+		init();
 		return kMapper.updateModifikationsdatum(id);
 		
 	}

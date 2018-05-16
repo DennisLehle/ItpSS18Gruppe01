@@ -81,6 +81,7 @@ public class AuspraegungMapper {
 				// INSERT-Statement ausfuehren
 				prestmt1.execute();
 				
+				/**
 				// Modifikationsdatum des dazugehörigen Kontakts aktualisieren
 				String sql = "UPDATE Kontakt SET modifikationsdatum=? WHERE id=?";
 				PreparedStatement prestmt2 = con.prepareStatement(sql);
@@ -88,8 +89,9 @@ public class AuspraegungMapper {
 				prestmt2.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
 		    	prestmt2.setInt(2, a.getKontaktId());
 		    	prestmt2.executeUpdate();
-				
+				**/
 			}
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -122,6 +124,7 @@ public class AuspraegungMapper {
 		   	 //UPDATE Statement ausfuehren
 		   	 stmt.executeUpdate();
 		   	 
+		   	/**
 			// Modifikationsdatum des dazugehörigen Kontakts aktualisieren
 			String sql2 = "UPDATE Kontakt SET modifikationsdatum=? WHERE id=?";
 			PreparedStatement prestmt2 = con.prepareStatement(sql2);
@@ -129,6 +132,7 @@ public class AuspraegungMapper {
 			prestmt2.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
 		    prestmt2.setInt(2, a.getKontaktId());
 		    prestmt2.executeUpdate();
+		    **/
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -146,13 +150,14 @@ public class AuspraegungMapper {
 		Connection con = DBConnection.connection();
 		
 		try {
+			/**
 			// Modifikationsdatum des dazugehörigen Kontakts aktualisieren
 			String sql = "UPDATE Kontakt SET modifikationsdatum=? WHERE id=?";
 			PreparedStatement prestmt1 = con.prepareStatement(sql);
-			
 			prestmt1.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
 		    prestmt1.setInt(2, a.getKontaktId());
 		    prestmt1.executeUpdate();
+		    **/
 		    
 			// DELETE-Statement anlegen
 			PreparedStatement prestmt2 = con.prepareStatement("DELETE FROM Auspraegung "

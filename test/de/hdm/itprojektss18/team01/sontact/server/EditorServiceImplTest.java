@@ -88,11 +88,11 @@ class EditorServiceImplTest extends GWTTestCase {
 	public void createKontakt() {
 		Nutzer n = new Nutzer();
 		n.setId(1);
-		n.setEmailAddress("dennis");
+		n.setEmailAddress("miescha");
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		//Ich erstelle einen Kontakt und Ã¼bergebe einen Nutzer in dem Fall mich selbst.
-		editor.createKontakt("Hans", "Peter");
+		editor.createKontakt("Lisa", "Müller");
 	}
 	
 	/**
@@ -118,6 +118,34 @@ class EditorServiceImplTest extends GWTTestCase {
 	   * ABSCHNITT, Anfang: Methoden fuer Kontaktlisten-Objekte Test
 	   * ***************************************************************************
 	   */
+	
+	public void createKontakt1() {
+		Nutzer n = new Nutzer();
+		n.setId(1);
+		n.setEmailAddress("miescha");
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		//Ich erstelle einen Kontakt und Ã¼bergebe einen Nutzer in dem Fall mich selbst.
+		editor.createKontakt("Lisa", "Müller");
+	}
+	
+	/**
+	 * Test Case fÃ¼r das Updaten eines Kontakts.
+	 * CHECK
+	 */
+	@Test
+	public void updateKontakt1() {
+		
+		Kontakt k = new Kontakt();
+		k.setId(19);
+		k.setVorname("Martin");
+		k.setOwnerId(1);
+
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		editor.saveKontakt(k);
+		
+	}
 	
 	/*
 	   * ***************************************************************************

@@ -119,6 +119,27 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 	
 	/**
+	 * Diese Methode sucht den Nutzer anhand der Emailadresse raus
+	 * Überprüfung Nutzer vorhanden
+	 * @param email
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
+	public Nutzer findNutzerByEmail (String email) throws IllegalArgumentException {
+		try {
+			if (nMapper.findUserByGMail(email) == null) {
+				return null;
+				
+			} else {
+				return nMapper.findUserByGMail(email);
+			}
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return null;
+	}
+	
+	/**
 	 * Ein Nutzer wird mit all seinen Objekten aus der Datenbank gelï¿½scht.
 	 */
 	public void deleteNutzer(Nutzer n) throws IllegalArgumentException {

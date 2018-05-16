@@ -47,6 +47,11 @@ public interface EditorService extends RemoteService{
 	 */
 	public void deleteNutzer(Nutzer n) throws IllegalArgumentException;
 	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#findNutzerByEmail(String email);
+	 */
+	public Nutzer findNutzerByEmail (String email) throws IllegalArgumentException;
+	
 	
 	// Abschnitt Kontakt:
 	

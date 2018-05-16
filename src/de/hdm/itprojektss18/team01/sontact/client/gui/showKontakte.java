@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  *
  */
 
-public class showKontakte {
+public class showKontakte extends VerticalPanel {
 
 	private Button createKontaktBtn = new Button("Kontakt erstellen");
 	private Button removeKontaktBtn = new Button("Kontakt l\u00f6schen");
@@ -22,15 +22,15 @@ public class showKontakte {
 	TextBox searchTextBox = new TextBox();
 
 	HorizontalPanel searchPanel = new HorizontalPanel();
-	VerticalPanel KontaktPanel = new VerticalPanel();
 
-	void onLoad() {
+	public showKontakte() {
+
 		searchPanel.add(searchBtn);
 		searchPanel.add(searchTextBox);
-		this.KontaktPanel.add(searchPanel);
-		
-		this.KontaktPanel.add(createKontaktBtn);
-		this.KontaktPanel.add(removeKontaktBtn);
+
+		this.add(searchPanel);
+		this.add(createKontaktBtn);
+		this.add(removeKontaktBtn);
 
 		/**
 		 * Styling der Buttons
@@ -43,14 +43,6 @@ public class showKontakte {
 
 		// TextBox stylen...
 		searchTextBox.setStyleName("ButtonStyleSuche");
-
-		/**
-		 * Panels dem RootPanel hinzufügen und in dem div-Bereich "content"
-		 * ablegen.
-		 */
-		RootPanel.get("content").add(KontaktPanel);
-		
-		
 
 	}
 

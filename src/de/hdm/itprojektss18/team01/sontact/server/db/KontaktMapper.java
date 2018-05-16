@@ -140,7 +140,7 @@ public class KontaktMapper {
 	    	stmt.setString(1, k.getVorname());
 	    	stmt.setString(2, k.getNachname());
 	    	stmt.setInt(3, k.getOwnerId());
-	    	stmt.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+	    	stmt.setTimestamp(4, k.getModDat());
 	    	stmt.setInt(5, k.getId());
 	    	stmt.executeUpdate();
 	   

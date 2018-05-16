@@ -175,8 +175,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Kontakt saveKontakt(Kontakt k) throws IllegalArgumentException {
-		init();
-		this.saveModifikationsdatum(k.getId());
+		k.setModDat(new Timestamp(System.currentTimeMillis()));
 		return kMapper.update(k);
 	}
 	

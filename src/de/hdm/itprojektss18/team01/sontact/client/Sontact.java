@@ -10,11 +10,12 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18.team01.sontact.client.gui.Hauptansicht;
+import de.hdm.itprojektss18.team01.sontact.client.gui.MessageBox;
+import de.hdm.itprojektss18.team01.sontact.client.gui.Navigation;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.LoginService;
 import de.hdm.itprojektss18.team01.sontact.shared.LoginServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
-
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -29,10 +30,8 @@ public class Sontact implements EntryPoint {
 	private Anchor signInLink = new Anchor("Sign In");
 	private Anchor signOutLink = new Anchor("Sign Out");
 
-
-	
 	LoginServiceAsync loginService = GWT.create(LoginService.class);
-	private static EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditorVerwaltung();
+	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditorVerwaltung();
 
 	/**
 	 * This is the entry point method.
@@ -44,35 +43,52 @@ public class Sontact implements EntryPoint {
 
 			@Override
 			public void onFailure(Throwable error) {
-				//Window.alert("Fehler Login: " + error.toString());
-				start();
+				Window.alert("Fehler Login: " + error.toString());
+				// start();
 
 			}
-
-
 
 			@Override
 			public void onSuccess(Nutzer result) {
 				loginInfo = result;
 				if (loginInfo.isLoggedIn()) {
-					start();
+					editorVerwaltung.findNutzerByEmail(loginInfo.getEmailAddress(), new AsyncCallback<Nutzer>() {
+
+						@Override
+						public void onFailure(Throwable error) {
+							Window.alert("Es ist ein Fehler beim Login aufgetreten: " + error.toString());
+						}
+
+						@Override
+						public void onSuccess(Nutzer nutzer) {
+							if (nutzer != null) {
+								RootPanel.get("content").clear();
+								start(nutzer);
+							} else {
+								RootPanel.get("content").clear();
+								RootPanel.get("navigator").clear();
+								MessageBox.alertWidget("Kontakt",
+										"Sie haben noch kein Kontakt angelegt, bitte legen Sie Ihren eigenen Kontakt an");
+								// RootPanel.get("content").add(new RegistrierungsPanel(nutzer);
+								// Bei Registrierung saveButton klick Kontakt wird gespeichert / Hauptansicht wird aufgerufen
+							}
+						}
+					});
+
 				} else {
 					loadLogin();
-
 				}
-
-				//
-
 			}
 		});
-		
 	}
-	
-	private void start() {
-		Hauptansicht hp = new Hauptansicht();
-		RootPanel.get("navigator").add(hp);
 
-		
+	/**
+	 * Ist die Init() Methode für den Start der Kontaktverwaltung
+	 * 
+	 * @param nutzer
+	 */
+	private void start(final Nutzer nutzer) {
+		RootPanel.get().add(new Hauptansicht(nutzer));
 	}
 
 	void loadLogin() {

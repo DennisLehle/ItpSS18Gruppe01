@@ -6,40 +6,183 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 
-
+/**
+ * Interface für RPC-Service
+ * 
+ * @author Yakup Kanal 
+ *
+ */
 
 
 @RemoteServiceRelativePath("editorservice")
 public interface EditorService extends RemoteService{
 	
-	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#init();
+	 */
 	public void init() throws IllegalArgumentException;
 	
+	
+	// Abschnitt Nutzer:
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createNutzer(String emailAddress);
+	 */
 	public Nutzer createNutzer(String emailAddress) throws IllegalArgumentException;
 	
-	public void deleteNutzer(Kontakt kontakt) throws IllegalArgumentException;
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#setNutzer(Nutzer n);
+	 */
+	public void setNutzer(Nutzer n) throws IllegalArgumentException;
 	
-	public Kontakt createKontakt (String vorname, String nachname, Nutzer nutzer)
-			throws IllegalArgumentException;
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#init();
+	 */
+	public void deleteNutzer(Nutzer n) throws IllegalArgumentException;
 	
-	public Kontakt saveKontakt (Kontakt k) throws IllegalArgumentException;
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#findNutzerByEmail(String email);
+	 */
+	public Nutzer findNutzerByEmail (String email) throws IllegalArgumentException;
 	
-	public void removeKontakt (Kontakt k) throws IllegalArgumentException;
 	
+	// Abschnitt Kontakt:
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.serverEditor.ServiceImpl#createKontakt(String vorname, String nachname);
+	 */
+	public Kontakt createKontakt(String vorname, String nachname) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#saveKontakt(Kontakt k);
+	 */
+	public Kontakt saveKontakt(Kontakt k) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#removeKontakt(Kontakt k);
+	 */
+	public void removeKontakt(Kontakt k) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontaktById(int id);
+	 */
 	public Kontakt getKontaktById(int id) throws IllegalArgumentException;
 	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontaktByName(String name);
+	 */
 	public Vector<Kontakt> getKontaktByName(String name) throws IllegalArgumentException;
 	
-	public Vector<Kontakt> getAllKontakteByOwner (Nutzer n) throws IllegalArgumentException;
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getAllKontakteByOwner();
+	 */
+	public Vector<Kontakt> getAllKontakteByOwner() throws IllegalArgumentException;
 	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#addKontaktToKontaktliste(Kontakt k, Kontaktliste kl);
+	 */
 	public void addKontaktToKontaktliste(Kontakt k, Kontaktliste kl) throws IllegalArgumentException;
 
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#removeKontaktFromKontaktliste(Kontakt k);
+	 */
 	public void removeKontaktFromKontaktliste(Kontakt k) throws IllegalArgumentException;
+	
+	
+	// Abschnitt Kontaktliste:
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createKontaktliste(String totel, int ownerId);
+	 */
+	public Kontaktliste createKontaktliste (String titel, int ownerId) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#saveKontaktliste(Kontaktliste kl);
+	 */
+	public Kontaktliste saveKontaktliste (Kontaktliste kl) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#deleteKontaktliste(Kontaktliste kl);
+	 */
+	public void deleteKontaktliste (Kontaktliste kl) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontaktlisteByOwner();
+	 */
+	public Vector<Kontaktliste> getKontaktlistenByOwner() throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontakteByKontaktliste(Kontaktliste kl);
+	 */
+	public Vector <Kontakt> getKontakteByKontaktliste (Kontaktliste kl) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#findKontaktlisteByTitel(String titel);
+	 */
+	public Vector <Kontaktliste> findKontaktlisteByTitel (String titel) throws IllegalArgumentException;
+	
+	
+	// Abschnitt Eigenschaft:
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createEigenschaft(String bezeichnung);
+	 */
+	public Eigenschaft createEigenschaft (String bezeichnung);
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#saveEigenschaft(Eigenschaft e);
+	 */	
+	public Eigenschaft saveEigenschaft (Eigenschaft e) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#deleteEigenschaft(Eigenschaft e);
+	 */
+	public void deleteEigenschaft (Eigenschaft e) throws IllegalArgumentException;
+	
+	
+	// Abschnitt Ausprägung:
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createAuspraegung
+	 * (String wert, int eigenschaftId, int kontaktId, int ownerId);
+	 */
+	public Auspraegung createAuspraegung (String wert, int eigenschaftId, int kontaktId, int ownerId) 
+			throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#saveAuspraegung (Auspraegung a);
+	 */
+	public Auspraegung saveAuspraegung (Auspraegung a) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#deleteAuspraegung (Auspraegung a);
+	 */
+	public void deleteAuspraegung (Auspraegung a) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getAuspraegungById (Auspraegung a);
+	 */
+	public Auspraegung getAuspraegungById(Auspraegung a) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getAllAuspraegungenByKontakt (Kontakt k);
+	 */
+	public Vector<Auspraegung> getAllAuspraegungenByKontakt(Kontakt k) throws IllegalArgumentException;
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 }

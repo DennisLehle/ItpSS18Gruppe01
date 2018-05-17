@@ -3,11 +3,14 @@ package de.hdm.itprojektss18.team01.sontact.server.db;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Vector;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 
 /**
@@ -66,8 +69,8 @@ public class AuspraegungMapper {
 				a.setId(rs.getInt("maxid") + 1);
 				
 				// INSERT-Statement anlegen
-				PreparedStatement prestmt = con
-						.prepareStatement("INSERT INTO Auspraegung (id, wert, eigenschaftid, kontaktid, ownerid) "
+				PreparedStatement prestmt1 = con.prepareStatement(
+						"INSERT INTO Auspraegung (id, wert, eigenschaftid, kontaktid, ownerid) "
 								+ "VALUES('" 
 								+ a.getId() + "', '" 
 								+ a.getWert() + "', '"
@@ -76,9 +79,19 @@ public class AuspraegungMapper {
 								+ a.getOwnerId() + "')");
 		
 				// INSERT-Statement ausfuehren
-				prestmt.execute();
+				prestmt1.execute();
 				
+				/**
+				// Modifikationsdatum des dazugehörigen Kontakts aktualisieren
+				String sql = "UPDATE Kontakt SET modifikationsdatum=? WHERE id=?";
+				PreparedStatement prestmt2 = con.prepareStatement(sql);
+
+				prestmt2.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
+		    	prestmt2.setInt(2, a.getKontaktId());
+		    	prestmt2.executeUpdate();
+				**/
 			}
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -94,12 +107,13 @@ public class AuspraegungMapper {
 	 * @return das als Parameter ï¿½bergebene Objekt
 	 */
 	public Auspraegung update(Auspraegung a) {
-		String sql = "UPDATE Auspraegung SET  wert=?, eigenschaftid=?, kontaktid=?, ownerid=? WHERE id=?"; 
+		
 		Connection con = DBConnection.connection();
 		 
 		 try {
 			// UPDATE-Statement anlegen
-			 PreparedStatement stmt = con.prepareStatement(sql);
+			 String sql1 = "UPDATE Auspraegung SET wert=?, eigenschaftid=?, kontaktid=?, ownerid=? WHERE id=?"; 
+			 PreparedStatement stmt = con.prepareStatement(sql1);
 			
 			 stmt.setString(1, a.getWert());
 		     stmt.setInt(2, a.getEigenschaftId());
@@ -107,8 +121,18 @@ public class AuspraegungMapper {
 		     stmt.setInt(4, a.getOwnerId());
 		   	 stmt.setInt(5, a.getId());
 		   	 
-		   	 //UPDATE Statement ausfï¿½hren
+		   	 //UPDATE Statement ausfuehren
 		   	 stmt.executeUpdate();
+		   	 
+		   	/**
+			// Modifikationsdatum des dazugehörigen Kontakts aktualisieren
+			String sql2 = "UPDATE Kontakt SET modifikationsdatum=? WHERE id=?";
+			PreparedStatement prestmt2 = con.prepareStatement(sql2);
+
+			prestmt2.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
+		    prestmt2.setInt(2, a.getKontaktId());
+		    prestmt2.executeUpdate();
+		    **/
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -126,12 +150,21 @@ public class AuspraegungMapper {
 		Connection con = DBConnection.connection();
 		
 		try {
+			/**
+			// Modifikationsdatum des dazugehörigen Kontakts aktualisieren
+			String sql = "UPDATE Kontakt SET modifikationsdatum=? WHERE id=?";
+			PreparedStatement prestmt1 = con.prepareStatement(sql);
+			prestmt1.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
+		    prestmt1.setInt(2, a.getKontaktId());
+		    prestmt1.executeUpdate();
+		    **/
+		    
 			// DELETE-Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("DELETE * FROM Auspraegung "
+			PreparedStatement prestmt2 = con.prepareStatement("DELETE FROM Auspraegung "
 					+ "WHERE id = " + a.getId());
 			
-			// DELETE-Statement ausfï¿½hren
-			prestmt.execute();
+			// DELETE-Statement ausfuehren
+			prestmt2.execute();
 					
 			
 		} catch (Exception e) {
@@ -245,4 +278,23 @@ public class AuspraegungMapper {
 		return result;
 		
 	}
+	
+	public void deleteAllByOwner(Nutzer n) {
+		Connection con = DBConnection.connection();
+		
+		try {
+		//SQL Statement anlegen
+		PreparedStatement prestmt = con.prepareStatement(
+				"DELETE FROM Auspraegung WHERE ownerid=" 
+				+ n.getId());
+		
+		//Statement als Query an die DB schicken
+		prestmt.execute();
+		}
+		
+		catch (SQLException e2){
+			e2.printStackTrace();
+		}
+	}
+	
 }

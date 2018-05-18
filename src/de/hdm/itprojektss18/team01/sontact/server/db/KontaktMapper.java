@@ -308,7 +308,55 @@ public class KontaktMapper {
 			}
 		}
 		
-	
+		/**
+		 * Auslesen aller Kontakte eines durch Fremdschlï¿½ssel (ownerId) gegebenen Kontakts.
+		 * 
+		 * @see findKontaktByNutzerId
+		 * @param int ownerId fï¿½r zugehï¿½rige Kontakte
+		 * @return ein Vektor mit Kontakt-Objekten, die durch den gegebenen Nutzer reprï¿½sentiert werden. 
+		 * Bei evtl. Exceptions wird ein partiell gefï¿½llter oder ggf. auch leerer Vektor zurï¿½ckgeliefert.
+		 * 
+		 */
+		
+		public Vector<Kontakt> findKontaktByNutzerId (int ownerId) {
+			
+			//Leerer Kontakt Vektor fÃ¼r ale Kontakte eines Nutzers.
+			Vector<Kontakt> result = new Vector<Kontakt>();
+			
+			// Datenbank Verbdinung aufbauen.
+			Connection con = DBConnection.connection();
+			
+			try {
+				
+				//SQL Statement anlegen
+				PreparedStatement prestmt = con.prepareStatement(
+						"SELECT * FROM Kontakt "
+						+ "WHERE ownerid =" 
+						+ ownerId);
+				
+				//Statement als Query an die DB schicken
+				ResultSet rs = prestmt.executeQuery();
+			
+				while (rs.next()){
+					Kontakt k = new Kontakt();
+			        k.setId(rs.getInt("id"));
+			        k.setVorname(rs.getString("vorname"));
+			        k.setNachname(rs.getString("nachname"));
+			        k.setOwnerId(rs.getInt("ownerid"));
+			        
+			        //Kontakt Objekte des Nutzers in einen Kontakt Vektor speichern.
+			        result.addElement(k);
+			}
+				
+			return result;
+			
+			}
+			catch (SQLException e2){
+				e2.printStackTrace();
+			}
+			
+			return null;
+		}
 	
 	
 	 
@@ -466,59 +514,12 @@ public class KontaktMapper {
 		return null;
 	}
 	
-	
-	/**
-	 * Auslesen aller Kontakte eines durch Fremdschlï¿½ssel (ownerId) gegebenen Kontakts.
-	 * 
-	 * @see findKontaktByNutzerId
-	 * @param int ownerId fï¿½r zugehï¿½rige Kontakte
-	 * @return ein Vektor mit Kontakt-Objekten, die durch den gegebenen Nutzer reprï¿½sentiert werden. 
-	 * Bei evtl. Exceptions wird ein partiell gefï¿½llter oder ggf. auch leerer Vektor zurï¿½ckgeliefert.
-	 * 
-	 */
-	
-	public Vector<Kontakt> findKontaktByNutzerId (int ownerId) {
-		Connection con = DBConnection.connection();
-		
-		try {
-			Vector<Kontakt> list = new Vector<Kontakt>();
-			
-			//SQL Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement(
-					"SELECT * FROM kontakt "
-					+ "WHERE ownerid=" 
-					+ ownerId);
-			
-			//Statement als Query an die DB schicken
-			ResultSet result = prestmt.executeQuery();
-			
-			//Ergebnistuppel in Objekt umwandeln
-			Kontakt k = new Kontakt();
-			while (result.next()){
-		        k.setId(result.getInt("id"));
-		        k.setVorname(result.getString("vorname"));
-		        k.setNachname(result.getString("nachname"));
-		        k.setKontaktlisteId(result.getInt("kontaktlisteid"));
-		        k.setOwnerId(result.getInt("ownerid"));
-		}
-			
-		return list;
-		
-		}
-		catch (SQLException e2){
-			e2.printStackTrace();
-		}
-		
-		return null;
-	}
-
-	
 	public int updateModifikationsdatum(int id) {
 		
 		Connection con = DBConnection.connection();
 		 
 		 try { 
-			// Modifikationsdatum des dazugehörigen Kontakts aktualisieren
+			// Modifikationsdatum des dazugehï¿½rigen Kontakts aktualisieren
 			String sql2 = "UPDATE Kontakt SET modifikationsdatum=? WHERE id=?";
 			PreparedStatement prestmt2 = con.prepareStatement(sql2);
 

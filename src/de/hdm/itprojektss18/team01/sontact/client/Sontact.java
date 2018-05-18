@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18.team01.sontact.client.gui.Hauptansicht;
+import de.hdm.itprojektss18.team01.sontact.client.gui.KontakteAnzeigen;
 import de.hdm.itprojektss18.team01.sontact.client.gui.MessageBox;
 import de.hdm.itprojektss18.team01.sontact.client.gui.Navigation;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
@@ -43,7 +44,10 @@ public class Sontact implements EntryPoint {
 
 			@Override
 			public void onFailure(Throwable error) {
-				Window.alert("Fehler Login: " + error.toString());
+				//Window.alert("Fehler Login: " + error.toString());
+				Nutzer n = new Nutzer();
+				n.setId(1);
+				RootPanel.get("content").add(new KontakteAnzeigen(n));
 				// start();
 
 			}
@@ -83,12 +87,13 @@ public class Sontact implements EntryPoint {
 	}
 
 	/**
-	 * Ist die Init() Methode für den Start der Kontaktverwaltung
+	 * Ist die Init() Methode fï¿½r den Start der Kontaktverwaltung
 	 * 
 	 * @param nutzer
 	 */
 	private void start(final Nutzer nutzer) {
 		RootPanel.get().add(new Hauptansicht(nutzer));
+		RootPanel.get("content").add(new KontakteAnzeigen(nutzer));
 	}
 
 	void loadLogin() {
@@ -97,6 +102,7 @@ public class Sontact implements EntryPoint {
 		loginPanel.add(loginLabel);
 		loginPanel.add(signInLink);
 		RootPanel.get("login").add(loginPanel);
+	
 	}
 
 }

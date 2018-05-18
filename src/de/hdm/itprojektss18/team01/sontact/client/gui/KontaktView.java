@@ -35,7 +35,7 @@ public class KontaktView extends VerticalPanel{
 	private CellList<Kontakt> kTable;
 	private Button loeschen;
 	private Button updaten;
-	final SingleSelectionModel<Kontakt> selectionModel = new SingleSelectionModel<Kontakt>(KontaktWrapper.getKeyProvider());
+	final SingleSelectionModel<Kontakt> selectionModel = new SingleSelectionModel<Kontakt>();
 	final ListDataProvider<Kontakt> kontaktDataProvider = new ListDataProvider<Kontakt>();
 	HorizontalPanel hp = new HorizontalPanel();
 	
@@ -67,29 +67,29 @@ public void onLoad() {
     k.setId(1);
     k.setOwnerId(1);
 
-	editorService.getKontaktById(k.getId(), new AsyncCallback<Vector<Kontakt>>() {
-
-		@Override
-		public void onFailure(Throwable err) {
-			err.getMessage().toString();
-			
-		}
-
-		@Override
-		public void onSuccess(Vector<Kontakt> result) {
-			kTable.setRowData(0, result);
-			
-			if(result.size() == 0){
-				kTable.setVisible(false);
-		 		hp.setVisible(false);
-		 		loeschen.setVisible(false);
-		 		
-			
-		} else {
-			hp.setVisible(true);
-			kTable.setVisible(true);
-		}
+//	editorService.getKontaktById(k.getId(), new AsyncCallback<Vector<Kontakt>>() {
+//
+//		@Override
+//		public void onFailure(Throwable err) {
+//			err.getMessage().toString();
+//			
+//		}
+//
+//		@Override
+//		public void onSuccess(Vector<Kontakt> result) {
+//			kTable.setRowData(0, result);
+//			
+//			if(result.size() == 0){
+//				kTable.setVisible(false);
+//		 		hp.setVisible(false);
+//		 		loeschen.setVisible(false);
+//		 		
+//			
+//		} else {
+//			hp.setVisible(true);
+//			kTable.setVisible(true);
+//		}
+//    	
     	
-    	
-		}});
+//		}});
 }}

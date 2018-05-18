@@ -120,7 +120,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	/**
 	 * Diese Methode sucht den Nutzer anhand der Emailadresse raus
-	 * Überprüfung Nutzer vorhanden
+	 * ï¿½berprï¿½fung Nutzer vorhanden
 	 * @param email
 	 * @return
 	 * @throws IllegalArgumentException
@@ -144,13 +144,13 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public void deleteNutzer(Nutzer n) throws IllegalArgumentException {
 	
-		// Alle Auspraegungen der Kontakte, welche im Eigentumsverhältnis mit dem Nutzer stehen, aus der DB entfernen 
+		// Alle Auspraegungen der Kontakte, welche im Eigentumsverhï¿½ltnis mit dem Nutzer stehen, aus der DB entfernen 
 		this.aMapper.deleteAllByOwner(nutzer);
 	
-		//Alle Kontakte, welche im Eigentumsverhältnis mit dem Nutzer stehen, aus der DB entfernen	
+		//Alle Kontakte, welche im Eigentumsverhï¿½ltnis mit dem Nutzer stehen, aus der DB entfernen	
 		this.kMapper.deleteAllByOwner(nutzer);
 		
-		//Alle Kontaktlisten, welche im Eigentumsverhältnis mit dem Nutzer stehen, aus der DB entfernen	
+		//Alle Kontaktlisten, welche im Eigentumsverhï¿½ltnis mit dem Nutzer stehen, aus der DB entfernen	
 		this.klMapper.deleteAllByOwner(nutzer);
 		
 		//Alle Von- + Mit- Berechtigungen aus der DB entfernen	
@@ -229,7 +229,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Auslesen der Kontakte anhand des Namens.
 	 */
-	// Beschränkung auf eigene Kontakte?
+	// Beschrï¿½nkung auf eigene Kontakte?
 	public Vector<Kontakt> getKontaktByName(String name) throws IllegalArgumentException {
 		return this.kMapper.findKontaktByName(name);
 	}
@@ -238,8 +238,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Auslesen aller Kontakte welche im Eigentum sind.
 	 * 
 	 */
-	public Vector<Kontakt> getAllKontakteByOwner() throws IllegalArgumentException {
-		return this.kMapper.findKontaktByNutzerId(nutzer.getId()); 
+	public Vector<Kontakt> getAllKontakteByOwner(Nutzer n) throws IllegalArgumentException {
+		return this.kMapper.findKontaktByNutzerId(n.getId()); 
 	}
 
 	/**
@@ -333,7 +333,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Alle Kontaktlisten anhand ihrem Titel
 	 */
-	// Beschränkung auf eigene Kontaktlisten?
+	// Beschrï¿½nkung auf eigene Kontaktlisten?
 	public Vector <Kontaktliste> findKontaktlisteByTitel (String titel) throws IllegalArgumentException {
 		return this.klMapper.findByTitel(titel);
 	}
@@ -574,7 +574,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return kMapper.updateModifikationsdatum(id);
 		
 	}
-	
+
 	
 	/*
 	   * ***************************************************************************

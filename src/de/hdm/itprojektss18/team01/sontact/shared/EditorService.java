@@ -14,7 +14,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 
 /**
- * Interface für RPC-Service
+ * Interface fï¿½r RPC-Service
  * 
  * @author Yakup Kanal 
  *
@@ -81,11 +81,6 @@ public interface EditorService extends RemoteService{
 	public Vector<Kontakt> getKontaktByName(String name) throws IllegalArgumentException;
 	
 	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getAllKontakteByOwner();
-	 */
-	public Vector<Kontakt> getAllKontakteByOwner() throws IllegalArgumentException;
-	
-	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#addKontaktToKontaktliste(Kontakt k, Kontaktliste kl);
 	 */
 	public void addKontaktToKontaktliste(Kontakt k, Kontaktliste kl) throws IllegalArgumentException;
@@ -129,6 +124,9 @@ public interface EditorService extends RemoteService{
 	public Vector <Kontaktliste> findKontaktlisteByTitel (String titel) throws IllegalArgumentException;
 	
 	
+	
+	public Vector<Kontakt> getAllKontakteByOwner(Nutzer n) throws IllegalArgumentException;
+	
 	// Abschnitt Eigenschaft:
 	
 	/**
@@ -147,7 +145,7 @@ public interface EditorService extends RemoteService{
 	public void deleteEigenschaft (Eigenschaft e) throws IllegalArgumentException;
 	
 	
-	// Abschnitt Ausprägung:
+	// Abschnitt Ausprï¿½gung:
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createAuspraegung

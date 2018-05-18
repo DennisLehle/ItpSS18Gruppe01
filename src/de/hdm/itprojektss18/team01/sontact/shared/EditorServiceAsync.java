@@ -4,6 +4,7 @@ package de.hdm.itprojektss18.team01.sontact.shared;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.RemoteService;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
@@ -12,7 +13,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * Asynchrones Gegenstück des Interfaces <code>EditorService</code>
+ * Asynchrones Gegenstï¿½ck des Interfaces <code>EditorService</code>
  * @author Yakup Kanal
  *
  */
@@ -74,12 +75,9 @@ public interface EditorServiceAsync {
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontaktByName(String name);
 	 */
 	void getKontaktByName(String name, AsyncCallback<Vector<Kontakt>> callback);
-
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getAllKontakteByOwner();
-	 */
-	void getAllKontakteByOwner(AsyncCallback<Vector<Kontakt>> callback);
-
+	
+	void getAllKontakteByOwner(Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
+	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#addKontaktToKontaktliste(Kontakt k, Kontaktliste kl);
 	 */
@@ -132,6 +130,7 @@ public interface EditorServiceAsync {
 
 
 	void getAllAuspraegungenByKontakt(Kontakt k, AsyncCallback<Vector<Auspraegung>> callback);
+
 
 	
 	// Abschnitt Kontaktliste:

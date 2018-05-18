@@ -203,10 +203,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 	
 	/**
-	 * Loeschen eines Kontakts
+	 * Loeschen eines Kontakts mit seinen Auspraegungen und seinen Kontaktlistenzugehörigkeiten 
 	 * 
 	 */
-	public void removeKontakt(Kontakt k) throws IllegalArgumentException {
+	public void removeKontakt(Kontakt k, Kontaktliste kl) throws IllegalArgumentException {
 		
 		// Zunaechst alle Auspraegungen des Kontakts aus der DB entfernen.
 		Vector <Auspraegung> deleteAllAuspraegungen = getAllAuspraegungenByKontakt(k);
@@ -216,6 +216,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			}
 		}
 		
+		this.kMapper.removeKontaktFromKontaktliste(k, kl);
 		this.kMapper.delete(k);
 	}
 	
@@ -256,9 +257,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Aufhebung der Zuordnung eines Kontakts zur einer Kontaktliste 
 	 * @param k
 	 */
-	public void removeKontaktFromKontaktliste(Kontakt k) throws IllegalArgumentException {
+	public void removeKontaktFromKontaktliste(Kontakt k, Kontaktliste kl) throws IllegalArgumentException {
 		init();
-		this.kMapper.removeKontaktFromKontaktliste(k);
+		this.kMapper.removeKontaktFromKontaktliste(k, kl);
 	}
 	
 	/*
@@ -306,7 +307,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		Vector <Kontakt> removeAllKontakte = klMapper.getKontakteByKontaktliste(kl);
 		if (removeAllKontakte != null) {
 			for (Kontakt k : removeAllKontakte) {
-				this.kMapper.removeKontaktFromKontaktliste(k);
+				this.kMapper.removeKontaktFromKontaktliste(k, kl);
 			}
 		}
 
@@ -463,27 +464,25 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**Eine neue Eigenschaft für eine neue Ausprägung setzen 
 	 *
 	 */
-		public Auspraegung createAuspraegungForNewEigenschaft (String wert, 
-				int kontaktId, int ownerId, int eigenschaftId) {
-			
-			init();
-			
-			Eigenschaft e = new Eigenschaft();
-			eMapper.insert(e);
-			
-			
-			Auspraegung a = new Auspraegung();
-			a.setWert(wert);
-			a.setKontaktId(kontaktId);
-			a.setOwnerId(nutzer.getId());
-			a.setEigenschaftId(eigenschaftId);
-			
-			
-			a.setId(1);
-					
-			this.saveModifikationsdatum(a.getKontaktId());
-			return this.aMapper.insert(a);
-		}
+	public Auspraegung createAuspraegungForNewEigenschaft (String wert, int eigenschaftId, int kontaktId, int ownerId) {
+		
+		init();
+		
+		Eigenschaft e = new Eigenschaft();
+		this.createEigenschaft(e.getBezeichnung());
+		
+		Auspraegung a = new Auspraegung();
+		a.setWert(wert);
+		a.setEigenschaftId(e.getId());
+		a.setKontaktId(kontaktId);
+		a.setOwnerId(nutzer.getId());
+		
+		
+		a.setId(1);
+				
+		this.saveModifikationsdatum(a.getKontaktId());
+		return this.aMapper.insert(a);
+	}
 	
 		// getAllAuspraegungenByEigenschaft (?)
 	
@@ -599,6 +598,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return kMapper.updateModifikationsdatum(id);
 		
 	}
+
 
 	
 	

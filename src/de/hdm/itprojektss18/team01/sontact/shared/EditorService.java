@@ -68,7 +68,7 @@ public interface EditorService extends RemoteService{
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#removeKontakt(Kontakt k);
 	 */
-	public void removeKontakt(Kontakt k) throws IllegalArgumentException;
+	public void removeKontakt(Kontakt k, Kontaktliste kl) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontaktById(int id);
@@ -93,7 +93,7 @@ public interface EditorService extends RemoteService{
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#removeKontaktFromKontaktliste(Kontakt k);
 	 */
-	public void removeKontaktFromKontaktliste(Kontakt k) throws IllegalArgumentException;
+	public void removeKontaktFromKontaktliste(Kontakt k, Kontaktliste kl) throws IllegalArgumentException;
 	
 	
 	// Abschnitt Kontaktliste:

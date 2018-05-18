@@ -63,7 +63,7 @@ public interface EditorServiceAsync {
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#removeKontakt(Kontakt k);
 	 */
-	void removeKontakt(Kontakt k, AsyncCallback<Void> callback);
+	void removeKontakt(Kontakt k, Kontaktliste kl, AsyncCallback<Void> callback);
 
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontaktById(int id);
@@ -88,7 +88,7 @@ public interface EditorServiceAsync {
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#removeKontaktFromKontaktliste(Kontakt k);
 	 */
-	void removeKontaktFromKontaktliste(Kontakt k, AsyncCallback<Void> callback);
+	void removeKontaktFromKontaktliste(Kontakt k, Kontaktliste kl, AsyncCallback<Void> callback);
 
 
 	void createKontaktliste(String titel, int ownerId, AsyncCallback<Kontaktliste> callback);

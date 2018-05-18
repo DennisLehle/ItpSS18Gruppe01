@@ -220,8 +220,9 @@ public class KontaktMapper {
 
 		    try {
 		    	PreparedStatement stmt = con.prepareStatement(
-		    			"SELECT * FROM `Kontakt` WHERE `ownerid`= " + ownerId
+		    			"SELECT * FROM `Kontaktliste` WHERE `ownerid`= " + ownerId
 		    			+ " AND `kontaktlisteid`="+ kontaktlisteId);
+		    	//Anpassung Statement für Zwischentabelle KontaktlisteKontakt
 
 		      ResultSet rs = stmt.executeQuery();
 
@@ -257,8 +258,12 @@ public class KontaktMapper {
 			
 			try {
 				PreparedStatement  prestmt = con.prepareStatement(
-						"UPDATE `Kontakt` SET`kontaktlisteid` = " + kl.getId()
-						+" WHERE `id` = " + k.getId());
+						//"UPDATE `Kontakt` SET`kontaktlisteid` = " + kl.getId()
+						//+" WHERE `id` = " + k.getId());
+				"INSERT INTO KontaktlisteKontakt (kontaktlisteid, kontaktid) VALUES('" 
+				+ kl.getId() + "', '" 
+				+ k.getId()
+				+ "')"); 
 			
 					// Statement ausfï¿½hren
 					prestmt.execute();
@@ -275,13 +280,21 @@ public class KontaktMapper {
 		 * 
 		 * @param Id des Kontakts, kontaktlisteId der Kontaktliste in welche der Kontakt gespeichert ist.
 		 */
-		public void removeKontaktFromKontaktliste(Kontakt k) {
+		public void removeKontaktFromKontaktliste(Kontakt k, Kontaktliste kl) {
 			Connection con = DBConnection.connection();
 			
 			try {
 				PreparedStatement  prestmt = con.prepareStatement(
-						"UPDATE `Kontakt` SET`kontaktlisteid` =NULL WHERE `id` = "
-								+ k.getId());
+
+						//"UPDATE `Kontakt` SET `kontaktlisteid`= NULL WHERE `id`=" 
+							//	+ k.getId() 
+							//	+ " AND `kontaktlisteid`="
+							//	+ kl.getId());
+						
+				"DELETE FROM KontaktlisteKontakt WHERE kontaktlisteid= "
+				+ kl.getId() + 
+				" AND kontaktid= "
+				+ k.getId()); 
 		
 				// Statement ausfï¿½hren
 				prestmt.execute();
@@ -427,6 +440,9 @@ public class KontaktMapper {
 			PreparedStatement prestmt = con.prepareStatement(
 					"SELECT * FROM kontakt WHERE kontaktlisteid=" 
 					+ kontaktlisteId);
+			//Statement muss noch angepasst werden, aufgrund der Zwischentabelle
+				//	"SELECT * FROM kontaktliste WHERE kontaktlisteid=" 
+				//	+ kontaktlisteId);
 		
 			//Statement als Query an die DB schicken
 			ResultSet result = prestmt.executeQuery();

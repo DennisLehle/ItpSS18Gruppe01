@@ -36,7 +36,8 @@ public interface EditorServiceAsync {
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#setNutzer(Nutzer n);
 	 */
-	void setNutzer(Nutzer n, AsyncCallback<Void> callback);
+	
+	//void setNutzer(Nutzer n, AsyncCallback<Void> callback);
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#deleteNutzer(Nutzer n);
@@ -54,7 +55,7 @@ public interface EditorServiceAsync {
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createKontakt(String vorname, String nachname);
 	 */
-	void createKontakt(String vorname, String nachname, AsyncCallback<Kontakt> callback);
+	void createKontakt(String vorname, String nachname, Nutzer n, AsyncCallback<Kontakt> callback);
 
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#saveKontakt(Kontakt k);
@@ -86,10 +87,10 @@ public interface EditorServiceAsync {
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#removeKontaktFromKontaktliste(Kontakt k);
 	 */
-	void removeKontaktFromKontaktliste(Kontakt k, AsyncCallback<Void> callback);
+	void removeKontaktFromKontaktliste(Kontakt k, Kontaktliste kl, AsyncCallback<Void> callback);
 
 
-	void createKontaktliste(String titel, int ownerId, AsyncCallback<Kontaktliste> callback);
+	void createKontaktliste(String titel, Nutzer n, AsyncCallback<Kontaktliste> callback);
 
 
 	void saveKontaktliste(Kontaktliste kl, AsyncCallback<Kontaktliste> callback);
@@ -98,7 +99,7 @@ public interface EditorServiceAsync {
 	void deleteKontaktliste(Kontaktliste kl, AsyncCallback<Void> callback);
 
 
-	void getKontaktlistenByOwner(AsyncCallback<Vector<Kontaktliste>> callback);
+	void getKontaktlistenByOwner(Nutzer n, AsyncCallback<Vector<Kontaktliste>> callback);
 
 
 	void getKontakteByKontaktliste(Kontaktliste kl, AsyncCallback<Vector<Kontakt>> callback);
@@ -116,7 +117,10 @@ public interface EditorServiceAsync {
 	void deleteEigenschaft(Eigenschaft e, AsyncCallback<Void> callback);
 
 
-	void createAuspraegung(String wert, int eigenschaftId, int kontaktId, int ownerId,
+	void getEigenschaftAuswahl(AsyncCallback<Vector<Eigenschaft>> callback);
+
+
+	void createAuspraegung(String wert, int eigenschaftId, int kontaktId, Nutzer n,
 			AsyncCallback<Auspraegung> callback);
 
 
@@ -130,6 +134,9 @@ public interface EditorServiceAsync {
 
 
 	void getAllAuspraegungenByKontakt(Kontakt k, AsyncCallback<Vector<Auspraegung>> callback);
+
+
+	void saveModifikationsdatum(int id, AsyncCallback<Void> callback);
 
 
 	

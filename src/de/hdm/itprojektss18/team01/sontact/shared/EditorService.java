@@ -40,7 +40,10 @@ public interface EditorService extends RemoteService{
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#setNutzer(Nutzer n);
 	 */
+	
+	/**
 	public void setNutzer(Nutzer n) throws IllegalArgumentException;
+	**/
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#init();
@@ -58,7 +61,7 @@ public interface EditorService extends RemoteService{
 	/**
 	 * @see de.hdm.itprojektss18.team01.serverEditor.ServiceImpl#createKontakt(String vorname, String nachname);
 	 */
-	public Kontakt createKontakt(String vorname, String nachname) throws IllegalArgumentException;
+	public Kontakt createKontakt(String vorname, String nachname, Nutzer n ) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#saveKontakt(Kontakt k);
@@ -80,6 +83,9 @@ public interface EditorService extends RemoteService{
 	 */
 	public Vector<Kontakt> getKontaktByName(String name) throws IllegalArgumentException;
 	
+	public Vector<Kontakt> getAllKontakteByOwner(Nutzer n) throws IllegalArgumentException;
+
+
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#addKontaktToKontaktliste(Kontakt k, Kontaktliste kl);
 	 */
@@ -88,7 +94,7 @@ public interface EditorService extends RemoteService{
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#removeKontaktFromKontaktliste(Kontakt k);
 	 */
-	public void removeKontaktFromKontaktliste(Kontakt k) throws IllegalArgumentException;
+	public void removeKontaktFromKontaktliste(Kontakt k, Kontaktliste kl) throws IllegalArgumentException;
 	
 	
 	// Abschnitt Kontaktliste:
@@ -96,7 +102,7 @@ public interface EditorService extends RemoteService{
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createKontaktliste(String totel, int ownerId);
 	 */
-	public Kontaktliste createKontaktliste (String titel, int ownerId) throws IllegalArgumentException;
+	public Kontaktliste createKontaktliste (String titel, Nutzer n) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#saveKontaktliste(Kontaktliste kl);
@@ -111,7 +117,7 @@ public interface EditorService extends RemoteService{
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontaktlisteByOwner();
 	 */
-	public Vector<Kontaktliste> getKontaktlistenByOwner() throws IllegalArgumentException;
+	public Vector<Kontaktliste> getKontaktlistenByOwner(Nutzer n) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontakteByKontaktliste(Kontaktliste kl);
@@ -125,7 +131,7 @@ public interface EditorService extends RemoteService{
 	
 	
 	
-	public Vector<Kontakt> getAllKontakteByOwner(Nutzer n) throws IllegalArgumentException;
+	
 	
 	// Abschnitt Eigenschaft:
 	
@@ -144,6 +150,12 @@ public interface EditorService extends RemoteService{
 	 */
 	public void deleteEigenschaft (Eigenschaft e) throws IllegalArgumentException;
 	
+
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getEigenschaftAuswahl();
+	 */
+	public Vector<Eigenschaft> getEigenschaftAuswahl() throws IllegalArgumentException;
+	
 	
 	// Abschnitt Auspr�gung:
 	
@@ -151,7 +163,7 @@ public interface EditorService extends RemoteService{
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createAuspraegung
 	 * (String wert, int eigenschaftId, int kontaktId, int ownerId);
 	 */
-	public Auspraegung createAuspraegung (String wert, int eigenschaftId, int kontaktId, int ownerId) 
+	public Auspraegung createAuspraegung (String wert, int eigenschaftId, int kontaktId, Nutzer n) 
 			throws IllegalArgumentException;
 	
 	/**
@@ -177,10 +189,11 @@ public interface EditorService extends RemoteService{
 	
 	
 	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getAllAuspraegungenByKontakt (Kontakt k);
+	 */
 	
-	
-	
-	
+	public void saveModifikationsdatum(int id) throws IllegalArgumentException;
 	
 
 }

@@ -140,7 +140,7 @@ public class KontaktMapper {
 	    	stmt.setString(1, k.getVorname());
 	    	stmt.setString(2, k.getNachname());
 	    	stmt.setInt(3, k.getOwnerId());
-	    	stmt.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+	    	stmt.setTimestamp(4, k.getModDat());
 	    	stmt.setInt(5, k.getId());
 	    	stmt.executeUpdate();
 	   
@@ -497,18 +497,28 @@ public class KontaktMapper {
 	}
 
 	
-	/*
-	 * Notiz fï¿½r die nachstehenden beiden Mehtoden: 
-	 * 
-	 * InsertKontaktIntoKontaktliste() und deleteKontaktFromKontaktliste() sind jeweils nur
-	 * UPDATE-operationen auf der Datenbank, die das Fremdschluessel-Attribut 'kontaktlisteid' 
-	 * in der Tabelle 'Kontakt' fï¿½r die KontaktID xy setzten oder loeschen. 
-	 * 
-	 * Habe die SQL-Statements angepasst:
-	 * Evtl die Methode "Updatekonform" umschreiben, damit sie funktioniert. MaxID usw. nicht noetig .. 
-	 * 
-	 * @author kankup
-	 */
+	public int updateModifikationsdatum(int id) {
+		
+		Connection con = DBConnection.connection();
+		 
+		 try { 
+			// Modifikationsdatum des dazugehörigen Kontakts aktualisieren
+			String sql2 = "UPDATE Kontakt SET modifikationsdatum=? WHERE id=?";
+			PreparedStatement prestmt2 = con.prepareStatement(sql2);
+
+			prestmt2.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
+		    prestmt2.setInt(2, id);
+		    prestmt2.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		  }
+		 
+		 return id;
+	}
+	
+	
+	
 	
 }
 

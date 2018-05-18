@@ -5,6 +5,8 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
@@ -39,6 +41,11 @@ public interface EditorServiceAsync {
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#deleteNutzer(Nutzer n);
 	 */
 	void deleteNutzer(Nutzer n, AsyncCallback<Void> callback);
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#findNutzerByEmail(String email);
+	 */
+	void findNutzerByEmail(String email, AsyncCallback<Nutzer> callback);
 
 	
 	// Abschnitt Kontakt:
@@ -82,6 +89,49 @@ public interface EditorServiceAsync {
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#removeKontaktFromKontaktliste(Kontakt k);
 	 */
 	void removeKontaktFromKontaktliste(Kontakt k, AsyncCallback<Void> callback);
+
+
+	void createKontaktliste(String titel, int ownerId, AsyncCallback<Kontaktliste> callback);
+
+
+	void saveKontaktliste(Kontaktliste kl, AsyncCallback<Kontaktliste> callback);
+
+
+	void deleteKontaktliste(Kontaktliste kl, AsyncCallback<Void> callback);
+
+
+	void getKontaktlistenByOwner(AsyncCallback<Vector<Kontaktliste>> callback);
+
+
+	void getKontakteByKontaktliste(Kontaktliste kl, AsyncCallback<Vector<Kontakt>> callback);
+
+
+	void findKontaktlisteByTitel(String titel, AsyncCallback<Vector<Kontaktliste>> callback);
+
+
+	void createEigenschaft(String bezeichnung, AsyncCallback<Eigenschaft> callback);
+
+
+	void saveEigenschaft(Eigenschaft e, AsyncCallback<Eigenschaft> callback);
+
+
+	void deleteEigenschaft(Eigenschaft e, AsyncCallback<Void> callback);
+
+
+	void createAuspraegung(String wert, int eigenschaftId, int kontaktId, int ownerId,
+			AsyncCallback<Auspraegung> callback);
+
+
+	void saveAuspraegung(Auspraegung a, AsyncCallback<Auspraegung> callback);
+
+
+	void deleteAuspraegung(Auspraegung a, AsyncCallback<Void> callback);
+
+
+	void getAuspraegungById(Auspraegung a, AsyncCallback<Auspraegung> callback);
+
+
+	void getAllAuspraegungenByKontakt(Kontakt k, AsyncCallback<Vector<Auspraegung>> callback);
 
 	
 	// Abschnitt Kontaktliste:

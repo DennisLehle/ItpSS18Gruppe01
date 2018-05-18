@@ -1,8 +1,9 @@
 package de.hdm.itprojektss18.team01.sontact.client.gui;
 
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 
 /**
@@ -12,19 +13,20 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  *
  */
 
-public class Hauptansicht extends Composite {
-	VerticalPanel vPanel = new VerticalPanel();
+public class Hauptansicht extends VerticalPanel{
 	Navigation nav;
 	
 	
-	public Hauptansicht() {
+	public Hauptansicht(final Nutzer nutzer) {
 		/**
 		 * Zuweisung der Navigation der Hauptansicht. 
 		 */
-		Navigation nav = new Navigation();
-		vPanel.clear(); 
-		vPanel.add(nav);
-		RootPanel.get("navigator").add(vPanel);
+		Navigation nav = new Navigation(nutzer);
+		this.clear(); 
+		this.add(nav);
+		RootPanel.get("navigator").add(this);
+		RootPanel.get("content").add(new showKontakte());
+
 	}
 }
 

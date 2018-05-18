@@ -2,7 +2,6 @@ package de.hdm.itprojektss18.team01.sontact.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Label;
@@ -12,7 +11,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss18.team01.sontact.client.gui.Hauptansicht;
 import de.hdm.itprojektss18.team01.sontact.client.gui.KontakteAnzeigen;
 import de.hdm.itprojektss18.team01.sontact.client.gui.MessageBox;
-import de.hdm.itprojektss18.team01.sontact.client.gui.Navigation;
+import de.hdm.itprojektss18.team01.sontact.client.gui.RegistrierungsFormular;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.LoginService;
 import de.hdm.itprojektss18.team01.sontact.shared.LoginServiceAsync;
@@ -44,7 +43,7 @@ public class Sontact implements EntryPoint {
 
 			@Override
 			public void onFailure(Throwable error) {
-				//Window.alert("Fehler Login: " + error.toString());
+				// Window.alert("Fehler Login: " + error.toString());
 				Nutzer n = new Nutzer();
 				n.setId(1);
 				RootPanel.get("content").add(new KontakteAnzeigen(n));
@@ -60,7 +59,9 @@ public class Sontact implements EntryPoint {
 
 						@Override
 						public void onFailure(Throwable error) {
-							Window.alert("Es ist ein Fehler beim Login aufgetreten: " + error.toString());
+							// Window.alert("Es ist ein Fehler beim Login aufgetreten: " +
+							// error.toString());
+							RootPanel.get("content").add(new RegistrierungsFormular(result));
 						}
 
 						@Override
@@ -73,8 +74,9 @@ public class Sontact implements EntryPoint {
 								RootPanel.get("navigator").clear();
 								MessageBox.alertWidget("Kontakt",
 										"Sie haben noch kein Kontakt angelegt, bitte legen Sie Ihren eigenen Kontakt an");
-								// RootPanel.get("content").add(new RegistrierungsPanel(nutzer);
-								// Bei Registrierung saveButton klick Kontakt wird gespeichert / Hauptansicht wird aufgerufen
+								RootPanel.get("content").add(new RegistrierungsFormular(nutzer));
+								// Bei Registrierung saveButton klick Kontakt wird gespeichert / Hauptansicht
+								// wird aufgerufen
 							}
 						}
 					});
@@ -102,7 +104,7 @@ public class Sontact implements EntryPoint {
 		loginPanel.add(loginLabel);
 		loginPanel.add(signInLink);
 		RootPanel.get("login").add(loginPanel);
-	
+
 	}
 
 }

@@ -65,7 +65,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case fÃ¼r die Erstellung eines Nutzers.
 	 * CHECK
 	 */
-	
+
 	public void createNutzer() {
 		//Variable anlegen die Ã¼bergeben werden soll.
 		String email = "kan.kup@gmail.com";
@@ -90,7 +90,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Anmerkung: Wird der Kontakt in die Default-Kontaktliste gespeichert?
 	 * CHECK
 	 */
-	
+
 	public void createKontakt() {
 		
 		Nutzer n = new Nutzer();
@@ -137,7 +137,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		 * Test Case fuer das Erstellen einer Auspraegung
 		 * CHECK
 		 */
-	
+
 	public void createAuspraegung() {
 		Nutzer n = new Nutzer();
 		n.setId(1);
@@ -269,10 +269,11 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case fuer das Erstellen einer Kontaktliste
 	 * CHECK
 	 */
+
 	public void createKontaktliste() {
 		
 		Nutzer n = new Nutzer();
-		n.setId(2);
+		n.setId(1);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -286,7 +287,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * CHECK
 	 */
 	
-public void saveKontaktliste() {
+	public void saveKontaktliste() {
 		
 		Nutzer n = new Nutzer();
 		n.setId(2);
@@ -306,14 +307,14 @@ public void saveKontaktliste() {
  * Test Case fuer die Zuweisung eines Kontakts zu einer Kontaktliste
  * CHECK
  */
-
+	
 	public void addKontaktToKontaktliste() {
 		
 		Kontakt k = new Kontakt();
-		k.setId(2);
+		k.setId(25);
 		
 		Kontaktliste kl = new Kontaktliste();
-		kl.setId(2);
+		kl.setId(3);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -323,25 +324,39 @@ public void saveKontaktliste() {
 	
 	/**
 	 * Test Case fuer das Entfernen eines Kontakts aus einer Kontaktliste
-	 * Anmerkung: muss angepasst werden, da Kontakte mehreren Kontaktlisten 
-	 * zugeordnet werden können.  
-	 * CHECK
+	 *
 	 */
-	
+
 	public void removeKontaktFromKontaktliste() {
 		
 		Kontakt k = new Kontakt();
-		k.setId(2);
+		k.setId(25);
+		
+		Kontaktliste kl = new Kontaktliste();
+		kl.setId(3);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		editor.removeKontaktFromKontaktliste(k);
+		editor.removeKontaktFromKontaktliste(k, kl);
+		
 	}
 	
 	/**
-	 * Test Case fuer das Entfernen eines Kontakts aus einer bestimmten Kontaktliste
+	 * Test Case fuer das Löschen eines Kontakts
+	 * Muss noch angepasst werden
 	 * UNCHECK
 	 */
+	
+	public void removeKontakt() {
+		Kontakt k = new Kontakt();
+		k.setId(25);
+		
+		Kontaktliste kl = new Kontaktliste();
+		kl.setId(3);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		editor.removeKontakt(k, kl);
+	}
 	
 	
 	/*

@@ -1,7 +1,6 @@
 package de.hdm.itprojektss18.team01.sontact.server;
 
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Vector;
 
@@ -432,7 +431,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	
 	public Auspraegung createAuspraegung (String wert, int eigenschaftId, 
-			int kontaktId, int ownerId, Nutzer n) throws IllegalArgumentException { 
+			int kontaktId, Nutzer n) throws IllegalArgumentException { 
 		
 		init();
 		
@@ -634,6 +633,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.kMapper.updateModifikationsdatum(id);
 		
 	}
+
 
 
 	

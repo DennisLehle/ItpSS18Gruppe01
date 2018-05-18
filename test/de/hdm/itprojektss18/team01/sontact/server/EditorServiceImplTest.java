@@ -9,6 +9,7 @@ import com.google.gwt.junit.client.GWTTestCase;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 
@@ -86,6 +87,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	
 	/**
 	 * Test Case fÃ¼r die Erstellung eines Kontakts.
+	 * Anmerkung: Wird der Kontakt in die Default-Kontaktliste gespeichert?
 	 * CHECK
 	 */
 	
@@ -131,6 +133,10 @@ class EditorServiceImplTest extends GWTTestCase {
 	   * ***************************************************************************
 	   */
 		
+		/**
+		 * Test Case fuer das Erstellen einer Auspraegung
+		 * CHECK
+		 */
 	
 	public void createAuspraegung() {
 		Nutzer n = new Nutzer();
@@ -165,7 +171,11 @@ class EditorServiceImplTest extends GWTTestCase {
 		editor.createAuspraegung("lisaluftig@yahoo.de", 14 , 3 , 1);
 	}
 	
-
+	/**
+	 * Test Case fuer das Bearbeiten einer Auspraegung
+	 * CHECK
+	 */
+	
 	public void saveAuspraegung() {
 		
 		Nutzer n = new Nutzer();
@@ -184,7 +194,10 @@ class EditorServiceImplTest extends GWTTestCase {
 		editor.saveAuspraegung(a);
 	}
 	
-	
+	/**
+	 * Test Case fuer das Löschen einer Auspraegung
+	 * CHECK
+	 */
 	public void deleteAuspraegung() {
 		Nutzer n = new Nutzer();
 		n.setId(1);
@@ -209,10 +222,28 @@ class EditorServiceImplTest extends GWTTestCase {
 	   * ABSCHNITT, Anfang: Methoden fuer Eigenschaft-Objekte Test
 	   * ***************************************************************************
 	   */
+	/**
+	 * Test Case fuer das Erstellen einer Eigenschaft und einer Auspraegung
+	 * UNCHECK
+	 */
 	
-	//Lisa Luftig
+	public void createCreateAuspraegungforNewEigenschaft() {
+		Nutzer n = new Nutzer();
+		n.setId(1);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		editor.setNutzer(n);
+		
+		Eigenschaft e = new Eigenschaft();
+		e.setId(18);
+		
+		editor.createEigenschaft("Haustier");
+		
+		editor.createAuspraegungForNewEigenschaft("Hund", e.getId() , 3 , 1);
+		}
 	
-	
+	/**
 	public void createAuspraegungforNewEigenschaft() {
 		Nutzer n = new Nutzer();
 		n.setId(1);
@@ -226,13 +257,92 @@ class EditorServiceImplTest extends GWTTestCase {
 		editor.createAuspraegung("Bello", 18 , 3, 1);
 		
 	}
-		
+		**/
 		
 	/*
 	   * ***************************************************************************
-	   * ABSCHNITT, Anfang: Methoden fuer Auspraegungs-Objekte Test
+	   * ABSCHNITT, Anfang: Methoden fuer Kontaktlisten-Objekte Test
 	   * ***************************************************************************
 	   */
+	
+	/**
+	 * Test Case fuer das Erstellen einer Kontaktliste
+	 * CHECK
+	 */
+	public void createKontaktliste() {
+		
+		Nutzer n = new Nutzer();
+		n.setId(2);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		//Ich erstelle eine Kontaktliste und übergebe einen Nutzer
+		editor.setNutzer(n);
+		editor.createKontaktliste("Firma", n.getId());
+	}
+	
+	/**
+	 * Test Case fuer das Erstellen einer Kontaktliste
+	 * CHECK
+	 */
+	
+public void saveKontaktliste() {
+		
+		Nutzer n = new Nutzer();
+		n.setId(2);
+		
+		Kontaktliste kl = new Kontaktliste();
+		kl.setId(2);
+		kl.setTitel("Kameraden");
+
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		editor.setNutzer(n);
+		editor.saveKontaktliste(kl);
+	}
+	
+
+/**
+ * Test Case fuer die Zuweisung eines Kontakts zu einer Kontaktliste
+ * CHECK
+ */
+
+	public void addKontaktToKontaktliste() {
+		
+		Kontakt k = new Kontakt();
+		k.setId(2);
+		
+		Kontaktliste kl = new Kontaktliste();
+		kl.setId(2);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		editor.addKontaktToKontaktliste(k, kl);
+	}
+	
+	
+	/**
+	 * Test Case fuer das Entfernen eines Kontakts aus einer Kontaktliste
+	 * Anmerkung: muss angepasst werden, da Kontakte mehreren Kontaktlisten 
+	 * zugeordnet werden können.  
+	 * CHECK
+	 */
+	
+	public void removeKontaktFromKontaktliste() {
+		
+		Kontakt k = new Kontakt();
+		k.setId(2);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		editor.removeKontaktFromKontaktliste(k);
+	}
+	
+	/**
+	 * Test Case fuer das Entfernen eines Kontakts aus einer bestimmten Kontaktliste
+	 * UNCHECK
+	 */
+	
 	
 	/*
 	   * ***************************************************************************

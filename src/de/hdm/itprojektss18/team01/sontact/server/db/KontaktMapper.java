@@ -179,6 +179,25 @@ public class KontaktMapper {
 		}
 	}
 	
+	public void deleteKontaktFromAllLists(Kontakt k) {
+		Connection con = DBConnection.connection();
+		
+		try {
+		//SQL Statement anlegen
+		PreparedStatement prestmt = con.prepareStatement(
+				"DELETE FROM KontaktlisteKontakt WHERE kontaktid=" 
+				+ k.getId());
+		
+		//Statement als Query an die DB schicken
+		prestmt.execute();
+		}
+		
+		catch (SQLException e2){
+			e2.printStackTrace();
+		}
+	}
+	
+	
 	/**
 	 * Loeschen aller <code>Kontakt</code>-Objekte die einem <code>Owner</code> zugewiesen sind. 
 	 * @param k das aus der DB zu loeschende "Objekt"
@@ -213,27 +232,37 @@ public class KontaktMapper {
 	 * @param kontaktlisteId
 	 * @return
 	 */
-	 public Vector<Kontakt> findKontakteVonOwner(int ownerId, int kontaktlisteId) {
+	 public Vector<Kontakt> findAllKontakteByKontaktliste(int kontaktlisteId) {
 		 
 		    Connection con = DBConnection.connection();
 		    Vector<Kontakt> result = new Vector<Kontakt>();
 
 		    try {
 		    	PreparedStatement stmt = con.prepareStatement(
-		    			"SELECT * FROM `Kontaktliste` WHERE `ownerid`= " + ownerId
-		    			+ " AND `kontaktlisteid`="+ kontaktlisteId);
-		    	//Anpassung Statement für Zwischentabelle KontaktlisteKontakt
+		    			"SELECT klk.kontaktlisteid, kl.titel, k.id, k.vorname, k.nachname, k.ownerid "
+		    			+ "FROM KontaktlisteKontakt klk, Kontaktliste kl, Kontakt k"
+		    			+ "WHERE klk.kontaktlisteId = "+ kontaktlisteId
+		    			+ "INNER JOIN Kontakt k ON klk.kontaktid = k.id "
+		    			+ "INNER JOIN Kontaktliste kl ON kl.id = klk.kontaktlisteid");
+
+		    	//Anpassung Statement für Zwischentabelle KontaktlisteKontak
 
 		      ResultSet rs = stmt.executeQuery();
 
 		      // FÃ¼r jeden Eintrag im Suchergebnis wird nun ein Account-Objekt erstellt.
-		      while (rs.next()) {
+		     
+		      Kontaktliste kl = new Kontaktliste();
+		      kl.setTitel("titel");
+		    	
+		      while (rs.next()) {  
 		        Kontakt k = new Kontakt();
 		        k.setId(rs.getInt("id"));
 		        k.setVorname(rs.getString("vorname"));
 		        k.setNachname(rs.getString("nachname"));
-		        k.setKontaktlisteId(rs.getInt("kontaktlisteid"));
+		      // k.setErstellDat("erstellungsdatum"));
+		      // k.setModDat("modifikationsdatum"));
 		        k.setOwnerId(rs.getInt("ownerid"));
+
 		     
 
 		        // HinzufÃ¼gen des neuen Objekts zum Ergebnisvektor
@@ -299,8 +328,6 @@ public class KontaktMapper {
 				// Statement ausfï¿½hren
 				prestmt.execute();
 				
-				//Statement als Query an die DB schicken
-				prestmt.execute();
 			}
 			
 			catch (SQLException e2){
@@ -407,7 +434,6 @@ public class KontaktMapper {
 		        k.setId(rs.getInt("id"));
 		        k.setVorname(rs.getString("vorname"));
 		        k.setNachname(rs.getString("nachname"));
-		        k.setKontaktlisteId(rs.getInt("kontaktlisteid"));
 		        k.setOwnerId(rs.getInt("ownerid"));
 		}
 		return k;
@@ -456,7 +482,6 @@ public class KontaktMapper {
 		        k.setId(result.getInt("id"));
 		        k.setVorname(result.getString("vorname"));
 		        k.setNachname(result.getString("nachname"));
-		        k.setKontaktlisteId(result.getInt("kontaktlisteid"));
 		        k.setOwnerId(result.getInt("ownerid"));
 		}	
 		return list;
@@ -476,7 +501,7 @@ public class KontaktMapper {
 	 * @return ein Vektor mit Kontakt-Objekten, die durch die gegebene Kontaktliste reprï¿½sentiert werden. 
 	 * Bei evtl. Exceptions wird ein partiell gefï¿½llter oder ggf. auch leerer Vektor zurï¿½ckgeliefert.
 	 * 
-	 */
+	 *
 	
 	public Vector<Kontakt> findKontaktByKontaktliste (int kontaktlisteId) {
 		Connection con = DBConnection.connection();
@@ -513,6 +538,8 @@ public class KontaktMapper {
 			}
 		return null;
 	}
+	
+	**/
 	
 	public int updateModifikationsdatum(int id) {
 		

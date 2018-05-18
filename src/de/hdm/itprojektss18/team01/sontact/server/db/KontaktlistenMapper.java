@@ -326,7 +326,7 @@ public class KontaktlistenMapper {
 		     * die passenden Kontakte herauszufiltern. Dies wird für die Default Kontaktliste und für die 
 		     * angelegte Kontaktliste benötigt.
 		     */
-		    return KontaktMapper.kontaktMapper().findKontakteVonOwner(kl.getOwnerId(), kl.getId()); 
+		    return KontaktMapper.kontaktMapper().findAllKontakteByKontaktliste(kl.getId());
 		  }
 		
 		/**

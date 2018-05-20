@@ -332,6 +332,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Vector<Kontaktliste> getKontaktlistenByOwner(Nutzer n) throws IllegalArgumentException {
+		init();
 		return this.klMapper.findKontaktlistenByOwner(n.getId());
 	}
 	
@@ -622,6 +623,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	   * ABSCHNITT, Ende: Share-Methoden
 	   * ***************************************************************************
 	   */
+
 	/*
 	   * ***************************************************************************
 	   * ABSCHNITT, Beginn: Sonstiges

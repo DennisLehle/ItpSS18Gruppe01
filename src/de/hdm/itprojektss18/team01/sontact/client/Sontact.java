@@ -9,8 +9,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.hdm.itprojektss18.team01.sontact.client.gui.Hauptansicht;
 import de.hdm.itprojektss18.team01.sontact.client.gui.MessageBox;
+import de.hdm.itprojektss18.team01.sontact.client.gui.Navigation;
 import de.hdm.itprojektss18.team01.sontact.client.gui.RegistrierungsFormular;
 import de.hdm.itprojektss18.team01.sontact.client.gui.ShowKontakte;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
@@ -116,7 +116,7 @@ public class Sontact implements EntryPoint {
 	 * @param nutzer
 	 */
 	private void start(final Nutzer nutzer) {
-		RootPanel.get().add(new Hauptansicht(nutzer));
+		RootPanel.get("navigator").add(new Navigation(nutzer));
 		RootPanel.get("content").add(new ShowKontakte(nutzer));
 	}
 

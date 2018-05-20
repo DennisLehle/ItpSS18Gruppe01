@@ -25,7 +25,7 @@ public class Hauptansicht extends VerticalPanel{
 		this.clear(); 
 		this.add(nav);
 		RootPanel.get("navigator").add(this);
-		RootPanel.get("content").add(new showKontakte());
+		RootPanel.get("content").add(new ShowKontakte(nutzer));
 
 	}
 }

@@ -64,7 +64,8 @@ public class EigenschaftMapper {
 		    			"INSERT INTO Eigenschaft (id, bezeichnung) "
 		    	  				+ "VALUES ('"
 		    	  				+ e.getId() + "', '" 
-								+ e.getBezeichnung());
+								+ e.getBezeichnung() + "')");
+		    	
 
 		    	// INSERT-Statement ausf�hren
 				prestmt.execute();

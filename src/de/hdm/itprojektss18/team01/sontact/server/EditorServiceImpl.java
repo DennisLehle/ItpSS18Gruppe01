@@ -378,7 +378,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		
 		Eigenschaft e = new Eigenschaft();
 		e.setBezeichnung(bezeichnung);
-		
+
 		e.setId(1);
 		
 		return this.eMapper.insert(e);
@@ -432,7 +432,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	
 	public Auspraegung createAuspraegung (String wert, int eigenschaftId, 
-			int kontaktId, Nutzer n) throws IllegalArgumentException { 
+			int kontaktId, Nutzer n /**int ownerId*/) throws IllegalArgumentException { 
 		
 		init();
 		
@@ -440,7 +440,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		a.setWert(wert);
 		a.setEigenschaftId(eigenschaftId);
 		a.setKontaktId(kontaktId);
-		a.setOwnerId(n.getId());
+		a.setOwnerId(n.getId() /**ownerId*/);
 		
 		a.setId(1);
 				
@@ -487,38 +487,17 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**Eine neue Eigenschaft f�r eine neue Auspr�gung setzen 
 	 *
 	 */
-	public Auspraegung createAuspraegungForNewEigenschaft (String wert, int eigenschaftId, int kontaktId, int ownerId) {
+	public void createAuspraegungForNewEigenschaft (Eigenschaft e, Auspraegung a, Nutzer n) {
 		
 		init();
-		
-		Eigenschaft e = new Eigenschaft();
+
 		this.createEigenschaft(e.getBezeichnung());
-		
-		Auspraegung a = new Auspraegung();
-		a.setWert(wert);
-		a.setEigenschaftId(e.getId());
-		a.setKontaktId(kontaktId);
-		a.setOwnerId(nutzer.getId());
-		
-		
-		a.setId(1);
-				
-		this.saveModifikationsdatum(a.getKontaktId());
-		return this.aMapper.insert(a);
+		this.createAuspraegung(a.getWert(), e.getId(), a.getKontaktId(), n);
 	}
+	
 	
 		// getAllAuspraegungenByEigenschaft (?)
 	

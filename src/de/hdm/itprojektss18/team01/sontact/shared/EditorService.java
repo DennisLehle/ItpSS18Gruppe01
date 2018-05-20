@@ -150,6 +150,9 @@ public interface EditorService extends RemoteService{
 	 */
 	public void deleteEigenschaft (Eigenschaft e) throws IllegalArgumentException;
 	
+	
+	
+	public void createAuspraegungForNewEigenschaft(/**String bezeichnung, String wert, int eigenschaftId, int kontaktId, int ownerId*/ Eigenschaft e, Auspraegung a, Nutzer n) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getEigenschaftAuswahl();
@@ -163,7 +166,7 @@ public interface EditorService extends RemoteService{
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createAuspraegung
 	 * (String wert, int eigenschaftId, int kontaktId, int ownerId);
 	 */
-	public Auspraegung createAuspraegung (String wert, int eigenschaftId, int kontaktId, Nutzer n) 
+	public Auspraegung createAuspraegung (String wert, int eigenschaftId, int kontaktId, Nutzer n /**int ownerId*/) 
 			throws IllegalArgumentException;
 	
 	/**

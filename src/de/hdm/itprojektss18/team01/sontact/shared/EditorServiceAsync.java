@@ -115,12 +115,15 @@ public interface EditorServiceAsync {
 
 
 	void deleteEigenschaft(Eigenschaft e, AsyncCallback<Void> callback);
+	
+	void createAuspraegungForNewEigenschaft(/**String bezeichnung, String wert, int eigenschaftId, int kontaktId, int ownerId,*/ Eigenschaft e, Auspraegung a, Nutzer n,
+			AsyncCallback<Void> callback);
 
 
 	void getEigenschaftAuswahl(AsyncCallback<Vector<Eigenschaft>> callback);
 
 
-	void createAuspraegung(String wert, int eigenschaftId, int kontaktId, Nutzer n,
+	void createAuspraegung(String wert, int eigenschaftId, int kontaktId, Nutzer n  /**int ownerId*/,
 			AsyncCallback<Auspraegung> callback);
 
 

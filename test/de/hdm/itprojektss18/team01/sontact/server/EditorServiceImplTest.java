@@ -97,9 +97,9 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		//Ich erstelle einen Kontakt und Ã¼bergebe einen Nutzer in dem Fall mich selbst.
-		editor.createKontakt("Max", "Mustermann", n);
-		editor.createKontakt("Petra", "Pfiffig", n);
-		editor.createKontakt("Lisa", "Lustig", n);
+		editor.createKontakt("Melanie", "Musterchen", n);
+		//editor.createKontakt("Petra", "Pfiffig", n);
+		//editor.createKontakt("Lisa", "Lustig", n);
 	}
 	
 	/**
@@ -140,6 +140,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		n.setId(1);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
+
 			
 		//Max Mustermann
 		editor.createAuspraegung("0176/ 232222", 6 , 1 , n);
@@ -216,23 +217,66 @@ class EditorServiceImplTest extends GWTTestCase {
 	   * ABSCHNITT, Anfang: Methoden fuer Eigenschaft-Objekte Test
 	   * ***************************************************************************
 	   */
-	/**
-	 * Test Case fuer das Erstellen einer Eigenschaft und einer Auspraegung
-	 * UNCHECK
-	 */
 	
-	public void createCreateAuspraegungforNewEigenschaft() {
-		Nutzer n = new Nutzer();
-		n.setId(1);
+	/**
+	 * Test Case fuer das Erstellen einer Eigenschaft
+	 * CHECK
+	 */
+
+	public void createEigenschaft() {
+
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
+
+		
+		editor.createEigenschaft("Lieblingssport");			
+	}
+	
+	/**
+	 * Test Case fuer das Loeschen einer Eigenschaft
+	 * UNCHECK
+	 */
+
+
+	public void deleteEigenschaft() {
 		
 		Eigenschaft e = new Eigenschaft();
 		e.setId(18);
+		e.setBezeichnung("Haustier");
 		
-		editor.createEigenschaft("Haustier");
+		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		editor.createAuspraegungForNewEigenschaft("Hund", e.getId() , 3 , 1);
+		editor.deleteEigenschaft(e);			
+	}
+	
+	
+	/**
+	 * Test Case fuer das Erstellen einer Eigenschaft und einer Auspraegung
+	 * CHECK
+	*/
+	
+	public void createAuspraegungForNewEigenschaft() {
+		Nutzer n = new Nutzer();
+		n.setId(1);
+
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		//Anlegen der Eigenschaft
+		Eigenschaft e = new Eigenschaft();
+		e.setBezeichnung("Schuhgröße");
+		e.setId(21);
+		
+		//Anlegen der Auspraegung
+		Auspraegung a = new Auspraegung();
+		a.setWert("38");
+		a.setEigenschaftId(e.getId());
+		a.setKontaktId(3);
+		a.setOwnerId(1);
+		
+		
+		//Anlegen der dazugehörigen Auspraegung		
+		editor.createAuspraegungForNewEigenschaft(e, a, n);
 		}
 	
 	/**
@@ -336,7 +380,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case fuer das Entfernen eines Kontakts aus einer Kontaktliste
 	 *CHECK
 	 */
-	@Test
+
 	public void getKontaktlistenByOwner() {
 		
 		Nutzer n = new Nutzer();

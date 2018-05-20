@@ -1,10 +1,7 @@
 package de.hdm.itprojektss18.team01.sontact.client.gui;
 
-import java.util.Vector;
-
-import com.google.gwt.view.client.ListDataProvider;
-
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.dom.client.Style.Unit;
@@ -22,6 +19,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
+import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
@@ -37,7 +35,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  * @author Dennis Lehle, Kevin Batista, Ugur Bayrak
  *
  */
-public class KontakteAnzeigen extends VerticalPanel {
+public class ShowKontakte extends VerticalPanel {
 
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
 
@@ -55,7 +53,7 @@ public class KontakteAnzeigen extends VerticalPanel {
 	/**
 	 * Konstruktor der Klasse
 	 */
-	public KontakteAnzeigen(final Nutzer n) {
+	public ShowKontakte(final Nutzer n) {
 
 		// Methode die beim Start dieser Klasse aufgerufen wird.
 		onLoad(n);
@@ -158,7 +156,7 @@ public class KontakteAnzeigen extends VerticalPanel {
 		nachnameCol.setSortable(true);
 
 		kontaktTable.addColumn(erstellungsdatumCol, "Erstellungsdatum");
-		kontaktTable.addColumn(modifikationsdatumCol, "Erstellungsdatum");
+		kontaktTable.addColumn(modifikationsdatumCol, "Modifikationsdatum");
 
 		kontaktTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		kontaktTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));

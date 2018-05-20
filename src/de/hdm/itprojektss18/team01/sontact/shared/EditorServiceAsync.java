@@ -98,7 +98,7 @@ public interface EditorServiceAsync {
 	void deleteKontaktliste(Kontaktliste kl, AsyncCallback<Void> callback);
 
 
-	void getKontaktlistenByOwner(AsyncCallback<Vector<Kontaktliste>> callback);
+	void getKontaktlistenByOwner(Nutzer n, AsyncCallback<Vector<Kontaktliste>> callback);
 
 
 	void getKontakteByKontaktliste(Kontaktliste kl, AsyncCallback<Vector<Kontakt>> callback);

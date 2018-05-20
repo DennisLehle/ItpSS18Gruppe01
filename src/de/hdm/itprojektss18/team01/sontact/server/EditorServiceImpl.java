@@ -317,8 +317,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Alle Kontaktlisten eines Nutzers anhand OwnerId
 	 * 
 	 */
-	public Vector<Kontaktliste> getKontaktlistenByOwner() throws IllegalArgumentException {
-		return this.klMapper.findKontaktlistenByOwner(nutzer.getId());
+	public Vector<Kontaktliste> getKontaktlistenByOwner(Nutzer n) throws IllegalArgumentException {
+		return this.klMapper.findKontaktlistenByOwner(n.getId());
 	}
 	
 	/**

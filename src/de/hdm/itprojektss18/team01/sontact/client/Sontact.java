@@ -44,12 +44,7 @@ public class Sontact implements EntryPoint {
 
 			@Override
 			public void onFailure(Throwable error) {
-				// Window.alert("Fehler Login: " + error.toString());
-				Nutzer n = new Nutzer();
-				n.setId(1);
-				RootPanel.get("content").add(new ShowKontakte(n));
-				// start();
-
+				Window.alert("Fehler Login: " + error.toString());
 			}
 
 			@Override
@@ -116,7 +111,7 @@ public class Sontact implements EntryPoint {
 	}
 
 	/**
-	 * Ist die Init() Methode f�r den Start der Kontaktverwaltung
+	 * Ist die Initialisierungmethode fuer den Start des Kontaktverwaltungssystems
 	 * 
 	 * @param nutzer
 	 */
@@ -130,7 +125,7 @@ public class Sontact implements EntryPoint {
 		signInLink.setHref(loginInfo.getLoginUrl());
 		loginPanel.add(loginLabel);
 		loginPanel.add(signInLink);
-		RootPanel.get("login").add(loginPanel);
+		RootPanel.get("content").add(loginPanel);
 
 	}
 

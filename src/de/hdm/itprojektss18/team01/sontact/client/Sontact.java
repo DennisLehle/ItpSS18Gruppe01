@@ -9,7 +9,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-
 import de.hdm.itprojektss18.team01.sontact.client.gui.Hauptansicht;
 import de.hdm.itprojektss18.team01.sontact.client.gui.MessageBox;
 import de.hdm.itprojektss18.team01.sontact.client.gui.RegistrierungsFormular;
@@ -41,7 +40,6 @@ public class Sontact implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 
-	
 		loginService.login(GWT.getHostPageBaseURL() + "Sontact.html", new AsyncCallback<LoginInfo>() {
 
 			@Override
@@ -63,11 +61,11 @@ public class Sontact implements EntryPoint {
 						@Override
 						public void onFailure(Throwable error) {
 							Window.alert("Es ist ein Fehler beim Login aufgetreten: ");
-						
+
 						}
 
 						@Override
-						public void onSuccess(Nutzer nutzer) {
+						public void onSuccess(final Nutzer nutzer) {
 							if (nutzer != null) {
 								RootPanel.get("content").clear();
 								start(nutzer);
@@ -76,9 +74,36 @@ public class Sontact implements EntryPoint {
 								RootPanel.get("navigator").clear();
 								MessageBox.alertWidget("Kontakt",
 										"Sie haben noch kein Kontakt angelegt, bitte legen Sie Ihren eigenen Kontakt an");
-								RootPanel.get("content").add(new RegistrierungsFormular(nutzer));
-								// Bei Registrierung saveButton klick Kontakt wird gespeichert / Hauptansicht
-								// wird aufgerufen
+								editorVerwaltung.createNutzer(loginInfo.getEmailAddress(), new AsyncCallback<Nutzer>() {
+
+									@Override
+									public void onFailure(Throwable error) {
+										error.getMessage();
+									}
+
+									@Override
+									public void onSuccess(Nutzer result) {
+										Nutzer n = result;
+										editorVerwaltung.findNutzerByEmail(n.getEmailAddress(),
+												new AsyncCallback<Nutzer>() {
+
+													@Override
+													public void onFailure(Throwable error) {
+														Window.alert("Es ist ein Fehler beim Login aufgetreten: ");
+
+													}
+
+													@Override
+													public void onSuccess(final Nutzer nutzer) {
+														RootPanel.get("content")
+																.add(new RegistrierungsFormular(nutzer));
+
+													}
+												});
+
+									}
+
+								});
 							}
 						}
 					});

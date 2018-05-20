@@ -192,7 +192,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Kontakt createKontakt(String vorname, String nachname, Nutzer n) throws IllegalArgumentException {
-		init();
+		
 
 		Kontakt kontakt = new Kontakt();
 		kontakt.setVorname(vorname);
@@ -202,9 +202,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		kontakt.setOwnerId(n.getId());
 
 		kontakt.setId(1);
+		init();
+		return kMapper.insert(kontakt);
 
-		kontakt = this.kMapper.insert(kontakt);
-		return kontakt;
 	}
 
 	/**

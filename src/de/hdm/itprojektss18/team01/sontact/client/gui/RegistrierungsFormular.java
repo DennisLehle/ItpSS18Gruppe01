@@ -12,10 +12,12 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import de.hdm.itprojektss18.team01.sontact.client.gui.MessageBox;
 
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
@@ -24,7 +26,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
  *
  */
- 
+
 public class RegistrierungsFormular extends VerticalPanel {
 
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
@@ -61,7 +63,7 @@ public class RegistrierungsFormular extends VerticalPanel {
 			@Override
 			public void onClick(ClickEvent event) {
 				TextBox txtBox = new TextBox();
-				ListBox listBox = new ListBox();
+				final ListBox listBox = new ListBox();
 				ev.getEigenschaftAuswahl(new AsyncCallback<Vector<Eigenschaft>>() {
 
 					@Override
@@ -87,6 +89,50 @@ public class RegistrierungsFormular extends VerticalPanel {
 				auswahlPanel.add(txtBox);
 				RootPanel.get("content").add(auswahlPanel);
 			}
+		});
+
+		eigeneEigenschaft.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				TextBox txtBox = new TextBox();
+				TextBox textBox = new TextBox();
+
+				HorizontalPanel eigenesPanel = new HorizontalPanel();
+				eigenesPanel.add(txtBox);
+				eigenesPanel.add(textBox);
+				RootPanel.get("content").add(eigenesPanel);
+				// Schauen nach Regel für die Befüllung der Boxen (Box muss erst befüllt sein
+				// damit die nächste Box erscheint)
+			}
+
+		});
+
+		speichern.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+
+				RegistrierungsFormular rf = new RegistrierungsFormular(nutzer);
+			//	String vorname = rf.vornameTb.getText();
+				//String nachname = rf.nachnameTb.getText();
+				ev.createKontakt(rf.vornameTb.getText(), rf.nachnameTb.getText(), nutzer, new AsyncCallback<Kontakt>() {
+
+					@Override
+					public void onFailure(Throwable error) {
+						error.getMessage().toString();
+
+					}
+
+					@Override
+					public void onSuccess(Kontakt k) {
+						MessageBox.alertWidget("",
+								"Sie haben Ihren Kontakt: " + vorname + " " + nachname + " erfolgreich angelegt");
+
+					}
+				});
+			}
+
 		});
 
 	}

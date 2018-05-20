@@ -179,6 +179,9 @@ public class KontaktMapper {
 		}
 	}
 	
+
+// ZUORDNUNG IM KLK-MAPPER (!)	
+/**	
 	public void deleteKontaktFromAllLists(Kontakt k) {
 		Connection con = DBConnection.connection();
 		
@@ -196,6 +199,7 @@ public class KontaktMapper {
 			e2.printStackTrace();
 		}
 	}
+**/
 	
 	
 	/**
@@ -221,67 +225,15 @@ public class KontaktMapper {
 		}
 	}
 	
-
-	/**
-	 * Filtert Kontakte einer Kontaktliste heraus 
-	 * Benötigt werden hier die 2 Fremdschlüssel ownerId und kontaktlisteId.
-	 *
-	 * Diese Methode dient als Erweitrung für die Methode im <code>KontaktlistenMapper</code> <code>getKontakte()</code>
-	 * und von <code>getKontakte</code>.
-	 * @param ownerId
-	 * @param kontaktlisteId
-	 * @return
-	 */
-	 public Vector<Kontakt> findAllKontakteByKontaktliste(int kontaktlisteId) {
-		 
-		    Connection con = DBConnection.connection();
-		    Vector<Kontakt> result = new Vector<Kontakt>();
-
-		    try {
-		    	PreparedStatement stmt = con.prepareStatement(
-		    			"SELECT klk.kontaktlisteid, kl.titel, k.id, k.vorname, k.nachname, k.ownerid "
-		    			+ "FROM KontaktlisteKontakt klk, Kontaktliste kl, Kontakt k"
-		    			+ "WHERE klk.kontaktlisteId = "+ kontaktlisteId
-		    			+ "INNER JOIN Kontakt k ON klk.kontaktid = k.id "
-		    			+ "INNER JOIN Kontaktliste kl ON kl.id = klk.kontaktlisteid");
-
-		    	//Anpassung Statement f�r Zwischentabelle KontaktlisteKontak
-
-		      ResultSet rs = stmt.executeQuery();
-
-		      // Für jeden Eintrag im Suchergebnis wird nun ein Account-Objekt erstellt.
-		     
-		      Kontaktliste kl = new Kontaktliste();
-		      kl.setTitel("titel");
-		    	
-		      while (rs.next()) {  
-		        Kontakt k = new Kontakt();
-		        k.setId(rs.getInt("id"));
-		        k.setVorname(rs.getString("vorname"));
-		        k.setNachname(rs.getString("nachname"));
-		      // k.setErstellDat("erstellungsdatum"));
-		      // k.setModDat("modifikationsdatum"));
-		        k.setOwnerId(rs.getInt("ownerid"));
-
-		     
-
-		        // Hinzufügen des neuen Objekts zum Ergebnisvektor
-		        result.addElement(k);
-		      }
-		    }
-		    catch (SQLException e2) {
-		      e2.printStackTrace();
-		    }
-
-		    // Ergebnisvektor zurückgeben
-		    return result;
-		  }
+	
+	
+// ZUORDNUNG IM KLK-MAPPER (!)	
 	 
 		/**
 		 * Zuordnung eines <code>Kontakt</code>-Objekts einer spezifische <code>Kontaktliste</code>. 
 		
 		 * @param k der <code>Kontakt</code>, kl die <code>Kontaktliste</code> 
-		 */
+		 *
 		public Kontakt addKontaktToKontaktliste(Kontakt k, Kontaktliste kl) {
 			Connection con = DBConnection.connection();
 			
@@ -303,12 +255,13 @@ public class KontaktMapper {
 			return k;
 			
 			}
-
+			
+**/
 		/**
 		 * Entfernen eines <code>Kontakt</code>-Objekts aus einer <code>Kontaktliste</code>. 
 		 * 
 		 * @param Id des Kontakts, kontaktlisteId der Kontaktliste in welche der Kontakt gespeichert ist.
-		 */
+		 *
 		public void removeKontaktFromKontaktliste(Kontakt k, Kontaktliste kl) {
 			Connection con = DBConnection.connection();
 			
@@ -334,6 +287,14 @@ public class KontaktMapper {
 				e2.printStackTrace();
 			}
 		}
+		
+**/
+	
+	
+	
+	
+	
+	
 		
 		/**
 		 * Auslesen aller Kontakte eines durch Fremdschl�ssel (ownerId) gegebenen Kontakts.

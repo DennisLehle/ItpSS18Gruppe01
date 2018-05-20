@@ -353,7 +353,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		editor.addKontaktToKontaktliste(k, kl);
+		editor.addKontaktToKontaktliste(kl, k);
 	}
 	
 	
@@ -372,7 +372,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		editor.removeKontaktFromKontaktliste(k, kl);
+		editor.removeKontaktFromKontaktliste(kl, k);
 		
 	}
 	

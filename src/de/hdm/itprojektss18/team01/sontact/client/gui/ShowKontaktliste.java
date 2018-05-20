@@ -29,7 +29,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * Die Klasse stellt Interaktionsm�glichkeiten um Kontaktlisten zu verwalten bereit
+ * Die Klasse stellt Interaktionsm�glichkeiten um Kontaktlisten zu verwalten bereit
  * und soll vorhandene Kontaktlisten anzeigen.
  * 
  * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
@@ -137,74 +137,74 @@ public class ShowKontaktliste extends VerticalPanel {
 		kontaktListenTable.addColumnSortHandler(sort);
 
 		this.add(kontaktListenTable);
+//
+//		/**
+//		 * Erstellung von Buttons mit <code>ClickHandlern()</code> für
+//		 * Interaktionen mit den Kontakten.
+//		 */
+//		this.deleteKontakt = new Button("Löschen");
+//		this.showKontakt = new Button("Kontakt anzeigen");
+//		titel.setText("Meine Kontakte");
+//		this.add(hp);
+//
+//		/**
+//		 * Button ClickHandler fürs anzeigen eines Kontaktes aus der
+//		 * Kontaktliste. Die KontaktFormular Klasse wird instanzieiert.
+//		 */
+//		showKontakt.addClickHandler(new ClickHandler() {
+//
+//			@Override
+//			public void onClick(ClickEvent event) {
+//
+//				Kontakt k = selectionModel.getSelectedObject();
+//
+//				ev.getKontaktById(k.getId(), new AsyncCallback<Kontakt>() {
+//					@Override
+//					public void onFailure(Throwable caught) {
+//						Window.alert("Der ausgewählte Kontakt konnte nicht angezeigt werden.");
+//
+//					}
+//
+//					@Override
+//					public void onSuccess(Kontakt result) {
+//
+//					}
+//				});
+//				clear();
+//				add(new KontaktFormular());
+//
+//			}
+//		});
+//
+//		/**
+//		 * Button ClickHandler fürs löschen eines Kontaktes aus der
+//		 * Kontaktliste.
+//		 */
+//		deleteKontakt.addClickHandler(new ClickHandler() {
+//
+//			public void onClick(ClickEvent event) {
+//
+//				Kontakt k = selectionModel.getSelectedObject();
+//
+//				ev.removeKontakt(k, new AsyncCallback<Void>() {
+//
+//					@Override
+//					public void onFailure(Throwable caught) {
+//						Window.alert("Hoppala" + caught.toString());
+//					}
+//
+//					@Override
+//					public void onSuccess(Void result) {
+//						if (selectionModel.getSelectedSet().size() > 0) {
+//							clear();
+//							onLoad();
+//						}
+//					}
+//				});
+//
+//			}
+//		});
+//
+//	}
 
-		/**
-		 * Erstellung von Buttons mit <code>ClickHandlern()</code> für
-		 * Interaktionen mit den Kontakten.
-		 */
-		this.deleteKontakt = new Button("Löschen");
-		this.showKontakt = new Button("Kontakt anzeigen");
-		titel.setText("Meine Kontakte");
-		this.add(hp);
-
-		/**
-		 * Button ClickHandler fürs anzeigen eines Kontaktes aus der
-		 * Kontaktliste. Die KontaktFormular Klasse wird instanzieiert.
-		 */
-		showKontakt.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-
-				Kontakt k = selectionModel.getSelectedObject();
-
-				ev.getKontaktById(k.getId(), new AsyncCallback<Kontakt>() {
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert("Der ausgewählte Kontakt konnte nicht angezeigt werden.");
-
-					}
-
-					@Override
-					public void onSuccess(Kontakt result) {
-
-					}
-				});
-				clear();
-				add(new KontaktFormular());
-
-			}
-		});
-
-		/**
-		 * Button ClickHandler fürs löschen eines Kontaktes aus der
-		 * Kontaktliste.
-		 */
-		deleteKontakt.addClickHandler(new ClickHandler() {
-
-			public void onClick(ClickEvent event) {
-
-				Kontakt k = selectionModel.getSelectedObject();
-
-				ev.removeKontakt(k, new AsyncCallback<Void>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert("Hoppala" + caught.toString());
-					}
-
-					@Override
-					public void onSuccess(Void result) {
-						if (selectionModel.getSelectedSet().size() > 0) {
-							clear();
-							onLoad();
-						}
-					}
-				});
-
-			}
-		});
-
-	}
-
-}
+}}

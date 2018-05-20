@@ -5,13 +5,14 @@ import java.io.Serializable;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss18.team01.sontact.shared.LoginService;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.LoginInfo;
 
 
-public class LoginServiceImpl extends RemoteServiceServlet implements LoginService, Serializable{
+public class LoginServiceImpl extends RemoteServiceServlet implements LoginService, IsSerializable{
 
 	/**
 	 * Von Eclipse automatisch generiert.

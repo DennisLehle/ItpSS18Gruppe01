@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * Navigation der GUI für einezlnen Sektionen Kontakt, Kontaktliste etc.
+ * Navigation der GUI fï¿½r einezlnen Sektionen Kontakt, Kontaktliste etc.
  * 
  * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
  *
@@ -67,7 +67,7 @@ public class Navigation extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 
 				RootPanel.get("content").clear();
-				RootPanel.get("content").add(new ShowKontaktliste());
+				RootPanel.get("content").add(new ShowKontaktliste(nutzer));
 
 
 			}
@@ -83,9 +83,9 @@ public class Navigation extends VerticalPanel {
 		kbtn.addClickHandler(new ClickHandler() {
 			/**
 			 * Abstrakte Methode des Interfaces wird implementiert! Durch den Klick auf den
-			 * Button, sollen weitere Interaktionsmöglichkeiten für die Verwaltung von
-			 * Kontakten angezeigt werden. Dafür wird erst den Content geleert und
-			 * anschließend geladen.
+			 * Button, sollen weitere Interaktionsmï¿½glichkeiten fï¿½r die Verwaltung von
+			 * Kontakten angezeigt werden. Dafï¿½r wird erst den Content geleert und
+			 * anschlieï¿½end geladen.
 			 */
 			public void onClick(ClickEvent event) {
 				RootPanel.get("content").clear();

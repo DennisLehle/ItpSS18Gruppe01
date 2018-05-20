@@ -4,7 +4,9 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.BusinessObject;
 
 import java.io.Serializable;
 
-public class Nutzer extends BusinessObject implements Serializable {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class Nutzer extends BusinessObject implements IsSerializable {
 
 	private static final long serialVersionUID = 1L;
 

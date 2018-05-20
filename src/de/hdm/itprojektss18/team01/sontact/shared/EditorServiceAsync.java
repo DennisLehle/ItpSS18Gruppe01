@@ -82,12 +82,12 @@ public interface EditorServiceAsync {
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#addKontaktToKontaktliste(Kontakt k, Kontaktliste kl);
 	 */
-	void addKontaktToKontaktliste(Kontakt k, Kontaktliste kl, AsyncCallback<Void> callback);
+	void addKontaktToKontaktliste(Kontaktliste kl, Kontakt k, AsyncCallback<Void> callback);
 
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#removeKontaktFromKontaktliste(Kontakt k);
 	 */
-	void removeKontaktFromKontaktliste(Kontakt k, Kontaktliste kl, AsyncCallback<Void> callback);
+	void removeKontaktFromKontaktliste(Kontaktliste kl, Kontakt k, AsyncCallback<Void> callback);
 
 
 	void createKontaktliste(String titel, Nutzer n, AsyncCallback<Kontaktliste> callback);

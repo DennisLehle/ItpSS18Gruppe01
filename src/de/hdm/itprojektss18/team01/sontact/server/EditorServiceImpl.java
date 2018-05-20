@@ -46,6 +46,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	private KontaktlistenMapper klMapper = null;
 	
 	/**
+	   * Die Mapperklasse wird referenziert, die Kontaktlisten-Objekte mit 
+	   * der Datenbank vergleicht. 
+	   */
+	private KontaktlisteKontaktMapper klkMapper = null;
+	/**
 	   * Die Mapperklasse wird referenziert, die Eigenschafts-Objekte mit 
 	   * der Datenbank vergleicht. 
 	   */
@@ -218,7 +223,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			}
 		}
 				
-		this.kMapper.deleteKontaktFromAllLists(k);
+		this.klkMapper.deleteKontaktFromAllLists(k);
 		
 		
 		// (!) Berechtigungen fuer den Kontakt entfernen -> ownerGesetteteBerechtigugen 
@@ -261,18 +266,18 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Setzten der Zuordnung eines Kontakts zur einer Kontaktliste
 	 * 
 	 */
-	public void addKontaktToKontaktliste(Kontakt k, Kontaktliste kl) throws IllegalArgumentException {
+	public void addKontaktToKontaktliste(Kontaktliste kl, Kontakt k) throws IllegalArgumentException {
 		init();
-		this.kMapper.addKontaktToKontaktliste(k, kl);
+		this.klkMapper.addKontaktToKontaktliste(kl, k);
 	}
 	
 	/**
 	 * Aufhebung der Zuordnung eines Kontakts zur einer Kontaktliste 
 	 * @param k
 	 */
-	public void removeKontaktFromKontaktliste(Kontakt k, Kontaktliste kl) throws IllegalArgumentException {
+	public void removeKontaktFromKontaktliste(Kontaktliste kl, Kontakt k) throws IllegalArgumentException {
 		init();
-		this.kMapper.removeKontaktFromKontaktliste(k, kl);
+		this.klkMapper.removeKontaktFromKontaktliste(kl, k);
 	}
 	
 	/*
@@ -317,13 +322,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public void deleteKontaktliste (Kontaktliste kl) throws IllegalArgumentException {
 		
 		// Alle Kontakte der Kontaktliste aus der DB entfernen.
-		Vector <Kontakt> removeAllKontakte = klMapper.getKontakteByKontaktliste(kl);
+		Vector <Kontakt> removeAllKontakte = klkMapper.findAllKontakteByKontaktliste(kl.getId());
 		if (removeAllKontakte != null) {
 			for (Kontakt k : removeAllKontakte) {
-				this.kMapper.removeKontaktFromKontaktliste(k, kl);
+				this.klkMapper.removeKontaktFromKontaktliste(kl, k);
+				this.removeKontakt(k);
+				
 			}
 		}
-
+		
 		this.klMapper.delete(kl);
 	}
 	
@@ -343,7 +350,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @throws IllegalArgumentException
 	 */
 	public Vector <Kontakt> getKontakteByKontaktliste (Kontaktliste kl) throws IllegalArgumentException {
-		return this.kMapper.findAllKontakteByKontaktliste(kl.getId());
+		return this.klkMapper.findAllKontakteByKontaktliste(kl.getId());
 		
 	}
 
@@ -612,11 +619,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public void saveModifikationsdatum(int id) throws IllegalArgumentException {
 		init();
 		this.kMapper.updateModifikationsdatum(id);
-		
 	}
-
-
-
+	
 	
 	/*
 	   * ***************************************************************************

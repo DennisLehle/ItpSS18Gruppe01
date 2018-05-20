@@ -306,9 +306,7 @@ public class KontaktlistenMapper {
 				return null;
 			}
 		}
-		
-		
-		
+
 		
 		/**
 		 * Diese Erweiterungs Methode filtert Kontakte für eine Kontaktliste heraus.
@@ -319,15 +317,17 @@ public class KontaktlistenMapper {
 		 * @see findOwnersKontaktliste(), findOwnersDefaultKontaktliste()
 		 * @param kl
 		 * @return
-		 */
+		 
 		public Vector<Kontakt> getKontakteByKontaktliste(Kontaktliste kl) {
 		    /*
 		     * Wir spechen hier den KontaktMapper an um darüber für die Kontaktliste die ausgewähöt wurde
 		     * die passenden Kontakte herauszufiltern. Dies wird für die Default Kontaktliste und für die 
 		     * angelegte Kontaktliste benötigt.
-		     */
+		     *
 		    return KontaktMapper.kontaktMapper().findAllKontakteByKontaktliste(kl.getId());
-		  }
+**/		 
+	
+			
 		
 		/**
 		 * Diese Methode gibt Kontaktlisten anhand ihrem Titel aus.

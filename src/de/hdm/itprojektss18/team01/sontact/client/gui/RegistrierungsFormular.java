@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -112,25 +113,26 @@ public class RegistrierungsFormular extends VerticalPanel {
 
 			@Override
 			public void onClick(ClickEvent event) {
+				String vorname = vornameTb.getText();
+				String nachname = nachnameTb.getText();
+				if (!vornameTb.getText().isEmpty() && !nachnameTb.getText().isEmpty()) {
+					ev.createKontakt(vorname, nachname, nutzer, new AsyncCallback<Kontakt>() {
 
-				RegistrierungsFormular rf = new RegistrierungsFormular(nutzer);
-			//	String vorname = rf.vornameTb.getText();
-				//String nachname = rf.nachnameTb.getText();
-				ev.createKontakt(rf.vornameTb.getText(), rf.nachnameTb.getText(), nutzer, new AsyncCallback<Kontakt>() {
+						@Override
+						public void onFailure(Throwable error) {
+							error.getMessage().toString();
+						}
 
-					@Override
-					public void onFailure(Throwable error) {
-						error.getMessage().toString();
-
-					}
-
-					@Override
-					public void onSuccess(Kontakt k) {
-						MessageBox.alertWidget("",
-								"Sie haben Ihren Kontakt: " + vorname + " " + nachname + " erfolgreich angelegt");
-
-					}
-				});
+						@Override
+						public void onSuccess(Kontakt k) {
+							MessageBox.alertWidget("Benachrichtigung: ", "Sie haben den Kontakt " + vorname + " " + nachname + " erfolgreich angelegt");
+						}
+					});
+										
+				} else {
+					MessageBox.alertWidget("Benachrichtigung: ", "Vor- und Nachname sind Pflichtfelder" );
+				}
+	
 			}
 
 		});

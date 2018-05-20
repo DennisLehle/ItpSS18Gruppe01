@@ -8,7 +8,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss18.team01.sontact.shared.LoginService;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.LoginInfo;
 
 
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService, Serializable{
@@ -19,10 +19,10 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 	private static final long serialVersionUID = 1L;
 	
 
-	  public Nutzer login(String requestUri)  throws IllegalArgumentException {
+	  public LoginInfo login(String requestUri)  throws IllegalArgumentException {
 	    UserService userService = UserServiceFactory.getUserService();
 	    User user = userService.getCurrentUser();
-	    Nutzer loginInfo = new Nutzer();
+	    LoginInfo loginInfo = new LoginInfo();
 
 	    if (user != null) {
 	      loginInfo.setLoginIn(true);

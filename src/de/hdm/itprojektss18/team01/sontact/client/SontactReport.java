@@ -2,33 +2,25 @@ package de.hdm.itprojektss18.team01.sontact.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.LoginService;
 import de.hdm.itprojektss18.team01.sontact.shared.LoginServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorServiceAsync;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.LoginInfo;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class SontactReport implements EntryPoint {
 	
-	Nutzer loginInfo = new Nutzer();
+	LoginInfo loginInfo = new LoginInfo();
 	private VerticalPanel loginPanel = new VerticalPanel();
 	private Label loginLabel = new Label("Bitte Melden Sie sich mit Ihren Google Account, um einen Zugriff auf den ReportGenerator zu bekommen.");
 	private Anchor signInLink = new Anchor("Login");
@@ -66,12 +58,12 @@ public class SontactReport implements EntryPoint {
 	public void onModuleLoad() {
 
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
-	    loginService.login(GWT.getHostPageBaseURL() + "SontactReport.html", new AsyncCallback<Nutzer>() {
+	    loginService.login(GWT.getHostPageBaseURL() + "SontactReport.html", new AsyncCallback<LoginInfo>() {
 	      public void onFailure(Throwable error) {
 	      }
 
 		@Override
-		public void onSuccess(Nutzer result) {
+		public void onSuccess(LoginInfo result) {
 			loginInfo = result;
 	        if(loginInfo.isLoggedIn()) {
 	        	RootPanel.get("Details").clear(); 

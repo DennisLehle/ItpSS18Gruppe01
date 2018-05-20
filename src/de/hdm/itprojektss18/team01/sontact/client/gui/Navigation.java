@@ -67,7 +67,7 @@ public class Navigation extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 
 				RootPanel.get("content").clear();
-				RootPanel.get("content").add(new showKontaktliste());
+				RootPanel.get("content").add(new ShowKontaktliste());
 
 
 			}
@@ -89,7 +89,7 @@ public class Navigation extends VerticalPanel {
 			 */
 			public void onClick(ClickEvent event) {
 				RootPanel.get("content").clear();
-				RootPanel.get("content").add(new showKontakte());
+				RootPanel.get("content").add(new ShowKontakte(nutzer));
 
 			}
 		});

@@ -48,8 +48,8 @@ public class Kontakt extends BusinessObject implements Participation {
 		return erstellDat;
 	}
 
-	public void setErstellDat(Timestamp erstellDat) {
-		this.erstellDat = erstellDat;
+	public void setErstellDat(Timestamp i) {
+		this.erstellDat = i;
 	}
 
 	public Timestamp getModDat() {

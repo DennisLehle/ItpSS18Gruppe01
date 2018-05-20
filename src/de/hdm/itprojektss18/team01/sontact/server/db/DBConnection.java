@@ -16,9 +16,9 @@ public class DBConnection{
 
 	private static Connection con = null;
 	private static String googleUrl = "jdbc:google:mysql://NameDeployAppEngine:europe-west:LinkDeploy?user=root&password=1234";
-	private static String localUrl = "jdbc:mysql://localhost:3306/sontact?user=root&password=";
+//	private static String localUrl = "jdbc:mysql://localhost:3306/sontact?user=root&password=";
 //	private static String localUrl = "jdbc:mysql://localhost:3308/itproj?user=root&password=";
-//  private static String localUrl = "jdbc:mysql://localhost:8889/Sontact?user=dennis&password=dennislehle";
+  private static String localUrl = "jdbc:mysql://localhost:3306/Sontact?user=Miescha&password=eminem";
      /**
       * Diese Methode gibt die aufgebaute DB-Verbindung zurück
       * @return con

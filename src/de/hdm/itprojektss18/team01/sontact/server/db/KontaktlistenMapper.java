@@ -309,28 +309,6 @@ public class KontaktlistenMapper {
 		
 		
 		
-		/**
-		 * Das insert fügt einen Kontakt zu einer Kontaktliste hinzu.
-		 * 
-		 * @param k Kontakt der einer Kontaktliste zugewiesen werden soll.
-		 * @param kl Zu welcher Kontaktliste der Kontakt hinzugefügt werden soll.
-		 */
-		public void insertKontakt(Kontakt k, Kontaktliste kl) {
-			
-			KontaktMapper.kontaktMapper().addKontaktToKontaktliste(k, kl);
-		
-		}
-		
-		/**
-		 * Methode zum löschen eines Kontakts aus einer Kontaktliste.
-		 * 
-		 * @param kl aus der der Kontakt entfertn werden soll.
-		 */
-		public void deleteKontakt(Kontakt k) {
-			
-			KontaktMapper.kontaktMapper().removeKontaktFromKontaktliste(k);
-			
-		}
 		
 		/**
 		 * Diese Erweiterungs Methode filtert Kontakte für eine Kontaktliste heraus.
@@ -348,7 +326,7 @@ public class KontaktlistenMapper {
 		     * die passenden Kontakte herauszufiltern. Dies wird für die Default Kontaktliste und für die 
 		     * angelegte Kontaktliste benötigt.
 		     */
-		    return KontaktMapper.kontaktMapper().findKontakteVonOwner(kl.getOwnerId(), kl.getId()); 
+		    return KontaktMapper.kontaktMapper().findAllKontakteByKontaktliste(kl.getId());
 		  }
 		
 		/**

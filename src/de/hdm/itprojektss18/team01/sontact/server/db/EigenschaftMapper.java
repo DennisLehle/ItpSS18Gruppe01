@@ -64,7 +64,8 @@ public class EigenschaftMapper {
 		    			"INSERT INTO Eigenschaft (id, bezeichnung) "
 		    	  				+ "VALUES ('"
 		    	  				+ e.getId() + "', '" 
-								+ e.getBezeichnung());
+								+ e.getBezeichnung() + "')");
+		    	
 
 		    	// INSERT-Statement ausf�hren
 				prestmt.execute();
@@ -167,7 +168,7 @@ public class EigenschaftMapper {
 	 * @return Eigenschaften
 	 * @throws SQLException
 	 */
-	public Vector <Eigenschaft> findEigenschaftAuswahl() throws SQLException {
+	public Vector <Eigenschaft> findEigenschaftAuswahl() {
 		// DBConnection holen
 		Connection con = DBConnection.connection();
 		// Ergebnisvektor anlegen
@@ -176,7 +177,7 @@ public class EigenschaftMapper {
 		try {
 			// SQL Statement anlegen
 			PreparedStatement prestmt = con.prepareStatement(
-					"SELECT * FROM Eigenschaft");
+					"SELECT * FROM Eigenschaft WHERE id BETWEEN 1 AND 17");
 			
 			// Statement als Query an die DB schicken
 			ResultSet result = prestmt.executeQuery();

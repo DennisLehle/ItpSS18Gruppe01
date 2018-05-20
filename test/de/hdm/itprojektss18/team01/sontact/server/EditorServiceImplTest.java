@@ -65,7 +65,6 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case fÃ¼r die Erstellung eines Nutzers.
 	 * CHECK
 	 */
-	
 	public void createNutzer() {
 		//Variable anlegen die Ã¼bergeben werden soll.
 		String email = "kan.kup@gmail.com";
@@ -90,7 +89,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Anmerkung: Wird der Kontakt in die Default-Kontaktliste gespeichert?
 	 * CHECK
 	 */
-	
+
 	public void createKontakt() {
 		
 		Nutzer n = new Nutzer();
@@ -98,17 +97,16 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		//Ich erstelle einen Kontakt und Ã¼bergebe einen Nutzer in dem Fall mich selbst.
-		editor.setNutzer(n);
-		editor.createKontakt("Max", "Mustermann");
-		editor.createKontakt("Petra", "Pfiffig");
-		editor.createKontakt("Lisa", "Lustig");
+		editor.createKontakt("Melanie", "Musterchen", n);
+		//editor.createKontakt("Petra", "Pfiffig", n);
+		//editor.createKontakt("Lisa", "Lustig", n);
 	}
 	
 	/**
 	 * Test Case fÃ¼r das Updaten eines Kontakts.
 	 * CHECK
 	 */
-	
+
 		public void saveKontakt() {
 	
 		Nutzer n = new Nutzer();
@@ -121,8 +119,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		k.setOwnerId(1);
 
 		EditorServiceImpl editor = new EditorServiceImpl();
-		
-		editor.setNutzer(n);
+	
 		editor.saveKontakt(k);
 	}
 	
@@ -143,39 +140,38 @@ class EditorServiceImplTest extends GWTTestCase {
 		n.setId(1);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
-		
-		editor.setNutzer(n);
-		
+
+			
 		//Max Mustermann
-		editor.createAuspraegung("0176/ 232222", 6 , 1 , 1);
+		editor.createAuspraegung("0176/ 232222", 6 , 1 , n);
 		
-		editor.createAuspraegung("0172/ 333333", 6 , 1 , 1);
+		editor.createAuspraegung("0172/ 333333", 6 , 1 , n);
 		
-		editor.createAuspraegung("maxmustermann@gmx.de", 14 , 1 , 1);
+		editor.createAuspraegung("maxmustermann@gmx.de", 14 , 1 , n);
 		
 	
 		//Petra Pfiffig
 		
-		editor.createAuspraegung("0178/ 52555", 6 , 2 , 1);
+		editor.createAuspraegung("0178/ 52555", 6 , 2 , n);
 		
-		editor.createAuspraegung("0172/ 44444", 6 , 2 , 1);
+		editor.createAuspraegung("0172/ 44444", 6 , 2 , n);
 		
-		editor.createAuspraegung("petrapfiffig@web.de", 14 , 2 , 1);
+		editor.createAuspraegung("petrapfiffig@web.de", 14 , 2 , n);
 				
 		//Lisa Luftig
 		
-		editor.createAuspraegung("0152/ 71777", 6 , 3, 1);
+		editor.createAuspraegung("0152/ 71777", 6 , 3, n);
 		
-		editor.createAuspraegung("0152/ 11111", 6 , 3 , 1);
+		editor.createAuspraegung("0152/ 11111", 6 , 3 , n);
 		
-		editor.createAuspraegung("lisaluftig@yahoo.de", 14 , 3 , 1);
+		editor.createAuspraegung("lisaluftig@yahoo.de", 14 , 3 , n);
 	}
 	
 	/**
 	 * Test Case fuer das Bearbeiten einer Auspraegung
 	 * CHECK
 	 */
-	
+
 	public void saveAuspraegung() {
 		
 		Nutzer n = new Nutzer();
@@ -190,7 +186,6 @@ class EditorServiceImplTest extends GWTTestCase {
 
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		editor.setNutzer(n);
 		editor.saveAuspraegung(a);
 	}
 	
@@ -198,6 +193,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case fuer das Löschen einer Auspraegung
 	 * CHECK
 	 */
+
 	public void deleteAuspraegung() {
 		Nutzer n = new Nutzer();
 		n.setId(1);
@@ -211,7 +207,6 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		editor.setNutzer(n);
 		editor.deleteAuspraegung(a);
 	}
 	
@@ -222,25 +217,66 @@ class EditorServiceImplTest extends GWTTestCase {
 	   * ABSCHNITT, Anfang: Methoden fuer Eigenschaft-Objekte Test
 	   * ***************************************************************************
 	   */
-	/**
-	 * Test Case fuer das Erstellen einer Eigenschaft und einer Auspraegung
-	 * UNCHECK
-	 */
 	
-	public void createCreateAuspraegungforNewEigenschaft() {
-		Nutzer n = new Nutzer();
-		n.setId(1);
+	/**
+	 * Test Case fuer das Erstellen einer Eigenschaft
+	 * CHECK
+	 */
+
+	public void createEigenschaft() {
+
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
+
 		
-		editor.setNutzer(n);
+		editor.createEigenschaft("Lieblingssport");			
+	}
+	
+	/**
+	 * Test Case fuer das Loeschen einer Eigenschaft
+	 * UNCHECK
+	 */
+
+
+	public void deleteEigenschaft() {
 		
 		Eigenschaft e = new Eigenschaft();
 		e.setId(18);
+		e.setBezeichnung("Haustier");
 		
-		editor.createEigenschaft("Haustier");
+		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		editor.createAuspraegungForNewEigenschaft("Hund", e.getId() , 3 , 1);
+		editor.deleteEigenschaft(e);			
+	}
+	
+	
+	/**
+	 * Test Case fuer das Erstellen einer Eigenschaft und einer Auspraegung
+	 * CHECK
+	*/
+	
+	public void createAuspraegungForNewEigenschaft() {
+		Nutzer n = new Nutzer();
+		n.setId(1);
+
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		//Anlegen der Eigenschaft
+		Eigenschaft e = new Eigenschaft();
+		e.setBezeichnung("Schuhgröße");
+		e.setId(21);
+		
+		//Anlegen der Auspraegung
+		Auspraegung a = new Auspraegung();
+		a.setWert("38");
+		a.setEigenschaftId(e.getId());
+		a.setKontaktId(3);
+		a.setOwnerId(1);
+		
+		
+		//Anlegen der dazugehörigen Auspraegung		
+		editor.createAuspraegungForNewEigenschaft(e, a, n);
 		}
 	
 	/**
@@ -269,35 +305,35 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case fuer das Erstellen einer Kontaktliste
 	 * CHECK
 	 */
+	
 	public void createKontaktliste() {
 		
 		Nutzer n = new Nutzer();
-		n.setId(2);
+		n.setId(1);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		//Ich erstelle eine Kontaktliste und übergebe einen Nutzer
-		editor.setNutzer(n);
-		editor.createKontaktliste("Firma", n.getId());
+		editor.createKontaktliste("Familie", n);
+		editor.createKontaktliste("Freunde", n);
 	}
 	
 	/**
 	 * Test Case fuer das Erstellen einer Kontaktliste
 	 * CHECK
 	 */
-	
-public void saveKontaktliste() {
+
+	public void saveKontaktliste() {
 		
 		Nutzer n = new Nutzer();
-		n.setId(2);
+		n.setId(1);
 		
 		Kontaktliste kl = new Kontaktliste();
-		kl.setId(2);
+		kl.setId(1);
 		kl.setTitel("Kameraden");
 
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		editor.setNutzer(n);
 		editor.saveKontaktliste(kl);
 	}
 	
@@ -313,7 +349,7 @@ public void saveKontaktliste() {
 		k.setId(2);
 		
 		Kontaktliste kl = new Kontaktliste();
-		kl.setId(2);
+		kl.setId(1);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -323,9 +359,7 @@ public void saveKontaktliste() {
 	
 	/**
 	 * Test Case fuer das Entfernen eines Kontakts aus einer Kontaktliste
-	 * Anmerkung: muss angepasst werden, da Kontakte mehreren Kontaktlisten 
-	 * zugeordnet werden können.  
-	 * CHECK
+	 *CHECK
 	 */
 	
 	public void removeKontaktFromKontaktliste() {
@@ -333,15 +367,47 @@ public void saveKontaktliste() {
 		Kontakt k = new Kontakt();
 		k.setId(2);
 		
+		Kontaktliste kl = new Kontaktliste();
+		kl.setId(1);
+		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		editor.removeKontaktFromKontaktliste(k);
+		editor.removeKontaktFromKontaktliste(k, kl);
+		
 	}
 	
 	/**
-	 * Test Case fuer das Entfernen eines Kontakts aus einer bestimmten Kontaktliste
+	 * Test Case fuer das Entfernen eines Kontakts aus einer Kontaktliste
+	 *CHECK
+	 */
+
+	public void getKontaktlistenByOwner() {
+		
+		Nutzer n = new Nutzer();
+		n.setId(1);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		editor.getKontaktlistenByOwner(n);
+	}
+	
+	
+	/**
+	 * Test Case fuer das Löschen eines Kontakts
+	 * Muss noch angepasst werden
 	 * UNCHECK
 	 */
+	
+	public void removeKontakt() {
+		Kontakt k = new Kontakt();
+		k.setId(25);
+		
+		Kontaktliste kl = new Kontaktliste();
+		kl.setId(3);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		editor.removeKontakt(k);
+	}
 	
 	
 	/*

@@ -1,5 +1,6 @@
 package de.hdm.itprojektss18.team01.sontact.server;
 
+import java.io.Console;
 import java.sql.Timestamp;
 import java.util.Vector;
 
@@ -7,6 +8,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import de.hdm.itprojektss18.team01.sontact.server.db.*;
 import de.hdm.itprojektss18.team01.sontact.shared.*;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.*;
+
 
 public class EditorServiceImpl extends RemoteServiceServlet implements EditorService {
 
@@ -259,8 +261,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	// Beschrï¿½nkung auf eigene Kontakte?
 	public Vector<Kontakt> getKontaktByName(String name) throws IllegalArgumentException {
-		return this.kMapper.findKontaktByName(name);
-	}
+			return this.kMapper.findKontaktByName(name);
+		}
+	
 
 	/**
 	 * Auslesen aller Kontakte welche im Eigentum sind.
@@ -528,7 +531,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * *************************************************************************
 	 * **
 	 */
-
 	/**
 	 * Wie lï¿½sen wir das mit den ï¿½bergabeparameter fï¿½r Kontakt,
 	 * Kontaktliste oder Ausprï¿½gung? Mï¿½ssen diese ï¿½berhaupt ï¿½bergeben
@@ -546,16 +548,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @throws IllegalArgumentException
 	 */
 
-	public Berechtigung createBerechtigung(int holderId, int receiverId, int objectId, char type,
+	public Berechtigung createBerechtigung(int ownerId, int receiverId, int objectId, char type,
 			int berechtigungsstufe) throws IllegalArgumentException {
 
 		Berechtigung b = new Berechtigung();
 
-		b.setHolderId(holderId);
+		b.setOwnerId(ownerId);
 		b.setReceiverId(receiverId);
 		b.setObjectId(objectId);
 		b.setType(type);
-		b.setBerechtigungsstufe(berechtigungsstufe);
+		b.setBerechtigungsstufe(3);
 
 		b.setId(1);
 		return this.bMapper.insert(b);
@@ -579,6 +581,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * *************************************************************************
 	 * **
 	 */
+	
 	/*
 	 * *************************************************************************
 	 * ** ABSCHNITT, Beginn: Abruf der geteilten Objekte
@@ -587,13 +590,48 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	// getAllSharedKontakteWith()
+	public Vector<Berechtigung> getAllSharedKontakteWith(int ownerId) throws IllegalArgumentException {
+		
+		Vector<Berechtigung> b = this.bMapper.findAllSharedKontakteWith(ownerId);
+	        return b;
+	    }
 
 	// getAllSharedKontakteFrom()
+	public Vector<Berechtigung> getAllSharedKontakteFrom(int receiverId) throws IllegalArgumentException {
+		
+		Vector<Berechtigung> b = this.bMapper.findAllSharedKontakteFrom(receiverId);
+	        return b;
+	    }
+	
+	
+	//Owner löscht ein berechtigtes Objekt und somit die Berechtigungen des Objekts
+	public void removeBerechtigungWith (int ownerId) throws IllegalArgumentException {
+		 
+		Berechtigung b = this.bMapper.findById(ownerId);
+			this.bMapper.delete(b);
+		
+	}
+	
+	//Teilhaber löscht ein berechtigtes Objekt und somit die Berechtigungen 
+	public void removeBerechtigungFrom (int receiverId) throws IllegalArgumentException {
+			 
+		Berechtigung b = this.bMapper.findById(receiverId);
+			this.bMapper.delete(b);
+			
+		}
 
-	// getAllSharedKontaktlistenWith()
+
+	/** getAllSharedKontaktlistenWith(), Methode wird nicht benötigt!
+	 * 
+	public Vector<Berechtigung> getAllSharedKontaktlistenWith(int ownerId) throws IllegalArgumentException {
+		
+		Vector<Berechtigung> b = this.bMapper.(ownerId);
+	        return b;
+	    }
 
 	// getAllSharedKontaktlistenFrom()
-
+	 	**/
+	
 	/*
 	 * *************************************************************************
 	 * ** ABSCHNITT, Ende: Abruf der geteilten Objekte
@@ -606,11 +644,59 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * *************************************************************************
 	 * **
 	 */
+	
+	// shareObjectWith() Ein Objekt mit einem Empfänger teilen. Davor überprüfen, ob bereits
+		//eine Berechtigungszugriff vorhanden sei, falls nicht die Berechtigung hinzuzufügen.
+	public Berechtigung shareObjectWith(int ownerId, int receiverId, int objectId, char type,
+			int berechtigungsstufe) throws IllegalArgumentException {
+		
+		Berechtigung b = bMapper.findById(berechtigungsstufe);
+        if (bMapper.findById(berechtigungsstufe) == null) {	
+        	this.createBerechtigung(ownerId, receiverId, objectId, type, 3);
+        }
+        else return bMapper.findById(berechtigungsstufe);
+        
+        b.setOwnerId(ownerId);
+        b.setReceiverId(receiverId);
+        b.setObjectId(objectId);
+        b.setType(type);
+        b.setBerechtigungsstufe(berechtigungsstufe);
+        
+        return this.bMapper.insert(b);
+	}     
+	
+/**	
+	//getType-Methode zum identifizieren der ObjektId -- ?
+ 	public Berechtigung getType (char type, int objectId, int kontaktId, int kontaktlisteId,
+ 			int auspraegungId) throws IllegalArgumentException {
+ 	
+ 		
+ 	Berechtigung o = new Berechtigung(o.getObjectId());
+ 	Berechtigung k = this.bMapper.findById(k.getKontaktId());
+ 	Berechtigung kl = this.bMapper.findById(kl.getKontaktlisteId());
+ 	Berechtigung a = this.bMapper.findById(a.getAuspraegungId());
+ 	
+ 	switch (objectId) {
+ 	case kontaktId : 
+ 		if (k.equals(o))
+ 			return;
+ 			break;
+ 	case kontaktlisteId : 
+ 		if (kl.equals(o))
+ 			return;
+ 			break;
+ 	case auspraegungId : 
+ 		if (a.equals(o))
+			return ;
+			break;
+ 	}
+    
+ 	}
+ 
+ /**
 
-	// shareObjectWith()
-
-	// removeSharedObjectWith()
-
+	// removeSharedObjectWith() --> Delete Berechtigung, siehe oben.
+ 	
 	/*
 	 * *************************************************************************
 	 * ** ABSCHNITT, Ende: Share-Methoden
@@ -624,17 +710,31 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * *************************************************************************
 	 * **
 	 */
-
+	//Aktualisiere das Modifikationsdatum
 	public void saveModifikationsdatum(int id) throws IllegalArgumentException {
 		init();
 		this.kMapper.updateModifikationsdatum(id);
 	}
-
-	/*
+}
+	// Suchfunktion 
+	
+	
+	
+	
+	/**
+	//Herauslesen des Status OwnerTeilhaber
+	public void createStatusForKontakt( int ownerId, int receiverId) throws IllegalArgumentException {
+		//IstUser Teilhaber oder Eigentümer
+		
+	}
+}
+     **/
+	
+     /*
 	 * *************************************************************************
 	 * ** ABSCHNITT, Ende: Sonsitges
 	 * *************************************************************************
 	 * **
 	 */
 
-}
+

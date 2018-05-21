@@ -10,7 +10,7 @@ public class Berechtigung extends BusinessObject {
 	/**
 	 * Instanzvariablen der Klasse Berechtigung
 	 */
-	private int holderId;
+	private int ownerId;
 	private int receiverId;
 	private int objectId;
 	private char type;
@@ -61,12 +61,12 @@ public class Berechtigung extends BusinessObject {
 	/**
 	 * Getter- und Setter-Methoden zum Setzen und Auslesen der Werte
 	 */
-	public int getHolderId() {
-		return holderId;
+	public int getOwnerId() {
+		return ownerId;
 	}
 
-	public void setHolderId(int holderId) {
-		this.holderId = holderId;
+	public void setOwnerId(int ownerId) {
+		this.ownerId = ownerId;
 	}
 
 	public int getReceiverId() {
@@ -108,7 +108,7 @@ public class Berechtigung extends BusinessObject {
 
 	@Override
 	public String toString() {
-		return "Berechtigung [id=" + id + ", senderId=" + holderId + ", userId=" + receiverId + ", objectId=" + objectId
+		return "Berechtigung [id=" + id + ", senderId=" + ownerId + ", userId=" + receiverId + ", objectId=" + objectId
 				+ ", type= " + type + "berechtigungsstufe= " + berechtigungsstufe + "]";
 	}
 

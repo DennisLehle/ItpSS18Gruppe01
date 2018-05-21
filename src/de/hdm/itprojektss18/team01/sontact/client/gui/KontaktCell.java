@@ -1,7 +1,6 @@
 package de.hdm.itprojektss18.team01.sontact.client.gui;
 
 import com.google.gwt.cell.client.AbstractCell;
-import com.google.gwt.cell.client.Cell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;

@@ -57,6 +57,9 @@ public class RegistrierungsFormular extends VerticalPanel {
 		this.add(auswahlEigenschaft);
 		this.add(eigeneEigenschaft);
 
+		/**
+		 * ClickHandler zum Erzeugen von Auswwahleigenschaften welche aus einer ListBox selektiert werden können.
+		 */
 		auswahlEigenschaft.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -90,6 +93,9 @@ public class RegistrierungsFormular extends VerticalPanel {
 			}
 		});
 
+		/**
+		 * ClickHandler welches es ermöglicht eigene Eigenschaften hinzuzufügen.
+		 */
 		eigeneEigenschaft.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -107,6 +113,9 @@ public class RegistrierungsFormular extends VerticalPanel {
 
 		});
 
+		/**
+		 * ClickHandler zum Speichern des neu angelegten Nutzer-Kontakts.
+		 */
 		speichern.addClickHandler(new ClickHandler() {
 
 			@Override

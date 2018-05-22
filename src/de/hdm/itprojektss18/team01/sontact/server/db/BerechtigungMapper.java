@@ -58,10 +58,10 @@ public class BerechtigungMapper {
 
 				// INSERT-Statement anlegen
 				PreparedStatement prestmt = con
-						.prepareStatement("INSERT INTO Berechtigung (id, holderid, receiverid, "
+						.prepareStatement("INSERT INTO Berechtigung (id, ownerid, receiverid, "
 								+ "type, berechtigungsstufe, kontaktid, kontaktlisteid, auspraegungid) VALUES('" 
 								+ b.getId() + "', '" 
-								+ b.getHolderId() + "', '"
+								+ b.getOwnerId() + "', '"
 								+ b.getReceiverId() + "', '" 
 							
 								+ b.getType() + "', '"
@@ -87,7 +87,7 @@ public class BerechtigungMapper {
 	 * @return Berechtigung
 	 */
 	public Berechtigung update(Berechtigung b) {
-		String sql = "UPDATE Berechtigung SET  kontaktid=?, kontaktlisteid=?, auspraegungid=?, holderid=?, receiverid=?, type=?, berechtigungsstufe=? WHERE id=?";
+		String sql = "UPDATE Berechtigung SET  kontaktid=?, kontaktlisteid=?, auspraegungid=?, ownerid=?, receiverid=?, type=?, berechtigungsstufe=? WHERE id=?";
 		
 		// DBConnection herstellen
 		Connection con = DBConnection.connection();
@@ -100,7 +100,7 @@ public class BerechtigungMapper {
 	    	stmt.setInt(1, b.getKontaktId());
 	    	stmt.setInt(2, b.getKontaktlisteId());
 	    	stmt.setInt(3, b.getAuspraegungId());
-	    	stmt.setInt(4, b.getHolderId());
+	    	stmt.setInt(4, b.getOwnerId());
 	    	stmt.setInt(5, b.getReceiverId());
 	    	stmt.setInt(6, b.getType());
 	    	stmt.setInt(7, b.getBerechtigungsstufe());
@@ -172,7 +172,7 @@ public class BerechtigungMapper {
 				b.setBerechtigungsstufe(rs.getInt("berechtigungsstufe"));
 				b.setObjectId(rs.getInt("object"));
 				b.setType(rs.getString("type").charAt(0));
-				b.setHolderId(rs.getInt("holderid"));
+				b.setOwnerId(rs.getInt("ownerid"));
 				b.setReceiverId(rs.getInt("receiverid"));		
 			}
 			
@@ -192,7 +192,7 @@ public class BerechtigungMapper {
 	 * @return Berechtigungen
 	 */
 
-	public Vector<Berechtigung> findAllSharedKontakteWith(int holderId) {
+	public Vector<Berechtigung> findAllSharedKontakteWith(int ownerId) {
 
 		// DBConnection herstellen
 		Connection con = DBConnection.connection();
@@ -203,14 +203,14 @@ public class BerechtigungMapper {
 			
 			// SQL-Statement anlegen
 			PreparedStatement prestmt = con.prepareStatement(
-			"SELECT * FROM Berechtigung WHERE holderid=" + holderId); //+ "AND type= 'k'");
+			"SELECT * FROM Berechtigung WHERE ownerid=" + ownerId); //+ "AND type= 'k'");
 
 			ResultSet rs = prestmt.executeQuery();
 			//Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
 			while (rs.next()) {
 				Berechtigung b = new Berechtigung();
 				b.setId(rs.getInt("id"));
-				b.setHolderId(rs.getInt("holderid"));
+				b.setOwnerId(rs.getInt("ownerid"));
 				b.setReceiverId(rs.getInt("receiverid"));
 				b.setObjectId(rs.getInt("objectid"));
 				b.setType(rs.getString("type").charAt(0));
@@ -252,7 +252,7 @@ public class BerechtigungMapper {
 			while (rs.next()) {
 				Berechtigung b = new Berechtigung();
 				b.setId(rs.getInt("id"));
-				b.setHolderId(rs.getInt("holderid"));
+				b.setOwnerId(rs.getInt("ownerid"));
 				b.setReceiverId(rs.getInt("receiverid"));
 				b.setObjectId(rs.getInt("objectid"));
 				b.setType(rs.getString("type").charAt(0));

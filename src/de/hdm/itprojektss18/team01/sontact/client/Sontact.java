@@ -18,6 +18,7 @@ import de.hdm.itprojektss18.team01.sontact.client.gui.ShowKontakte;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.LoginService;
 import de.hdm.itprojektss18.team01.sontact.shared.LoginServiceAsync;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.LoginInfo;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
@@ -35,7 +36,7 @@ public class Sontact implements EntryPoint {
 
 	LoginServiceAsync loginService = GWT.create(LoginService.class);
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditorVerwaltung();
-
+	ClientsideSettings clientSettings = new ClientsideSettings();
 	/**
 	 * This is the entry point method.
 	 */
@@ -92,6 +93,7 @@ public class Sontact implements EntryPoint {
 
 													@Override
 													public void onSuccess(final Nutzer nutzer) {
+														clientSettings.setCurrentNutzer(nutzer);
 														RootPanel.get("content")
 																.add(new RegistrierungsFormular(nutzer));
 
@@ -118,21 +120,48 @@ public class Sontact implements EntryPoint {
 	 * @param nutzer
 	 */
 	private void start(final Nutzer nutzer) {
+
 		RootPanel.get("navigator").add(new Navigation(nutzer));
 		RootPanel.get("nutzermenu")
 				.add(new HTML("<p><span class='fa fa-user-circle-o'></span> &nbsp; " + nutzer.getEmailAddress()));
 		HTML signOutLink = new HTML(
 				"<p><a href='" + loginInfo.getLogoutUrl() + "'><span class='fas fa-sign-out-alt'></span></a></p>");
 		RootPanel.get("nutzermenu").add(signOutLink);
-		RootPanel.get("content").add(new ShowKontakte(nutzer));
 
+		clientSettings.setCurrentNutzer(nutzer);
+		RootPanel.get("navigator").add(new Navigation(clientSettings.getCurrentNutzer()));
+		
+		//Identifizierung des Registrierungs Kontakts des Nutzers für Namens Setzung in der Gui.
+		editorVerwaltung.getOwnKontakt(nutzer, new AsyncCallback <Kontakt>() {
+
+			@Override
+			public void onFailure(Throwable err) {
+				err.getMessage().toString();
+				
+			}
+
+			@Override
+			public void onSuccess(Kontakt result) {
+				RootPanel.get("nutzermenu").add(new HTML("<p><span class='fa fa-user-circle-o'></span> &nbsp; " + result.getVorname() +" "+ result.getNachname()));
+				HTML signOutLink = new HTML("<p><a href='" 
+						+ loginInfo.getLogoutUrl() 
+						+ "'><span class='fas fa-sign-out-alt'></span></a></p>");
+				RootPanel.get("nutzermenu").add(signOutLink);
+			}
+			
+			
+			
+		});
+		
+
+		RootPanel.get("content").add(new ShowKontakte(nutzer));
 		HorizontalPanel footer = new HorizontalPanel();
 		Anchor startseite = new Anchor("Startseite", "Sontact.html");
 		HTML copyrightText1 = new HTML(" | ");
-		Anchor reportGeneratorLink = new Anchor(" ReportGenerator", "SontactReport.html");
 		HTML copyrightText2 = new HTML(" | © 2018 Sontact, IT-Projekt Gruppe01, Hochschule der\n" + 
 				"					Medien Stuttgart | ");
-	//	Anchor impressumLink = new Anchor("Impressum");
+		Anchor reportGeneratorLink = new Anchor (" ReportGenerator", "SontactReport.html");
+		Anchor impressumLink = new Anchor("Impressum");
 		footer.add(startseite);
 		footer.add(copyrightText1);
 		footer.add(reportGeneratorLink);

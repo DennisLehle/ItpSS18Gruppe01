@@ -12,6 +12,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.EditorService;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorService;
 import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorServiceAsync;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
  * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
@@ -19,6 +20,10 @@ import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorServiceAsync;
  */
 
 public class ClientsideSettings extends CommonSettings {
+	/**
+	 * Anlegen eines leeren Nutzers zur Speicherung des aktuellen Nutzers.
+	 */
+	public Nutzer nutzer = null;
 	/**
 	 * Remote Service Proxy zur Verbindungsaufnahme mit dem Server-seitgen
 	 * Dienst namens <code>EditorService</code>.
@@ -158,7 +163,7 @@ public class ClientsideSettings extends CommonSettings {
 			loginService = GWT.create(LoginService.class);
 		}
 		/**
-		 * R�ckgabe des EditorService's.
+		 * R�ckgabe des EditorService's.
 		 */
 		return loginService;
 	}
@@ -207,5 +212,18 @@ public class ClientsideSettings extends CommonSettings {
 		 * Rückgabe des ReportGeneratorService's.
 		 */
 		return reportGeneratorVerwaltung;
+	}
+	
+	/**
+	 * Setzen eines Nutzers für die Bearbeitung in der Sontact Verwaltung
+	 */
+	public final void setCurrentNutzer(Nutzer n) {
+		this.nutzer = n;
+	}
+	/**
+	 * Auslesen eines Nutzers für die Bearbeitung in der Sontact Verwaltung
+	 */
+	public Nutzer getCurrentNutzer() {
+		return nutzer;
 	}
 }

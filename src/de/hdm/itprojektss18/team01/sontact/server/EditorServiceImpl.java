@@ -515,6 +515,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.createEigenschaft(e.getBezeichnung());
 		this.createAuspraegung(a.getWert(), e.getId(), a.getKontaktId(), n);
 	}
+	
+	/**
+	 * Das Entfernen einer selbstdefinierten Eigenschaft mit ihren Auspraegungen des Kontakts.
+	 */
+	
 
 	// getAllAuspraegungenByEigenschaft (?)
 

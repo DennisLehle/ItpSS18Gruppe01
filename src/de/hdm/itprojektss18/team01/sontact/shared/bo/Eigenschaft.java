@@ -8,6 +8,8 @@ public class Eigenschaft extends BusinessObject {
 	 * Instanzvariablen
 	 */
 	private String bezeichnung;
+	Auspraegung a;
+	
 
 	/**
 	 * Getter- und Setter zum Setzen und Auslesen der Werte
@@ -20,6 +22,14 @@ public class Eigenschaft extends BusinessObject {
 
 	public void setBezeichnung(String bezeichnung) {
 		this.bezeichnung = bezeichnung;
+	}
+	
+	public Auspraegung getAuspraegung() {
+		return a;
+	}
+	
+	public void setAuspraegung(Auspraegung a) {
+		this.a = a;
 	}
 
 }

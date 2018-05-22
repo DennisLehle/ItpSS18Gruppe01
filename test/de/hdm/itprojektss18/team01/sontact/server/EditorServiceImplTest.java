@@ -1,15 +1,14 @@
 package de.hdm.itprojektss18.team01.sontact.server;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-
 import com.google.gwt.junit.client.GWTTestCase;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.KontaktlisteKontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 
@@ -65,6 +64,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case fÃ¼r die Erstellung eines Nutzers.
 	 * CHECK
 	 */
+	
 	public void createNutzer() {
 		//Variable anlegen die Ã¼bergeben werden soll.
 		String email = "kan.kup@gmail.com";
@@ -89,7 +89,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Anmerkung: Wird der Kontakt in die Default-Kontaktliste gespeichert?
 	 * CHECK
 	 */
-
+	
 	public void createKontakt() {
 		
 		Nutzer n = new Nutzer();
@@ -97,17 +97,17 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		//Ich erstelle einen Kontakt und Ã¼bergebe einen Nutzer in dem Fall mich selbst.
-		editor.createKontakt("Melanie", "Musterchen", n);
-		//editor.createKontakt("Petra", "Pfiffig", n);
-		//editor.createKontakt("Lisa", "Lustig", n);
+		//editor.createKontakt("Melanie", "Musterchen", n);
+		editor.createKontakt("Petra", "Pfiffig", n);
+		editor.createKontakt("Lisa", "Lustig", n);
 	}
 	
 	/**
 	 * Test Case fÃ¼r das Updaten eines Kontakts.
 	 * CHECK
 	 */
-
-		public void saveKontakt() {
+	 	
+	public void saveKontakt() {
 	
 		Nutzer n = new Nutzer();
 		n.setId(1);
@@ -117,9 +117,9 @@ class EditorServiceImplTest extends GWTTestCase {
 		k.setVorname("Lisa");
 		k.setNachname("Luftig");
 		k.setOwnerId(1);
-
-		EditorServiceImpl editor = new EditorServiceImpl();
 	
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
 		editor.saveKontakt(k);
 	}
 	
@@ -171,7 +171,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case fuer das Bearbeiten einer Auspraegung
 	 * CHECK
 	 */
-
+	
 	public void saveAuspraegung() {
 		
 		Nutzer n = new Nutzer();
@@ -193,7 +193,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case fuer das Löschen einer Auspraegung
 	 * CHECK
 	 */
-
+	
 	public void deleteAuspraegung() {
 		Nutzer n = new Nutzer();
 		n.setId(1);
@@ -222,7 +222,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case fuer das Erstellen einer Eigenschaft
 	 * CHECK
 	 */
-
+	
 	public void createEigenschaft() {
 
 		
@@ -237,12 +237,12 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * UNCHECK
 	 */
 
-
+	 
 	public void deleteEigenschaft() {
 		
 		Eigenschaft e = new Eigenschaft();
 		e.setId(18);
-		e.setBezeichnung("Haustier");
+		//e.setBezeichnung("Lieblingssport");
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -265,7 +265,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		//Anlegen der Eigenschaft
 		Eigenschaft e = new Eigenschaft();
 		e.setBezeichnung("Schuhgröße");
-		e.setId(21);
+		e.setId(18);
 		
 		//Anlegen der Auspraegung
 		Auspraegung a = new Auspraegung();
@@ -279,21 +279,6 @@ class EditorServiceImplTest extends GWTTestCase {
 		editor.createAuspraegungForNewEigenschaft(e, a, n);
 		}
 	
-	/**
-	public void createAuspraegungforNewEigenschaft() {
-		Nutzer n = new Nutzer();
-		n.setId(1);
-		
-		EditorServiceImpl editor = new EditorServiceImpl();
-		
-		editor.createEigenschaft("Haustier");
-		
-		editor.setNutzer(n);
-		
-		editor.createAuspraegung("Bello", 18 , 3, 1);
-		
-	}
-		**/
 		
 	/*
 	   * ***************************************************************************
@@ -322,7 +307,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case fuer das Erstellen einer Kontaktliste
 	 * CHECK
 	 */
-
+	
 	public void saveKontaktliste() {
 		
 		Nutzer n = new Nutzer();
@@ -330,7 +315,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		Kontaktliste kl = new Kontaktliste();
 		kl.setId(1);
-		kl.setTitel("Kameraden");
+		kl.setTitel("Geschaeft");
 
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -340,28 +325,35 @@ class EditorServiceImplTest extends GWTTestCase {
 
 /**
  * Test Case fuer die Zuweisung eines Kontakts zu einer Kontaktliste
- * CHECK
+ * 
  */
-
+// OFFEN //
 	public void addKontaktToKontaktliste() {
-		
-		Kontakt k = new Kontakt();
-		k.setId(2);
+	
+		Nutzer n = new Nutzer();
+		n.setId(1);
 		
 		Kontaktliste kl = new Kontaktliste();
 		kl.setId(1);
 		
-		EditorServiceImpl editor = new EditorServiceImpl();
+		Kontakt k = new Kontakt();
+		k.setId(2);
 		
+		KontaktlisteKontakt klk = new KontaktlisteKontakt();
+		klk.setKontaktlisteid(kl.getId());
+		klk.setKontaktid(k.getId());
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+
 		editor.addKontaktToKontaktliste(kl, k);
 	}
 	
 	
 	/**
 	 * Test Case fuer das Entfernen eines Kontakts aus einer Kontaktliste
-	 *CHECK
+	 *
 	 */
-	
+// OFFEN //
 	public void removeKontaktFromKontaktliste() {
 		
 		Kontakt k = new Kontakt();
@@ -369,6 +361,10 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		Kontaktliste kl = new Kontaktliste();
 		kl.setId(1);
+		
+		KontaktlisteKontakt klk = new KontaktlisteKontakt();
+		klk.setKontaktlisteid(kl.getId());
+		klk.setKontaktid(k.getId());
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -378,9 +374,9 @@ class EditorServiceImplTest extends GWTTestCase {
 	
 	/**
 	 * Test Case fuer das Entfernen eines Kontakts aus einer Kontaktliste
-	 *CHECK
+	 *
 	 */
-
+// OFFEN //
 	public void getKontaktlistenByOwner() {
 		
 		Nutzer n = new Nutzer();
@@ -397,15 +393,13 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Muss noch angepasst werden
 	 * UNCHECK
 	 */
-	
+// OFFEN // 	
 	public void removeKontakt() {
 		Kontakt k = new Kontakt();
-		k.setId(25);
-		
-		Kontaktliste kl = new Kontaktliste();
-		kl.setId(3);
-		
+		k.setId(3);
+
 		EditorServiceImpl editor = new EditorServiceImpl();
+		
 		editor.removeKontakt(k);
 	}
 	
@@ -415,5 +409,29 @@ class EditorServiceImplTest extends GWTTestCase {
 	   * ABSCHNITT, Anfang: Methoden fuer Berechtigungs-Objekte Test
 	   * ***************************************************************************
 	   */
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

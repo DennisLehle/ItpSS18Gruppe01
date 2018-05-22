@@ -39,11 +39,9 @@ public interface EditorService extends RemoteService{
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#setNutzer(Nutzer n);
-	 */
-	
-	/**
+	 *
 	public void setNutzer(Nutzer n) throws IllegalArgumentException;
-	**/
+**/
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#init();

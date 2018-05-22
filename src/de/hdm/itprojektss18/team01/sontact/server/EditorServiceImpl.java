@@ -1,6 +1,5 @@
 package de.hdm.itprojektss18.team01.sontact.server;
 
-import java.io.Console;
 import java.sql.Timestamp;
 import java.util.Vector;
 
@@ -44,7 +43,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	private KontaktlistenMapper klMapper = null;
 
 	/**
-	   * Die Mapperklasse wird referenziert, die Kontaktlisten-Objekte mit 
+	   * Die Mapperklasse wird referenziert, die KontaktlistenKontakt-Objekten 
 	   * der Datenbank vergleicht. 
 	   */
 	private KontaktlisteKontaktMapper klkMapper = null;
@@ -419,7 +418,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public void deleteEigenschaft(Eigenschaft e) throws IllegalArgumentException {
-
+		init();
 		this.eMapper.delete(e);
 	}
 

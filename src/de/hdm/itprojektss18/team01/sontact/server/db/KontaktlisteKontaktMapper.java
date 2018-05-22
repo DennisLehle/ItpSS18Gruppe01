@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
@@ -12,6 +11,19 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.KontaktlisteKontakt;
 
 public class KontaktlisteKontaktMapper {
+	
+	public static KontaktlisteKontaktMapper kontaktlisteKontaktMapper = null;
+
+	protected KontaktlisteKontaktMapper() {	
+		
+	}
+	
+	public static KontaktlisteKontaktMapper kontaktlisteKontaktMapper() {
+		if(kontaktlisteKontaktMapper == null) {
+			kontaktlisteKontaktMapper = new KontaktlisteKontaktMapper();
+		}
+		return kontaktlisteKontaktMapper;
+	}
 	
 	
 	/**
@@ -28,10 +40,10 @@ public class KontaktlisteKontaktMapper {
 		try {
 
 				PreparedStatement  prestmt = con.prepareStatement(
-						"INSERT INTO KontaktlisteKontakt (kontaktlisteid, kontaktid)"
-								+ "VALUES('" 
+						"INSERT INTO KontaktlisteKontakt (kontaktlisteid, kontaktid) VALUES('" 
 								+ kl.getId() + "', '" 
-								+ k.getId() + "')");
+								+ k.getId()
+								+ "')"); 
 							
 				// INSERT-Statement ausf�hren
 				prestmt.execute();

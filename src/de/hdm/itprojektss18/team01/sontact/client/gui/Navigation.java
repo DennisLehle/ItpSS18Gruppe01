@@ -1,7 +1,10 @@
 package de.hdm.itprojektss18.team01.sontact.client.gui;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -16,16 +19,11 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  */
 
 public class Navigation extends VerticalPanel {
+	
 
-	Button ownerbtn = new Button(
-			"<image src='/images/user.png' width='20px' height='20px' align='center' /> Eigener Kontakt");
 	Button kbtn = new Button("<image src='/images/kontakte.png' width='20px' height='20px' align='center' /> Kontakte");
 	Button klbtn = new Button(
 			"<image src='/images/kontaktliste.png' width='20px' height='20px' align='center' /> Kontaktliste");
-	Button logOutButton = new Button(
-			"<image src='/images/logout.png' width='20px' height='20px' align='center' /> Abmelden");
-	Button rpbtn = new Button(
-			"<image src='/images/report.png' width='20px' height='20px' align='center' /> Report Generator");
 
 	public Navigation(final Nutzer nutzer) {
 
@@ -34,23 +32,17 @@ public class Navigation extends VerticalPanel {
 		 */
 		kbtn.setStyleName("ButtonStyle");
 		klbtn.setStyleName("ButtonStyle");
-		rpbtn.setStyleName("ButtonStyle");
-		ownerbtn.setStyleName("ButtonStyle");
-		logOutButton.setStyleName("ButtonStyle");
+		
 		kbtn.setPixelSize(150, 40);
 		klbtn.setPixelSize(150, 40);
-		rpbtn.setPixelSize(150, 40);
-		logOutButton.setPixelSize(150, 40);
-		ownerbtn.setPixelSize(150, 40);
-
+		
 		/**
 		 * Button zur Anzeige der Navigation anheften
 		 */
-		this.add(ownerbtn);
+		
 		this.add(kbtn);
 		this.add(klbtn);
-		this.add(logOutButton);
-		this.add(rpbtn);
+	
 
 		/**
 		 * ClickHandler für den "Meine Kontaktliste" Button.
@@ -91,21 +83,6 @@ public class Navigation extends VerticalPanel {
 			}
 		});
 
-		/**
-		 * ClickHandler für den ReportGenerator Button.
-		 */
-		rpbtn.addClickHandler(new ClickHandler() {
-			/**
-			 * Interface clickhandler wird als anonyme klasse erstellt und realisert die on
-			 * click methode, die auf einen klick wartet und dann ausgeführt wird wenn der
-			 * Button geklickt wird.
-			 */
-			public void onClick(ClickEvent event) {
-
-				RootPanel.get("content").clear();
-
-			}
-		});
 
 	}
 }

@@ -202,12 +202,35 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		kontakt.setErstellDat(new Timestamp(System.currentTimeMillis()));
 		kontakt.setModDat(new Timestamp(System.currentTimeMillis()));
 		kontakt.setOwnerId(n.getId());
+		kontakt.setIdentifier('k');
 
 		kontakt.setId(1);
 		init();
 		return kMapper.insert(kontakt);
 
 	}
+	
+	/**
+	 * Erzeugen eines neuen Kontakts bei der Registrierung.
+	 * 
+	 */
+	public Kontakt createKontaktRegistrierung(String vorname, String nachname, Nutzer n) throws IllegalArgumentException {
+		
+
+		Kontakt kontakt = new Kontakt();
+		kontakt.setVorname(vorname);
+		kontakt.setNachname(nachname);
+		kontakt.setErstellDat(new Timestamp(System.currentTimeMillis()));
+		kontakt.setModDat(new Timestamp(System.currentTimeMillis()));
+		kontakt.setOwnerId(n.getId());
+		kontakt.setIdentifier('r');
+
+		kontakt.setId(1);
+		init();
+		return kMapper.insert(kontakt);
+
+	}
+
 
 	/**
 	 * Speichern eines modifizierten Kontakts
@@ -221,7 +244,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	/**
 	 * Loeschen eines Kontakts mit seinen Auspraegungen und seinen
-	 * Kontaktlistenzugehörigkeiten
+	 * Kontaktlistenzugehï¿½rigkeiten
 	 * 
 	 */
 	public void removeKontakt(Kontakt k) throws IllegalArgumentException {
@@ -254,6 +277,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public Kontakt getKontaktById(int id) throws IllegalArgumentException {
 		return this.kMapper.findKontaktById(id);
+	}
+	
+	/**
+	 * Auslesen des eigenen Kontaktes.
+	 * @param n
+	 * @return
+	 */
+	public Kontakt getOwnKontakt(Nutzer n) {
+		
+		return this.kMapper.findNutzerKontaktByIdentifier(n.getId());
 	}
 
 	/**
@@ -424,7 +457,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
-	 * Gibt die vordefinierte Auswahl der Eigenschaften zurück. @return @throws
+	 * Gibt die vordefinierte Auswahl der Eigenschaften zurï¿½ck. @return @throws
 	 * IllegalArgumentException @throws
 	 */
 	public Vector<Eigenschaft> getEigenschaftAuswahl() throws IllegalArgumentException {
@@ -609,7 +642,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	    }
 	
 	
-	//Owner löscht ein berechtigtes Objekt und somit die Berechtigungen des Objekts
+	//Owner lï¿½scht ein berechtigtes Objekt und somit die Berechtigungen des Objekts
 	public void removeBerechtigungWith (int ownerId) throws IllegalArgumentException {
 		 
 		Berechtigung b = this.bMapper.findById(ownerId);
@@ -617,7 +650,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		
 	}
 	
-	//Teilhaber löscht ein berechtigtes Objekt und somit die Berechtigungen 
+	//Teilhaber lï¿½scht ein berechtigtes Objekt und somit die Berechtigungen 
 	public void removeBerechtigungFrom (int receiverId) throws IllegalArgumentException {
 			 
 		Berechtigung b = this.bMapper.findById(receiverId);
@@ -626,7 +659,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 
 
-	/** getAllSharedKontaktlistenWith(), Methode wird nicht benötigt!
+	/** getAllSharedKontaktlistenWith(), Methode wird nicht benï¿½tigt!
 	 * 
 	public Vector<Berechtigung> getAllSharedKontaktlistenWith(int ownerId) throws IllegalArgumentException {
 		
@@ -650,8 +683,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * **
 	 */
 	
-	// shareObjectWith() Ein Objekt mit einem Empfänger teilen. Davor überprüfen, ob bereits
-		//eine Berechtigungszugriff vorhanden sei, falls nicht die Berechtigung hinzuzufügen.
+	// shareObjectWith() Ein Objekt mit einem Empfï¿½nger teilen. Davor ï¿½berprï¿½fen, ob bereits
+		//eine Berechtigungszugriff vorhanden sei, falls nicht die Berechtigung hinzuzufï¿½gen.
 	public Berechtigung shareObjectWith(int ownerId, int receiverId, int objectId, char type,
 			int berechtigungsstufe) throws IllegalArgumentException {
 		
@@ -729,7 +762,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	//Herauslesen des Status OwnerTeilhaber
 	public void createStatusForKontakt( int ownerId, int receiverId) throws IllegalArgumentException {
-		//IstUser Teilhaber oder Eigentümer
+		//IstUser Teilhaber oder Eigentï¿½mer
 		
 	}
 }

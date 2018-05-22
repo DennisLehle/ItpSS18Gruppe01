@@ -138,6 +138,9 @@ public interface EditorServiceAsync {
 	void saveModifikationsdatum(int id, AsyncCallback<Void> callback);
 
 
+	void getOwnKontakt(Nutzer n, AsyncCallback<Kontakt> callback);
+
+
 	
 	// Abschnitt Kontaktliste:
 

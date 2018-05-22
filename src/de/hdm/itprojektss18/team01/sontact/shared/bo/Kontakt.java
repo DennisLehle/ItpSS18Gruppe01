@@ -22,6 +22,7 @@ public class Kontakt extends BusinessObject implements Participation {
 	private Timestamp modDat;
 	private int ownerId;
 	private int kontaktlisteId;
+	private char identifier;
 	private Berechtigung berechtigung;
 
 	/**
@@ -98,6 +99,14 @@ public class Kontakt extends BusinessObject implements Participation {
 	@Override
 	public int getOwner() {
 		return ownerId;
+	}
+
+	public char getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(char identifier) {
+		this.identifier = identifier;
 	}
 
 }

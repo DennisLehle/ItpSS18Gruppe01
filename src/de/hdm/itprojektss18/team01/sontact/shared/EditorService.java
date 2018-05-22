@@ -83,6 +83,7 @@ public interface EditorService extends RemoteService{
 	
 	public Vector<Kontakt> getAllKontakteByOwner(Nutzer n) throws IllegalArgumentException;
 
+	public Kontakt getOwnKontakt(Nutzer n) throws IllegalArgumentException;
 
 	/**
 	 * @return 

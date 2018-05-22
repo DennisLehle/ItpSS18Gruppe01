@@ -4,6 +4,10 @@ package de.hdm.itprojektss18.team01.sontact.shared.bo;
  * Realisierung einer exemplarischen Berechtigungsklasse.
  */
 public class Berechtigung extends BusinessObject {
+	
+	/*
+	 * Testkommentar für nicht getrackte Klasse. 
+	 */
 
 	private static final long serialVersionUID = 1L;
 

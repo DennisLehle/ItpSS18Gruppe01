@@ -11,6 +11,9 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.KontaktlisteKontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
+/*
+ * Test
+ */
 
 /**
  * Test der Impl Klasse <code>EditorServiceImpl</code> Methoden.

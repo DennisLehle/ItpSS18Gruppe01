@@ -6,6 +6,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -26,46 +28,74 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  *
  */
 
-public class RegistrierungsFormular extends VerticalPanel {
+public class RegistrierungsFormular extends Composite {
 
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
 
-	private Label titel = new Label("Eigenen Kontakt anlegen");
+	private Label titel = new Label("Nutzerkontakt anlegen");
 
-	private Label vorname = new Label("Vorname");
+	private Label vorname = new Label("Vorname:");
 	private TextBox vornameTb = new TextBox();
-	private Label nachname = new Label("Nachname");
+	private Label nachname = new Label("Nachname:");
 	private TextBox nachnameTb = new TextBox();
-	private Button speichern = new Button("Speichern");
+	private Label gmail = new Label("Gmail-Adresse:");
+	private TextBox gmailTb = new TextBox();
+	private Button speichernBtn = new Button("Speichern");
 
-	private Button auswahlEigenschaft = new Button("Auswahleigenschaft");
-	private Button eigeneEigenschaft = new Button("Eigene Eigenschaft hinzufuegen");
+	private Button auswahlEigenschaftBtn = new Button("Auswahleigenschaft");
+	private Button eigeneEigenschaftBtn = new Button("Eigene Eigenschaft hinzufuegen");
 
-	private HorizontalPanel hpvorname = new HorizontalPanel();
-	private HorizontalPanel hpnachnahme = new HorizontalPanel();
+	private VerticalPanel hauptPanel = new VerticalPanel();
+	private HorizontalPanel ButtonsPanel = new HorizontalPanel();
+	
+	private HorizontalPanel auswahlEigPanel = new HorizontalPanel();
+	private HorizontalPanel eigeneEigPanel = new HorizontalPanel();
+	
+	FlexTable mindestEigenschaftsTable = new FlexTable();
+	FlexTable eigeneEigenschaftFlex = new FlexTable();
+	FlexTable auswahlEigenschaftFlex = new FlexTable();
+	
 
-	public RegistrierungsFormular(final Nutzer nutzer) {
-		this.add(titel);
-		hpvorname.add(vorname);
-		hpvorname.add(vornameTb);
-		hpnachnahme.add(nachname);
-		hpnachnahme.add(nachnameTb);
-		this.add(hpvorname);
-		this.add(hpnachnahme);
+	public RegistrierungsFormular(Nutzer nutzer) {
+		initWidget(hauptPanel);
+		ButtonsPanel.add(auswahlEigenschaftBtn);
+		ButtonsPanel.add(eigeneEigenschaftBtn);
+		ButtonsPanel.add(speichernBtn);
+		ButtonsPanel.setSpacing(20);
+		hauptPanel.add(ButtonsPanel);
+		
+		hauptPanel.add(auswahlEigPanel);
+		hauptPanel.add(eigeneEigPanel);
+		
 
-		this.add(speichern);
-		this.add(auswahlEigenschaft);
-		this.add(eigeneEigenschaft);
+		// Methode welche die Pflichtangaben lädt
+		ladePflichtEigenschaften(mindestEigenschaftsTable);
+		
+	
+		gmailTb.setText(nutzer.getEmailAddress());
+		gmailTb.setEnabled(false);
+
+		vornameTb.setFocus(true);
+		nachnameTb.setFocus(true);
+
+		speichernBtn.setPixelSize(160, 40);
+		auswahlEigenschaftBtn.setPixelSize(160, 40);
+		eigeneEigenschaftBtn.setPixelSize(160, 40);
+
+		RootPanel.get("contentHeader").clear();
+		RootPanel.get("contentHeader").add(titel);
 
 		/**
-		 * ClickHandler zum Erzeugen von Auswwahleigenschaften welche aus einer ListBox selektiert werden können.
+		 * ClickHandler zum Erzeugen von Auswwahleigenschaften welche aus einer ListBox
+		 * selektiert werden können.
 		 */
-		auswahlEigenschaft.addClickHandler(new ClickHandler() {
+		auswahlEigenschaftBtn.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 				TextBox txtBox = new TextBox();
 				final ListBox listBox = new ListBox();
+				listBox.getElement().setPropertyString("placeholder", "Eigenschaft auswählen");
 				ev.getEigenschaftAuswahl(new AsyncCallback<Vector<Eigenschaft>>() {
 
 					@Override
@@ -85,38 +115,34 @@ public class RegistrierungsFormular extends VerticalPanel {
 					}
 
 				});
-
-				HorizontalPanel auswahlPanel = new HorizontalPanel();
-				auswahlPanel.add(listBox);
-				auswahlPanel.add(txtBox);
-				RootPanel.get("content").add(auswahlPanel);
+				
+				platziereAuswahlEigenschaften(listBox, txtBox, auswahlEigenschaftFlex, auswahlEigPanel);
+							
 			}
+			
 		});
 
 		/**
 		 * ClickHandler welches es ermöglicht eigene Eigenschaften hinzuzufügen.
 		 */
-		eigeneEigenschaft.addClickHandler(new ClickHandler() {
+		eigeneEigenschaftBtn.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				TextBox txtBox = new TextBox();
-				TextBox textBox = new TextBox();
+				TextBox txtBoxEigenschaft = new TextBox();
+				TextBox txtBoxWert = new TextBox();
 
-				HorizontalPanel eigenesPanel = new HorizontalPanel();
-				eigenesPanel.add(txtBox);
-				eigenesPanel.add(textBox);
-				RootPanel.get("content").add(eigenesPanel);
-				// Schauen nach Regel für die Befüllung der Boxen (Box muss erst befüllt sein
-				// damit die nächste Box erscheint)
+				platziereEigeneEigenschaften(txtBoxEigenschaft, txtBoxWert, auswahlEigenschaftFlex, ButtonsPanel);
+				
+
 			}
-
+			
 		});
 
 		/**
 		 * ClickHandler zum Speichern des neu angelegten Nutzer-Kontakts.
 		 */
-		speichern.addClickHandler(new ClickHandler() {
+		speichernBtn.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -132,17 +158,61 @@ public class RegistrierungsFormular extends VerticalPanel {
 
 						@Override
 						public void onSuccess(Kontakt k) {
-							MessageBox.alertWidget("Benachrichtigung: ", "Sie haben den Kontakt " + vorname + " " + nachname + " erfolgreich angelegt");
+							MessageBox.alertWidget("Benachrichtigung: ",
+									"Sie haben den Kontakt " + vorname + " " + nachname + " erfolgreich angelegt");
 						}
 					});
-										
+
 				} else {
-					MessageBox.alertWidget("Benachrichtigung: ", "Vor- und Nachname sind Pflichtfelder" );
+					MessageBox.alertWidget("Benachrichtigung: ", "Vor- und Nachname sind Pflichtfelder");
 				}
-	
+
 			}
 
 		});
+
+	}
+
+	public void platziereAuswahlEigenschaften(ListBox listBox, TextBox txtBox, FlexTable zusatzEigenschaftFlex, HorizontalPanel auswahlEigPanel) {
+
+		listBox.getElement().setPropertyString("placeholder", "Eigenschaft auswählen");
+		txtBox.getElement().setPropertyString("placeholder", "Wert der Eigenschaft");
+		int count = zusatzEigenschaftFlex.getRowCount();
+		zusatzEigenschaftFlex.setWidget(count + 1, 0, listBox);
+		zusatzEigenschaftFlex.setWidget(count + 2, 0, txtBox);
+		//zusatzEigenschaftFlex.setBorderWidth(2);
+		auswahlEigPanel.add(zusatzEigenschaftFlex);
+
+	}
+
+	public void platziereEigeneEigenschaften(TextBox txtBoxEigenschaft, TextBox txtBoxWert,
+			FlexTable eigeneEigenschaftFlex, HorizontalPanel eigeneEigPanel ) {
+
+		txtBoxEigenschaft.getElement().setPropertyString("placeholder", "Name der Eigenschaft");
+		txtBoxWert.getElement().setPropertyString("placeholder", "Wert der Eigenschaft");
+		txtBoxEigenschaft.setFocus(true);
+		txtBoxWert.setFocus(true);
+
+		int count = eigeneEigenschaftFlex.getRowCount();
+		eigeneEigenschaftFlex.setWidget(count + 1, 0, txtBoxEigenschaft);
+		eigeneEigenschaftFlex.setWidget(count + 2, 0, txtBoxWert);
+		//eigeneEigenschaftFlex.setBorderWidth(2);
+		eigeneEigPanel.add(eigeneEigenschaftFlex);
+
+	}
+
+	public void ladePflichtEigenschaften(FlexTable mindestEigenschaftsTable) {
+		int count = mindestEigenschaftsTable.getRowCount();
+		mindestEigenschaftsTable.setWidget(count + 1, 0, vorname);
+		mindestEigenschaftsTable.setWidget(count + 2, 0, vornameTb);
+		mindestEigenschaftsTable.setWidget(count + 3, 0, nachname);
+		mindestEigenschaftsTable.setWidget(count + 4, 0, nachnameTb);
+		mindestEigenschaftsTable.setWidget(count + 5, 0, gmail);
+		mindestEigenschaftsTable.setWidget(count + 6, 0, gmailTb);
+		//mindestEigenschaftsTable.setBorderWidth(2);
+		hauptPanel.add(mindestEigenschaftsTable);
+		
+		
 
 	}
 

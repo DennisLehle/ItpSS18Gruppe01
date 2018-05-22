@@ -1,11 +1,91 @@
 /** Add css rules here for your application. */
 /** Example rules used by the template application (remove for your app) */
+
+PM>Install-Package bootstrap -Version 4.1.1
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,700');
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
+@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css");
+
+/*
+ * Seitenweite Regeln
+ */
+div {
+  height: 90vh;
+  width: 90vw;
+}
+
+
+html,body {
+	height: 100%;
+	
+}
+
+body > div {
+	width: 90%;
+	height: 100%;
+}
+
+body > div > div{
+	width: 100%;
+}
+
+#top {
+	cursor: default;
+	display: flex;
+	width: 100%;
+	flex: 0 1 auto;
+	justify-content: space-between;
+	padding-right: 30px;
+	box-sizing: border-box;
+	background: #999 url('http://1.bp.blogspot.com/-rtGjmU_cBgs/USf8_93SNBI/AAAAAAAANkQ/wxRNRP82Fw0/s1600/wallpaper-abstrakt-hintergrund-mit-blauen-streifen.jpg') no-repeat left 50%;
+	background-size: cover;	color: white;
+}
+
+#nutzermenu {
+	display: flex;
+	width: 30%;
+	justify-content: flex-end;
+}
+
+#nutzermenu .gwt-HTML {
+	padding: 20px 0px;
+}
+
+#nutzermenu p {
+	width: 100%;
+	font-size: 16px;
+	text-align: right;
+	cursor: pointer;
+}
+
+#nutzermenu p a {
+	margin-left: 10px;
+	padding-left: 10px;
+	text-decoration: none;
+	color: #666;
+	border-left: 1px solid #666;
+}
+
 h1 {
-	font-size: 2em;
-	font-weight: bold;
-	color: #777777;
-	margin: 40px 0px 70px;
-	text-align: center;
+	font-weight: 400;
+	font-size: 38px;
+	width: 33%;
+	background:  url(/images/sontact2.png) no-repeat left 80%;
+	background-size: contain;
+	margin-left: 20px;
+	color: white;
+	font: 'Gotham';
+	font-weight: lighter !important;
+	font-variant: small-caps;
+	letter-spacing: 7px;
+	height:auto;
+	
+}
+
+h1 a {
+	display: block;
+	color: rgba(255,255,255,0.0);
+	padding: 20px 0px 20px 30px;
 }
 
 .sendButton {
@@ -31,17 +111,14 @@ h1 {
 	margin: 15px 6px 6px;
 }
 
+
 #header {
-	display: block;
-	background-color: #125485;
 	color: white;
-	font-weight: lighter !important;
-	font-variant: small-caps;
 	letter-spacing: 10px;
-	text-align: center;
+	text-align: left;
+	float: left;
 	padding-top: 10px;
 	padding-bottom: 20px;
-	font-size: 20px;
 }
 
 .box {
@@ -57,26 +134,37 @@ h1 {
 	width: 77%;
 	min-height: 500px;
 	float: right;
-	padding-left: 10px;
+	padding-left: 0px;
 	padding-top: 25px;
-	padding-left: 30px;
 }
 
 #navigator {
 	float: left;
+	background: #999 url('https://i.pinimg.com/originals/29/6d/82/296d82d638ab0db314288c13cb6c3953.jpg') no-repeat left 50%;
+	background-size: cover;	color: white;
+	
 }
 
 #footer {
-	background-color: #125485;
-	color: white;
-	font: 'Gotham';
-	font-weight: lighter !important;
-	font-variant: small-caps;
-	letter-spacing: 10px;
-	text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-	clear: both;
-	text-align: center;
-	padding: 5px;
+    padding: 10px 0px;
+    text-align: center;
+    color: #777;
+    font-size: 80%;
+    width: 100%;
+   	display: flex;
+   	justify-content: center;
+    background: #999 url('http://mindchamps-medical.com/wp-content/uploads/2015/04/Abstract-Background-White.jpg') no-repeat left 50%;
+}
+
+#footer .gwt-HTML {
+	margin: 0px 5px;
+}
+
+#footer a {
+    color: #1c9cd8;
+    text-decoration: none;
+}
+	
 }
 
 .ButtonStyle {

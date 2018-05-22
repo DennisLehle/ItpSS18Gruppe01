@@ -5,6 +5,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -30,7 +32,7 @@ public class Sontact implements EntryPoint {
 	private VerticalPanel loginPanel = new VerticalPanel();
 	private Label loginLabel = new Label("Please sign in to your Google Account to access the Sontact application.");
 	private Anchor signInLink = new Anchor("Sign In");
-	private Anchor signOutLink = new Anchor("Sign Out");
+
 
 	LoginServiceAsync loginService = GWT.create(LoginService.class);
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditorVerwaltung();
@@ -44,7 +46,8 @@ public class Sontact implements EntryPoint {
 
 			@Override
 			public void onFailure(Throwable error) {
-				Window.alert("Fehler Login: " + error.toString());
+			Window.alert("Fehler Login: " + error.toString());
+	
 			}
 
 			@Override
@@ -117,7 +120,26 @@ public class Sontact implements EntryPoint {
 	 */
 	private void start(final Nutzer nutzer) {
 		RootPanel.get("navigator").add(new Navigation(nutzer));
+		RootPanel.get("nutzermenu").add(new HTML("<p><span class='fa fa-user-circle-o'></span> &nbsp; " + nutzer.getEmailAddress()));
+		HTML signOutLink = new HTML("<p><a href='" 
+				+ loginInfo.getLogoutUrl() 
+				+ "'><span class='fas fa-sign-out-alt'></span></a></p>");
+		RootPanel.get("nutzermenu").add(signOutLink);
 		RootPanel.get("content").add(new ShowKontakte(nutzer));
+		
+		HorizontalPanel footer = new HorizontalPanel();
+		Anchor startseite = new Anchor ("Startseite", "Sontact.html");
+		HTML copyrightText1 = new HTML(" | ");
+		Anchor reportGeneratorLink = new Anchor (" ReportGenerator", "SontactReport.html");
+		HTML copyrightText2 = new HTML(" | © 2018 Sontact | ");
+		Anchor impressumLink = new Anchor("Impressum");
+		footer.add(startseite);
+		footer.add(copyrightText1);
+		footer.add(reportGeneratorLink);
+		footer.add(copyrightText2);
+		
+		RootPanel.get("footer").add(footer);
+
 	}
 
 	void loadLogin() {

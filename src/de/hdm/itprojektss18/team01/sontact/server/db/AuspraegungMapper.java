@@ -246,14 +246,14 @@ public class AuspraegungMapper {
 		
 	}
 
-	public Vector<Auspraegung> findAuspraegungByKontakt(Kontakt k){
+	public Vector<Auspraegung> findAuspraegungByKontakt(int kontaktId){
 		Connection con = DBConnection.connection();
 		Vector<Auspraegung> result = new Vector<Auspraegung>();
 		
 		try {
 			// SQL-Statement anlegen
 			PreparedStatement prestmt = con.prepareStatement(
-					"SELECT * FROM Auspraegung WHERE kontaktid = " + k.getId());
+					"SELECT * FROM Auspraegung WHERE kontaktid = " + kontaktId);
 			
 		    // Statement ausf�hren
 		    ResultSet rs = prestmt.executeQuery();

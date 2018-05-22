@@ -121,7 +121,7 @@ public interface EditorService extends RemoteService{
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontakteByKontaktliste(Kontaktliste kl);
 	 */
-	public Vector <Kontakt> getKontakteByKontaktliste (Kontaktliste kl) throws IllegalArgumentException;
+	public Vector <Kontakt> getKontakteByKontaktliste (int kontaktlisteId) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#findKontaktlisteByTitel(String titel);
@@ -186,7 +186,7 @@ public interface EditorService extends RemoteService{
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getAllAuspraegungenByKontakt (Kontakt k);
 	 */
-	public Vector<Auspraegung> getAllAuspraegungenByKontakt(Kontakt k) throws IllegalArgumentException;
+	public Vector<Auspraegung> getAllAuspraegungenByKontakt(int kontaktId) throws IllegalArgumentException;
 	
 	
 	

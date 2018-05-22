@@ -85,6 +85,7 @@ public interface EditorService extends RemoteService{
 
 
 	/**
+	 * @return 
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#addKontaktToKontaktliste(Kontakt k, Kontaktliste kl);
 	 */
 	public void addKontaktToKontaktliste(Kontaktliste kl, Kontakt k) throws IllegalArgumentException;

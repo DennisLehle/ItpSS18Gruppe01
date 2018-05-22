@@ -8,7 +8,6 @@ import java.util.Vector;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.KontaktlisteKontakt;
 
 public class KontaktlisteKontaktMapper {
 	
@@ -34,16 +33,15 @@ public class KontaktlisteKontaktMapper {
 	 * @param k für das Kontaktobjekt, kl für das Kontaktlistenobjekt
 	 */
 	
-	public KontaktlisteKontakt addKontaktToKontaktliste(Kontaktliste kl, Kontakt k) {
+	public void addKontaktToKontaktliste(Kontaktliste kl, Kontakt k) {
 		Connection con = DBConnection.connection();
 		
 		try {
 
 				PreparedStatement  prestmt = con.prepareStatement(
-						"INSERT INTO KontaktlisteKontakt (kontaktlisteid, kontaktid) VALUES('" 
+						"INSERT INTO KontaktlisteKontakt (kontaktlisteid, kontaktid) VALUES ('" 
 								+ kl.getId() + "', '" 
-								+ k.getId()
-								+ "')"); 
+								+ k.getId()	+ "')"); 
 							
 				// INSERT-Statement ausfï¿½hren
 				prestmt.execute();
@@ -53,45 +51,42 @@ public class KontaktlisteKontaktMapper {
 			catch (SQLException e2) {
 				e2.printStackTrace();
 			}
-		
-			return null;
 		}
 
 	
-	/**
-	 * Updaten der Zuordnung eines Kontakts einer Kontaktliste (eingeklammert)
-	 * @see insert 
-	 * @param k das Objekt, das in die DB geschrieben werden soll
-	 * @return das als Parameter ï¿½bergebene Objekt
-	 */
-	
-	public KontaktlisteKontakt update(Kontaktliste kl, Kontakt k) {
-		String sql = "UPDATE KontaktlisteKontakt SET kontaktlisteid=?, kontaktid=? WHERE kontaktlisteid=?, kontaktid=?";
-		
-		Connection con = DBConnection.connection();
-		
-		try {
-			PreparedStatement stmt = con.prepareStatement(sql);
-	    	
-	   
-	    	stmt.setInt(1, kl.getId());
-	    	stmt.setInt(2, k.getId());
-	    	
-	    	stmt.setInt(3, kl.getId());
-	    	stmt.setInt(4, k.getId());
-
-	    	stmt.executeUpdate();
-	   
-		}
-		
-		catch (SQLException e2){
-			e2.printStackTrace();
-		}
-		/**
-		 * Um Analogie zu insertKontakt(Kontakt k) zu wahren, geben wir k zurï¿½ck
-		 */
-		return null;
-	}
+//	/**
+//	 * Updaten der Zuordnung eines Kontakts einer Kontaktliste (eingeklammert)
+//	 * @see insert 
+//	 * @param k das Objekt, das in die DB geschrieben werden soll
+//	 * @return das als Parameter ï¿½bergebene Objekt
+//	 */
+//	
+//	public void update(Kontaktliste kl, Kontakt k) {
+//		String sql = "UPDATE KontaktlisteKontakt SET kontaktlisteid=?, kontaktid=? WHERE kontaktlisteid=?, kontaktid=?";
+//		
+//		Connection con = DBConnection.connection();
+//		
+//		try {
+//			PreparedStatement stmt = con.prepareStatement(sql);
+//	    	
+//	   
+//	    	stmt.setInt(1, kl.getId());
+//	    	stmt.setInt(2, k.getId());
+//	    	
+//	    	stmt.setInt(3, kl.getId());
+//	    	stmt.setInt(4, k.getId());
+//
+//	    	stmt.executeUpdate();
+//	   
+//		}
+//		
+//		catch (SQLException e2){
+//			e2.printStackTrace();
+//		}
+//		/**
+//		 * Um Analogie zu insertKontakt(Kontakt k) zu wahren, geben wir k zurï¿½ck
+//		 */
+//	}
 	
 	
 	/**
@@ -106,8 +101,8 @@ public class KontaktlisteKontaktMapper {
 		try {
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement(
-				"DELETE FROM KontaktlisteKontakt  WHERE kontaktlisteid=?" + kl.getId()
-				+ " AND kontaktid=" + k.getId());
+				"DELETE FROM KontaktlisteKontakt WHERE kontaktlisteid=?" + kl.getId()
+				 + " AND kontaktid=" + k.getId());
 		
 		//Statement als Query an die DB schicken
 		prestmt.execute();

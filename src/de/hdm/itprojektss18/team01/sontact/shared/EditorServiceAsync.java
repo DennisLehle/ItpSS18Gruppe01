@@ -4,7 +4,6 @@ package de.hdm.itprojektss18.team01.sontact.shared;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.RemoteService;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
@@ -79,9 +78,6 @@ public interface EditorServiceAsync {
 	
 	void getAllKontakteByOwner(Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 	
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#addKontaktToKontaktliste(Kontakt k, Kontaktliste kl);
-	 */
 	void addKontaktToKontaktliste(Kontaktliste kl, Kontakt k, AsyncCallback<Void> callback);
 
 	/**

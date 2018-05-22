@@ -85,6 +85,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.nMapper = NutzerMapper.nutzerMapper();
 		this.kMapper = KontaktMapper.kontaktMapper();
 		this.klMapper = KontaktlistenMapper.kontaktlistenMapper();
+		this.klkMapper = KontaktlisteKontaktMapper.kontaktlisteKontaktMapper();
 		this.eMapper = EigenschaftMapper.eigenschaftMapper();
 		this.aMapper = AuspraegungMapper.auspraegungMapper();
 		this.bMapper = BerechtigungMapper.berechtigungMapper();

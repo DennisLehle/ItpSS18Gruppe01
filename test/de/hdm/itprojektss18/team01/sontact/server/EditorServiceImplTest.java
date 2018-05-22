@@ -97,7 +97,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		//Ich erstelle einen Kontakt und Ã¼bergebe einen Nutzer in dem Fall mich selbst.
-		editor.createKontakt("Melanie", "Musterchen", n);
+		editor.createKontakt("Melo", "Meli", n);
 		//editor.createKontakt("Petra", "Pfiffig", n);
 		//editor.createKontakt("Lisa", "Lustig", n);
 	}
@@ -227,22 +227,19 @@ class EditorServiceImplTest extends GWTTestCase {
 
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
-
 		
-		editor.createEigenschaft("Lieblingssport");			
+		editor.createEigenschaft("Lieblingsfarbe");			
 	}
 	
 	/**
 	 * Test Case fuer das Loeschen einer Eigenschaft
-	 * UNCHECK
+	 * CHECK
 	 */
 
-
 	public void deleteEigenschaft() {
-		
+
 		Eigenschaft e = new Eigenschaft();
 		e.setId(18);
-		e.setBezeichnung("Haustier");
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -279,21 +276,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		editor.createAuspraegungForNewEigenschaft(e, a, n);
 		}
 	
-	/**
-	public void createAuspraegungforNewEigenschaft() {
-		Nutzer n = new Nutzer();
-		n.setId(1);
-		
-		EditorServiceImpl editor = new EditorServiceImpl();
-		
-		editor.createEigenschaft("Haustier");
-		
-		editor.setNutzer(n);
-		
-		editor.createAuspraegung("Bello", 18 , 3, 1);
-		
-	}
-		**/
+
 		
 	/*
 	   * ***************************************************************************
@@ -395,7 +378,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	/**
 	 * Test Case fuer das Löschen eines Kontakts
 	 * Muss noch angepasst werden
-	 * UNCHECK
+	 * CHECK
 	 */
 	
 	public void removeKontakt() {

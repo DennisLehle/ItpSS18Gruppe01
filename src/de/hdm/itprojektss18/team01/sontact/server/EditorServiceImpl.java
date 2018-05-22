@@ -419,6 +419,19 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public void deleteEigenschaft(Eigenschaft e) throws IllegalArgumentException {
+		
+		init();
+		
+		/**
+		// Alle Auspraegungen einer Eigenschaft aus der DB entfernen.
+		Vector <Auspraegung> removeAllAuspraegung = aMapper.findAuspraegungByEigenschaft(e, k);
+		
+		if (removeAllAuspraegung != null) {
+			for (Auspraegung a : removeAllAuspraegung) {
+				this.aMapper.delete(a);
+			}
+		}
+		*/
 
 		this.eMapper.delete(e);
 	}
@@ -516,6 +529,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.createEigenschaft(e.getBezeichnung());
 		this.createAuspraegung(a.getWert(), e.getId(), a.getKontaktId(), n);
 	}
+	
+	/**
+	 * Das Entfernen einer selbstdefinierten Eigenschaft mit ihren Auspraegungen des Kontakts.
+	 */
+	
 
 	// getAllAuspraegungenByEigenschaft (?)
 

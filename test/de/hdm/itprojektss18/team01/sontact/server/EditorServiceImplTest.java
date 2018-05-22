@@ -95,8 +95,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		n.setId(1);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
-		//Ich erstelle einen Kontakt und übergebe einen Nutzer in dem Fall mich selbst.
-		//editor.createKontakt("Melanie", "Musterchen", n);
+		editor.createKontakt("Max", "Mustermann", n);
 		editor.createKontakt("Petra", "Pfiffig", n);
 		editor.createKontakt("Lisa", "Lustig", n);
 	}
@@ -333,7 +332,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		kl.setId(2);
 		
 		Kontakt k = new Kontakt();
-		k.setId(3);
+		k.setId(2);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -347,7 +346,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 *
 	 */
 
-	@Test
+	
 	public void removeKontaktFromKontaktliste() {
 		
 		Nutzer n = new Nutzer();
@@ -369,7 +368,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case fuer das Entfernen eines Kontakts aus einer Kontaktliste
 	 *
 	 */
-// OFFEN //
+	
 	public void getKontaktlistenByOwner() {
 		
 		Nutzer n = new Nutzer();
@@ -386,7 +385,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Muss noch angepasst werden
 	 * UNCHECK
 	 */
-// OFFEN // 	
+	
 	public void removeKontakt() {
 		Kontakt k = new Kontakt();
 		k.setId(3);
@@ -404,10 +403,51 @@ class EditorServiceImplTest extends GWTTestCase {
 	   */
 	
 	
+	public void createBerechtigung() {
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		Nutzer n1 = new Nutzer();
+		Nutzer n2 = new Nutzer();
+			n1.setId(1);
+			n2.setId(2);
+				
+		Kontaktliste kl = new Kontaktliste();
+			kl.setId(1);
+			kl.setTitel("Geschaeft");
+			kl.setOwnerId(n1.getId());
+		
+		Kontakt k = new Kontakt();
+			k.setId(1);
+		
+		Auspraegung a1 = new Auspraegung();
+		Auspraegung a2 = new Auspraegung();
+			a1.setId(7);
+			a2.setId(8);
+		
+		editor.createBerechtigung(n1.getId(), n2.getId(), k.getId(), k.getType());
+		editor.createBerechtigung(n1.getId(), n2.getId(), a1.getId(), a1.getType());
+		editor.createBerechtigung(n1.getId(), n2.getId(), a2.getId(), a2.getType());
+		
+	}
 	
 	
+	@Test
+	public void shareObject() {
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		Nutzer n1 = new Nutzer();
+		Nutzer n2 = new Nutzer();
+			n1.setId(1);
+			n2.setId(2);
+				
+		Kontaktliste kl = new Kontaktliste();
+			kl.setId(2);
+
+		editor.createBerechtigung(n1.getId(), n2.getId(), kl.getId(), kl.getType());
 	
-	
+	}
 	
 	
 	

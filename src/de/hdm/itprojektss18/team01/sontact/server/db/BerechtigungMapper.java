@@ -58,17 +58,12 @@ public class BerechtigungMapper {
 
 				// INSERT-Statement anlegen
 				PreparedStatement prestmt = con
-						.prepareStatement("INSERT INTO Berechtigung (id, ownerid, receiverid, "
-								+ "type, berechtigungsstufe, kontaktid, kontaktlisteid, auspraegungid) VALUES('" 
+						.prepareStatement("INSERT INTO Berechtigung (id, ownerid, receiverid, objectid, type) VALUES ('" 
 								+ b.getId() + "', '" 
 								+ b.getOwnerId() + "', '"
 								+ b.getReceiverId() + "', '" 
-							
-								+ b.getType() + "', '"
-								+ b.getBerechtigungsstufe() + "', '" 
-								+ b.getKontaktId() + "', '"
-								+ b.getKontaktlisteId() + "', '"
-								+ b.getAuspraegungId() + "')");
+								+ b.getObjectId() + "', '"
+								+ b.getType() + "')");
 								
 
 				// INSERT-Statement ausf�hren

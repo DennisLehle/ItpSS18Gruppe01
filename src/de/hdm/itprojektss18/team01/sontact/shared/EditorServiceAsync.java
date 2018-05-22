@@ -98,7 +98,7 @@ public interface EditorServiceAsync {
 	void getKontaktlistenByOwner(Nutzer n, AsyncCallback<Vector<Kontaktliste>> callback);
 
 
-	void getKontakteByKontaktliste(Kontaktliste kl, AsyncCallback<Vector<Kontakt>> callback);
+	void getKontakteByKontaktliste(int kontaktlisteId, AsyncCallback<Vector<Kontakt>> callback);
 
 
 	void findKontaktlisteByTitel(String titel, AsyncCallback<Vector<Kontaktliste>> callback);
@@ -132,7 +132,7 @@ public interface EditorServiceAsync {
 	void getAuspraegungById(Auspraegung a, AsyncCallback<Auspraegung> callback);
 
 
-	void getAllAuspraegungenByKontakt(Kontakt k, AsyncCallback<Vector<Auspraegung>> callback);
+	void getAllAuspraegungenByKontakt(int kontaktId, AsyncCallback<Vector<Auspraegung>> callback);
 
 
 	void saveModifikationsdatum(int id, AsyncCallback<Void> callback);

@@ -69,7 +69,7 @@ body > div > div{
 h1 {
 	font-weight: 400;
 	font-size: 38px;
-	width: 33%;
+	width: 34%;
 	background:  url(/images/sontact2.png) no-repeat left 80%;
 	background-size: contain;
 	margin-left: 20px;
@@ -87,6 +87,54 @@ h1 a {
 	color: rgba(255,255,255,0.0);
 	padding: 20px 0px 20px 30px;
 }
+
+/* Ab hier beginnt der Login */
+
+.signInLink {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    background: rgba(200,200,200,.8) url('http://mindchamps-medical.com/wp-content/uploads/2015/04/Abstract-Background-White.jpg');
+    display: block;
+    padding: 200px 30% 0px 30%;
+}
+
+.signInLink tbody {
+    background: #fff;
+    padding: 40px;
+    display: block;
+    box-shadow: 0px 0px 8px #999;
+}
+
+.signInLink h1 {
+	padding: 20px 0px 20px 30px;
+}
+
+.signInLink a {
+    margin: 30px 40px 0px 40px;
+    padding: 10px 20px;
+    background: #61a3e4;
+    display: block;
+    color: #f0f0f0;
+    text-decoration: none;
+    text-align: center;
+}
+
+.signInLinka a :focus,
+.signInLink a:hover {
+	background: #006EB5;
+}
+
+.signInLink h1 {
+    margin-left: 0px;
+    margin-bottom: 20px;
+    width: 100%;
+	background-position: 50%;
+}
+
+/** Ende */
 
 .sendButton {
 	display: block;

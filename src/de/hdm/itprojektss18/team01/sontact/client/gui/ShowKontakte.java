@@ -120,22 +120,6 @@ public class ShowKontakte extends VerticalPanel {
 			}
 		};
 
-		TextColumn<Kontakt> erstellungsdatumCol = new TextColumn<Kontakt>() {
-
-			public String getValue(Kontakt erstellungsdatum) {
-
-				return erstellungsdatum.getErstellDat().toString();
-			}
-		};
-
-		TextColumn<Kontakt> modifikationsdatumCol = new TextColumn<Kontakt>() {
-
-			public String getValue(Kontakt modifikationsdatum) {
-
-				return modifikationsdatum.getModDat().toString();
-			}
-		};
-
 		/**
 		 * Implementierung der Checkbox fürs auswählen von einem oder mehrere Kontakten.
 		 */
@@ -154,9 +138,6 @@ public class ShowKontakte extends VerticalPanel {
 
 		kontaktTable.addColumn(nachnameCol, "Nachname");
 		nachnameCol.setSortable(true);
-
-		kontaktTable.addColumn(erstellungsdatumCol, "Erstellungsdatum");
-		kontaktTable.addColumn(modifikationsdatumCol, "Modifikationsdatum");
 
 		kontaktTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		kontaktTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
@@ -229,7 +210,7 @@ public class ShowKontakte extends VerticalPanel {
 					public void onSuccess(Void result) {
 						if (selectionModel.getSelectedSet().size() > 0) {
 							clear();
-							onLoad();
+							onLoad(n);
 						}
 					}
 				});

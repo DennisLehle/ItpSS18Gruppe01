@@ -1,47 +1,198 @@
 /** Add css rules here for your application. */
-
-
 /** Example rules used by the template application (remove for your app) */
+
+PM>Install-Package bootstrap -Version 4.1.1
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,700');
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
+@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css");
+
+/*
+ * Seitenweite Regeln
+ */
+div {
+  height: 90vh;
+  width: 90vw;
+}
+
+
+html,body {
+	height: 100%;
+	
+}
+
+body > div {
+	width: 90%;
+	height: 100%;
+}
+
+body > div > div{
+	width: 100%;
+}
+
+#topR {
+	cursor: default;
+	display: flex;
+	width: 100%;
+	flex: 0 1 auto;
+	justify-content: space-between;
+	padding-right: 30px;
+	box-sizing: border-box;
+	background: #999 url('http://1.bp.blogspot.com/-rtGjmU_cBgs/USf8_93SNBI/AAAAAAAANkQ/wxRNRP82Fw0/s1600/wallpaper-abstrakt-hintergrund-mit-blauen-streifen.jpg') no-repeat left 50%;
+	background-size: cover;	color: white;
+}
+
+#nutzermenuR {
+	display: flex;
+	width: 30%;
+	justify-content: flex-end;
+}
+
+#nutzermenuR .gwt-HTML {
+	padding: 20px 0px;
+}
+
+#nutzermenuR p {
+	width: 100%;
+	font-size: 16px;
+	text-align: right;
+	cursor: pointer;
+}
+
+#nutzermenuR p a {
+	margin-left: 10px;
+	padding-left: 10px;
+	text-decoration: none;
+	color: #666;
+	border-left: 1px solid #666;
+}
+
 h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
-}
-
-.sendButton {
-  display: block;
-  font-size: 16pt;
-}
-
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
-}
-
-.dialogVPanel {
-  margin: 5px;
-}
-
-.serverResponseLabelError {
-  color: red;
-}
-
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
-}
-
-#footer {
-	background-color: blue;
+	font-weight: 400;
+	font-size: 30px;
+	width: 55%;
+	background:  url(/images/sontact2.png) no-repeat left 80%;
+	background-size: contain;
+	margin-left: 20px;
 	color: white;
 	font: 'Gotham';
 	font-weight: lighter !important;
 	font-variant: small-caps;
-	letter-spacing: 10px;
-	text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-	clear: both;
-	text-align: center;
-	padding: 5px; 
+	letter-spacing: 7px;
+	height:auto;
+	
 }
+
+h1 a {
+
+	display: block;
+	color: rgba(255,255,255,0.0);
+	padding: 20px 0px 20px 30px;
+}
+
+.sendButton {
+	display: block;
+	font-size: 16pt;
+}
+
+/** Most GWT widgets already have a style name defined */
+.gwt-DialogBox {
+	width: 400px;
+}
+
+.dialogVPanel {
+	margin: 5px;
+}
+
+.serverResponseLabelError {
+	color: red;
+}
+
+/** Set ids using widget.getElement().setId("idOfElement") */
+#closeButton {
+	margin: 15px 6px 6px;
+}
+
+
+#headerR {
+	
+	color: white;
+	letter-spacing: 10px;
+	text-align: left;
+	float: left;
+	padding-top: 10px;
+	padding-bottom: 20px;
+}
+
+.box {
+	float: left;
+	width: 30%;
+	margin-right: 3.33333%;
+	padding: 20px;
+	background: #eee;
+	box-sizing: border-box;
+}
+
+#contentR {
+	width: 77%;
+	min-height: 500px;
+	float: right;
+	padding-left: 0px;
+	padding-top: 25px;
+}
+
+#navigatorR {
+	float: left;
+	background: #999 url('https://i.pinimg.com/originals/29/6d/82/296d82d638ab0db314288c13cb6c3953.jpg') no-repeat left 50%;
+	background-size: cover;	color: white;
+	
+}
+
+#footerR {
+    padding: 10px 0px;
+    text-align: center;
+    color: #777;
+    font-size: 80%;
+    width: 100%;
+   	display: flex;
+   	justify-content: center;
+    background: #999 url('http://mindchamps-medical.com/wp-content/uploads/2015/04/Abstract-Background-White.jpg') no-repeat left 50%;
+}
+
+#footerR .gwt-HTML {
+	margin: 0px 5px;
+}
+
+#footerR a {
+    color: #1c9cd8;
+    text-decoration: none;
+}
+	
+}
+
+.ButtonStyle {
+	color: #125485;
+	text-align: center;
+	border-radius: 10px;
+	margin: 3px;
+	text-align: center;
+}
+
+.ButtonStyleSuche {
+	color: #125485;
+	margin: 3px;
+	text-align: center;
+}
+
+.ButtonStyleKontaktliste {
+	color: #125485;
+	border-radius: 12px;
+	text-align: center;
+	margin: 3px;
+}
+
+.ButtonStyleKontakte {
+	color: #125485;
+	border-radius: 12px;
+	text-align: center;
+	margin: 3px;
+}	

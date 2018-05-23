@@ -607,46 +607,45 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	public void shareObject(int ownerId, int receiverId, int objectId, char type)
 			throws IllegalArgumentException {
-		
-		char kl = 0;
-		char k = 0;
-		
-	
-		if (type == kl) {
+		init(); 
+//		switch (type) {		
+//		case 1:
+		if (type == 'l') {
+			
 			this.createBerechtigung(ownerId, receiverId, objectId, type);
-			
-			
-			// BAUSTELLE: 
-			
-			Vector<Kontakt> geteilteKontaktliste = getKontakteByKontaktliste(objectId);
-			if (geteilteKontaktliste != null) {
-				for (Kontakt kontakt : geteilteKontaktliste) {
-				createBerechtigung(ownerId, receiverId, kontakt.getId(), type);
 				
-					Vector<Auspraegung> geteilteAuspraegungen = getAllAuspraegungenByKontakt(objectId);
-					if (geteilteAuspraegungen != null) {
-						for (Auspraegung a : geteilteAuspraegungen) {
-							createBerechtigung(ownerId, receiverId, a.getId(), type);
-						}			
-					}		
-				}	
-			}	
-		}
+			Vector<Kontakt> kv = this.getKontakteByKontaktliste(objectId);
+			for (int k=0; k < kv.size(); k++)  {
+				if (kv != null ) {
+				this.createBerechtigung(ownerId, receiverId, kv.elementAt(k).getId(), kv.elementAt(k).getType());
+				
+				Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(kv.elementAt(k).getId());
+				for (int a = 0; a < av.size(); a++) {
+					if(av != null) {
+						this.createBerechtigung(ownerId, receiverId, av.elementAt(a).getId(), av.elementAt(a).getType());
+						}	
+					}
+				}		
+			}		
+		} else //
+//		break;
+//		case 2:
+		if (type == 'k') {
 		
-		if (type == k) {
 			this.createBerechtigung(ownerId, receiverId, objectId, type);
-
-			Vector<Auspraegung> geteilteAuspraegungen = getAllAuspraegungenByKontakt(objectId);
-			if (geteilteAuspraegungen != null) {
-				for (Auspraegung a : geteilteAuspraegungen) {
-					createBerechtigung(ownerId, receiverId, a.getId(), type);
+			
+			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(objectId);
+			for (int a=0; a < av.size(); a++) {
+				if(av != null) {
+					this.createBerechtigung(ownerId, receiverId, av.elementAt(a).getId(), av.elementAt(a).getType());	
 				}
 			}
-		}
-
+		} // break;
+		}	
+//	} 
 		
-		
-	}
+			
+	
 		
 		
 		

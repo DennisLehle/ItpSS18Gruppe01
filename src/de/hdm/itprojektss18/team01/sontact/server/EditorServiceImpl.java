@@ -827,17 +827,14 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * **
 	 */
 	//Aktualisiere das Modifikationsdatum
+	
 	public void saveModifikationsdatum(int id) throws IllegalArgumentException {
 		init();
 		this.kMapper.updateModifikationsdatum(id);
 	}
 
-
-	
-	
-	
-}
-	// Suchfunktion 
+		
+		// Suchfunktion 
 	
 	
 	
@@ -848,8 +845,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public void createStatusForKontakt( int ownerId, int receiverId) throws IllegalArgumentException {
 		//IstUser Teilhaber oder Eigentï¿½mer
 		
-	}
-}
+	
+
      **/
 
      /*
@@ -858,5 +855,59 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * *************************************************************************
 	 * **
 	 */
+	
+
+	/**
+	// Nach Aufruf des Kontaktlistenkontakts den Titel der übergebenen kontaktlistenId zurückgeben.
+     **/
+	
+	public void getListenbezeichnung (int kontaktlisteId, String titel) throws IllegalArgumentException {
+
+		KontaktlisteKontakt klk  = new KontaktlisteKontakt();
+		klk.setKontaktlisteid(klk.getKontaktlisteid());
+		
+		if (klk.equals(kontaktlisteId)) {
+			
+		}
+		this.klMapper.findByTitel(titel);
+		
+		return;
+	}
+	
+	/**
+	// Nach Aufruf des Kontaktlistenkontakts den Kontakt mit Auspraegung der übergebenen kontaktId zurückgeben.
+     **/
+	public void getListenstruktur (int kontaktlisteId, int kontaktId) throws IllegalArgumentException {
+
+		KontaktlisteKontakt klk  = new KontaktlisteKontakt();
+		klk.setKontaktid(klk.getKontaktid());
+		
+		Kontakt k = new Kontakt();
+		k.setId(klk.getKontaktid());
+		
+		Vector<Auspraegung> Auspraegung = getAllAuspraegungenByKontakt(kontaktId);
+		
+		if (klk.equals(kontaktId)) {
+			for (Auspraegung a : Auspraegung) {
+				this.getAllAuspraegungenByKontakt(a.getId());
+				}
+			return;
+			
+			}
+		
+		}
+	}
+	
+	/**
+	 * Ende
+	 */
+
+	
+	
+	
+		
+			
+		
+	
 
 

@@ -6,6 +6,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
@@ -149,6 +150,11 @@ public interface EditorServiceAsync {
 
 	void shareObject(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Void> callback);
 
+
+	void shareThisObject(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Void> callback);
+
+
+	void getStatusForObject(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Void> callback);
 
 	
 	// Abschnitt Kontaktliste:

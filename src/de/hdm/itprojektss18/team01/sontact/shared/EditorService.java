@@ -205,4 +205,10 @@ public interface EditorService extends RemoteService{
 	
 	public void shareObject(int ownerId, int receiverId, int objectId, char type)
 				throws IllegalArgumentException;
+	
+	public void shareThisObject(int ownerId, int receiverId, int objectId, char type)
+			throws IllegalArgumentException;
+	
+	void getStatusForObject( int ownerId, int receiverId, int objectId, char type) 
+			throws IllegalArgumentException;
 }

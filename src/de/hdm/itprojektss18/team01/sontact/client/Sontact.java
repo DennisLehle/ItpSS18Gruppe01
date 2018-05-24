@@ -34,7 +34,6 @@ public class Sontact implements EntryPoint {
 	private Label loginLabel = new Label("Please sign in to your Google Account to access the Sontact application.");
 	private Anchor signInLink = new Anchor("Sign In");
 
-
 	LoginServiceAsync loginService = GWT.create(LoginService.class);
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditorVerwaltung();
 	ClientsideSettings clientSettings = new ClientsideSettings();
@@ -47,8 +46,8 @@ public class Sontact implements EntryPoint {
 
 			@Override
 			public void onFailure(Throwable error) {
-			Window.alert("Fehler Login: " + error.toString());
-	
+				Window.alert("Fehler Login: " + error.toString());
+
 			}
 
 			@Override
@@ -121,6 +120,14 @@ public class Sontact implements EntryPoint {
 	 * @param nutzer
 	 */
 	private void start(final Nutzer nutzer) {
+
+		RootPanel.get("navigator").add(new Navigation(nutzer));
+		RootPanel.get("nutzermenu")
+				.add(new HTML("<p><span class='fa fa-user-circle-o'></span> &nbsp; " + nutzer.getEmailAddress()));
+		HTML signOutLink = new HTML(
+				"<p><a href='" + loginInfo.getLogoutUrl() + "'><span class='fas fa-sign-out-alt'></span></a></p>");
+		RootPanel.get("nutzermenu").add(signOutLink);
+
 		clientSettings.setCurrentNutzer(nutzer);
 		RootPanel.get("navigator").add(new Navigation(clientSettings.getCurrentNutzer()));
 		
@@ -146,29 +153,38 @@ public class Sontact implements EntryPoint {
 			
 		});
 		
+
 		RootPanel.get("content").add(new ShowKontakte(nutzer));
-		
 		HorizontalPanel footer = new HorizontalPanel();
-		Anchor startseite = new Anchor ("Startseite", "Sontact.html");
+		Anchor startseite = new Anchor("Startseite", "Sontact.html");
 		HTML copyrightText1 = new HTML(" | ");
+		HTML copyrightText2 = new HTML(" | © 2018 Sontact, IT-Projekt Gruppe01, Hochschule der\n" + 
+				"					Medien Stuttgart | ");
 		Anchor reportGeneratorLink = new Anchor (" ReportGenerator", "SontactReport.html");
-		HTML copyrightText2 = new HTML(" | 2018 Sontact | ");
 		Anchor impressumLink = new Anchor("Impressum");
 		footer.add(startseite);
 		footer.add(copyrightText1);
 		footer.add(reportGeneratorLink);
 		footer.add(copyrightText2);
-		
+
 		RootPanel.get("footer").add(footer);
 
 	}
 
 	void loadLogin() {
 		// Assemble login panel.
+		VerticalPanel loginPanel = new VerticalPanel();
+	//	HTML loginHeader = new HTML("<h1>Sontact Login</h1>");
+		Label loginLabel = new Label("Nur ein Schritt trennt Sie noch von der Kontaktverwaltung. Melden Sie sich jetzt mit einem Google-Konto an, um Sontact nutzen zu können.");
+		Anchor signInLink = new Anchor("Mit Google anmelden");
+		
 		signInLink.setHref(loginInfo.getLoginUrl());
+	//	loginPanel.add(loginHeader);
 		loginPanel.add(loginLabel);
 		loginPanel.add(signInLink);
-		RootPanel.get("content").add(loginPanel);
+		loginPanel.addStyleName("signInLink");
+		
+		RootPanel.get("content").add(loginPanel);			
 
 	}
 

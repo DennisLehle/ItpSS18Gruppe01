@@ -201,5 +201,17 @@ public interface EditorService extends RemoteService{
 	
 	public void saveModifikationsdatum(int id) throws IllegalArgumentException;
 	
-
+	
+	public void getListenbezeichnung (int kontaktlisteId, String titel) throws IllegalArgumentException;
+	
+	public void getListenstruktur (int kontaktlisteId, int kontaktId) throws IllegalArgumentException;
+	
+	public void shareObject(int ownerId, int receiverId, int objectId, char type)
+				throws IllegalArgumentException;
+	
+	public void shareThisObject(int ownerId, int receiverId, int objectId, char type)
+			throws IllegalArgumentException;
+	
+	void getStatusForObject( int ownerId, int receiverId, int objectId, char type) 
+			throws IllegalArgumentException;
 }

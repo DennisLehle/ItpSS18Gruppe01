@@ -101,8 +101,8 @@ public class KontaktlisteKontaktMapper {
 		try {
 		//SQL Statement anlegen
 		PreparedStatement prestmt = con.prepareStatement(
-				"DELETE FROM KontaktlisteKontakt WHERE kontaktlisteid=?" + kl.getId()
-				 + " AND kontaktid=" + k.getId());
+				"DELETE FROM KontaktlisteKontakt WHERE kontaktlisteid= " + kl.getId()
+				 + " AND kontaktid = " + k.getId());
 		
 		//Statement als Query an die DB schicken
 		prestmt.execute();

@@ -142,19 +142,15 @@ public interface EditorServiceAsync {
 	void getOwnKontakt(Nutzer n, AsyncCallback<Kontakt> callback);
 
 
-	void getListenbezeichnung(int kontaktlisteId, String titel, AsyncCallback<Void> callback);
-
-
-	void getListenstruktur(int kontaktlisteId, int kontaktId, AsyncCallback<Void> callback);
-
-
 	void shareObject(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Void> callback);
 
-
-	void shareThisObject(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Void> callback);
-
-
 	void getStatusForObject(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Void> callback);
+
+
+	void createBerechtigung(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Berechtigung> callback);
+
+
+	void deleteBerechtigung(Berechtigung b, AsyncCallback<Void> callback);
 
 	
 	// Abschnitt Kontaktliste:

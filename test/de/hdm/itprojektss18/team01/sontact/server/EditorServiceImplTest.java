@@ -219,7 +219,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	
 	/**
 	 * Test Case fuer das Erstellen einer Eigenschaft
-	 * CHECK
+	 * CHECK MELANIE
 	 */
 	
 	public void createEigenschaft() {
@@ -230,20 +230,76 @@ class EditorServiceImplTest extends GWTTestCase {
 	}
 	
 	/**
+	 * Test Case fuer das Updaten einer Eigenschaft
+	 * CHECK MELANIE
+	 * Update der Bezeichnung + Ausgabe "Updated"
+	 */
+	
+
+	public void saveEigenschaft() {
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		Eigenschaft e = new Eigenschaft();
+		e.setId(23);
+		e.setBezeichnung("Lieblingsfarbe");
+		
+		editor.saveEigenschaft(e);
+		
+		
+	}
+	
+	/**
 	 * Test Case fuer das Loeschen einer Eigenschaft
-	 * UNCHECK
+	 * CHECK MELANIE
 	 */
 
-	 
 	public void deleteEigenschaft() {
 
 		Eigenschaft e = new Eigenschaft();
-		e.setId(18);
+		e.setId(23);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		editor.deleteEigenschaft(e);			
 	}
+	
+	
+	/**
+	 * Test Case fuer das Erhalten einer Eigenschaft anhand ihrer ID
+	 * Trotzdem testen, auch wenn nicht benötigt? So haben wir Gewissheit, dass es funktioniert.
+	 * UNCHECK
+	 */
+	
+//	public Eigenschaft findEigenschaftById() {
+//		
+//		EditorServiceImpl editor = new EditorServiceImpl();
+//		
+//	}
+	
+	/**
+	 * Test Case fuer das Erhalten der Eigenschaften mit ID 1-17
+	 * Trotzdem testen, auch wenn nicht benötigt? So haben wir Gewissheit, dass es funktioniert.
+	 * UNCHECK
+	 */
+	
+//	public Eigenschaft findEigenschaftByAuswahl() {
+//		
+//		EditorServiceImpl editor = new EditorServiceImpl();
+//		
+//	}
+	
+	/**
+	 * Test Case fuer das Erhalten einer Eigenschaft, die einer einer Auspraegung eines Kontaktes zugeordnet ist.
+	 * Trotzdem testen, auch wenn nicht benötigt? So haben wir Gewissheit, dass es funktioniert.
+	 * UNCHECK
+	 */
+	
+//	public Eigenschaft findEigenschaftForAuspraegung() {
+//		
+//		EditorServiceImpl editor = new EditorServiceImpl();
+//		
+//	}
 	
 	
 	/**
@@ -472,7 +528,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test ShareKontaktliste: 
 	 * IMPL-Methode shareObject();
 	 */
-	@Test
+
 	public void shareObjectListe() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();

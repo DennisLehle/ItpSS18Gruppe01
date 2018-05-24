@@ -453,7 +453,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Eigenschaft saveEigenschaft(Eigenschaft e) throws IllegalArgumentException {
-
+		init();
 		return eMapper.update(e);
 	}
 

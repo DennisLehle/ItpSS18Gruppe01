@@ -545,13 +545,12 @@ class EditorServiceImplTest extends GWTTestCase {
 	// CHECK
 @Test
 	public void deleteBerechtigung() {
-		
 	 Berechtigung b = new Berechtigung();
-		b.setOwnerId(1);
-		b.setReceiverId(2);
+ 		b.setId(14);
+	 	b.setOwnerId(1);
+	 	b.setReceiverId(2);
 		b.setObjectId(2);
-		b.setType('l');
-//		b.setId(13);
+		b.setType('k');
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		editor.deleteBerechtigung(b);

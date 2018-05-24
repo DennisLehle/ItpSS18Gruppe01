@@ -667,41 +667,48 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	public void deleteBerechtigung(Berechtigung b) throws IllegalArgumentException {
 		init();
-		
-		
+
 		if (b.getType() == 'l') {
 			this.bMapper.delete(b);
 			Vector<Kontakt> kv = this.getKontakteByKontaktliste(b.getObjectId());
-			for (int k=0; k < kv.size(); k++)  {
-				if (kv != null ) {
-					this.bMapper.delete(b);
+			for (int k = 0; k < kv.size(); k++) {
+				if (kv != null) {
+					kv.elementAt(k).getId();
+					
+						Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(kv.elementAt(k).getId());
+					for (int a = 0; a < av.size(); a++) {
+						if (av != null) {
+							av.elementAt(a).getId();
+							b.setObjectId(a);
+							this.bMapper.delete(b);
+							
+				Berechtigung b1 = new Berechtigung();
+					b.setOwnerId(b.getOwnerId());
+					b1.setReceiverId(b.getReceiverId());
+					b1.setObjectId(k);
+					b1.setType(b1.getType());
+					b.setObjectId(k);
+					this.bMapper.delete(b1);
+
+				
+						}
+					}
+				}
 			}
-			
-			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(kv.elementAt(k).getId());
-			for (int a = 0; a < av.size(); a++) {
-				if(av != null) {
-					this.bMapper.delete(b); }
-			} }
-			}
-		else
-		if (b.getType() == 'k') {
-			this.bMapper.delete(b);
-				Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(b.getObjectId());
-			for (int a=0; a < av.size(); a++) {
-				if(av != null) {
-					this.bMapper.delete(b);							
-				}}}
-		
-		else 
-		if (b.getType() == 'a') {
+		} else if (b.getType() == 'k') {
 			this.bMapper.delete(b);
 			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(b.getObjectId());
-			for (int a=0; a < av.size(); a++) {
-				if(av != null) {
-					this.bMapper.delete(b); 
-					}}}
-			} 
-		
+			for (int a = 0; a < av.size(); a++) {
+				if (av != null) {
+					this.bMapper.delete(b);
+				}
+			}
+		}
+
+		else if (b.getType() == 'a') {
+			this.bMapper.delete(b);
+		}
+	}
 
 	/*
 	 * *************************************************************************

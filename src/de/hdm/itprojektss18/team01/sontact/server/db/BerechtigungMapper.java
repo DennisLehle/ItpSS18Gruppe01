@@ -81,35 +81,7 @@ public class BerechtigungMapper {
 	 * @param berechtigung
 	 * @return Berechtigung
 	 */
-	public Berechtigung update(Berechtigung b) {
-		String sql = "UPDATE Berechtigung SET  kontaktid=?, kontaktlisteid=?, auspraegungid=?, ownerid=?, receiverid=?, type=?, berechtigungsstufe=? WHERE id=?";
-		
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
-		
-		try {
-		// Angelegten String sql dem PreparedStatement übergeben.
-		PreparedStatement stmt = con.prepareStatement(sql);
-	    	
-	   
-	    	stmt.setInt(1, b.getKontaktId());
-	    	stmt.setInt(2, b.getKontaktlisteId());
-	    	stmt.setInt(3, b.getAuspraegungId());
-	    	stmt.setInt(4, b.getOwnerId());
-	    	stmt.setInt(5, b.getReceiverId());
-	    	stmt.setInt(6, b.getType());
-	    	stmt.setInt(7, b.getBerechtigungsstufe());
-	   
-	    	stmt.setInt(8, b.getId());
-	    	stmt.executeUpdate();
-	    	
-	    	System.out.println("Updated");
 
-		} catch (SQLException e2) {
-			e2.printStackTrace();
-		}
-		return b;
-	}
 
 	/**
 	 * L�schen eines Berechtigung-Objekts aus der Datenbank.
@@ -127,11 +99,11 @@ public class BerechtigungMapper {
 			// Dem SQL Statement wird der lokalen Variable �bergeben
 			PreparedStatement prestmt = con.prepareStatement(
 					" DELETE FROM Berechtigung WHERE "
-					+ " objectid = " + b.getId() 		
-					+ " AND receiverid = " + b.getId() 
-					+ " AND ownerid = " + b.getId()
-					+ " AND id = " + b.getId()
-					+ " AND type = " + b.getId());
+						+ " id = " + b.getId()
+						+ " AND ownerid = " + b.getOwnerId()
+						+ " AND receiverid = " + b.getReceiverId() 
+						+ " AND objectid = " + b.getObjectId() 		
+						+ " AND type = '" + b.getType() + "'");
 			
 			
 			// DELETE-Statement ausf�hren
@@ -168,7 +140,7 @@ public class BerechtigungMapper {
 			// Ergebnis-Tupel in Objekt umwandeln
 			if (rs.next()) {
 				b.setId(rs.getInt("id"));
-				b.setBerechtigungsstufe(rs.getInt("berechtigungsstufe"));
+			//	b.setBerechtigungsstufe(rs.getInt("berechtigungsstufe"));
 				b.setObjectId(rs.getInt("object"));
 				b.setType(rs.getString("type").charAt(0));
 				b.setOwnerId(rs.getInt("ownerid"));

@@ -7,6 +7,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
@@ -191,27 +192,21 @@ public interface EditorService extends RemoteService{
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getAllAuspraegungenByKontakt (Kontakt k);
 	 */
 	public Vector<Auspraegung> getAllAuspraegungenByKontakt(int kontaktId) throws IllegalArgumentException;
-	
-	
-	
-	
+		
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getAllAuspraegungenByKontakt (Kontakt k);
 	 */
 	
 	public void saveModifikationsdatum(int id) throws IllegalArgumentException;
 	
-	
-	public void getListenbezeichnung (int kontaktlisteId, String titel) throws IllegalArgumentException;
-	
-	public void getListenstruktur (int kontaktlisteId, int kontaktId) throws IllegalArgumentException;
+	public Berechtigung createBerechtigung(int ownerId, int receiverId, int objectId, char type)
+			throws IllegalArgumentException;
 	
 	public void shareObject(int ownerId, int receiverId, int objectId, char type)
 				throws IllegalArgumentException;
 	
-	public void shareThisObject(int ownerId, int receiverId, int objectId, char type)
-			throws IllegalArgumentException;
-	
 	void getStatusForObject( int ownerId, int receiverId, int objectId, char type) 
 			throws IllegalArgumentException;
+	
+	public void deleteBerechtigung(Berechtigung b) throws IllegalArgumentException;
 }

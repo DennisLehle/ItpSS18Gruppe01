@@ -59,7 +59,7 @@ public class Sontact implements EntryPoint {
 						@Override
 						public void onFailure(Throwable error) {
 							Window.alert("Es ist ein Fehler beim Login aufgetreten: ");
-
+					
 						}
 
 						@Override
@@ -122,14 +122,6 @@ public class Sontact implements EntryPoint {
 	private void start(final Nutzer nutzer) {
 
 		RootPanel.get("navigator").add(new Navigation(nutzer));
-		RootPanel.get("nutzermenu")
-				.add(new HTML("<p><span class='fa fa-user-circle-o'></span> &nbsp; " + nutzer.getEmailAddress()));
-		HTML signOutLink = new HTML(
-				"<p><a href='" + loginInfo.getLogoutUrl() + "'><span class='fas fa-sign-out-alt'></span></a></p>");
-		RootPanel.get("nutzermenu").add(signOutLink);
-
-		clientSettings.setCurrentNutzer(nutzer);
-		RootPanel.get("navigator").add(new Navigation(clientSettings.getCurrentNutzer()));
 		
 		//Identifizierung des Registrierungs Kontakts des Nutzers für Namens Setzung in der Gui.
 		editorVerwaltung.getOwnKontakt(nutzer, new AsyncCallback <Kontakt>() {
@@ -174,7 +166,6 @@ public class Sontact implements EntryPoint {
 	void loadLogin() {
 		// Assemble login panel.
 		VerticalPanel loginPanel = new VerticalPanel();
-	//	HTML loginHeader = new HTML("<h1>Sontact Login</h1>");
 		Label loginLabel = new Label("Nur ein Schritt trennt Sie noch von der Kontaktverwaltung. Melden Sie sich jetzt mit einem Google-Konto an, um Sontact nutzen zu können.");
 		Anchor signInLink = new Anchor("Mit Google anmelden");
 		

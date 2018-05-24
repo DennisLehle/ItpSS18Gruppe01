@@ -26,7 +26,6 @@ public class KontaktCell extends AbstractCell<Kontakt> {
       sb.appendEscaped(k.getVorname());
       sb.appendHtmlConstant(", ");
       sb.appendEscaped(k.getNachname());
-      sb.append(k.getId());
       sb.appendHtmlConstant("</div>");
 
 	}

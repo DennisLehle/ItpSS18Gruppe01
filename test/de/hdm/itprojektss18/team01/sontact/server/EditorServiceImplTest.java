@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import com.google.gwt.junit.client.GWTTestCase;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
@@ -463,6 +464,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Berechtigungseintrag in der Tabelle Berechtigung für Objekt K, KL oder A
 	 * IMPL-Methode createBerechtigung();
 	 */
+	// CHECK
 	public void createBerechtigung() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
@@ -495,39 +497,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test ShareKontakt:
 	 * IMPL-Methode shareObject();
 	 */
-	
-	public void shareObjectKontakt() {
-		
-		EditorServiceImpl editor = new EditorServiceImpl();
-		
-		Nutzer n1 = new Nutzer();
-		Nutzer n2 = new Nutzer();
-		n1.setId(1);
-		n2.setId(2);
-		
-//		Kontaktliste kl = new Kontaktliste(); 
-//		kl.setId(2);
-		
-		Kontakt k = new Kontakt(); 
-		k.setId(3);
-		k.setOwnerId(n1.getId());
-		
-		Auspraegung a1 = new Auspraegung(); 
-		a1.setId(7);
-		a1.setKontaktId(k.getId());
-		
-		Auspraegung a2 = new Auspraegung(); 
-		a2.setId(8);
-		a1.setKontaktId(k.getId());
-				
-		editor.shareObject(n1.getId(), n2.getId(), k.getId(), k.getType());
-		
-	}
-	
-	/**
-	 * Test ShareKontaktliste: 
-	 * IMPL-Methode shareObject();
-	 */
+	// CHECK
 
 	public void shareObjectListe() {
 		
@@ -542,37 +512,43 @@ class EditorServiceImplTest extends GWTTestCase {
 			kl.setId(2);
 			kl.setOwnerId(n1.getId());	
 			
-//		Kontakt k1 = new Kontakt(); 
-//			k1.setId(3);
-//			k1.setOwnerId(n1.getId());
-//		
-//		Kontakt k2 = new Kontakt(); 
-//			k2.setId(2);
-//			k2.setOwnerId(n1.getId());
-//
-//		KontaktlisteKontakt klk1 = new KontaktlisteKontakt(); 
-//			klk1.setKontaktlisteid(kl.getId());
-//			klk1.setKontaktid(k1.getId());
-//		
-//		KontaktlisteKontakt klk2 = new KontaktlisteKontakt(); 
-//			klk2.setKontaktlisteid(kl.getId());
-//			klk2.setKontaktid(k2.getId());
-//
-//		Auspraegung a1 = new Auspraegung(); 
-//			a1.setId(7);
-//			a1.setKontaktId(k1.getId());
-//		Auspraegung a2 = new Auspraegung(); 
-//			a2.setId(8);
-//			a1.setKontaktId(k1.getId());
+		Kontakt k1 = new Kontakt(); 
+		k1.setId(3);
+			k1.setOwnerId(n1.getId());
+		
+		Kontakt k2 = new Kontakt(); 
+			k2.setId(2);
+			k2.setOwnerId(n1.getId());
+
+		KontaktlisteKontakt klk1 = new KontaktlisteKontakt(); 
+			klk1.setKontaktlisteId(kl.getId());
+			klk1.setKontaktId(k1.getId());
+		
+		KontaktlisteKontakt klk2 = new KontaktlisteKontakt(); 
+			klk2.setKontaktlisteId(kl.getId());
+			klk2.setKontaktId(k2.getId());
+
+		Auspraegung a1 = new Auspraegung(); 
+			a1.setId(7);
+			a1.setKontaktId(k1.getId());
+		Auspraegung a2 = new Auspraegung(); 
+			a2.setId(8);
+			a1.setKontaktId(k1.getId());
 			
 		editor.shareObject(n1.getId(), n2.getId(), kl.getId(), kl.getType());
 	}
+
+	public void deleteBerechtigung(Berechtigung berechtigung) {
+		
+		Berechtigung b = new Berechtigung();
+		
+		
+		
+		
+	}
 	
 	
-	
-	
-	
-	
+
 	
 	
 	

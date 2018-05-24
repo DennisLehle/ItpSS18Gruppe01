@@ -243,8 +243,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
-	 * Loeschen eines Kontakts mit seinen Auspraegungen und seinen
-	 * Kontaktlistenzugehï¿½rigkeiten
+	 * Loeschen eines Kontakts mit seinen Auspraegungen seinen
+	 * Kontaktlistenzugehï¿½rigkeiten und seinen Teilhaberschaften/ Berechtigungen 
 	 * 
 	 */
 	public void removeKontakt(Kontakt k) throws IllegalArgumentException {
@@ -581,7 +581,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	
 	/**
-	 * Erstellung einer neuen Berechtigung.
+	 * Erstellung einer neuen Berechtigung. Es wird eine neue Berechtigung für eine 
+	 * neue Teilhaberschaft an einem bestimmten Objekt erteilt. 
 	 * 
 	 * @param ownerId
 	 * @param receiverId
@@ -606,7 +607,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 
 	/**
-	 * Erteilung einer Berechtigung im Kontext zu den geteilten Objekten. 
+	 * Es wird eine Berechtigung für ein bestimmtes Objekt erteilt. 
+	 * Das tatsächlich geteilte Objekt wird angesprochen und als Typ identifiziert. 
 	 * 
 	 * @param ownerId
 	 * @param receiverId
@@ -643,7 +645,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		if (type == 'k') {
 		
 			this.createBerechtigung(ownerId, receiverId, objectId, type);
-			
+			// -> 
 			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(objectId);
 			for (int a=0; a < av.size(); a++) {
 				if(av != null) {
@@ -653,21 +655,49 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		} // break;
 		}	
 //	} 
-		
-			
 	
 	/**
-	 * Das Loeschen einer Berechtigung.
-	 * 
+	 * Das Loeschen einer Berechtigung. Diese Methode hebt die Berechtigung einer Teilhaberschaft
+	 * zu einem bestimmten Objekttyp auf. Es werden z.B. alle abhängigen Objekte einer
+	 * Kontaktliste, also Kontakte angesprochen, die wiederum Ausprägungen beinhalten. 
+	 * Alle Objekte werden fortlaufend von der Berechtigung gelöst. 
 	 * @param b
 	 * @throws IllegalArgumentException
 	 */
 
 	public void deleteBerechtigung(Berechtigung b) throws IllegalArgumentException {
 
-		this.bMapper.delete(b);
-	}
-
+		if (b.getType() == 'l') {
+		 b.setObjectId('l');
+		Vector<Kontakt> kv = this.getKontakteByKontaktliste(b.getObjectId());
+		for (int k=0; k < kv.size(); k++)  {
+			if (kv != null ) {
+				kv.elementAt(k).getId();
+				kv.elementAt(k);
+			} this.bMapper.delete(b);
+			
+			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(kv.elementAt(k).getId());
+			for (int a = 0; a < av.size(); a++) {
+				if(av != null) {
+					 av.elementAt(a).getId(); 
+					 av.elementAt(a).getType();
+					this.bMapper.delete(b);
+		}
+				} }
+		}
+		else
+		if (b.getType() == 'k') {
+			b.setObjectId('k');
+			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(b.getObjectId());
+			for (int a=0; a < av.size(); a++) {
+				if(av != null) {		 
+					av.elementAt(a).getId();
+					av.elementAt(a).getType();	
+				this.bMapper.delete(b);
+			
+							
+				}}}}
+	
 	/*
 	 * *************************************************************************
 	 * ** ABSCHNITT, Ende: Methoden fuer Berechtigung-Objekte
@@ -696,34 +726,17 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	        return b;
 	    }
 	
-	
-	//Owner lï¿½scht ein berechtigtes Objekt und somit die Berechtigungen des Objekts
-	public void removeBerechtigungWith (int ownerId) throws IllegalArgumentException {
-		 
-		Berechtigung b = this.bMapper.findById(ownerId);
-			this.bMapper.delete(b);
-		
-	}
-	
-	//Teilhaber lï¿½scht ein berechtigtes Objekt und somit die Berechtigungen 
-	public void removeBerechtigungFrom (int receiverId) throws IllegalArgumentException {
-			 
-		Berechtigung b = this.bMapper.findById(receiverId);
-			this.bMapper.delete(b);
-			
-		}
-
 
 	/** getAllSharedKontaktlistenWith(), Methode wird nicht benï¿½tigt!
 	 * 
+	 */
 	public Vector<Berechtigung> getAllSharedKontaktlistenWith(int ownerId) throws IllegalArgumentException {
 		
-		Vector<Berechtigung> b = this.bMapper.(ownerId);
-	        return b;
+	        return null;
 	    }
 
 	// getAllSharedKontaktlistenFrom()
-	 	**/
+	
 	
 	/*
 	 * *************************************************************************
@@ -880,7 +893,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public void getListenbezeichnung (int kontaktlisteId, String titel) throws IllegalArgumentException {
 
 		KontaktlisteKontakt klk  = new KontaktlisteKontakt();
-		klk.setKontaktlisteid(klk.getKontaktlisteid());
+		klk.setKontaktlisteId(klk.getKontaktlisteId());
 		
 		if (klk.equals(kontaktlisteId)) {
 			
@@ -897,10 +910,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public void getListenstruktur (int kontaktlisteId, int kontaktId) throws IllegalArgumentException {
 
 		KontaktlisteKontakt klk  = new KontaktlisteKontakt();
-		klk.setKontaktid(klk.getKontaktid());
+		klk.setKontaktId(klk.getKontaktId());
 		
 		Kontakt k = new Kontakt();
-		k.setId(klk.getKontaktid());
+		k.setId(klk.getKontaktId());
 		
 		Berechtigung b = new Berechtigung();
 		b.getOwnerId();

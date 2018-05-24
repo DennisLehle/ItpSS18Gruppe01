@@ -4,24 +4,24 @@ public class KontaktlisteKontakt extends BusinessObject implements Participation
 	
 	private static final long serialVersionUID = 1L;
 
-	private int kontaktlisteid = 0; 
-	private int kontaktid = 0;
+	private int kontaktlisteId = 0; 
+	private int kontaktId = 0;
 	
 	
-	public int getKontaktlisteid() {
-		return kontaktlisteid;
+	public int getKontaktlisteId() {
+		return kontaktlisteId;
 	}
 
-	public void setKontaktlisteid(int kontaktlisteid) {
-		this.kontaktlisteid = kontaktlisteid;
+	public void setKontaktlisteId(int kontaktlisteId) {
+		this.kontaktlisteId = kontaktlisteId;
 	}
 
-	public int getKontaktid() {
-		return kontaktid;
+	public int getKontaktId() {
+		return kontaktId;
 	}
 
-	public void setKontaktid(int kontaktid) {
-		this.kontaktid = kontaktid;
+	public void setKontaktId(int kontaktId) {
+		this.kontaktId = kontaktId;
 	}
 
 	

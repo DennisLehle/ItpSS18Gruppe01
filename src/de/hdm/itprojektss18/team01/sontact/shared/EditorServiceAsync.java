@@ -141,7 +141,6 @@ public interface EditorServiceAsync {
 
 	void getOwnKontakt(Nutzer n, AsyncCallback<Kontakt> callback);
 
-
 	void shareObject(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Void> callback);
 
 	void getStatusForObject(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Void> callback);
@@ -151,6 +150,9 @@ public interface EditorServiceAsync {
 
 
 	void deleteBerechtigung(Berechtigung b, AsyncCallback<Void> callback);
+
+
+	void findKontaktlisteById(int id, AsyncCallback<Kontaktliste> callback);
 
 	
 	// Abschnitt Kontaktliste:

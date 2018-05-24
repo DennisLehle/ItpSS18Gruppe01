@@ -185,7 +185,7 @@ public class ShowKontakte extends VerticalPanel {
 					}
 				});
 				clear();
-				add(new KontaktFormular());
+				add(new KontaktForm());
 
 			}
 		});

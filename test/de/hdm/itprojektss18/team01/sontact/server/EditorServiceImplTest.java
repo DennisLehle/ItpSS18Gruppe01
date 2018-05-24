@@ -514,25 +514,29 @@ class EditorServiceImplTest extends GWTTestCase {
 		editor.shareObject(n1.getId(), n2.getId(), kl.getId(), kl.getType());
 	}
 
-	public void deleteBerechtigung(Berechtigung berechtigung) {
+	/**
+	 * Test Delete Berechtigung: 
+	 * IMPL-Methode deleteBerechtigung();
+	 */
+	// CHECK
+@Test
+	public void deleteBerechtigung() {
 		
-		Berechtigung b = new Berechtigung();
+	 Berechtigung b = new Berechtigung();
+		b.setOwnerId(1);
+		b.setReceiverId(2);
+		b.setObjectId(2);
+		b.setType('l');
+//		b.setId(13);
 		
-		
-		
-		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		editor.deleteBerechtigung(b);
 	}
 	
 	
 
 	
 	
-	
-	
-	
-	
-	
-	
-	
+
 
 }

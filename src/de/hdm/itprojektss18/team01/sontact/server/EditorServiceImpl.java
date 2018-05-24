@@ -666,38 +666,43 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	public void deleteBerechtigung(Berechtigung b) throws IllegalArgumentException {
-
+		init();
+		
+		
 		if (b.getType() == 'l') {
-		 b.setObjectId('l');
-		Vector<Kontakt> kv = this.getKontakteByKontaktliste(b.getObjectId());
-		for (int k=0; k < kv.size(); k++)  {
-			if (kv != null ) {
-				kv.elementAt(k).getId();
-				kv.elementAt(k);
-			} this.bMapper.delete(b);
+			this.bMapper.delete(b);
+			Vector<Kontakt> kv = this.getKontakteByKontaktliste(b.getObjectId());
+			for (int k=0; k < kv.size(); k++)  {
+				if (kv != null ) {
+					this.bMapper.delete(b);
+			}
 			
 			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(kv.elementAt(k).getId());
 			for (int a = 0; a < av.size(); a++) {
 				if(av != null) {
-					 av.elementAt(a).getId(); 
-					 av.elementAt(a).getType();
-					this.bMapper.delete(b);
-		}
-				} }
-		}
+					this.bMapper.delete(b); }
+			} }
+			}
 		else
 		if (b.getType() == 'k') {
-			b.setObjectId('k');
+			this.bMapper.delete(b);
+				Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(b.getObjectId());
+			for (int a=0; a < av.size(); a++) {
+				if(av != null) {
+					this.bMapper.delete(b);							
+				}}}
+		
+		else 
+		if (b.getType() == 'a') {
+			this.bMapper.delete(b);
 			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(b.getObjectId());
 			for (int a=0; a < av.size(); a++) {
-				if(av != null) {		 
-					av.elementAt(a).getId();
-					av.elementAt(a).getType();	
-				this.bMapper.delete(b);
-			
-							
-				}}}}
-	
+				if(av != null) {
+					this.bMapper.delete(b); 
+					}}}
+			} 
+		
+
 	/*
 	 * *************************************************************************
 	 * ** ABSCHNITT, Ende: Methoden fuer Berechtigung-Objekte
@@ -792,40 +797,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 //        return this.bMapper.insert(b);
 //	}     
 
-	
-/**	
-	//getType-Methode zum identifizieren der ObjektId -- ?
- 	public Berechtigung getType (char type, int objectId, int kontaktId, int kontaktlisteId,
- 			int auspraegungId) throws IllegalArgumentException {
- 	
- 		
- 	Berechtigung o = new Berechtigung(o.getObjectId());
- 	Berechtigung k = this.bMapper.findById(k.getKontaktId());
- 	Berechtigung kl = this.bMapper.findById(kl.getKontaktlisteId());
- 	Berechtigung a = this.bMapper.findById(a.getAuspraegungId());
- 	
- 	switch (objectId) {
- 	case kontaktId : 
- 		if (k.equals(o))
- 			return;
- 			break;
- 	case kontaktlisteId : 
- 		if (kl.equals(o))
- 			return;
- 			break;
- 	case auspraegungId : 
- 		if (a.equals(o))
-			return ;
-			break;
- 	}
-    
- 	}
- 
- /**
-
-	// removeSharedObjectWith() --> Delete Berechtigung, siehe oben.
- 	
-
 
 	/**
 	//Es kann ein Status für ein Objekt gesetzt werden, dieser darauf verweist, ob das Objekt im Eigentum
@@ -842,99 +813,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	return;
 	}
 
-/** Das Objekt wird geteilt und durch die vollständige Rückgabe des geteilten Objekts, 
- * mit einer Berechtigung versehen. 
- * Wurde noch nicht getestet!
- * 	
- * @param ownerId
- * @param receiverId
- * @param objectId
- * @param type
- * @throws IllegalArgumentException
- */
-	
-	public void shareThisObject(int ownerId, int receiverId, int objectId, char type)
-			throws IllegalArgumentException {
-		init();  
-		
-		Berechtigung b = new Berechtigung();
-		b.getOwnerId();
-		b.getReceiverId();
-		b.getObjectId();
-		b.getType();
-		
-		Kontaktliste kl = new Kontaktliste();
-		kl.getId();
-		
-		Kontakt k = new Kontakt();
-		k.getId();
-				
-		if(type== 'l') { 
-			this.getListenstruktur(kl.getId(), k.getId());
-		}
- 
-		if (type == 'k') {
-			this.createBerechtigung(ownerId, receiverId, objectId, type);
-	
-			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(objectId);
-			for (int a=0; a < av.size(); a++) {
-				if(av != null) {
-					this.createBerechtigung(ownerId, receiverId, av.elementAt(a).getId(),
-							av.elementAt(a).getType());	
-				}
-			}
-		}
-	}		
 
-/**
- * Nach Aufruf des Kontaktlistenkontakts den Titel der übergebenen kontaktlistenId zurückgeben.
-**/
-	
-	public void getListenbezeichnung (int kontaktlisteId, String titel) throws IllegalArgumentException {
-
-		KontaktlisteKontakt klk  = new KontaktlisteKontakt();
-		klk.setKontaktlisteId(klk.getKontaktlisteId());
-		
-		if (klk.equals(kontaktlisteId)) {
-			
-		}
-		this.klMapper.findByTitel(titel);
-		
-		return;
-	}
-	
-/**
- * Nach Aufruf des Kontaktlistenkontakts den Kontakt mit Auspraegung der übergebenen kontaktId zurückgeben.
-**/
-	
-	public void getListenstruktur (int kontaktlisteId, int kontaktId) throws IllegalArgumentException {
-
-		KontaktlisteKontakt klk  = new KontaktlisteKontakt();
-		klk.setKontaktId(klk.getKontaktId());
-		
-		Kontakt k = new Kontakt();
-		k.setId(klk.getKontaktId());
-		
-		Berechtigung b = new Berechtigung();
-		b.getOwnerId();
-		b.getReceiverId();
-		b.getObjectId();
-		b.getType();
-		
-		this.getKontakteByKontaktliste(kontaktlisteId);
-		Vector<Auspraegung> Auspraegung = getAllAuspraegungenByKontakt(kontaktId);
-		
-		if (klk.equals(kontaktId)) {
-			for (Auspraegung a : Auspraegung) {
-				this.getAllAuspraegungenByKontakt(a.getId());
-				
-				this.createBerechtigung(b.getOwnerId(), b.getReceiverId(), 
-						b.getObjectId(), b.getType());			
-			}
-		
-		}
-	}
-	
 /*
  * *************************************************************************
  * ** ABSCHNITT, Ende: Share-Methoden
@@ -954,6 +833,8 @@ public void saveModifikationsdatum(int id) throws IllegalArgumentException {
 	init();
 	this.kMapper.updateModifikationsdatum(id);
 }
+
+
 
 
 // Suchfunktion 

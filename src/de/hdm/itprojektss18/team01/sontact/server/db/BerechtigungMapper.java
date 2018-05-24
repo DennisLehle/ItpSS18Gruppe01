@@ -118,17 +118,21 @@ public class BerechtigungMapper {
 	 * @return void
 	 */
 
-	public void delete(Berechtigung b) {
+	public void delete (Berechtigung b) {
 
 		// DBConnection herstellen
 		Connection con = DBConnection.connection();
 
 		try {
-
 			// Dem SQL Statement wird der lokalen Variable �bergeben
 			PreparedStatement prestmt = con.prepareStatement(
-					"DELETE * FROM Berechtigung WHERE id = "
-					+ b.getId());
+					" DELETE FROM Berechtigung WHERE "
+					+ " objectid = " + b.getId() 		
+					+ " AND receiverid = " + b.getId() 
+					+ " AND ownerid = " + b.getId()
+					+ " AND id = " + b.getId()
+					+ " AND type = " + b.getId());
+			
 			
 			// DELETE-Statement ausf�hren
 			prestmt.execute();

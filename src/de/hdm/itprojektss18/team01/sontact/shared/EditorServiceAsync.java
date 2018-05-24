@@ -141,6 +141,9 @@ public interface EditorServiceAsync {
 	void getOwnKontakt(Nutzer n, AsyncCallback<Kontakt> callback);
 
 
+	void findKontaktlisteById(int id, AsyncCallback<Kontaktliste> callback);
+
+
 	
 	// Abschnitt Kontaktliste:
 

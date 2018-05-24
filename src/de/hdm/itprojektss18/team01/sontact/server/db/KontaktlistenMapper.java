@@ -248,7 +248,7 @@ public class KontaktlistenMapper {
 				
 				// SQL-Statement anlegen
 				PreparedStatement prestmt = con.prepareStatement(
-				"SELECT * FROM Kontaktliste " + "ORDER BY id");
+				"SELECT * FROM Kontaktliste " + "ORDER BY titel");
 
 				ResultSet rs = prestmt.executeQuery();
 				//Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.

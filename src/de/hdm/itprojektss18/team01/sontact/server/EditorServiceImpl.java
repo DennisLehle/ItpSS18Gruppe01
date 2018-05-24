@@ -409,6 +409,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Vector<Kontaktliste> findKontaktlisteByTitel(String titel) throws IllegalArgumentException {
 		return this.klMapper.findByTitel(titel);
 	}
+	
+	/**
+	 * Findet eine Kontaktliste anhand der Id
+	 * Für TreeViewModel benötigt.
+	 * @param id
+	 * @return
+	 */
+	public Kontaktliste findKontaktlisteById(int id) {
+		return this.klMapper.findById(id);
+	}
 
 	/*
 	 * *************************************************************************

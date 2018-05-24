@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.KontaktlisteKontakt;
 
 public class KontaktlisteKontaktMapper {
 	
@@ -127,29 +128,35 @@ public class KontaktlisteKontaktMapper {
 
 		    try {
 		    	PreparedStatement stmt = con.prepareStatement(
-		    			"SELECT kontaktlistekontakt.kontaktlisteid, kontaktliste.titel, kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.ownerid " +
-		    			"FROM kontaktlistekontakt , kontaktliste , kontakt " +
-		    			"JOIN kontakt ON kontaktlistekontakt.kontaktid = kontakt.id " +
-		    			"JOIN kontaktliste ON kontaktlistekontakt.kontaktlisteid = kontaktliste.id " +
-		    			"WHERE kontaktlistekontakt.kontaktlisteid = " + kontaktlisteId);
+	    			
+		    			"SELECT kontaktlistekontakt.kontaktlisteid, kontaktliste.titel, kontakt.id, kontakt.vorname, kontakt.nachname," +
+		    			 		 "kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid " +
+		    			         "FROM kontaktlistekontakt " +
+		    			         "JOIN kontakt ON kontaktlistekontakt.kontaktid = kontakt.id " +
+		    			         "JOIN kontaktliste ON kontaktlistekontakt.kontaktlisteid = kontaktliste.id " +
+		    			         "WHERE kontaktlistekontakt.kontaktlisteid = " + kontaktlisteId);
+		    	
 		    			
 		    	//Anpassung Statement f�r Zwischentabelle KontaktlisteKontak
 
 		      ResultSet rs = stmt.executeQuery();
 
-		      // Für jeden Eintrag im Suchergebnis wird nun ein Account-Objekt erstellt.
+		      // Für jeden Eintrag im Suchergebnis wird nun ein Objekt erstellt.
+
 		     
 		      Kontaktliste kl = new Kontaktliste();
 		      kl.setTitel("titel");
 		    	
-		      while (rs.next()) {  
-		        Kontakt k = new Kontakt();
-		        k.setId(rs.getInt("id"));
-		        k.setVorname(rs.getString("vorname"));
-		        k.setNachname(rs.getString("nachname"));
-		      // k.setErstellDat("erstellungsdatum"));
-		      // k.setModDat("modifikationsdatum"));
-		        k.setOwnerId(rs.getInt("ownerid"));
+		      while (rs.next()) {
+		    				      
+			      Kontakt k = new Kontakt();
+			      k.setId(rs.getInt("id"));
+			      k.setVorname(rs.getString("vorname"));
+			      k.setNachname(rs.getString("nachname"));
+			      k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
+			      k.setModDat(rs.getTimestamp("modifikationsdatum"));
+			      k.setOwnerId(rs.getInt("ownerid"));
+			     
 
 		     
 

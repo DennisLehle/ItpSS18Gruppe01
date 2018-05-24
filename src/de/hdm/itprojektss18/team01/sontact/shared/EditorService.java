@@ -119,6 +119,9 @@ public interface EditorService extends RemoteService{
 	 */
 	public Vector<Kontaktliste> getKontaktlistenByOwner(Nutzer n) throws IllegalArgumentException;
 	
+	
+	public Kontaktliste findKontaktlisteById(int id) throws IllegalArgumentException;
+	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontakteByKontaktliste(Kontaktliste kl);
 	 */

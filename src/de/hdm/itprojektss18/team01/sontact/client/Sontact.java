@@ -94,8 +94,8 @@ public class Sontact implements EntryPoint {
 													@Override
 													public void onSuccess(final Nutzer nutzer) {
 														clientSettings.setCurrentNutzer(nutzer);
-														RootPanel.get("content")
-																.add(new RegistrierungsFormular(nutzer));
+													//	RootPanel.get("content")
+															//	.add(new RegistrierungsFormular(nutzer));
 
 													}
 												});
@@ -142,10 +142,10 @@ public class Sontact implements EntryPoint {
 
 			@Override
 			public void onSuccess(Kontakt result) {
-				RootPanel.get("nutzermenu").add(new HTML("<p><span class='fa fa-user-circle-o'></span> &nbsp; " + result.getVorname() +" "+ result.getNachname()));
+				RootPanel.get("nutzermenu").add(new HTML("<p><span class='glyphicon glyphicon-user'></span> &nbsp; " + result.getVorname() +" "+ result.getNachname()));
 				HTML signOutLink = new HTML("<p><a href='" 
 						+ loginInfo.getLogoutUrl() 
-						+ "'><span class='fas fa-sign-out-alt'></span></a></p>");
+						+ "'><span class='glyphicon glyphicon-log-out'></span></a></p>");
 				RootPanel.get("nutzermenu").add(signOutLink);
 			}
 			

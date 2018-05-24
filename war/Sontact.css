@@ -14,6 +14,9 @@ div {
   width: 90vw;
 }
 
+body{
+	 font-family: "Lato", sans-serif;
+}
 
 html,body {
 	height: 100%;
@@ -37,7 +40,7 @@ body > div > div{
 	justify-content: space-between;
 	padding-right: 30px;
 	box-sizing: border-box;
-	background: #999 url('http://1.bp.blogspot.com/-rtGjmU_cBgs/USf8_93SNBI/AAAAAAAANkQ/wxRNRP82Fw0/s1600/wallpaper-abstrakt-hintergrund-mit-blauen-streifen.jpg') no-repeat left 50%;
+	background: #999 url('/images/3.png') no-repeat left 50%;
 	background-size: cover;	color: white;
 }
 
@@ -68,8 +71,8 @@ body > div > div{
 
 h1 {
 	font-weight: 400;
-	font-size: 38px;
-	width: 34%;
+	font-size: 20px;
+	width: 33%;
 	background:  url(/images/sontact2.png) no-repeat left 80%;
 	background-size: contain;
 	margin-left: 20px;
@@ -80,61 +83,20 @@ h1 {
 	letter-spacing: 7px;
 	height:auto;
 	
+	
 }
+
+h2{
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	text-align: right;
+}
+
 
 h1 a {
 	display: block;
 	color: rgba(255,255,255,0.0);
 	padding: 20px 0px 20px 30px;
 }
-
-/* Ab hier beginnt der Login */
-
-.signInLink {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    bottom: 0px;
-    right: 0px;
-    background: rgba(200,200,200,.8) url('http://mindchamps-medical.com/wp-content/uploads/2015/04/Abstract-Background-White.jpg');
-    display: block;
-    padding: 200px 30% 0px 30%;
-}
-
-.signInLink tbody {
-    background: #fff;
-    padding: 40px;
-    display: block;
-    box-shadow: 0px 0px 8px #999;
-}
-
-.signInLink h1 {
-	padding: 20px 0px 20px 30px;
-}
-
-.signInLink a {
-    margin: 30px 40px 0px 40px;
-    padding: 10px 20px;
-    background: #61a3e4;
-    display: block;
-    color: #f0f0f0;
-    text-decoration: none;
-    text-align: center;
-}
-
-.signInLinka a :focus,
-.signInLink a:hover {
-	background: #006EB5;
-}
-
-.signInLink h1 {
-    margin-left: 0px;
-    margin-bottom: 20px;
-    width: 100%;
-	background-position: 50%;
-}
-
-/** Ende */
 
 .sendButton {
 	display: block;
@@ -158,8 +120,6 @@ h1 a {
 #closeButton {
 	margin: 15px 6px 6px;
 }
-
-
 #header {
 	color: white;
 	letter-spacing: 10px;
@@ -180,15 +140,15 @@ h1 a {
 
 #content {
 	width: 77%;
-	min-height: 500px;
+	min-height: 550px;
 	float: right;
-	padding-left: 0px;
-	padding-top: 25px;
+	padding-left: 100px;
+	padding-top: 20px;
 }
 
 #navigator {
 	float: left;
-	background: #999 url('https://i.pinimg.com/originals/29/6d/82/296d82d638ab0db314288c13cb6c3953.jpg') no-repeat left 50%;
+	background: #999 url('/images/3.png') no-repeat;
 	background-size: cover;	color: white;
 	
 }
@@ -241,4 +201,28 @@ h1 a {
 	border-radius: 12px;
 	text-align: center;
 	margin: 3px;
+}
+
+.label {
+color: #5247b4;
+font-weight: bold;
+display: block;
+width: 150px;
+height: 30px;
+float: middle;
+}
+
+.gwt-Button { 
+   font-size: 150%; 
+   font-weight: bold;
+   width:100px;
+   height:50px;
+}
+
+.gwt-Big-Text { 
+   font-size:150%;
+}
+
+.gwt-Small-Text { 
+   font-size:75%;
 }

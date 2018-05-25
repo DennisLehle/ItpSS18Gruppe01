@@ -222,6 +222,7 @@ public interface EditorService extends RemoteService{
 	
 	public Vector<Kontakt> getAllSharedKontakteBySharedKontaktliste(int kontaktlisteId);
 	
+	public boolean getStatusForObject(int objectId) throws IllegalArgumentException;
 	
 	
 	

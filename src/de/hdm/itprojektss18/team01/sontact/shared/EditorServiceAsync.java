@@ -174,6 +174,9 @@ public interface EditorServiceAsync {
 	void getAllSharedKontakteBySharedKontaktliste(int kontaktlisteId, AsyncCallback<Vector<Kontakt>> callback);
 
 
+	void getStatusForObject(int objectId, AsyncCallback<Boolean> callback);
+
+
 
 	
 	

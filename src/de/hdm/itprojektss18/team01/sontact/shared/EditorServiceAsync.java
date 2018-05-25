@@ -102,7 +102,7 @@ public interface EditorServiceAsync {
 	void getKontakteByKontaktliste(int kontaktlisteId, AsyncCallback<Vector<Kontakt>> callback);
 
 
-	void findKontaktlisteByTitel(String titel, AsyncCallback<Vector<Kontaktliste>> callback);
+	void getKontaktlisteByTitel(String titel, AsyncCallback<Vector<Kontaktliste>> callback);
 
 
 	void createEigenschaft(String bezeichnung, AsyncCallback<Eigenschaft> callback);
@@ -113,14 +113,14 @@ public interface EditorServiceAsync {
 
 	void deleteEigenschaft(Eigenschaft e, AsyncCallback<Void> callback);
 	
-	void createAuspraegungForNewEigenschaft(/**String bezeichnung, String wert, int eigenschaftId, int kontaktId, int ownerId,*/ Eigenschaft e, Auspraegung a, Nutzer n,
+	void createAuspraegungForNewEigenschaft(Eigenschaft e, Auspraegung a, Nutzer n,
 			AsyncCallback<Void> callback);
 
 
 	void getEigenschaftAuswahl(AsyncCallback<Vector<Eigenschaft>> callback);
 
 
-	void createAuspraegung(String wert, int eigenschaftId, int kontaktId, Nutzer n  /**int ownerId*/,
+	void createAuspraegung(String wert, int eigenschaftId, int kontaktId, Nutzer n,
 			AsyncCallback<Auspraegung> callback);
 
 
@@ -152,14 +152,29 @@ public interface EditorServiceAsync {
 	void deleteBerechtigung(Berechtigung b, AsyncCallback<Void> callback);
 
 
-	void findKontaktlisteById(int id, AsyncCallback<Kontaktliste> callback);
+	void getKontaktlisteById(int id, AsyncCallback<Kontaktliste> callback);
 
-	
-	// Abschnitt Kontaktliste:
 
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#methodenName();
-	 */
+	void getAllBerechtigungenByOwner(int ownerId, AsyncCallback<Vector<Berechtigung>> callback);
+
+
+	void getAllBerechtigungenByReceiver(int receiverId, AsyncCallback<Vector<Berechtigung>> callback);
+
+
+	void getAllSharedKontakteByOwner(int ownerId, AsyncCallback<Vector<Kontakt>> callback);
+
+
+	void getAllSharedKontakteByReceiver(int receiverId, AsyncCallback<Vector<Kontakt>> callback);
+
+
+	void getAllSharedKontaktlistenByOwner(int ownerId, AsyncCallback<Vector<Kontaktliste>> callback);
+
+
+	void getAllSharedKontaktlistenByReceiver(int receiverId, AsyncCallback<Vector<Kontaktliste>> callback);
+
+
+	void getAllSharedKontakteBySharedKontaktliste(int kontaktlisteId, AsyncCallback<Vector<Kontakt>> callback);
+
 
 
 	

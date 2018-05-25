@@ -581,8 +581,8 @@ class EditorServiceImplTest extends GWTTestCase {
 		Berechtigung b = new Berechtigung(); 
 		b.setOwnerId(n1.getId());
 		b.setReceiverId(n2.getId());
-		b.setObjectId(k1.getId());
-		b.setType(k1.getType());
+		b.setObjectId(kl.getId());
+		b.setType(kl.getType());
 			
 		editor.deleteBerechtigung(b);
 	}

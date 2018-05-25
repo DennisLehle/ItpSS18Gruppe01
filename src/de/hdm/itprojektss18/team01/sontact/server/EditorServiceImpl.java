@@ -674,22 +674,22 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			}
 			
 			this.bMapper.delete(b);
-		// OFFEN		
+		
 		} else if (b.getType() == 'k') {
-			Vector<Auspraegung> av1 = this.getAllAuspraegungenByKontakt(b.getId());
-			for (int a = 0; a < av1.size(); a++) {
-				if (av1 != null) {
+			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(b.getObjectId());
+			for (int a = 0; a < av.size(); a++) {
+				if (av != null) {
 					Berechtigung b2 = new Berechtigung();
 					b2.setOwnerId(b.getOwnerId());
 					b2.setReceiverId(b.getReceiverId());
-					b2.setObjectId(av1.elementAt(a).getId());
-					b2.setType(av1.elementAt(a).getType());
+					b2.setObjectId(av.elementAt(a).getId());
+					b2.setType(av.elementAt(a).getType());
 					this.bMapper.delete(b2);
 				}
 			}
 
 			this.bMapper.delete(b);
-		// CHECK			
+
 		} else if (b.getType() == 'a') {
 			this.bMapper.delete(b);
 		}

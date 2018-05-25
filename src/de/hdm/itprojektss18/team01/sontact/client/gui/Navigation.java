@@ -5,6 +5,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
@@ -37,8 +38,9 @@ public class Navigation extends VerticalPanel {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// Hier kommt das Kontaktlisten Formular hinein...Welches aufgerufen wird wenn
-				// man eine neue Kontaktliste erstellen möchte.
+				//Wird instanziiert wenn eine neue Kontaktliste erstellt werden soll.
+				//Klasse besitzt 2 Konstruktoren.
+				RootPanel.get("content").add(new KontaktlisteForm(nutzer));
 			}
 
 		});

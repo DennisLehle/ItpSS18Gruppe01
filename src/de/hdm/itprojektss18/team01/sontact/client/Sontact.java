@@ -2,6 +2,7 @@ package de.hdm.itprojektss18.team01.sontact.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -54,6 +55,7 @@ public class Sontact implements EntryPoint {
 			public void onSuccess(LoginInfo result) {
 				loginInfo = result;
 				if (loginInfo.isLoggedIn()) {
+
 					editorVerwaltung.findNutzerByEmail(loginInfo.getEmailAddress(), new AsyncCallback<Nutzer>() {
 
 						@Override
@@ -66,6 +68,13 @@ public class Sontact implements EntryPoint {
 						public void onSuccess(Nutzer nutzer) {
 							if (nutzer != null) {
 								RootPanel.get("content").clear();
+								
+								//Setzen von Cookies für spätere Identifizierung eines Nutzers.
+								Cookies.setCookie("nutzerGMail", loginInfo.getEmailAddress()); 	
+								
+								//Wenn ein nutzer vorhanden wird die nutzerId noch gesetzt.
+								Cookies.setCookie("nutzerID", String.valueOf(nutzer.getId()));
+								
 								start(nutzer);
 							} else {
 								RootPanel.get("content").clear();
@@ -93,7 +102,13 @@ public class Sontact implements EntryPoint {
 
 													@Override
 													public void onSuccess(final Nutzer nutzer) {
-														clientSettings.setCurrentNutzer(nutzer);
+													
+														//Setzen von Cookies für spätere Identifizierung eines Nutzers.
+														Cookies.setCookie("nutzerGMail", loginInfo.getEmailAddress()); 	
+														
+														//Wenn ein nutzer vorhanden wird die nutzerId noch gesetzt.
+														Cookies.setCookie("nutzerID", String.valueOf(nutzer.getId()));
+														
 													//	RootPanel.get("content")
 															//	.add(new RegistrierungsFormular(nutzer));
 
@@ -120,7 +135,7 @@ public class Sontact implements EntryPoint {
 	 * @param nutzer
 	 */
 	private void start(final Nutzer nutzer) {
-
+	
 		RootPanel.get("navigator").add(new Navigation(nutzer));
 		
 		//Identifizierung des Registrierungs Kontakts des Nutzers für Namens Setzung in der Gui.

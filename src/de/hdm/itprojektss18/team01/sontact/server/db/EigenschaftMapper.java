@@ -47,11 +47,11 @@ public class EigenschaftMapper {
 		
 		
 		//Query für die Abfrage der hoechsten ID (Primärschlüssel) in der Datenbank
-		String maxIdSQL = "SELECT MAX(id) AS maxid FROM Eigenschaft";
+		String maxIdSQL = "SELECT MAX(id) AS maxid FROM eigenschaft";
 		
 		
 		//Query für den Insert
-		String insertSQL = "INSERT INTO Eigenschaft (id, bezeichnung) VALUES (?,?)";		
+		String insertSQL = "INSERT INTO eigenschaft (id, bezeichnung) VALUES (?,?)";		
 		
 		
 		
@@ -104,7 +104,7 @@ public class EigenschaftMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		
-		String updateSQL = "UPDATE Eigenschaft SET bezeichnung=? WHERE id=?";
+		String updateSQL = "UPDATE eigenschaft SET bezeichnung=? WHERE id=?";
 		
 		try {
 			
@@ -140,7 +140,7 @@ public class EigenschaftMapper {
 		Connection con = null; 
 		PreparedStatement stmt = null;
 		
-		String deleteSQL = "DELETE FROM Eigenschaft WHERE id=?";
+		String deleteSQL = "DELETE FROM eigenschaft WHERE id=?";
 		
 		try {
 			
@@ -172,7 +172,7 @@ public class EigenschaftMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		
-		String selectByKey = "SELECT * FROM Eigenschaft where id=? ORDER BY id";
+		String selectByKey = "SELECT * FROM eigenschaft WHERE id=? ORDER BY id";
 		
 		
 		try {
@@ -221,7 +221,7 @@ public class EigenschaftMapper {
 		Connection con = null; 
 		PreparedStatement stmt = null; 
 		
-		String selectByAuswahl = "SELECT * FROM Eigenschaft WHERE id BETWEEN 1 AND 17";
+		String selectByAuswahl = "SELECT * FROM eigenschaft WHERE id BETWEEN 1 AND 17";
 		
 		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
 		Vector <Eigenschaft> result = new Vector<Eigenschaft>();
@@ -270,7 +270,7 @@ public class EigenschaftMapper {
 		Connection con = null;
 		PreparedStatement stmt = null; 
 		
-		String selectByAuswahl = "SELECT * FROM Eigenschaft WHERE id=?";
+		String selectByAuswahl = "SELECT * FROM eigenschaft WHERE id=?";
 		
 		try {
 			

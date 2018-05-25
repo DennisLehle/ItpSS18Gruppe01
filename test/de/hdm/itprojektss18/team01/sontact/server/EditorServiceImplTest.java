@@ -132,8 +132,9 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		/**
 		 * Test Case fuer das Erstellen einer Auspraegung
-		 * CHECK
+		 * CHECK MELANIE
 		 */
+	
 	
 	public void createAuspraegung() {
 		Nutzer n = new Nutzer();
@@ -143,33 +144,33 @@ class EditorServiceImplTest extends GWTTestCase {
 
 			
 		//Max Mustermann
-		editor.createAuspraegung("0176/ 232222", 6 , 1 , n);
-		
-		editor.createAuspraegung("0172/ 333333", 6 , 1 , n);
-		
-		editor.createAuspraegung("maxmustermann@gmx.de", 14 , 1 , n);
-		
-	
-		//Petra Pfiffig
-		
-		editor.createAuspraegung("0178/ 52555", 6 , 2 , n);
-		
-		editor.createAuspraegung("0172/ 44444", 6 , 2 , n);
-		
-		editor.createAuspraegung("petrapfiffig@web.de", 14 , 2 , n);
-				
-		//Lisa Luftig
-		
-		editor.createAuspraegung("0152/ 71777", 6 , 3, n);
-		
-		editor.createAuspraegung("0152/ 11111", 6 , 3 , n);
-		
-		editor.createAuspraegung("lisaluftig@yahoo.de", 14 , 3 , n);
+		editor.createAuspraegung("Elefant", 22 , 1 , n);
+//		
+//		editor.createAuspraegung("0172/ 333333", 6 , 1 , n);
+//		
+//		editor.createAuspraegung("maxmustermann@gmx.de", 14 , 1 , n);
+//		
+//	
+//		//Petra Pfiffig
+//		
+//		editor.createAuspraegung("0178/ 52555", 6 , 2 , n);
+//		
+//		editor.createAuspraegung("0172/ 44444", 6 , 2 , n);
+//		
+//		editor.createAuspraegung("petrapfiffig@web.de", 14 , 2 , n);
+//				
+//		//Lisa Luftig
+//		
+//		editor.createAuspraegung("0152/ 71777", 6 , 3, n);
+//		
+//		editor.createAuspraegung("0152/ 11111", 6 , 3 , n);
+//		
+//		editor.createAuspraegung("lisaluftig@yahoo.de", 14 , 3 , n);
 	}
 	
 	/**
 	 * Test Case fuer das Bearbeiten einer Auspraegung
-	 * CHECK
+	 * CHECK MELANIE
 	 */
 	
 	public void saveAuspraegung() {
@@ -178,10 +179,10 @@ class EditorServiceImplTest extends GWTTestCase {
 		n.setId(1);
 		
 		Auspraegung a = new Auspraegung();
-		a.setId(9);
-		a.setWert("lisaluftig@outlook.de");
-		a.setKontaktId(3);
-		a.setEigenschaftId(14);
+		a.setId(13);
+		a.setWert("Tiger");
+		a.setKontaktId(1);
+		a.setEigenschaftId(22);
 		a.setOwnerId(1);
 
 		EditorServiceImpl editor = new EditorServiceImpl();
@@ -191,7 +192,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	
 	/**
 	 * Test Case fuer das Löschen einer Auspraegung
-	 * CHECK
+	 * CHECK MELANIE
 	 */
 	
 	public void deleteAuspraegung() {
@@ -199,11 +200,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		n.setId(1);
 		
 		Auspraegung a = new Auspraegung();
-		a.setId(9);
-		a.setWert("lisaluftig@outlook.de");
-		a.setKontaktId(3);
-		a.setEigenschaftId(14);
-		a.setOwnerId(1);
+		a.setId(13);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -541,7 +538,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode deleteBerechtigung();
 	 */
 	// CHECK
-	@Test
+	
 	public void deleteBerechtigung() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();

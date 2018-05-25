@@ -480,8 +480,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	public Auspraegung createAuspraegung(String wert, int eigenschaftId, int kontaktId,
-			Nutzer n /** int ownerId */
-	) throws IllegalArgumentException {
+			Nutzer n /** int ownerId */) throws IllegalArgumentException {
 
 		init();
 

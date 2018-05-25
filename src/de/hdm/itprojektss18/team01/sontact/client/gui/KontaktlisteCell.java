@@ -24,6 +24,7 @@ public class KontaktlisteCell extends AbstractCell<Kontaktliste> {
 		}
 
 	  sb.appendHtmlConstant("<div>");
+	  sb.appendHtmlConstant("<p><span class='glyphicon glyphicon-list-alt'></span> &nbsp; ");
       sb.appendEscaped(kl.getTitel());
       sb.appendHtmlConstant("</div>");
 

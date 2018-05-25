@@ -125,7 +125,7 @@ public interface EditorService extends RemoteService{
 	public Vector<Kontaktliste> getKontaktlistenByOwner(Nutzer n) throws IllegalArgumentException;
 	
 	
-	public Kontaktliste findKontaktlisteById(int id) throws IllegalArgumentException;
+	public Kontaktliste getKontaktlisteById(int id) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontakteByKontaktliste(Kontaktliste kl);
@@ -136,9 +136,6 @@ public interface EditorService extends RemoteService{
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#findKontaktlisteByTitel(String titel);
 	 */
 	public Kontaktliste findKontaktlisteByTitel (Nutzer n, String titel) throws IllegalArgumentException;
-	
-	
-	
 	
 	
 	// Abschnitt Eigenschaft:
@@ -174,7 +171,7 @@ public interface EditorService extends RemoteService{
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createAuspraegung
 	 * (String wert, int eigenschaftId, int kontaktId, int ownerId);
 	 */
-	public Auspraegung createAuspraegung (String wert, int eigenschaftId, int kontaktId, Nutzer n /**int ownerId*/) 
+	public Auspraegung createAuspraegung (String wert, int eigenschaftId, int kontaktId, Nutzer n) 
 			throws IllegalArgumentException;
 	
 	/**
@@ -209,8 +206,26 @@ public interface EditorService extends RemoteService{
 	public void shareObject(int ownerId, int receiverId, int objectId, char type)
 				throws IllegalArgumentException;
 	
-	void getStatusForObject( int ownerId, int receiverId, int objectId, char type) 
-			throws IllegalArgumentException;
 	
 	public void deleteBerechtigung(Berechtigung b) throws IllegalArgumentException;
+	
+	public Vector<Berechtigung> getAllBerechtigungenByOwner(int ownerId) throws IllegalArgumentException;
+	
+	public Vector<Berechtigung> getAllBerechtigungenByReceiver(int receiverId) throws IllegalArgumentException;
+	
+	public Vector<Kontakt> getAllSharedKontakteByOwner(int ownerId) throws IllegalArgumentException;
+	
+	public Vector<Kontakt> getAllSharedKontakteByReceiver(int receiverId) throws IllegalArgumentException;
+	
+	public Vector<Kontaktliste> getAllSharedKontaktlistenByOwner(int ownerId) throws IllegalArgumentException;
+	
+	public Vector<Kontaktliste> getAllSharedKontaktlistenByReceiver(int receiverId) throws IllegalArgumentException;
+	
+	public Vector<Kontakt> getAllSharedKontakteBySharedKontaktliste(int kontaktlisteId);
+	
+	public boolean getStatusForObject(int objectId) throws IllegalArgumentException;
+	
+	
+	
+	
 }

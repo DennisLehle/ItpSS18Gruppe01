@@ -54,124 +54,177 @@ public class AuspraegungMapper {
 	 * @return das bereits ï¿½bergebene Objekt, 
 	 * jedoch mit ggf. korrigierter <code>id</code>.
 	 */	
-	public Auspraegung insert(Auspraegung a) {
-
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
+	
+	public Auspraegung insert(Auspraegung a){
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		
+		//Query für die Abfrage der hoechsten ID (Primärschlüssel) in der Datenbank
+		String maxIdSQL = "SELECT MAX(id) AS maxid FROM auspraegung";
+		
+		
+		//Query für den Insert
+		String insertSQL = "INSERT INTO auspraegung (id, wert, eigenschaftid, kontaktid, ownerid) VALUES (?,?,?,?,?)";		
+		
+		
+	    //Query für die Aktualisierung des Modifikationsdatums von dem dazugehörigen Kontakt
+//		String sqlDat = "UPDATE kontakt SET modifikationsdatum=? WHERE id=?";
+		
 		
 		try {
-			// Leeres SQL Statement anlegen
-			Statement stmt = con.createStatement();
 			
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Auspraegung");
+			con = DBConnection.connection(); 
+			stmt = con.prepareStatement(maxIdSQL);
 			
-			if (rs.next()) {
-				a.setId(rs.getInt("maxid") + 1);
-				
-				// INSERT-Statement anlegen
-				PreparedStatement prestmt1 = con.prepareStatement(
-						"INSERT INTO Auspraegung (id, wert, eigenschaftid, kontaktid, ownerid) "
-								+ "VALUES('" 
-								+ a.getId() + "', '" 
-								+ a.getWert() + "', '"
-								+ a.getEigenschaftId() + "', '" 
-								+ a.getKontaktId() + "', '" 
-								+ a.getOwnerId() + "')");
-		
-				// INSERT-Statement ausfuehren
-				prestmt1.execute();
-				
-				/**
-				// Modifikationsdatum des dazugehörigen Kontakts aktualisieren
-				String sql = "UPDATE Kontakt SET modifikationsdatum=? WHERE id=?";
-				PreparedStatement prestmt2 = con.prepareStatement(sql);
 
-				prestmt2.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
-		    	prestmt2.setInt(2, a.getKontaktId());
-		    	prestmt2.executeUpdate();
-				**/
-			}
+			//MAX ID Query ausfuehren
+			ResultSet rs = stmt.executeQuery();
 			
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			//...um diese dann um 1 inkrementiert der ID des BO zuzuweisen
+		    if(rs.next()){
+		    	a.setId(rs.getInt("maxId")+1);
+		    }	   
+		    
+		    	
+			//Jetzt erfolgt der Insert
+		    stmt = con.prepareStatement(insertSQL);
+		    
+		    
+		    //Setzen der ? Platzhalter als Values
+		    stmt.setInt(1, a.getId());
+		    stmt.setString(2, a.getWert());
+		    stmt.setInt(3, a.getEigenschaftId());
+		    stmt.setInt(4, a.getKontaktId());
+		    stmt.setInt(5, a.getOwnerId());
+		    
+		    
+		    //INSERT-Query ausführen
+		    stmt.executeUpdate();
+		    
+		    
+		    //UPDATE-Statement des Modifikationsdatums setzen
+//			stmt = con.prepareStatement(sqlDat);
+			
+
+		    //Setzen der ? Platzhalter als VALUES
+//			stmt.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
+//	    	stmt.setInt(2, a.getKontaktId());
+	    	
+		    
+		    //UPDATE-Query ausfuehren
+//	    	stmt.executeUpdate();
+		    
+		    
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			}			
 		
 		return a;
+	}	
 
-	}
 	
 	/**
 	 * Aktualisierung eines Auspraegung-Objekts in der Datenbank.
 	 * @param a das Objekt, das in die DB geschrieben werden soll
 	 * @return das als Parameter ï¿½bergebene Objekt
 	 */
-	public Auspraegung update(Auspraegung a) {
+	
+	public Auspraegung update (Auspraegung a) {
 		
-		Connection con = DBConnection.connection();
-		 
-		 try {
-			// UPDATE-Statement anlegen
-			 String sql1 = "UPDATE Auspraegung SET wert=?, eigenschaftid=?, kontaktid=?, ownerid=? WHERE id=?"; 
-			 PreparedStatement stmt = con.prepareStatement(sql1);
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String updateSQL = "UPDATE auspraegung SET wert=?, eigenschaftid=?, kontaktid=?, ownerid=? WHERE id=?";
+		
+	    //Query für die Aktualisierung des Modifikationsdatums von dem dazugehörigen Kontakt
+//		String sqlDat = "UPDATE kontakt SET modifikationsdatum=? WHERE id=?";		
+		
+		try {
+	
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(updateSQL);
 			
-			 stmt.setString(1, a.getWert());
-		     stmt.setInt(2, a.getEigenschaftId());
-		     stmt.setInt(3, a.getKontaktId());
-		     stmt.setInt(4, a.getOwnerId());
-		   	 stmt.setInt(5, a.getId());
-		   	 
-		   	 //UPDATE Statement ausfuehren
-		   	 stmt.executeUpdate();
-		   	 
-		   	/**
-			// Modifikationsdatum des dazugehörigen Kontakts aktualisieren
-			String sql2 = "UPDATE Kontakt SET modifikationsdatum=? WHERE id=?";
-			PreparedStatement prestmt2 = con.prepareStatement(sql2);
+			stmt.setString(1, a.getWert());
+			stmt.setInt(2, a.getEigenschaftId());
+			stmt.setInt(3, a.getKontaktId());
+			stmt.setInt(4, a.getOwnerId());
+			stmt.setInt(5, a.getId());
+			
+			stmt.executeUpdate(); 
+			
+			System.out.println("Updated");
+			
+		    //UPDATE-Statement des Modifikationsdatums setzen
+//			stmt = con.prepareStatement(sqlDat);
+			
 
-			prestmt2.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
-		    prestmt2.setInt(2, a.getKontaktId());
-		    prestmt2.executeUpdate();
-		    **/
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+		    //Setzen der ? Platzhalter als VALUES
+//			stmt.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
+//	    	stmt.setInt(2, a.getKontaktId());
+	    	
+		    
+		    //UPDATE-Query ausfuehren
+//	    	stmt.executeUpdate();
+		
 		}
 		
-		 return a;
-	}
+		catch (SQLException e2) {
+			e2.printStackTrace();
+			
+		}
+		
+		return a;
+	}	
+	
 	
 	/**
 	 * Lï¿½schen eines Auspraegung-Objekts aus der Datenbank.
 	 * @param a
 	 */
-	public void delete(Auspraegung a){
+	
+	public void delete (Auspraegung a) {
 		
-		Connection con = DBConnection.connection();
+		Connection con = null; 
+		PreparedStatement stmt = null;
+		
+		String deleteSQL = "DELETE FROM auspraegung WHERE id=?";
+		
+	    //Query für die Aktualisierung des Modifikationsdatums von dem dazugehörigen Kontakt
+//		String sqlDat = "UPDATE kontakt SET modifikationsdatum=? WHERE id=?";
 		
 		try {
-			/**
-			// Modifikationsdatum des dazugehörigen Kontakts aktualisieren
-			String sql = "UPDATE Kontakt SET modifikationsdatum=? WHERE id=?";
-			PreparedStatement prestmt1 = con.prepareStatement(sql);
-			prestmt1.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
-		    prestmt1.setInt(2, a.getKontaktId());
-		    prestmt1.executeUpdate();
-		    **/
+			
+			con = DBConnection.connection();
+			
+			stmt = con.prepareStatement(deleteSQL);
+			stmt.setInt(1, a.getId());
+			
+			stmt.executeUpdate();
+			
+			
+		    //UPDATE-Statement des Modifikationsdatums setzen
+//			stmt = con.prepareStatement(sqlDat);
+			
+
+		    //Setzen der ? Platzhalter als VALUES
+//			stmt.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
+//	    	stmt.setInt(2, a.getKontaktId());
+	    	
 		    
-			// DELETE-Statement anlegen
-			PreparedStatement prestmt2 = con.prepareStatement("DELETE FROM Auspraegung "
-					+ "WHERE id = " + a.getId());
+		    //UPDATE-Query ausfuehren
+//	    	stmt.executeUpdate();
 			
-			// DELETE-Statement ausfuehren
-			prestmt2.execute();
-					
-			
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		
+		catch (SQLException e2) {
+			e2.printStackTrace();
+			
+		}
 	}
+	
 	
 	/**
 	 * Auspraegung anhand der eindeutig bestimmtbaren ID finden

@@ -65,23 +65,6 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case für die Erstellung eines Nutzers.
 	 * CHECK
 	 */
-//	
-//	@Test
-//	public void createKontaktRegist() {
-//		EditorServiceImpl editor = new EditorServiceImpl();
-//		Kontakt k = new Kontakt();
-//		k.setVorname("Winter");
-//		k.setNachname("Gut");
-//		
-//		Nutzer n = new Nutzer();
-//		n.setId(5);
-//		n.setEmailAddress("helloFresh@hdm.de");
-//		
-//	
-//		editor.createKontaktRegistrierung("Winter","Gut", n);
-//		
-//		
-//	}
 	
 
 	@Test

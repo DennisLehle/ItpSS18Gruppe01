@@ -10,8 +10,8 @@ import java.util.Vector;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 
 /**
- * Die Klasse <code>BerechtigungMapper</code> mappt auf der Datenbank alle
- * Berechtigungen eines Nutzers zu den eigenen oder geteilten Kontakt-Objekten.
+ * Die Klasse <code>BerechtigungMapper</code> bildet auf der Datenbank alle
+ * Berechtigungen eines Nutzers zu den eigenen oder geteilten Objekten ab.
  * Fï¿½r weitere Informationen:
  * 
  * @see NutzerMapper
@@ -75,42 +75,7 @@ public class BerechtigungMapper {
 		return b;
 	}
 
-	/**
-	 * Aktualisierung eines Berechtigung-Objekts in der Datenbank.
-	 * 
-	 * @param berechtigung
-	 * @return Berechtigung
-	 */
-	public Berechtigung update(Berechtigung b) {
-		String sql = "UPDATE Berechtigung SET  kontaktid=?, kontaktlisteid=?, auspraegungid=?, ownerid=?, receiverid=?, type=?, berechtigungsstufe=? WHERE id=?";
-		
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
-		
-		try {
-		// Angelegten String sql dem PreparedStatement Ã¼bergeben.
-		PreparedStatement stmt = con.prepareStatement(sql);
-	    	
-	   
-	    	stmt.setInt(1, b.getKontaktId());
-	    	stmt.setInt(2, b.getKontaktlisteId());
-	    	stmt.setInt(3, b.getAuspraegungId());
-	    	stmt.setInt(4, b.getOwnerId());
-	    	stmt.setInt(5, b.getReceiverId());
-	    	stmt.setInt(6, b.getType());
-	    	stmt.setInt(7, b.getBerechtigungsstufe());
-	   
-	    	stmt.setInt(8, b.getId());
-	    	stmt.executeUpdate();
-	    	
-	    	System.out.println("Updated");
-
-		} catch (SQLException e2) {
-			e2.printStackTrace();
-		}
-		return b;
-	}
-
+	
 	/**
 	 * Lï¿½schen eines Berechtigung-Objekts aus der Datenbank.
 	 * 
@@ -118,17 +83,20 @@ public class BerechtigungMapper {
 	 * @return void
 	 */
 
-	public void delete(Berechtigung b) {
+	public void delete (Berechtigung b) {
 
 		// DBConnection herstellen
 		Connection con = DBConnection.connection();
 
 		try {
-
-			// Dem SQL Statement wird der lokalen Variable ï¿½bergeben
+			// SQL Statement wird der lokalen Variable ï¿½bergeben
 			PreparedStatement prestmt = con.prepareStatement(
-					"DELETE * FROM Berechtigung WHERE id = "
-					+ b.getId());
+					" DELETE FROM Berechtigung WHERE"
+						+ " ownerid = " + b.getOwnerId()
+						+ " AND receiverid = " + b.getReceiverId() 
+						+ " AND objectid = " + b.getObjectId() 		
+						+ " AND type = '" + b.getType() + "'");
+			
 			
 			// DELETE-Statement ausfï¿½hren
 			prestmt.execute();
@@ -150,58 +118,53 @@ public class BerechtigungMapper {
 		Connection con = DBConnection.connection();
 
 		try {
-			
+
 			// SQL-Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement(
-					"SELECT * FROM Berechtigung WHERE id = " + id);
-						
-			// SQL Statement wird als Query an die DB geschickt und 
-			//in die Rï¿½ckgabe von rs gespeichert 
+			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Berechtigung WHERE id = " + id);
+
+			// SQL Statement wird als Query an die DB geschickt und
+			// in die Rï¿½ckgabe von rs gespeichert
 			ResultSet rs = prestmt.executeQuery();
-			
+
 			Berechtigung b = new Berechtigung();
-			
+
 			// Ergebnis-Tupel in Objekt umwandeln
 			if (rs.next()) {
 				b.setId(rs.getInt("id"));
-				b.setBerechtigungsstufe(rs.getInt("berechtigungsstufe"));
+				b.setOwnerId(rs.getInt("ownerid"));
+				b.setReceiverId(rs.getInt("receiverid"));
 				b.setObjectId(rs.getInt("object"));
 				b.setType(rs.getString("type").charAt(0));
-				b.setOwnerId(rs.getInt("ownerid"));
-				b.setReceiverId(rs.getInt("receiverid"));		
 			}
-			
+
 			return b;
-		} 
-		catch (SQLException e2) {
+		} catch (SQLException e2) {
 			e2.printStackTrace();
 			return null;
 		}
 	}
-
+	
+	
 	/**
-	 * Ruft eine Liste auf die alle Kontakte aufzeigt die ein Nutzer
-	 * <code>holderId</code> mit anderen Nutzern <code>receiverId</code> geteilt hat.
+	 * Findet ein bestimmtes Berechtigung-Objekt aus der Datenbank.
 	 * 
-	 * @param holderId
-	 * @return Berechtigungen
+	 * @param berechtigung
+	 * @return void
 	 */
-
-	public Vector<Berechtigung> findAllSharedKontakteWith(int ownerId) {
+	public Vector<Berechtigung> findAll() {
 
 		// DBConnection herstellen
 		Connection con = DBConnection.connection();
-		
+
 		Vector<Berechtigung> result = new Vector<Berechtigung>();
 
 		try {
-			
+
 			// SQL-Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement(
-			"SELECT * FROM Berechtigung WHERE ownerid=" + ownerId); //+ "AND type= 'k'");
+			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Berechtigung");
 
 			ResultSet rs = prestmt.executeQuery();
-			//Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
+			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
 			while (rs.next()) {
 				Berechtigung b = new Berechtigung();
 				b.setId(rs.getInt("id"));
@@ -211,7 +174,7 @@ public class BerechtigungMapper {
 				b.setType(rs.getString("type").charAt(0));
 
 				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
-				 result.addElement(b);
+				result.addElement(b);
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
@@ -221,29 +184,28 @@ public class BerechtigungMapper {
 		return result;
 	}
 
+	
 	/**
-	 * Ruft einen Liste auf die alle Kontakte aufzeigt die ein Nutzer
-	 * <code>receiverId</code> durch einen anderen Nutzer <code>holderId</code> geteilt
-	 * bekommen hat.
+	 * Gibt alle Objekt-Berechtigungen über jene Objekte aus,
+	 * welche vom Nutzer geteilt wurden.
 	 * 
-	 * @param receiverId
+	 * @param ownerId
 	 * @return Berechtigungen
 	 */
+	public Vector<Berechtigung> findAllBerechtigungenByOwner(int ownerId) {
 
-	public Vector<Berechtigung> findAllSharedKontakteFrom(int receiverId) {
 		// DBConnection herstellen
-				Connection con = DBConnection.connection();
-				
-				Vector<Berechtigung> result = new Vector<Berechtigung>();
-		try {
-			
-			// SQL-Statement anlegen
-						PreparedStatement prestmt = con.prepareStatement(
-								"SELECT * FROM Berechtigung WHERE receiverid=" + receiverId); //+ "AND type= 'k'
-						
-						ResultSet rs = prestmt.executeQuery();
+		Connection con = DBConnection.connection();
 
-			//Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
+		Vector<Berechtigung> result = new Vector<Berechtigung>();
+
+		try {
+
+			// SQL-Statement anlegen
+			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Berechtigung WHERE ownerid=" + ownerId);
+
+			ResultSet rs = prestmt.executeQuery();
+			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
 			while (rs.next()) {
 				Berechtigung b = new Berechtigung();
 				b.setId(rs.getInt("id"));
@@ -251,7 +213,6 @@ public class BerechtigungMapper {
 				b.setReceiverId(rs.getInt("receiverid"));
 				b.setObjectId(rs.getInt("objectid"));
 				b.setType(rs.getString("type").charAt(0));
-				
 
 				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
 				result.addElement(b);
@@ -260,7 +221,48 @@ public class BerechtigungMapper {
 			e2.printStackTrace();
 		}
 
-		//Rï¿½ckgabe des Ergebnisvektors
+		// Rï¿½ckgabe des Ergebnisvektors
+		return result;
+	}
+
+	
+	/**
+	 * Gibt alle Objekt-Berechtigungen über jene Objekte aus,
+	 * welche mit dem Nutzergeteilt wurden. 
+	 * 
+	 * @param receiverId
+	 * @return Berechtigungen
+	 */
+	public Vector<Berechtigung> findAllBerechtigungenByReceiver(int receiverId) {
+		// DBConnection herstellen
+		Connection con = DBConnection.connection();
+
+		Vector<Berechtigung> result = new Vector<Berechtigung>();
+		try {
+
+			// SQL-Statement anlegen
+			PreparedStatement prestmt = con
+					.prepareStatement("SELECT * FROM Berechtigung WHERE receiverid=" + receiverId);
+
+			ResultSet rs = prestmt.executeQuery();
+
+			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
+			while (rs.next()) {
+				Berechtigung b = new Berechtigung();
+				b.setId(rs.getInt("id"));
+				b.setOwnerId(rs.getInt("ownerid"));
+				b.setReceiverId(rs.getInt("receiverid"));
+				b.setObjectId(rs.getInt("objectid"));
+				b.setType(rs.getString("type").charAt(0));
+
+				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
+				result.addElement(b);
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+
+		// Rï¿½ckgabe des Ergebnisvektors
 		return result;
 	}
 }

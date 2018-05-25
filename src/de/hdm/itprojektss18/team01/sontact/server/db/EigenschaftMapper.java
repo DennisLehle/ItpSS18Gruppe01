@@ -47,11 +47,11 @@ public class EigenschaftMapper {
 		
 		
 		//Query für die Abfrage der hoechsten ID (Primärschlüssel) in der Datenbank
-		String maxIdSQL = "SELECT MAX(id) AS maxid FROM Eigenschaft";
+		String maxIdSQL = "SELECT MAX(id) AS maxid FROM eigenschaft";
 		
 		
 		//Query für den Insert
-		String insertSQL = "INSERT INTO Eigenschaft (id, bezeichnung) VALUES (?,?)";		
+		String insertSQL = "INSERT INTO eigenschaft (id, bezeichnung) VALUES (?,?)";		
 		
 		
 		
@@ -91,40 +91,7 @@ public class EigenschaftMapper {
 		return e;
 	}	
 	
-//	public Eigenschaft insert(Eigenschaft e){
-//	
-//	// DBConnection herstellen
-//	Connection con = DBConnection.connection();
-//	
-//	try {
-//		// Leeres SQL Statement anlegen
-//	    Statement stmt = con.createStatement();
-//
-//		// Statement als Query an die DB schicken
-//	    ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Eigenschaft ");
-//	     
-//		// Rï¿½ckgabe beinhaltet nur eine Tupel
-//	    if(rs.next()){
-//	    	  	
-//	    	// kl enthï¿½lt den bisher maximalen, nun um 1 inkrementierten Primï¿½rschlï¿½ssel
-//	    	e.setId(rs.getInt("maxid") + 1);	    	  	
-//	    	
-//			// INSERT-Statement anlegen
-//	    	PreparedStatement prestmt = con.prepareStatement(
-//	    			"INSERT INTO Eigenschaft (id, bezeichnung) "
-//	    	  				+ "VALUES ('"
-//	    	  				+ e.getId() + "', '" 
-//							+ e.getBezeichnung() + "')");
-//	    	
-//
-//	    	// INSERT-Statement ausfï¿½hren
-//			prestmt.execute();
-//		}
-//	} catch (SQLException e2) {
-//		e2.printStackTrace();
-//	}
-//	return e;
-//}	
+
 	
 	/**
 	 * Aktualisieren eines Eigenschafts-Objekt
@@ -137,7 +104,7 @@ public class EigenschaftMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		
-		String updateSQL = "UPDATE Eigenschaft SET bezeichnung=? WHERE id=?";
+		String updateSQL = "UPDATE eigenschaft SET bezeichnung=? WHERE id=?";
 		
 		try {
 			
@@ -161,25 +128,6 @@ public class EigenschaftMapper {
 		return e;
 	}
 	
-//	public Eigenschaft update(Eigenschaft e)  {
-//		String sql = "UPDATE Eigenschaft SET bezeichnung=? WHERE id=?";
-//		
-//		// DBConnection herstellen
-//		Connection con = DBConnection.connection();
-//		
-//		try {
-//			PreparedStatement stmt = con.prepareStatement(sql);
-//	    	
-//	    	stmt.setString(1, e.getBezeichnung());
-//	    	stmt.executeUpdate();
-//	    	
-//	    	System.out.println("Updated");
-//
-//		} catch (SQLException e2) {
-//			e2.printStackTrace();
-//		}
-//		return e;
-//	}
 
 	
 	/**
@@ -192,7 +140,7 @@ public class EigenschaftMapper {
 		Connection con = null; 
 		PreparedStatement stmt = null;
 		
-		String deleteSQL = "DELETE FROM Eigenschaft WHERE id=?";
+		String deleteSQL = "DELETE FROM eigenschaft WHERE id=?";
 		
 		try {
 			
@@ -210,25 +158,7 @@ public class EigenschaftMapper {
 		}
 	}
 	
-//	public void delete(Eigenschaft e) {
-//
-//		// DBConnection herstellen
-//		Connection con = DBConnection.connection();
-//
-//		try {
-//
-//			// Dem SQL Statement wird der lokalen Variable ï¿½bergeben
-//			PreparedStatement prestmt = con.prepareStatement(
-//					"DELETE FROM Eigenschaft WHERE id = "
-//					+ e.getId());
-//			
-//			// DELETE-Statement ausfï¿½hren
-//			prestmt.execute();
-//			
-//		} catch (SQLException e2) {
-//			e2.printStackTrace();
-//		}
-//	}
+
 	
 	/**
 	 * Auslesen einer Eigenschaft anhand id.
@@ -242,7 +172,7 @@ public class EigenschaftMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		
-		String selectByKey = "SELECT * FROM Eigenschaft where id=? ORDER BY id";
+		String selectByKey = "SELECT * FROM eigenschaft WHERE id=? ORDER BY id";
 		
 		
 		try {
@@ -276,32 +206,7 @@ public class EigenschaftMapper {
 		return null;
 	}
 	
-//	public Eigenschaft findEigenschaftById(int id) {
-//		// DBConnection herstellen
-//		Connection con = DBConnection.connection();
-//		try {
-//			// SQL Statement anlegen
-//			PreparedStatement prestmt = con.prepareStatement(
-//					"SELECT * FROM Eigenschaft where id = " + id);
-//			
-//			// Statement als Query an die DB schicken
-//			ResultSet rs = prestmt.executeQuery();
-//			
-//			// Da Id Primaerschluessel, besteht Rückgabe aus nur einer Tuppel
-//			if (rs.next()) {
-//				// Ergebnistuppel in Objekt umwandeln 
-//				Eigenschaft e = new Eigenschaft();
-//				e.setId(rs.getInt("id"));
-//				e.setBezeichnung(rs.getString("bezeichnung"));
-//				return e;			
-//			}
-//		}
-//		catch (SQLException e2) {
-//			e2.printStackTrace();
-//			return null;
-//		}
-//		return null;
-//	}
+
 	
 	/**
 	 * Auslesen aller Eigenschaften welche beim Anlegen einer neuen Auspraegung 
@@ -316,7 +221,7 @@ public class EigenschaftMapper {
 		Connection con = null; 
 		PreparedStatement stmt = null; 
 		
-		String selectByAuswahl = "SELECT * FROM Eigenschaft WHERE id BETWEEN 1 AND 17";
+		String selectByAuswahl = "SELECT * FROM eigenschaft WHERE id BETWEEN 1 AND 17";
 		
 		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
 		Vector <Eigenschaft> result = new Vector<Eigenschaft>();
@@ -349,35 +254,6 @@ public class EigenschaftMapper {
 		return result;
 	}
 	
-//	public Vector <Eigenschaft> findEigenschaftAuswahl() {
-//		// DBConnection holen
-//		Connection con = DBConnection.connection();
-//		// Ergebnisvektor anlegen
-//		Vector <Eigenschaft> eigenschaften = new Vector <Eigenschaft>();
-//		
-//		try {
-//			// SQL Statement anlegen
-//			PreparedStatement prestmt = con.prepareStatement(
-//					"SELECT * FROM Eigenschaft WHERE id BETWEEN 1 AND 17");
-//			
-//			// Statement als Query an die DB schicken
-//			ResultSet result = prestmt.executeQuery();
-//		
-//			// Alle Ergebnistuppeln in Objekte umwandeln 
-//			while (result.next()) {
-//				Eigenschaft e = new Eigenschaft();
-//				e.setId(result.getInt("id"));
-//				e.setBezeichnung(result.getString("bezeichnung"));
-//				
-//				// Hinzufügen des neuen Objekts zum Ergebnisvektor
-//				eigenschaften.add(e);	
-//			}
-//		} 
-//		catch (SQLException e2) {
-//			e2.printStackTrace();				
-//		}	
-//		return eigenschaften;
-//	}
 	
 	
 	// findEigenschaftForAuspraegung() evlt. in AuspraegungMapper uebernehmen.
@@ -394,7 +270,7 @@ public class EigenschaftMapper {
 		Connection con = null;
 		PreparedStatement stmt = null; 
 		
-		String selectByAuswahl = "SELECT * FROM Eigenschaft WHERE id=?";
+		String selectByAuswahl = "SELECT * FROM eigenschaft WHERE id=?";
 		
 		try {
 			
@@ -425,33 +301,5 @@ public class EigenschaftMapper {
 		
 		return null; 
 	}
-	
-	
-//	public Eigenschaft findEigenschaftForAuspraegung(Auspraegung a) {
-//		// DBConnection holen
-//		Connection con = DBConnection.connection();
-//		try {
-//			// SQL Statement anlegen
-//			PreparedStatement prestmt = con.prepareStatement(
-//				"SELECT * FROM Eigenschaft WHERE id =" + a.getEigenschaftId());
-//			
-//			// Statement als Query an die DB schicken
-//			ResultSet rs = prestmt.executeQuery();
-//			
-//			// Da Id Primaerschluessel, besteht Rückgabe aus nur einer Tuppel
-//			if (rs.next()) {
-//				// Ergebnistuppel in Objekt umwandeln 
-//				Eigenschaft e = new Eigenschaft();
-//				e.setId(rs.getInt("id"));
-//				e.setBezeichnung(rs.getString("bezeichnung"));
-//				return e;			
-//			}
-//		}
-//		catch (SQLException e2) {
-//			e2.printStackTrace();
-//			return null;
-//		}
-//		return null;
-//	}
 
 }

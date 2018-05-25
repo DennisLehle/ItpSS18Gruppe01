@@ -862,45 +862,33 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	/**
-	//Es kann ein Status für ein Objekt gesetzt werden, dieser darauf verweist, ob das Objekt im Eigentum
-	 * eines Nutzers ist oder jedoch wem das jeweilige Objekt zugeteilt wird. 
+	 * Gibt den Status eines Objektes Zurück, um zu identifizieren, ob das Objekt sich in einem 
+	 * geteilten Status befindet.  
      **/
-	public void getStatusForObject( int ownerId, int receiverId, int objectId, char type) 
-			throws IllegalArgumentException {
-		
-		//findBerechtigungById() ?! 
-		//Um die Zugehörigkeit des Objekts (Kontakt, Kontaktliste, Ausprägung) zu erhalten? 
-		//Objekt z.B. "a" -> getOwner() / getShareWith()
-		//GUI -> ruft bei jedem Objekt diese Methode auf und setzt den Status.
-		
-	return;
+	public boolean getStatusForObject(int objectId) throws IllegalArgumentException {
+			
+		Vector<Berechtigung> bv = this.bMapper.findAll();
+		for(int b = 0; b < bv.size(); b++) {
+			if(objectId == bv.elementAt(b).getObjectId()) {
+				return true;
+			} 
+		} return false;		
+	}
+	
+	
+	/**
+	 * Aktualisierung des Modifikationsdatums.
+	 */
+	public void saveModifikationsdatum(int id) throws IllegalArgumentException {
+		init();
+		this.kMapper.updateModifikationsdatum(id);
 	}
 /*
  * *************************************************************************
  * ** ABSCHNITT, Ende: Status
  * *************************************************************************
  */
-/*
- * *************************************************************************
- * ** ABSCHNITT, Beginn: Sonstiges
- * *************************************************************************
- */
-//Aktualisiere das Modifikationsdatum
 
-public void saveModifikationsdatum(int id) throws IllegalArgumentException {
-	init();
-	this.kMapper.updateModifikationsdatum(id);
-}
-
-
-
-
-// Suchfunktion 
-
-
-/**
- * Ende
- */
 
 }
 

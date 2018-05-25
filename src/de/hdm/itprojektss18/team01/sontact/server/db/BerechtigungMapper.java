@@ -131,10 +131,10 @@ public class BerechtigungMapper {
 			// Ergebnis-Tupel in Objekt umwandeln
 			if (rs.next()) {
 				b.setId(rs.getInt("id"));
-				b.setObjectId(rs.getInt("object"));
-				b.setType(rs.getString("type").charAt(0));
 				b.setOwnerId(rs.getInt("ownerid"));
 				b.setReceiverId(rs.getInt("receiverid"));
+				b.setObjectId(rs.getInt("object"));
+				b.setType(rs.getString("type").charAt(0));
 			}
 
 			return b;
@@ -142,6 +142,46 @@ public class BerechtigungMapper {
 			e2.printStackTrace();
 			return null;
 		}
+	}
+	
+	
+	/**
+	 * Findet ein bestimmtes Berechtigung-Objekt aus der Datenbank.
+	 * 
+	 * @param berechtigung
+	 * @return void
+	 */
+	public Vector<Berechtigung> findAll() {
+
+		// DBConnection herstellen
+		Connection con = DBConnection.connection();
+
+		Vector<Berechtigung> result = new Vector<Berechtigung>();
+
+		try {
+
+			// SQL-Statement anlegen
+			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Berechtigung");
+
+			ResultSet rs = prestmt.executeQuery();
+			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
+			while (rs.next()) {
+				Berechtigung b = new Berechtigung();
+				b.setId(rs.getInt("id"));
+				b.setOwnerId(rs.getInt("ownerid"));
+				b.setReceiverId(rs.getInt("receiverid"));
+				b.setObjectId(rs.getInt("objectid"));
+				b.setType(rs.getString("type").charAt(0));
+
+				// Hinzuf�gen des neuen Objekts zum Ergebnisvektor
+				result.addElement(b);
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+
+		// R�ckgabe des Ergebnisvektors
+		return result;
 	}
 
 	

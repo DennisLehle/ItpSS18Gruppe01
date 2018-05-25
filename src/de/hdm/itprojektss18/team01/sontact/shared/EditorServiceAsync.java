@@ -143,8 +143,6 @@ public interface EditorServiceAsync {
 
 	void shareObject(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Void> callback);
 
-	void getStatusForObject(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Void> callback);
-
 
 	void createBerechtigung(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Berechtigung> callback);
 

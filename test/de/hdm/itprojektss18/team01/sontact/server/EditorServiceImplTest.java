@@ -465,7 +465,8 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode createBerechtigung();
 	 */
 	// CHECK
-	public void createBerechtigung() {
+	
+	public void shareObjectKontakt() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -487,10 +488,7 @@ class EditorServiceImplTest extends GWTTestCase {
 			a1.setId(7);
 			a2.setId(8);
 		
-		editor.createBerechtigung(n1.getId(), n2.getId(), k.getId(), k.getType());
-		editor.createBerechtigung(n1.getId(), n2.getId(), a1.getId(), a1.getType());
-		editor.createBerechtigung(n1.getId(), n2.getId(), a2.getId(), a2.getType());
-		
+		editor.shareObject(n1.getId(), n2.getId(), k.getId(), k.getType());		
 	}
 	
 	/**
@@ -498,7 +496,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode shareObject();
 	 */
 	// CHECK
-
+	
 	public void shareObjectListe() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
@@ -543,16 +541,49 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode deleteBerechtigung();
 	 */
 	// CHECK
-@Test
+	@Test
 	public void deleteBerechtigung() {
-	 Berechtigung b = new Berechtigung();
- 		b.setId(14);
-	 	b.setOwnerId(1);
-	 	b.setReceiverId(2);
-		b.setObjectId(2);
-		b.setType('k');
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		Nutzer n1 = new Nutzer();
+		Nutzer n2 = new Nutzer();
+			n1.setId(1);
+			n2.setId(2);
+			
+		Kontaktliste kl = new Kontaktliste(); 
+			kl.setId(2);
+			kl.setOwnerId(n1.getId());	
+			
+		Kontakt k1 = new Kontakt(); 
+		k1.setId(3);
+			k1.setOwnerId(n1.getId());
+		
+		Kontakt k2 = new Kontakt(); 
+			k2.setId(1);
+			k2.setOwnerId(n1.getId());
+
+		KontaktlisteKontakt klk1 = new KontaktlisteKontakt(); 
+			klk1.setKontaktlisteId(kl.getId());
+			klk1.setKontaktId(k1.getId());
+		
+		KontaktlisteKontakt klk2 = new KontaktlisteKontakt(); 
+			klk2.setKontaktlisteId(kl.getId());
+			klk2.setKontaktId(k2.getId());
+
+		Auspraegung a1 = new Auspraegung(); 
+			a1.setId(7);
+			a1.setKontaktId(k1.getId());
+		Auspraegung a2 = new Auspraegung(); 
+			a2.setId(8);
+			a1.setKontaktId(k1.getId());
+			
+		Berechtigung b = new Berechtigung(); 
+		b.setOwnerId(n1.getId());
+		b.setReceiverId(n2.getId());
+		b.setObjectId(k1.getId());
+		b.setType(k1.getType());
+			
 		editor.deleteBerechtigung(b);
 	}
 	

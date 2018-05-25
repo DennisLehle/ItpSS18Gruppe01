@@ -621,13 +621,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	
 	/**
-<<<<<<< HEAD
 	 * Es wird eine Berechtigung f�r ein bestimmtes Objekt erteilt. 
 	 * Das tats�chlich geteilte Objekt wird angesprochen und als Typ identifiziert. 
-=======
 	 * Es wird eine Berechtigung f�r ein bestimmtes Objekt erteilt. Das tats�chlich
 	 * geteilte Objekt wird angesprochen und als Typ identifiziert.
->>>>>>> refs/heads/master
 	 * 
 	 * @param ownerId
 	 * @param receiverId
@@ -670,19 +667,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	
 	/**
-<<<<<<< HEAD
 	 * Das Loeschen einer Berechtigung. Diese Methode hebt die Berechtigung einer Teilhaberschaft
 	 * zu einem bestimmten Objekttyp auf. Es werden z.B. alle abh�ngigen Objekte einer
 	 * Kontaktliste, also Kontakte angesprochen, die wiederum Auspr�gungen beinhalten. 
 	 * Alle Objekte werden fortlaufend von der Berechtigung gel�st. 
-=======
 	 * Das Loeschen einer Berechtigung. Diese Methode hebt die Berechtigung einer
 	 * Teilhaberschaft zu einem bestimmten Objekttyp auf. Es werden z.B. alle
 	 * abh�ngigen Objekte einer Kontaktliste, also Kontakte angesprochen, die
 	 * wiederum Auspr�gungen beinhalten. Alle Objekte werden fortlaufend von der
 	 * Berechtigung gel�st.
 	 * 
->>>>>>> refs/heads/master
 	 * @param b
 	 * @throws IllegalArgumentException
 	 */
@@ -752,7 +746,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 	
-	
 	/**
 	 * Gibt alle Objekt-Berechtigungen �ber jene Objekte aus, welche vom Nutzer geteilt wurden.
 	 * 
@@ -796,19 +789,26 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @return Vector<Kontakt>
 	 */
 	public Vector<Kontakt> getAllSharedKontakteByOwner(int ownerId) throws IllegalArgumentException {
+		init();
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(ownerId);
+		Vector<Kontakt> kv = new Vector<Kontakt>();
+
 		for(int b = 0; b < bv.size(); b++) {
 			if(bv != null && ownerId == bv.elementAt(b).getOwnerId() && bv.elementAt(b).getType() == 'k') {
+				
 				this.getKontaktById(bv.elementAt(b).getObjectId());
 
-				
-				// TODO
-				
+					Kontakt k = new Kontakt();
+					k.setId(bv.elementAt(b).getObjectId());
+					k.setVorname(k.getVorname());
+					k.setNachname(k.getNachname());
+					k.setErstellDat(k.getErstellDat());
+					k.setModDat(k.getModDat());
+					k.setOwnerId(k.getOwnerId());
+					kv.addElement(k);
 			}
-			
 		}
-		
-		return null;
+		return kv;
 	}
 				
 	
@@ -869,14 +869,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		for(int b = 0; b < bv.size(); b++) {
 			if(bv != null && receiverId == bv.elementAt(b).getReceiverId() && bv.elementAt(b).getType() == 'l') {
 				this.getKontaktlisteById(bv.elementAt(b).getObjectId());
-
 				
-				// TODO
 				
 			}
-			
 		}
-
 		return null;
 	}	
 	
@@ -939,7 +935,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 /** Das Objekt wird geteilt und durch die vollst�ndige R�ckgabe des geteilten Objekts, 
  * mit einer Berechtigung versehen. 
- * Wurde noch nicht getestet!
  * 	
  * @param ownerId
  * @param receiverId
@@ -948,38 +943,38 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
  * @throws IllegalArgumentException
  */
 	
-	public void shareThisObject(int ownerId, int receiverId, int objectId, char type)
-			throws IllegalArgumentException {
-		init();  
-		
-		Berechtigung b = new Berechtigung();
-		b.getOwnerId();
-		b.getReceiverId();
-		b.getObjectId();
-		b.getType();
-		
-		Kontaktliste kl = new Kontaktliste();
-		kl.getId();
-		
-		Kontakt k = new Kontakt();
-		k.getId();
-				
-		if(type== 'l') { 
-			this.getListenstruktur(kl.getId(), k.getId());
-		}
- 
-		if (type == 'k') {
-			this.createBerechtigung(ownerId, receiverId, objectId, type);
-	
-			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(objectId);
-			for (int a=0; a < av.size(); a++) {
-				if(av != null) {
-					this.createBerechtigung(ownerId, receiverId, av.elementAt(a).getId(),
-							av.elementAt(a).getType());	
-				}
-			}
-		}
-	}		
+//	public void shareThisObject(int ownerId, int receiverId, int objectId, char type)
+//			throws IllegalArgumentException {
+//		init();  
+//		
+//		Berechtigung b = new Berechtigung();
+//		b.getOwnerId();
+//		b.getReceiverId();
+//		b.getObjectId();
+//		b.getType();
+//		
+//		Kontaktliste kl = new Kontaktliste();
+//		kl.getId();
+//		
+//		Kontakt k = new Kontakt();
+//		k.getId();
+//				
+//		if(type== 'l') { 
+//			this.getListenstruktur(kl.getId(), k.getId());
+//		}
+// 
+//		if (type == 'k') {
+//			this.createBerechtigung(ownerId, receiverId, objectId, type);
+//	
+//			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(objectId);
+//			for (int a=0; a < av.size(); a++) {
+//				if(av != null) {
+//					this.createBerechtigung(ownerId, receiverId, av.elementAt(a).getId(),
+//							av.elementAt(a).getType());	
+//				}
+//			}
+//		}
+//	}		
 
 /**
  * Nach Aufruf des Kontaktlistenkontakts den Titel der �bergebenen kontaktlistenId zur�ckgeben.

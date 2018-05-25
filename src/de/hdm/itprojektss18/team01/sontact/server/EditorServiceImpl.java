@@ -829,21 +829,29 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @return Vector<Kontakt>
 	 */
 	public Vector<Kontakt> getAllSharedKontakteByReceiver(int receiverId) throws IllegalArgumentException {
+		
+		init();
+		
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(receiverId);
+		Vector<Kontakt> kv = new Vector<Kontakt>();
+
 		for(int b = 0; b < bv.size(); b++) {
 			if(bv != null && receiverId == bv.elementAt(b).getReceiverId() && bv.elementAt(b).getType() == 'k') {
+				
 				this.getKontaktById(bv.elementAt(b).getObjectId());
 
-				
-				// TODO
-				
+					Kontakt k = new Kontakt();
+					k.setId(bv.elementAt(b).getObjectId());
+					k.setVorname(k.getVorname());
+					k.setNachname(k.getNachname());
+					k.setErstellDat(k.getErstellDat());
+					k.setModDat(k.getModDat());
+					k.setOwnerId(k.getOwnerId());
+					kv.addElement(k);
 			}
-			
 		}
-		
-		return null;
-	}	
-	
+		return kv;
+	}
 	
 	/**
 	 * Gibt alle <code>Kontaktliste</code>-Objekte aus, welche vom Nutzer geteilt wurden.

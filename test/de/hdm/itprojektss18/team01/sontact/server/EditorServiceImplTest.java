@@ -487,7 +487,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 */
 	// CHECK
 	
-
+	
 	public void createBerechtigung() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
@@ -498,10 +498,15 @@ class EditorServiceImplTest extends GWTTestCase {
 		Nutzer n2 = new Nutzer();
 		n2.setId(2);
 				
-//		Kontaktliste kl = new Kontaktliste();
-//			kl.setId(1);
-//			kl.setTitel("Geschaeft");
-//			kl.setOwnerId(n1.getId());
+		Kontaktliste kl = new Kontaktliste();
+		kl.setId(1);
+		kl.setTitel("Geschaeft");
+		kl.setOwnerId(n1.getId());
+						
+		Kontaktliste kl1 = new Kontaktliste();
+		kl1.setId(2);
+		kl1.setTitel("Freunde");
+		kl1.setOwnerId(n1.getId());
 		
 //		Kontakt k = new Kontakt();
 //		k.setId(1);
@@ -514,21 +519,25 @@ class EditorServiceImplTest extends GWTTestCase {
 //		
 //		Kontakt k3 = new Kontakt();
 //		k3.setId(4);
-		
-		Kontakt k4 = new Kontakt();
-		k4.setId(5);
+//		
+//		Kontakt k4 = new Kontakt();
+//		k4.setId(5);
 
 		
 //		Auspraegung a1 = new Auspraegung();
 //		Auspraegung a2 = new Auspraegung();
-//			a1.setId(7);
-//			a2.setId(8);
+//		a1.setId(7);
+//		a2.setId(8);
+		
+		editor.createBerechtigung(n1.getId(), n2.getId(), kl.getId(), kl.getType());
+		editor.createBerechtigung(n1.getId(), n2.getId(), kl1.getId(), kl1.getType());
+		
 		
 //		editor.createBerechtigung(n1.getId(), n2.getId(), k.getId(), k.getType());
 //		editor.createBerechtigung(n1.getId(), n2.getId(), k1.getId(), k.getType());
 //		editor.createBerechtigung(n1.getId(), n2.getId(), k2.getId(), k.getType());
 //		editor.createBerechtigung(n1.getId(), n2.getId(), k3.getId(), k.getType());
-		editor.createBerechtigung(n2.getId(), n1.getId(), k4.getId(), k4.getType());
+//		editor.createBerechtigung(n2.getId(), n1.getId(), k4.getId(), k4.getType());
 		
 //		editor.createBerechtigung(n1.getId(), n2.getId(), a1.getId(), a1.getType());
 //		editor.createBerechtigung(n1.getId(), n2.getId(), a2.getId(), a2.getType());
@@ -637,11 +646,75 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		
 }
-	
+
 //	public Vector<Berechtigung> getAllBerechtigungenByOwner(){
 //		
 //		
 //	}
+	
+	
+	/**
+	 * Test getAllSharedKontaktlistenByOwner:
+	 * IMPL-Methode getAllSharedKontaktlistenByOwner();
+	 */
+	//CHECK
+	
+	public void getAllSharedKontaktlistenByOwner() {
+		
+		Berechtigung b = new Berechtigung();
+		b.setOwnerId(1);
+		
+		Vector<Kontaktliste> klv = new Vector<Kontaktliste>();
+
+		Kontaktliste kl = new Kontaktliste();
+		kl.setId(1);
+		kl.setOwnerId(1);
+		klv.addElement(kl);
+		
+		Kontaktliste kl1 = new Kontaktliste();
+		kl1.setId(2);
+		kl1.setOwnerId(1);
+		klv.addElement(kl1);
+		
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getAllSharedKontaktlistenByOwner(b.getOwnerId()));
+		
+		}
+	
+	/**
+	 * Test getAllSharedKontaktlistenByReceiver:
+	 * IMPL-Methode getAllSharedKontaktlistenByReceiver();
+	 */
+	//CHECK
+	
+
+	public void getAllSharedKontaktlistenByReceiver() {
+		
+		Berechtigung b = new Berechtigung();
+		b.setReceiverId(1);
+		
+		
+		Vector<Kontaktliste> klv = new Vector<Kontaktliste>();
+
+		Kontaktliste kl = new Kontaktliste();
+		kl.setId(1);
+		klv.addElement(kl);
+		
+		Kontaktliste kl1 = new Kontaktliste();
+		kl1.setId(2);
+		klv.addElement(kl1);
+		
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getAllSharedKontaktlistenByOwner(b.getReceiverId()));
+		
+		}
+
+	
+	
 }
 	
 	

@@ -769,6 +769,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @return Berechtigungen
 	 */
 	public Vector<Berechtigung> getAllBerechtigungenByReceiver(int receiverId) throws IllegalArgumentException {
+	
+		init();
+		
 		Vector<Berechtigung> b = this.bMapper.findAllBerechtigungenByReceiver(receiverId);
 		return b;
 	}
@@ -849,20 +852,27 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @return Vector<Kontakt>
 	 */
 	public Vector<Kontaktliste> getAllSharedKontaktlistenByOwner(int ownerId) throws IllegalArgumentException {
+		
+		init(); 
+		
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(ownerId);
+		Vector<Kontaktliste> klv = new Vector<Kontaktliste>();
+		
 		for(int b = 0; b < bv.size(); b++) {
+			
 			if(bv != null && ownerId == bv.elementAt(b).getOwnerId() && bv.elementAt(b).getType() == 'l') {
+				
 				this.getKontaktlisteById(bv.elementAt(b).getObjectId());
 
-				
-				// TODO
-				
+				Kontaktliste kl = new Kontaktliste();
+				kl.setId(bv.elementAt(b).getObjectId());
+				kl.setTitel(kl.getTitel());
+				kl.setOwnerId(kl.getOwnerId());	
+				klv.addElement(kl);
+				}
 			}
-			
+			return klv;
 		}
-
-		return null;
-	}	
 	
 	
 	/**
@@ -872,16 +882,27 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @return Vector<Kontakt>
 	 */
 	public Vector<Kontaktliste> getAllSharedKontaktlistenByReceiver(int receiverId) throws IllegalArgumentException {
+		
+		init(); 
+		
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(receiverId);
+		Vector<Kontaktliste> klv = new Vector<Kontaktliste>();
+		
 		for(int b = 0; b < bv.size(); b++) {
+			
 			if(bv != null && receiverId == bv.elementAt(b).getReceiverId() && bv.elementAt(b).getType() == 'l') {
 				this.getKontaktlisteById(bv.elementAt(b).getObjectId());
-				
-				
+
+				Kontaktliste kl = new Kontaktliste();
+				kl.setId(bv.elementAt(b).getObjectId());
+				kl.setTitel(kl.getTitel());
+				kl.setOwnerId(kl.getOwnerId());	
+				klv.addElement(kl);
+				}
 			}
+		
+			return klv;
 		}
-		return null;
-	}	
 	
 	
 	

@@ -486,31 +486,52 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode createBerechtigung();
 	 */
 	// CHECK
+	
+
 	public void createBerechtigung() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		Nutzer n1 = new Nutzer();
+		n1.setId(1);
+		
 		Nutzer n2 = new Nutzer();
-			n1.setId(1);
-			n2.setId(2);
+		n2.setId(2);
 				
-		Kontaktliste kl = new Kontaktliste();
-			kl.setId(1);
-			kl.setTitel("Geschaeft");
-			kl.setOwnerId(n1.getId());
+//		Kontaktliste kl = new Kontaktliste();
+//			kl.setId(1);
+//			kl.setTitel("Geschaeft");
+//			kl.setOwnerId(n1.getId());
 		
-		Kontakt k = new Kontakt();
-			k.setId(1);
+//		Kontakt k = new Kontakt();
+//		k.setId(1);
+//		
+//		Kontakt k1 = new Kontakt();
+//		k1.setId(2);
+//		
+//		Kontakt k2 = new Kontakt();
+//		k2.setId(3);
+//		
+//		Kontakt k3 = new Kontakt();
+//		k3.setId(4);
 		
-		Auspraegung a1 = new Auspraegung();
-		Auspraegung a2 = new Auspraegung();
-			a1.setId(7);
-			a2.setId(8);
+		Kontakt k4 = new Kontakt();
+		k4.setId(5);
+
 		
-		editor.createBerechtigung(n1.getId(), n2.getId(), k.getId(), k.getType());
-		editor.createBerechtigung(n1.getId(), n2.getId(), a1.getId(), a1.getType());
-		editor.createBerechtigung(n1.getId(), n2.getId(), a2.getId(), a2.getType());
+//		Auspraegung a1 = new Auspraegung();
+//		Auspraegung a2 = new Auspraegung();
+//			a1.setId(7);
+//			a2.setId(8);
+		
+//		editor.createBerechtigung(n1.getId(), n2.getId(), k.getId(), k.getType());
+//		editor.createBerechtigung(n1.getId(), n2.getId(), k1.getId(), k.getType());
+//		editor.createBerechtigung(n1.getId(), n2.getId(), k2.getId(), k.getType());
+//		editor.createBerechtigung(n1.getId(), n2.getId(), k3.getId(), k.getType());
+		editor.createBerechtigung(n2.getId(), n1.getId(), k4.getId(), k4.getType());
+		
+//		editor.createBerechtigung(n1.getId(), n2.getId(), a1.getId(), a1.getType());
+//		editor.createBerechtigung(n1.getId(), n2.getId(), a2.getId(), a2.getType());
 		
 	}
 	
@@ -574,8 +595,9 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test getAllSharedKontakteByOwner:
 	 * IMPL-Methode getAllSharedKontakteByOwner();
 	 */
-	// UNCHECK
-	@Test
+	// CHECK
+
+
 	public void getAllSharedKontakteByOwner ()  {
 
 		Berechtigung b = new Berechtigung();
@@ -584,7 +606,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		Vector<Kontakt> kv = new Vector<Kontakt>();
 
 		Kontakt k = new Kontakt();
-		k.setId(3);
+		k.setId(1);
 		k.setOwnerId(1);
 		kv.addElement(k);
 		
@@ -592,14 +614,34 @@ class EditorServiceImplTest extends GWTTestCase {
 		k1.setId(2);
 		k1.setOwnerId(1);
 		kv.addElement(k1);
+		
+		Kontakt k2 = new Kontakt();
+		k2.setId(3);
+		k2.setOwnerId(1);
+		kv.addElement(k2);
+		
+		Kontakt k3 = new Kontakt();
+		k3.setId(4);
+		k3.setOwnerId(1);
+		kv.addElement(k3);
+		
+		Kontakt k4 = new Kontakt();
+		k4.setId(5);
+		k4.setOwnerId(2);
+		kv.addElement(k4);
 			
-		//return (kv);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		// editor.getAllBerechtigungenByOwner(b.getOwnerId());
-	 editor.getAllSharedKontakteByOwner(b.getOwnerId());
-	}
+		System.out.println(editor.getAllSharedKontakteByOwner(b.getOwnerId()));
+		
+		
+}
+	
+//	public Vector<Berechtigung> getAllBerechtigungenByOwner(){
+//		
+//		
+//	}
 }
 	
 	

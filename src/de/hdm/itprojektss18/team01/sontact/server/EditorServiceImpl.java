@@ -607,6 +607,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public Berechtigung createBerechtigung(int ownerId, int receiverId, int objectId, char type)
 			throws IllegalArgumentException {
+		
+		init();
 	
 			Berechtigung b = new Berechtigung();
 			b.setId(1);
@@ -753,6 +755,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @return Berechtigungen
 	 */
 	public Vector<Berechtigung> getAllBerechtigungenByOwner(int ownerId) throws IllegalArgumentException {
+	
+		init(); 
+		
 		Vector<Berechtigung> b = this.bMapper.findAllBerechtigungenByOwner(ownerId);
 		return b;
 	}
@@ -789,7 +794,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @return Vector<Kontakt>
 	 */
 	public Vector<Kontakt> getAllSharedKontakteByOwner(int ownerId) throws IllegalArgumentException {
+		
 		init();
+		
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(ownerId);
 		Vector<Kontakt> kv = new Vector<Kontakt>();
 

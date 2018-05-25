@@ -4,6 +4,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
@@ -16,7 +17,8 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  */
 
 public class Navigation extends VerticalPanel {
-
+	
+	Label klLb = new Label("Meine Kontaktlisten:");
 	Button neueKontaktliste = new Button(
 			"<image src='/images/kontaktliste.png' width='20px' height='20px' align='center' /> Kontaktliste");
 
@@ -42,6 +44,7 @@ public class Navigation extends VerticalPanel {
 		});
 
 		this.add(neueKontaktliste);
+		this.add(klLb);
 		this.add(navTree);
 	}
 

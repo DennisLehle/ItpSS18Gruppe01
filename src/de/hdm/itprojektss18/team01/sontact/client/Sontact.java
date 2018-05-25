@@ -63,7 +63,7 @@ public class Sontact implements EntryPoint {
 						}
 
 						@Override
-						public void onSuccess(final Nutzer nutzer) {
+						public void onSuccess(Nutzer nutzer) {
 							if (nutzer != null) {
 								RootPanel.get("content").clear();
 								start(nutzer);

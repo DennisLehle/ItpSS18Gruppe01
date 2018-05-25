@@ -330,24 +330,26 @@ public class KontaktlistenMapper {
 			
 		
 		/**
-		 * Diese Methode gibt Kontaktlisten anhand ihrem Titel aus.
+		 * Diese Methode gibt eine Kontaktliste anahnd des Titels für den Nutzer heraus.
+		 * Der Titel lautet hier "Alle Kontakte" da diese für jeden einzelnen Kontakt angelegt wird.
+		 * Kontakte werden immer bei Add dieser Default Kontaktliste hinzugefügt.
 		 * 
 		 * @see findById
 		 * @param titel
 		 * @return Kontaktliste
 		 */
-
-		public Vector <Kontaktliste> findByTitel(String titel) {
+		public Kontaktliste findByTitel(Nutzer n, String titel) {
 			
 			// DBConnection herstellen
 			Connection con = DBConnection.connection();
 
 			try {
-				Vector<Kontaktliste> list = new Vector<Kontaktliste>();
+			
 							
 				// SQL-Statement anlegen
 				PreparedStatement prestmt = con.prepareStatement(
-				"SELECT * FROM Kontaktliste WHERE titel =" + titel);
+						"SELECT * FROM `kontaktliste` WHERE `ownerid` ="+n.getId() + " AND `titel` = \"Alle Kontakte\" ");
+		
 										
 				// SQL Statement wird als Query an die DB geschickt und 
 				//in die R�ckgabe von rs gespeichert 
@@ -356,13 +358,13 @@ public class KontaktlistenMapper {
 							
 				// Ergebnis-Tupel in Objekt umwandeln
 				Kontaktliste kl = new Kontaktliste(); 
-				while (rs.next()) {
+				if (rs.next()) {
 					kl.setId(rs.getInt("id"));
 					kl.setTitel(rs.getString("titel"));
 					kl.setOwnerId(rs.getInt("ownerid"));		
 				}
 							
-				return list;
+				return kl;
 			} 
 				
 			catch (SQLException e2) {

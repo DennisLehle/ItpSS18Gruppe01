@@ -190,12 +190,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	/**
-	 * Erzeugen eines neuen Kontakts.
+	 * Erzeugen eines neuen Kontakts der direkt in die Default Kontaktliste des jeweiligen Nutzers gespeichert wird ("Alle Kontakte").
 	 * 
 	 */
-	public Kontakt createKontakt(String vorname, String nachname, Nutzer n) throws IllegalArgumentException {
+	public void createKontakt(String vorname, String nachname, Nutzer n) throws IllegalArgumentException {
 		
-
+		init();
 		Kontakt kontakt = new Kontakt();
 		kontakt.setVorname(vorname);
 		kontakt.setNachname(nachname);
@@ -205,18 +205,21 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		kontakt.setIdentifier('k');
 
 		kontakt.setId(1);
-		init();
-		return kMapper.insert(kontakt);
+		
+
+		//Kontaktliste und Kontakt der zwischen Tabelle hinzufÃ¼gen.
+		addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Alle Kontakte"), kMapper.insert(kontakt));
 
 	}
 	
 	/**
-	 * Erzeugen eines neuen Kontakts bei der Registrierung.
+	 * Erzeugen eines neuen Kontakts bei der Registrierung plus anlegen einer Default Kontaktliste die dann zusammen
+	 * mit dem erstellten Kontakt-Objekt in die zwischen Tabelle KontaktlisteKontakt.
 	 * 
 	 */
 	public Kontakt createKontaktRegistrierung(String vorname, String nachname, Nutzer n) throws IllegalArgumentException {
 		
-
+		init();
 		Kontakt kontakt = new Kontakt();
 		kontakt.setVorname(vorname);
 		kontakt.setNachname(nachname);
@@ -227,7 +230,22 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		kontakt.setId(1);
 		init();
-		return kMapper.insert(kontakt);
+		
+		//Kontakt in db vorhanden...
+		this.kMapper.insert(kontakt);
+		
+		// Den zuvor eingespeicherten Kontakt mit identifier r aus der Db lesen und speichern.
+		Kontakt k =getOwnKontakt(n);
+		
+		//Default Kontaktliste erstellen. (Alle Kontakte)
+		createKontaktlisteRegistrierung(n);
+		
+		//Kontaktliste und Kontakt der zwischen Tabelle hinzufÃ¼gen.
+		addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Alle Kontakte"), k);
+		
+		
+		return k;
+		
 
 	}
 
@@ -352,13 +370,24 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return this.klMapper.insert(kontaktliste);
 	}
 
+	public Kontaktliste createKontaktlisteRegistrierung(Nutzer n) {
+		
+		init();
+		Kontaktliste kontaktliste = new Kontaktliste();
+		kontaktliste.setTitel("Alle Kontakte");
+		kontaktliste.setOwnerId(n.getId());
+		kontaktliste.setId(1);
+		
+		 return this.klMapper.insert(kontaktliste);
+		
+	}
 	/**
 	 * Speichern einer modifizierten Kontaktliste
 	 * 
 	 */
-	public Kontaktliste saveKontaktliste(Kontaktliste kl) throws IllegalArgumentException {
+	public void saveKontaktliste(Kontaktliste kl) throws IllegalArgumentException {
 		init();
-		return klMapper.update(kl);
+		klMapper.update(kl);
 	}
 
 	/**
@@ -403,11 +432,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
-	 * Alle Kontaktlisten anhand ihrem Titel
+	 * Kontaktliste "Alle Kontakte" fÃ¼r den Nutzer in der Db finden (DefaultKontaktliste).
 	 */
-	// Beschrï¿½nkung auf eigene Kontaktlisten?
-	public Vector<Kontaktliste> findKontaktlisteByTitel(String titel) throws IllegalArgumentException {
-		return this.klMapper.findByTitel(titel);
+	public Kontaktliste findKontaktlisteByTitel(Nutzer n, String titel) throws IllegalArgumentException {
+		return this.klMapper.findByTitel(n, titel);
 	}
 	
 	/**
@@ -581,7 +609,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	
 	/**
-	 * Erstellung einer neuen Berechtigung. Es wird eine neue Berechtigung für eine 
+	 * Erstellung einer neuen Berechtigung. Es wird eine neue Berechtigung fï¿½r eine 
 	 * neue Teilhaberschaft an einem bestimmten Objekt erteilt. 
 	 * 
 	 * @param ownerId
@@ -607,8 +635,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 
 	/**
-	 * Es wird eine Berechtigung für ein bestimmtes Objekt erteilt. 
-	 * Das tatsächlich geteilte Objekt wird angesprochen und als Typ identifiziert. 
+	 * Es wird eine Berechtigung fï¿½r ein bestimmtes Objekt erteilt. 
+	 * Das tatsï¿½chlich geteilte Objekt wird angesprochen und als Typ identifiziert. 
 	 * 
 	 * @param ownerId
 	 * @param receiverId
@@ -658,9 +686,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	/**
 	 * Das Loeschen einer Berechtigung. Diese Methode hebt die Berechtigung einer Teilhaberschaft
-	 * zu einem bestimmten Objekttyp auf. Es werden z.B. alle abhängigen Objekte einer
-	 * Kontaktliste, also Kontakte angesprochen, die wiederum Ausprägungen beinhalten. 
-	 * Alle Objekte werden fortlaufend von der Berechtigung gelöst. 
+	 * zu einem bestimmten Objekttyp auf. Es werden z.B. alle abhï¿½ngigen Objekte einer
+	 * Kontaktliste, also Kontakte angesprochen, die wiederum Ausprï¿½gungen beinhalten. 
+	 * Alle Objekte werden fortlaufend von der Berechtigung gelï¿½st. 
 	 * @param b
 	 * @throws IllegalArgumentException
 	 */
@@ -828,21 +856,21 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 
 	/**
-	//Es kann ein Status für ein Objekt gesetzt werden, dieser darauf verweist, ob das Objekt im Eigentum
+	//Es kann ein Status fï¿½r ein Objekt gesetzt werden, dieser darauf verweist, ob das Objekt im Eigentum
 	 * eines Nutzers ist oder jedoch wem das jeweilige Objekt zugeteilt wird. 
      **/
 	public void getStatusForObject( int ownerId, int receiverId, int objectId, char type) 
 			throws IllegalArgumentException {
 		
 		//findBerechtigungById() ?! 
-		//Um die Zugehörigkeit des Objekts (Kontakt, Kontaktliste, Ausprägung) zu erhalten? 
+		//Um die Zugehï¿½rigkeit des Objekts (Kontakt, Kontaktliste, Ausprï¿½gung) zu erhalten? 
 		//Objekt z.B. "a" -> getOwner() / getShareWith()
 		//GUI -> ruft bei jedem Objekt diese Methode auf und setzt den Status.
 		
 	return;
 	}
 
-/** Das Objekt wird geteilt und durch die vollständige Rückgabe des geteilten Objekts, 
+/** Das Objekt wird geteilt und durch die vollstï¿½ndige Rï¿½ckgabe des geteilten Objekts, 
  * mit einer Berechtigung versehen. 
  * Wurde noch nicht getestet!
  * 	
@@ -887,24 +915,24 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}		
 
 /**
- * Nach Aufruf des Kontaktlistenkontakts den Titel der übergebenen kontaktlistenId zurückgeben.
+ * Nach Aufruf des Kontaktlistenkontakts den Titel der ï¿½bergebenen kontaktlistenId zurï¿½ckgeben.
 **/
-	
-	public void getListenbezeichnung (int kontaktlisteId, String titel) throws IllegalArgumentException {
-
-		KontaktlisteKontakt klk  = new KontaktlisteKontakt();
-		klk.setKontaktlisteId(klk.getKontaktlisteId());
-		
-		if (klk.equals(kontaktlisteId)) {
-			
-		}
-		this.klMapper.findByTitel(titel);
-		
-		return;
-	}
+//	
+//	public void getListenbezeichnung (int kontaktlisteId, String titel) throws IllegalArgumentException {
+//
+//		KontaktlisteKontakt klk  = new KontaktlisteKontakt();
+//		klk.setKontaktlisteId(klk.getKontaktlisteId());
+//		
+//		if (klk.equals(kontaktlisteId)) {
+//			
+//		}
+//		this.klMapper.findByTitel(titel);
+//		
+//		return;
+//	}
 	
 /**
- * Nach Aufruf des Kontaktlistenkontakts den Kontakt mit Auspraegung der übergebenen kontaktId zurückgeben.
+ * Nach Aufruf des Kontaktlistenkontakts den Kontakt mit Auspraegung der ï¿½bergebenen kontaktId zurï¿½ckgeben.
 **/
 	
 	public void getListenstruktur (int kontaktlisteId, int kontaktId) throws IllegalArgumentException {

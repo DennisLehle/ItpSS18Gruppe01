@@ -28,13 +28,13 @@ public class KontaktlisteKontaktMapper {
 	
 	/**
 	 * Zuordnen eins <code>Kontakt</code> Objekts zur einer <code>Kontaktliste</code>.
-	 * Dabei wird die Zuordnung über einen zusammengesetzten Primaerschluessel - sprich 
+	 * Dabei wird die Zuordnung ï¿½ber einen zusammengesetzten Primaerschluessel - sprich 
 	 * der des Kontakts und der der Kontaktliste - zugeordnet.
 	 * 
-	 * @param k für das Kontaktobjekt, kl für das Kontaktlistenobjekt
+	 * @param k fï¿½r das Kontaktobjekt, kl fï¿½r das Kontaktlistenobjekt
 	 */
 	
-	public void addKontaktToKontaktliste(Kontaktliste kl, Kontakt k) {
+	public KontaktlisteKontakt addKontaktToKontaktliste(Kontaktliste kl, Kontakt k) {
 		Connection con = DBConnection.connection();
 		
 		try {
@@ -52,6 +52,7 @@ public class KontaktlisteKontaktMapper {
 			catch (SQLException e2) {
 				e2.printStackTrace();
 			}
+		return null;
 		}
 
 	
@@ -137,7 +138,7 @@ public class KontaktlisteKontaktMapper {
 		    			         "WHERE kontaktlistekontakt.kontaktlisteid = " + kontaktlisteId);
 		    	
 		    			
-		    	//Anpassung Statement für Zwischentabelle KontaktlisteKontak
+		    	//Anpassung Statement fï¿½r Zwischentabelle KontaktlisteKontak
 
 		      ResultSet rs = stmt.executeQuery();
 

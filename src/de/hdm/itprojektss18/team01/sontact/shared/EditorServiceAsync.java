@@ -55,7 +55,7 @@ public interface EditorServiceAsync {
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createKontakt(String vorname, String nachname);
 	 */
-	void createKontakt(String vorname, String nachname, Nutzer n, AsyncCallback<Kontakt> callback);
+	void createKontakt(String vorname, String nachname, Nutzer n, AsyncCallback<Void> callback);
 
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#saveKontakt(Kontakt k);
@@ -90,7 +90,7 @@ public interface EditorServiceAsync {
 	void createKontaktliste(String titel, Nutzer n, AsyncCallback<Kontaktliste> callback);
 
 
-	void saveKontaktliste(Kontaktliste kl, AsyncCallback<Kontaktliste> callback);
+	void saveKontaktliste(Kontaktliste kl, AsyncCallback<Void> callback);
 
 
 	void deleteKontaktliste(Kontaktliste kl, AsyncCallback<Void> callback);
@@ -102,7 +102,7 @@ public interface EditorServiceAsync {
 	void getKontakteByKontaktliste(int kontaktlisteId, AsyncCallback<Vector<Kontakt>> callback);
 
 
-	void findKontaktlisteByTitel(String titel, AsyncCallback<Vector<Kontaktliste>> callback);
+	void findKontaktlisteByTitel(Nutzer n, String titel, AsyncCallback<Kontaktliste> callback);
 
 
 	void createEigenschaft(String bezeichnung, AsyncCallback<Eigenschaft> callback);
@@ -153,6 +153,12 @@ public interface EditorServiceAsync {
 
 
 	void findKontaktlisteById(int id, AsyncCallback<Kontaktliste> callback);
+
+
+	void createKontaktlisteRegistrierung(Nutzer n, AsyncCallback<Kontaktliste> callback);
+
+
+	void createKontaktRegistrierung(String vorname, String nachname, Nutzer n, AsyncCallback<Kontakt> callback);
 
 	
 	// Abschnitt Kontaktliste:

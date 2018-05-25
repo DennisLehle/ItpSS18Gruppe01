@@ -741,7 +741,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Vector<Kontakt> getAllSharedKontakteByOwner(int ownerId) throws IllegalArgumentException {
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(ownerId);
 		for(int b = 0; b < bv.size(); b++) {
-			if(bv != null && bv.elementAt(b).getType() == 'k') {
+			if(bv != null && ownerId == bv.elementAt(b).getOwnerId() && bv.elementAt(b).getType() == 'k') {
 				this.getKontaktById(bv.elementAt(b).getObjectId());
 
 				
@@ -764,7 +764,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Vector<Kontakt> getAllSharedKontakteByReceiver(int receiverId) throws IllegalArgumentException {
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(receiverId);
 		for(int b = 0; b < bv.size(); b++) {
-			if(bv != null && bv.elementAt(b).getType() == 'k') {
+			if(bv != null && receiverId == bv.elementAt(b).getReceiverId() && bv.elementAt(b).getType() == 'k') {
 				this.getKontaktById(bv.elementAt(b).getObjectId());
 
 				
@@ -787,7 +787,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Vector<Kontaktliste> getAllSharedKontaktlistenByOwner(int ownerId) throws IllegalArgumentException {
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(ownerId);
 		for(int b = 0; b < bv.size(); b++) {
-			if(bv != null && bv.elementAt(b).getType() == 'l') {
+			if(bv != null && ownerId == bv.elementAt(b).getOwnerId() && bv.elementAt(b).getType() == 'l') {
 				this.getKontaktlisteById(bv.elementAt(b).getObjectId());
 
 				
@@ -810,7 +810,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Vector<Kontaktliste> getAllSharedKontaktlistenByReceiver(int receiverId) throws IllegalArgumentException {
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(receiverId);
 		for(int b = 0; b < bv.size(); b++) {
-			if(bv != null && bv.elementAt(b).getType() == 'l') {
+			if(bv != null && receiverId == bv.elementAt(b).getReceiverId() && bv.elementAt(b).getType() == 'l') {
 				this.getKontaktlisteById(bv.elementAt(b).getObjectId());
 
 				

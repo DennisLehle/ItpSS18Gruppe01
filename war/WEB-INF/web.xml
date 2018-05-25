@@ -14,6 +14,7 @@
   <servlet-mapping>
     <servlet-name>editorServlet</servlet-name>
     <url-pattern>/sontact/editorservice</url-pattern>
+    <url-pattern>/sontactreport/editorservice</url-pattern>
   </servlet-mapping>
 
  <servlet>
@@ -23,7 +24,7 @@
   
   <servlet-mapping>
     <servlet-name>reportServlet</servlet-name>
-    <url-pattern>/sontact/reportservice</url-pattern>
+    <url-pattern>/sontactreport/reportservice</url-pattern>
   </servlet-mapping>
 
  <servlet>
@@ -34,6 +35,7 @@
   <servlet-mapping>
     <servlet-name>loginService</servlet-name>
     <url-pattern>/sontact/loginservice</url-pattern>
+     <url-pattern>/sontactreport/loginservice</url-pattern>
    <!--   <url-pattern>/sontact/loginReport</url-pattern> -->
   </servlet-mapping>
 

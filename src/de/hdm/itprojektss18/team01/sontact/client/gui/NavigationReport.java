@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorServiceAsync;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 
 /**
@@ -35,8 +36,9 @@ public class NavigationReport extends VerticalPanel{
 	
 	
 
-	public NavigationReport(){
+	public NavigationReport(final Nutzer n){
 		
+		VerticalPanel vp = new VerticalPanel();
 		/**
 		 * Styling der Buttons
 		 */
@@ -53,10 +55,12 @@ public class NavigationReport extends VerticalPanel{
 		/**
 		 * Button zur Anzeige der Navigation anheften
 		 */
-		this.add(showAllKontakteReport);
-		this.add(showAllKontakteNachBestimmtenAusp);
-		this.add(showReportNotVisitedButton);
+		vp.add(showAllKontakteReport);
+		vp.add(showAllKontakteNachBestimmtenAusp);
+		vp.add(showReportNotVisitedButton);
 	
+		RootPanel.get("navigatorR").add(vp);
+
 		
 		/**
 		 * ClickHandler für den "Meine Kontaktliste" Button.

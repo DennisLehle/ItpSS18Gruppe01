@@ -151,7 +151,7 @@ public class RegistrierungsFormular extends Composite {
 				String vorname = vornameTb.getText();
 				String nachname = nachnameTb.getText();
 				if (!vornameTb.getText().isEmpty() && !nachnameTb.getText().isEmpty()) {
-					ev.createKontakt(vorname, nachname, nutzer, new AsyncCallback<Kontakt>() {
+					ev.createKontaktRegistrierung(vorname, nachname, nutzer, new AsyncCallback<Kontakt>() {
 
 						@Override
 						public void onFailure(Throwable error) {

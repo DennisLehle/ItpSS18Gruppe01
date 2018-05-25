@@ -596,8 +596,6 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode getAllSharedKontakteByOwner();
 	 */
 	// CHECK
-
-
 	public void getAllSharedKontakteByOwner ()  {
 
 		Berechtigung b = new Berechtigung();
@@ -634,14 +632,76 @@ class EditorServiceImplTest extends GWTTestCase {
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		System.out.println(editor.getAllSharedKontakteByOwner(b.getOwnerId()));
+}
+@Test
+	/**
+	 * Test getAllSharedKontaktReceiver:
+	 * IMPL-Methode getAllSharedKontaktlistenByReceiver();
+	 **/
+	// CHECK
+	public void getAllSharedKontakteByReceiver ()  {
+
+		Berechtigung b = new Berechtigung();
+		b.setReceiverId(2);
 		
+		Vector<Kontakt> kv = new Vector<Kontakt>();
+
+		Kontakt k = new Kontakt();
+		k.setId(1);
+		k.setOwnerId(1);
+		kv.addElement(k);
 		
+		Kontakt k1 = new Kontakt();
+		k1.setId(2);
+		k1.setOwnerId(1);
+		kv.addElement(k1);
+		
+		Kontakt k2 = new Kontakt();
+		k2.setId(3);
+		k2.setOwnerId(1);
+		kv.addElement(k2);
+		
+		Kontakt k3 = new Kontakt();
+		k3.setId(4);
+		k3.setOwnerId(1);
+		kv.addElement(k3);
+		
+		Kontakt k4 = new Kontakt();
+		k4.setId(5);
+		k4.setOwnerId(2);
+		kv.addElement(k4);
+			
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getAllSharedKontakteByReceiver(b.getReceiverId()));
+			
 }
 	
-//	public Vector<Berechtigung> getAllBerechtigungenByOwner(){
-//		
-//		
-//	}
+	/**
+	 * Test getAllSharedKontakteBySharedKontaktlisten:
+	 * IMPL-Methode getAllSharedKontakteBySharedKontaktlisten();
+	 */
+	// UNCHECK
+	public void getAllSharedKontakteBySharedKontaktlisten ()  {
+
+		Berechtigung b = new Berechtigung();
+		b.setOwnerId(1);
+		
+		Kontaktliste kl = new Kontaktliste();
+		kl.setId(1);
+		kl.setOwnerId(1);
+		kl.setTitel(kl.getTitel());
+				
+		Vector<Kontakt> kv = new Vector<Kontakt>();
+		Kontakt k = new Kontakt();
+		k.setId(2);
+		k.setOwnerId(1);
+		kv.addElement(k);
+				
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getAllSharedKontakteBySharedKontaktliste(kl.getId()));
+	}
 }
 	
 	

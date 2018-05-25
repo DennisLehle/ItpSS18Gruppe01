@@ -137,7 +137,9 @@ public class AuspraegungMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		
+		
 		String updateSQL = "UPDATE auspraegung SET wert=?, eigenschaftid=?, kontaktid=?, ownerid=? WHERE id=?";
+		
 		
 	    //Query für die Aktualisierung des Modifikationsdatums von dem dazugehörigen Kontakt
 //		String sqlDat = "UPDATE kontakt SET modifikationsdatum=? WHERE id=?";		
@@ -156,6 +158,7 @@ public class AuspraegungMapper {
 			stmt.executeUpdate(); 
 			
 			System.out.println("Updated");
+			
 			
 		    //UPDATE-Statement des Modifikationsdatums setzen
 //			stmt = con.prepareStatement(sqlDat);
@@ -190,7 +193,9 @@ public class AuspraegungMapper {
 		Connection con = null; 
 		PreparedStatement stmt = null;
 		
+		
 		String deleteSQL = "DELETE FROM auspraegung WHERE id=?";
+		
 		
 	    //Query für die Aktualisierung des Modifikationsdatums von dem dazugehörigen Kontakt
 //		String sqlDat = "UPDATE kontakt SET modifikationsdatum=? WHERE id=?";

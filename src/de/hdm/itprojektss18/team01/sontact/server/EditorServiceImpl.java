@@ -689,31 +689,47 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	public void deleteBerechtigung(Berechtigung b) throws IllegalArgumentException {
 		init();
+		
 		// CHECK
 		if (b.getType() == 'l') {
+			
+			//Erstellen des Kontaktvektors, um alle Berechtigungen der Kontakte einer Kontaktliste zu erhalten
 			Vector<Kontakt> kv = this.getKontakteByKontaktliste(b.getObjectId());
+			
 			for (int k = 0; k < kv.size(); k++) {
 				if (kv != null) {
+					
+					//Erstellen des Auspraegungsvektors, um alle Berechtigungen der Auspraegung eines Kontakts zu erhalten
 					Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(kv.elementAt(k).getId());
+					
 					for (int a = 0; a < av.size(); a++) {
 						if (av != null) {
+							
+							//Abruf der Berechtigung auf die einzelnen Auspraegungs-Objekte innerhalb des Vektors
 							Berechtigung b2 = new Berechtigung();
 							b2.setOwnerId(b.getOwnerId());
 							b2.setReceiverId(b.getReceiverId());
 							b2.setObjectId(av.elementAt(a).getId());
 							b2.setType(av.elementAt(a).getType());
+							
+							//Löschen der Vektoreinträge und den Berechtigungen
 							this.bMapper.delete(b2);
 						}
 					}
+					
+					//Abruf der Berechtigung auf die einzelnen Kontakts-Objekte innerhalb des Vektors
 					Berechtigung b1 = new Berechtigung();
 					b1.setOwnerId(b.getOwnerId());
 					b1.setReceiverId(b.getReceiverId());
 					b1.setObjectId(kv.elementAt(k).getId());
 					b1.setType(kv.elementAt(k).getType());
+					
+					//Löschen der Vektoreinträge und den Berechtigungen
 					this.bMapper.delete(b1);
 				}
 			}
 			
+			//Löschen der Kontaktlisten-Berechtigung
 			this.bMapper.delete(b);
 		
 		} else if (b.getType() == 'k') {

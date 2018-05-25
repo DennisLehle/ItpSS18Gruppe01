@@ -1,9 +1,9 @@
 package de.hdm.itprojektss18.team01.sontact.client.gui;
 
-import java.util.Vector;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.ListDataProvider;
@@ -193,7 +193,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 		if (selectedKontakt != null) {
 
 			// Selektierte Kontaktliste anhand der ID in der Datenbank finden.
-			this.ev.findKontaktlisteById(this.selectedKontakt.getKontaktlisteId(), new AsyncCallback<Kontaktliste>() {
+			this.ev.getKontaktlisteById(this.selectedKontakt.getKontaktlisteId(), new AsyncCallback<Kontaktliste>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -287,7 +287,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 	 */
 	public void updateKontakt(final Kontakt kontakt) {
 
-		this.ev.findKontaktlisteById(kontakt.getKontaktlisteId(), new AsyncCallback<Kontaktliste>() {
+		this.ev.getKontaktlisteById(kontakt.getKontaktlisteId(), new AsyncCallback<Kontaktliste>() {
 
 			@Override
 			public void onFailure(Throwable caught) {

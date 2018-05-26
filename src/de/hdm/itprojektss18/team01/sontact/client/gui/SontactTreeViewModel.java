@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -45,12 +46,12 @@ public class SontactTreeViewModel implements TreeViewModel {
 	private ListDataProvider<Kontaktliste> kontaktlisteDataProvider = null;
 
 	/**
-	 * Diese Map speichert die ListDataProviders für die Kontaktlisten.
+	 * Diese Map speichert die ListDataProviders fï¿½r die Kontaktlisten.
 	 */
 	private Map<Kontaktliste, ListDataProvider<Kontakt>> kontaktDataProvider = null;
 
 	/**
-	 * Selektierung einer Kontaktliste / eines Kontakts möglich.
+	 * Selektierung einer Kontaktliste / eines Kontakts mï¿½glich.
 	 */
 	private Kontaktliste selectedKontaktliste = null;
 	private Kontakt selectedKontakt = null;
@@ -62,7 +63,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 	private KontaktForm kontaktForm = null;
 
 	/**
-	 * Bildet BusinessObjects auf eindeutige Stringobjekte ab, die als Schlüssel für
+	 * Bildet BusinessObjects auf eindeutige Stringobjekte ab, die als Schlï¿½ssel fï¿½r
 	 * Baumknoten dienen. Dadurch werden im Selektionsmodell alle Objekte mit
 	 * derselben string selektiert, wenn eines davon selektiert wird.
 	 */
@@ -84,7 +85,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 
 	/**
 	 * Die lokal definierte Klasse BusinessObjectKeyProvider wird nun als Variable
-	 * der Klasse SontactTreeViewModel hinzugefügt.
+	 * der Klasse SontactTreeViewModel hinzugefï¿½gt.
 	 */
 	private BusinessObjectKeyProvider boKeyProvider = null;
 
@@ -95,7 +96,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 	private SingleSelectionModel<BusinessObject> selectionModel = null;
 
 	/**
-	 * Nested Class für die Reaktion auf Selektionsereignisse. Als Folge einer
+	 * Nested Class fï¿½r die Reaktion auf Selektionsereignisse. Als Folge einer
 	 * Baumknotenauswahl wird je nach Typ des Business-Objekts die
 	 * "selectedKontaktliste" bzw. der "selectedKontakt" gesetzt.
 	 * 
@@ -106,11 +107,11 @@ public class SontactTreeViewModel implements TreeViewModel {
 		@Override
 		public void onSelectionChange(SelectionChangeEvent event) {
 
-			// Abfrage des ausgewählten Objekts
+			// Abfrage des ausgewï¿½hlten Objekts
 			BusinessObject selection = selectionModel.getSelectedObject();
 
 			if (selection instanceof Kontaktliste) {
-
+					RootPanel.get("content").add(new KontaktlisteForm((Kontaktliste) selection));
 			} else if (selection instanceof Kontakt) {
 
 			}
@@ -133,7 +134,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 	}
 
 	/**
-	 * Formulare für die Setter.
+	 * Formulare fï¿½r die Setter.
 	 */
 	public void setKontaktlisteForm(KontaktlisteForm kontaktlisteForm) {
 		this.kontaktlisteForm = kontaktlisteForm;
@@ -185,7 +186,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 	 */
 	public void setSelectedKontakt(Kontakt selectedKontakt) {
 
-		// Änderungen am Kontakt durch KontaktForm möglich.
+		// ï¿½nderungen am Kontakt durch KontaktForm mï¿½glich.
 		this.selectedKontakt = selectedKontakt;
 		this.kontaktForm.setSelectedKontakt(selectedKontakt);
 
@@ -212,7 +213,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 	}
 
 	/**
-	 * Fügt eine neue Kontaktliste zum Baum hinzu.
+	 * Fï¿½gt eine neue Kontaktliste zum Baum hinzu.
 	 * 
 	 * @param die
 	 *            neue Kontaktliste
@@ -244,7 +245,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 	}
 
 	/**
-	 * Löschung eines Kontaktlisten-Objekts.
+	 * Lï¿½schung eines Kontaktlisten-Objekts.
 	 * 
 	 * @param kontaktliste
 	 */
@@ -257,19 +258,19 @@ public class SontactTreeViewModel implements TreeViewModel {
 	}
 
 	/**
-	 * Hinzufügen eines Kontakt-Objekts in eine Kontaktliste.
+	 * Hinzufï¿½gen eines Kontakt-Objekts in eine Kontaktliste.
 	 * 
 	 * @param kontakt
 	 * @param kontaktliste
 	 */
 	public void addKontakt(Kontakt kontakt, Kontaktliste kontaktliste) {
 
-		// falls es noch keinen Kontakt Provider für diese Kontaktliste gibt,
-		// wurde der Baumknoten noch nicht geöffnet und wir brauchen nichts tun.
+		// falls es noch keinen Kontakt Provider fï¿½r diese Kontaktliste gibt,
+		// wurde der Baumknoten noch nicht geï¿½ffnet und wir brauchen nichts tun.
 		if (!this.kontaktDataProvider.containsKey(kontaktliste)) {
 			return;
 		}
-		// Erstellt einen ListDataProvider mit Kontakten der ausgewählten Kontaktliste.
+		// Erstellt einen ListDataProvider mit Kontakten der ausgewï¿½hlten Kontaktliste.
 		ListDataProvider<Kontakt> kontaktProvider = this.kontaktDataProvider.get(kontaktliste);
 		if (!kontaktProvider.getList().contains(kontakt)) {
 
@@ -311,7 +312,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 	}
 
 	/**
-	 * Löschung eines Kontakt-Objekts aus der Kontaktliste.
+	 * Lï¿½schung eines Kontakt-Objekts aus der Kontaktliste.
 	 * 
 	 * @param kontakt
 	 * @param kontaktliste
@@ -333,7 +334,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 		// Auflistung der Kontaktlisten
 		if (value == null) {
 
-			// Erzeugen eines neuen ListDataProviders für Kontaktlisten
+			// Erzeugen eines neuen ListDataProviders fï¿½r Kontaktlisten
 			this.kontaktlisteDataProvider = new ListDataProvider<Kontaktliste>();
 
 			// Abfrage aller Kontaktlisten
@@ -347,7 +348,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 				@Override
 				public void onSuccess(Vector<Kontaktliste> result) {
 
-					// Alle gefundenen Kontaktlisten werden dem DataProvider hinzugefügt
+					// Alle gefundenen Kontaktlisten werden dem DataProvider hinzugefï¿½gt
 					for (Kontaktliste kontaktliste : result) {
 						kontaktlisteDataProvider.getList().add(kontaktliste);
 					}
@@ -361,7 +362,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 
 		/*
 		 * Wenn Value eine Instanz von Kontaktliste ist werden die Kontakte aus der
-		 * Datenbank rausgelesen und dem ListDataProvider hinzugefügt.
+		 * Datenbank rausgelesen und dem ListDataProvider hinzugefï¿½gt.
 		 */
 		if (value instanceof Kontaktliste) {
 			final ListDataProvider<Kontakt> kontaktLDP = new ListDataProvider<Kontakt>();
@@ -388,7 +389,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 	}
 
 	/**
-	 * Überprüfung ob das Objekt ein Blatt ist.
+	 * ï¿½berprï¿½fung ob das Objekt ein Blatt ist.
 	 */
 	public boolean isLeaf(Object value) {
 		return (value instanceof Kontakt);

@@ -21,13 +21,6 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
-/**
- * Klasse welche Formulare für Kontaktlisten darstellt,
- * diese erlauben Interaktionsmöglichkeiten um Kontaktlisten 
- * Anzuzeigen, zu Bearbeiten oder Neuanzulegen.
- * 
- * @author Kevin Batista, Dennis Lehle, Ugur Bayrak
- */
 public class KontaktlisteForm extends VerticalPanel {
 
 	EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
@@ -106,7 +99,7 @@ public class KontaktlisteForm extends VerticalPanel {
 		HorizontalPanel headerPanel = new HorizontalPanel();	
 		headerPanel.add(new Label("Neue Kontaktliste erstellen"));
 
-		//Button für den Abbruch der Erstellung
+		//Button für den Abbruch der Erstellung.
 		Button quitBtn = new Button("Abbrechen");
 		quitBtn.addClickHandler(new ClickHandler() {
 
@@ -156,11 +149,11 @@ public class KontaktlisteForm extends VerticalPanel {
 				public void onSuccess(Vector<Kontakt> result) {
 					// Wenn Kontakte vorhanden sind...
 					if (result.size() > 0) {
-						Window.alert("Die Kontaktliste " + selectedKontaktliste.getTitel() + " enthält " + result.size()
+						Window.alert("Die Kontaktliste " + selectedKontaktliste.getTitel() + " enth�lt " + result.size()
 								+ " Kontakt(e). Bitte zuerst alle Kontakte aus der Liste entfernen.");
 					} else {
 						if (Window.confirm(
-								"Möchten Sie die Kontaktliste: " + selectedKontaktliste.getTitel() + "löschen?")) {
+								"M�chten Sie die Kontaktliste " + selectedKontaktliste.getTitel() + "l�schen?")) {
 							loescheKontaktliste();
 						}
 					}
@@ -177,7 +170,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 						@Override
 						public void onSuccess(Void result) {
-							Window.alert("Kontaktliste wurde geloescht");
+							Window.alert("Kontaktliste wurde gel�scht");
 							Window.Location.reload();
 
 						}
@@ -201,6 +194,7 @@ public class KontaktlisteForm extends VerticalPanel {
 			Nutzer n = new Nutzer();
 			
 			//Cookies des Nutzers holen.
+			
 			n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 			n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 		
@@ -216,7 +210,7 @@ public class KontaktlisteForm extends VerticalPanel {
 				public void onSuccess(Kontaktliste result) {
 					RootPanel.get("content").add(new KontaktlisteForm(result));
 					
-					//Refresh der Seite für die Aktualisierug...
+					//Refresh der Seite für die Aktualisierug des Baumes.
 					Window.Location.reload();
 
 				}
@@ -227,7 +221,7 @@ public class KontaktlisteForm extends VerticalPanel {
 	}
 
 	/**
-	 * ClickHandler fuer das Updaten einer Kontaktliste
+	 * ClickHandler f�r das Updaten einer Kontaktliste
 	 * 
 	 * @author Batista
 	 *
@@ -253,9 +247,8 @@ public class KontaktlisteForm extends VerticalPanel {
 
 			headerPanel.add(cancelBtn);
 
-			/**Instanziierung Button zum Speichern der Aenderungen an der selektierten Kontaktliste
-			 * 
-			 */
+			// Instanziierung Button zum Speichern der �nderungen an der selektierten
+			// Kontaktliste
 			Button saveBtn = new Button("speichern");
 			// ClickHandler f�r das Speichern
 			saveBtn.addClickHandler(new ClickHandler() {

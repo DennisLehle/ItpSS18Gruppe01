@@ -69,12 +69,6 @@ public class Sontact implements EntryPoint {
 							if (nutzer != null) {
 								RootPanel.get("content").clear();
 								
-								//Setzen von Cookies für spätere Identifizierung eines Nutzers.
-								Cookies.setCookie("nutzerGMail", loginInfo.getEmailAddress()); 	
-								
-								//Wenn ein nutzer vorhanden wird die nutzerId noch gesetzt.
-								Cookies.setCookie("nutzerID", String.valueOf(nutzer.getId()));
-								
 								start(nutzer);
 							} else {
 								RootPanel.get("content").clear();
@@ -102,16 +96,8 @@ public class Sontact implements EntryPoint {
 
 													@Override
 													public void onSuccess(final Nutzer nutzer) {
+													RootPanel.get("content").add(new RegistrierungsFormular(nutzer));
 													
-														//Setzen von Cookies für spätere Identifizierung eines Nutzers.
-														Cookies.setCookie("nutzerGMail", loginInfo.getEmailAddress()); 	
-														
-														//Wenn ein nutzer vorhanden wird die nutzerId noch gesetzt.
-														Cookies.setCookie("nutzerID", String.valueOf(nutzer.getId()));
-														
-													//	RootPanel.get("content")
-															//	.add(new RegistrierungsFormular(nutzer));
-
 													}
 												});
 
@@ -135,6 +121,19 @@ public class Sontact implements EntryPoint {
 	 * @param nutzer
 	 */
 	private void start(final Nutzer nutzer) {
+
+		//Logout wird hier schon gesetzt
+		HTML signOutLink = new HTML("<p><a href='" 
+				+ loginInfo.getLogoutUrl() 
+				+ "'><span class='glyphicon glyphicon-log-out'></span></a></p>");
+		RootPanel.get("nutzermenu").add(signOutLink);
+		
+		
+		//Setzen von Cookies für spätere Identifizierung eines Nutzers.
+		Cookies.setCookie("nutzerGMail", loginInfo.getEmailAddress()); 	
+		
+		//Wenn ein nutzer vorhanden wird die nutzerId noch gesetzt.
+		Cookies.setCookie("nutzerID", String.valueOf(nutzer.getId()));
 	
 		RootPanel.get("navigator").add(new Navigation(nutzer));
 		
@@ -149,7 +148,9 @@ public class Sontact implements EntryPoint {
 
 			@Override
 			public void onSuccess(Kontakt result) {
+				RootPanel.get("nutzermenu").clear();
 				RootPanel.get("nutzermenu").add(new HTML("<p><span class='glyphicon glyphicon-user'></span> &nbsp; " + result.getVorname() +" "+ result.getNachname()));
+				//Logout wird hier schon gesetzt
 				HTML signOutLink = new HTML("<p><a href='" 
 						+ loginInfo.getLogoutUrl() 
 						+ "'><span class='glyphicon glyphicon-log-out'></span></a></p>");

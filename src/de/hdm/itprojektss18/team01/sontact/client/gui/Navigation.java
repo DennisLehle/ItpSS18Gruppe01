@@ -40,6 +40,7 @@ public class Navigation extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				//Wird instanziiert wenn eine neue Kontaktliste erstellt werden soll.
 				//Klasse besitzt 2 Konstruktoren.
+				RootPanel.get("content").clear();
 				RootPanel.get("content").add(new KontaktlisteForm(nutzer));
 			}
 

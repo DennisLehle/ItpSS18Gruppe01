@@ -570,8 +570,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Auslesen einer bestimmten Auspraegung anhand der id.
 	 * 
 	 */
-	public Auspraegung getAuspraegungById(Auspraegung a) throws IllegalArgumentException {
-		return this.aMapper.findAuspraegungById(a.getId());
+	public Auspraegung getAuspraegungById(int auspraegungId) throws IllegalArgumentException {
+		return this.aMapper.findAuspraegungById(auspraegungId);
 	}
 
 	/**
@@ -980,8 +980,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		Vector<Berechtigung> bv = this.bMapper.findAll();
 		Vector<Auspraegung> av = new Vector<Auspraegung>();
 		for (int b = 0; b < bv.size(); b++) {
-			if (bv != null && bv.elementAt(b).getType() == 'a') {
-				this.getAllAuspraegungenByKontakt(bv.elementAt(b).getObjectId());
+			if (bv != null && bv.elementAt(b).getType() == 'a') {				
+				this.getAuspraegungById(bv.elementAt(b).getObjectId());
 
 				Auspraegung a = new Auspraegung();
 				a.setId(bv.elementAt(b).getObjectId());

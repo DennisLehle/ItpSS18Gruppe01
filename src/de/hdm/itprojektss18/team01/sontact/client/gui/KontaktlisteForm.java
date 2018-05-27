@@ -21,6 +21,14 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
+/**
+ * Klasse welche Formulare für Kontaktlisten darstellt,* diese erlauben
+ * Interaktionsmöglichkeiten um Kontaktlisten Anzuzeigen, zu Bearbeiten, Löschen
+ * oder Neuanzulegen.
+ * 
+ * @author Kevin Batista, Dennis Lehle, Ugur Bayrak
+ */
+
 public class KontaktlisteForm extends VerticalPanel {
 
 	EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
@@ -29,10 +37,8 @@ public class KontaktlisteForm extends VerticalPanel {
 	Kontaktliste selectedKontaktliste = null;
 
 	SontactTreeViewModel sontactTree = null;
-	
-	TextBox txtBox = new TextBox();
 
-	
+	TextBox txtBox = new TextBox();
 
 	/**
 	 * Konstruktor der zum Einsatz kommt, wenn eine Kontaktliste bereits vorhanden
@@ -59,10 +65,9 @@ public class KontaktlisteForm extends VerticalPanel {
 				HorizontalPanel headerPanel = new HorizontalPanel();
 				HorizontalPanel BtnPanel = new HorizontalPanel();
 				VerticalPanel vp = new VerticalPanel();
-				
+
 				headerPanel.add(new HTML("<h2>Kontaktliste: <em>" + selectedKontaktliste.getTitel() + "</em></h2>"));
 
-			
 				// L�sch-Button instanziieren und dem Panel zuweisen
 				Button deleteKlBtn = new Button("Kontaktliste löschen");
 				BtnPanel.add(deleteKlBtn);
@@ -77,7 +82,7 @@ public class KontaktlisteForm extends VerticalPanel {
 				// ClickHandler f�r das Updaten einer Kontaktliste
 				editKontaktlisteBtn.addClickHandler(new updateKontaktlisteClickHandler());
 				BtnPanel.add(editKontaktlisteBtn);
-				
+
 				vp.add(headerPanel);
 				vp.add(BtnPanel);
 				RootPanel.get("content").add(vp);
@@ -96,7 +101,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 		HorizontalPanel headerPanel = new HorizontalPanel();
 		headerPanel.add(new HTML("<h2>Neue Kontaktliste erstellen</h2>"));
-		
+
 		HorizontalPanel BtnPanel = new HorizontalPanel();
 
 		// Button für den Abbruch der Erstellung.
@@ -115,20 +120,20 @@ public class KontaktlisteForm extends VerticalPanel {
 
 		Button saveBtn = new Button("erstellen");
 		saveBtn.addClickHandler(new speichernKontaktlisteClickHandler());
-		
+
 		BtnPanel.add(saveBtn);
-		
+
 		VerticalPanel vp = new VerticalPanel();
-		
+
 		vp.add(headerPanel);
 		vp.add(new Label("Name der Kontaktliste:"));
 		txtBox.getElement().setPropertyString("placeholder", "Titel der Kontaktliste...");
 		vp.add(txtBox);
 		vp.add(BtnPanel);
-		
+
 		vp.setSpacing(20);
 		BtnPanel.setSpacing(20);
-		
+
 		RootPanel.get("content").add(vp);
 
 	}
@@ -239,7 +244,7 @@ public class KontaktlisteForm extends VerticalPanel {
 		public void onClick(ClickEvent event) {
 
 			RootPanel.get("content").clear();
-			
+
 			HorizontalPanel BtnPanel = new HorizontalPanel();
 			HorizontalPanel headerPanel = new HorizontalPanel();
 			headerPanel.add(
@@ -288,17 +293,17 @@ public class KontaktlisteForm extends VerticalPanel {
 			});
 
 			BtnPanel.add(saveBtn);
-			
+
 			VerticalPanel vp = new VerticalPanel();
 			vp.add(headerPanel);
+			txtBox.getElement().setPropertyString("placeholder", "Neuer Titel...");
 			vp.add(txtBox);
 			vp.add(BtnPanel);
 			RootPanel.get("content").add(vp);
 			selectedKontaktliste.setTitel(txtBox.getText());
-			
+
 			BtnPanel.setSpacing(20);
 			vp.setSpacing(20);
-			
 
 		}
 

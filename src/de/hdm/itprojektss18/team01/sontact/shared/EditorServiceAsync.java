@@ -47,7 +47,7 @@ public interface EditorServiceAsync {
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#findNutzerByEmail(String email);
 	 */
-	void findNutzerByEmail(String email, AsyncCallback<Nutzer> callback);
+	void getUserByGMail(String email, AsyncCallback<Nutzer> callback);
 
 	
 	// Abschnitt Kontakt:
@@ -130,7 +130,7 @@ public interface EditorServiceAsync {
 	void deleteAuspraegung(Auspraegung a, AsyncCallback<Void> callback);
 
 
-	void getAuspraegungById(Auspraegung a, AsyncCallback<Auspraegung> callback);
+	void getAuspraegungById(int auspraegungId, AsyncCallback<Auspraegung> callback);
 
 
 	void getAllAuspraegungenByKontakt(int kontaktId, AsyncCallback<Vector<Auspraegung>> callback);

@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -47,14 +48,12 @@ public class RegistrierungsFormular extends Composite {
 
 	private VerticalPanel hauptPanel = new VerticalPanel();
 	private HorizontalPanel ButtonsPanel = new HorizontalPanel();
-	
+
 	private HorizontalPanel EigenschaftsMenuPanel = new HorizontalPanel();
-	
-	
+
 	FlexTable mindestEigenschaftsTable = new FlexTable();
 	FlexTable eigeneEigenschaftFlex = new FlexTable();
 	FlexTable auswahlEigenschaftFlex = new FlexTable();
-	
 
 	public RegistrierungsFormular(Nutzer nutzer) {
 		initWidget(hauptPanel);
@@ -63,17 +62,14 @@ public class RegistrierungsFormular extends Composite {
 		ButtonsPanel.add(speichernBtn);
 		ButtonsPanel.setSpacing(20);
 		hauptPanel.add(ButtonsPanel);
-		
+
 		EigenschaftsMenuPanel.setSpacing(15);
 		EigenschaftsMenuPanel.setBorderWidth(5);
 		hauptPanel.add(EigenschaftsMenuPanel);
 
-		
-
 		// Methode welche die Pflichtangaben lädt
 		ladePflichtEigenschaften(mindestEigenschaftsTable, EigenschaftsMenuPanel);
-		
-	
+
 		gmailTb.setText(nutzer.getEmailAddress());
 		gmailTb.setEnabled(false);
 
@@ -117,11 +113,11 @@ public class RegistrierungsFormular extends Composite {
 					}
 
 				});
-				
+
 				platziereAuswahlEigenschaften(listBox, txtBox, auswahlEigenschaftFlex, EigenschaftsMenuPanel);
-							
+
 			}
-			
+
 		});
 
 		/**
@@ -134,11 +130,11 @@ public class RegistrierungsFormular extends Composite {
 				TextBox txtBoxEigenschaft = new TextBox();
 				TextBox txtBoxWert = new TextBox();
 
-				platziereEigeneEigenschaften(txtBoxEigenschaft, txtBoxWert, eigeneEigenschaftFlex, EigenschaftsMenuPanel);
-				
+				platziereEigeneEigenschaften(txtBoxEigenschaft, txtBoxWert, eigeneEigenschaftFlex,
+						EigenschaftsMenuPanel);
 
 			}
-			
+
 		});
 
 		/**
@@ -160,8 +156,7 @@ public class RegistrierungsFormular extends Composite {
 
 						@Override
 						public void onSuccess(Kontakt k) {
-							MessageBox.alertWidget("Benachrichtigung: ",
-									"Sie haben den Kontakt " + vorname + " " + nachname + " erfolgreich angelegt");
+							Window.Location.reload();
 						}
 					});
 
@@ -175,20 +170,21 @@ public class RegistrierungsFormular extends Composite {
 
 	}
 
-	public void platziereAuswahlEigenschaften(ListBox listBox, TextBox txtBox, FlexTable zusatzEigenschaftFlex, HorizontalPanel EigenschaftsMenuPanel) {
+	public void platziereAuswahlEigenschaften(ListBox listBox, TextBox txtBox, FlexTable zusatzEigenschaftFlex,
+			HorizontalPanel EigenschaftsMenuPanel) {
 
 		listBox.getElement().setPropertyString("placeholder", "Eigenschaft auswählen");
 		txtBox.getElement().setPropertyString("placeholder", "Wert der Eigenschaft");
 		int count = zusatzEigenschaftFlex.getRowCount();
 		zusatzEigenschaftFlex.setWidget(count + 1, 0, listBox);
 		zusatzEigenschaftFlex.setWidget(count + 2, 0, txtBox);
-		//zusatzEigenschaftFlex.setBorderWidth(2);
+		// zusatzEigenschaftFlex.setBorderWidth(2);
 		EigenschaftsMenuPanel.add(zusatzEigenschaftFlex);
 
 	}
 
 	public void platziereEigeneEigenschaften(TextBox txtBoxEigenschaft, TextBox txtBoxWert,
-			FlexTable eigeneEigenschaftFlex, HorizontalPanel EigenschaftsMenuPanel ) {
+			FlexTable eigeneEigenschaftFlex, HorizontalPanel EigenschaftsMenuPanel) {
 
 		txtBoxEigenschaft.getElement().setPropertyString("placeholder", "Name der Eigenschaft");
 		txtBoxWert.getElement().setPropertyString("placeholder", "Wert der Eigenschaft");
@@ -198,7 +194,7 @@ public class RegistrierungsFormular extends Composite {
 		int count = eigeneEigenschaftFlex.getRowCount();
 		eigeneEigenschaftFlex.setWidget(count + 1, 0, txtBoxEigenschaft);
 		eigeneEigenschaftFlex.setWidget(count + 2, 0, txtBoxWert);
-		//eigeneEigenschaftFlex.setBorderWidth(2);
+		// eigeneEigenschaftFlex.setBorderWidth(2);
 		EigenschaftsMenuPanel.add(eigeneEigenschaftFlex);
 
 	}
@@ -211,10 +207,8 @@ public class RegistrierungsFormular extends Composite {
 		mindestEigenschaftsTable.setWidget(count + 4, 0, nachnameTb);
 		mindestEigenschaftsTable.setWidget(count + 5, 0, gmail);
 		mindestEigenschaftsTable.setWidget(count + 6, 0, gmailTb);
-		//mindestEigenschaftsTable.setBorderWidth(2);
+		// mindestEigenschaftsTable.setBorderWidth(2);
 		EigenschaftsMenuPanel.add(mindestEigenschaftsTable);
-		
-		
 
 	}
 

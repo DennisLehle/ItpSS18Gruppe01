@@ -1,34 +1,50 @@
 /** Add css rules here for your application. */
 /** Example rules used by the template application (remove for your app) */
+PM
+>
+Install-Package
+ 
+bootstrap
+ 
+-Version
+ 
+4
+.1
+.1
 
-PM>Install-Package bootstrap -Version 4.1.1
+
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,700');
-@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
-@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css");
+
+@import
+	url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
+	;
+
+@import
+	url("https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css")
+	;
 
 /*
  * Seitenweite Regeln
  */
 div {
-  height: 90vh;
-  width: 90vw;
+	height: 90vh;
+	width: 90vw;
 }
 
-body{
-	 font-family: "Lato", sans-serif;
+body {
+	font-family: "Lato", sans-serif;
 }
 
-html,body {
+html, body {
 	height: 100%;
-	
 }
 
-body > div {
+body>div {
 	width: 90%;
 	height: 100%;
 }
 
-body > div > div{
+body>div>div {
 	width: 100%;
 }
 
@@ -41,7 +57,8 @@ body > div > div{
 	padding-right: 30px;
 	box-sizing: border-box;
 	background: #999 url('/images/3.png') no-repeat left 50%;
-	background-size: cover;	color: white;
+	background-size: cover;
+	color: white;
 }
 
 #nutzermenu {
@@ -73,7 +90,7 @@ h1 {
 	font-weight: 400;
 	font-size: 20px;
 	width: 33%;
-	background:  url(/images/sontact2.png) no-repeat left 80%;
+	background: url(/images/sontact2.png) no-repeat left 80%;
 	background-size: contain;
 	margin-left: 20px;
 	color: white;
@@ -81,20 +98,17 @@ h1 {
 	font-weight: lighter !important;
 	font-variant: small-caps;
 	letter-spacing: 7px;
-	height:auto;
-	
-	
+	height: auto;
 }
 
-h2{
+h2 {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	text-align: right;
 }
 
-
 h1 a {
 	display: block;
-	color: rgba(255,255,255,0.0);
+	color: rgba(255, 255, 255, 0.0);
 	padding: 20px 0px 20px 30px;
 }
 
@@ -120,6 +134,7 @@ h1 a {
 #closeButton {
 	margin: 15px 6px 6px;
 }
+
 #header {
 	color: white;
 	letter-spacing: 10px;
@@ -146,22 +161,35 @@ h1 a {
 	padding-top: 20px;
 }
 
+#contentHeader {
+	font: 'Gotham';
+	font-weight: lighter !important;
+	font-variant: small-caps;
+	letter-spacing: 4px;
+	display: flex;
+	align-items: left;
+	justify-content: left;
+	padding-bottom: 30px;
+}
+
 #navigator {
 	float: left;
 	background: #999 url('/images/3.png') no-repeat;
-	background-size: cover;	color: white;
-	
+	background-size: cover;
+	color: white;
 }
 
 #footer {
-    padding: 10px 0px;
-    text-align: center;
-    color: #777;
-    font-size: 80%;
-    width: 100%;
-   	display: flex;
-   	justify-content: center;
-    background: #999 url('http://mindchamps-medical.com/wp-content/uploads/2015/04/Abstract-Background-White.jpg') no-repeat left 50%;
+	padding: 10px 0px;
+	text-align: center;
+	color: #777;
+	font-size: 80%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	background: #999
+		url('http://mindchamps-medical.com/wp-content/uploads/2015/04/Abstract-Background-White.jpg')
+		no-repeat left 50%;
 }
 
 #footer .gwt-HTML {
@@ -169,12 +197,11 @@ h1 a {
 }
 
 #footer a {
-    color: #1c9cd8;
-    text-decoration: none;
-}
-	
+	color: #1c9cd8;
+	text-decoration: none;
 }
 
+}
 .ButtonStyle {
 	color: #125485;
 	text-align: center;
@@ -204,25 +231,25 @@ h1 a {
 }
 
 .label {
-color: #5247b4;
-font-weight: bold;
-display: block;
-width: 150px;
-height: 30px;
-float: middle;
+	color: #5247b4;
+	font-weight: bold;
+	display: block;
+	width: 150px;
+	height: 30px;
+	float: middle;
 }
 
-.gwt-Button { 
-   font-size: 150%; 
-   font-weight: bold;
-   width:100px;
-   height:50px;
+.gwt-Button {
+	font-size: 150%;
+	font-weight: bold;
+	width: 100px;
+	height: 50px;
 }
 
-.gwt-Big-Text { 
-   font-size:150%;
+.gwt-Big-Text {
+	font-size: 150%;
 }
 
-.gwt-Small-Text { 
-   font-size:75%;
+.gwt-Small-Text {
+	font-size: 75%;
 }

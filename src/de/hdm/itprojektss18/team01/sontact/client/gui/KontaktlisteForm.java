@@ -23,8 +23,8 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
  * Klasse welche Formulare für Kontaktlisten darstellt,* diese erlauben
- * Interaktionsmöglichkeiten um Kontaktlisten Anzuzeigen, zu Bearbeiten, Löschen oder
- * Neuanzulegen.
+ * Interaktionsmöglichkeiten um Kontaktlisten Anzuzeigen, zu Bearbeiten, Löschen
+ * oder Neuanzulegen.
  * 
  * @author Kevin Batista, Dennis Lehle, Ugur Bayrak
  */

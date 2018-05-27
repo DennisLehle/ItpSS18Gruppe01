@@ -133,7 +133,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	public Nutzer findNutzerByEmail(String email) throws IllegalArgumentException {
+	public Nutzer getUserByGMail(String email) throws IllegalArgumentException {
+		
+		init(); 
+		
 		try {
 			if (nMapper.findUserByGMail(email) == null) {
 				return null;
@@ -151,6 +154,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Ein Nutzer wird mit all seinen Objekten aus der Datenbank gel�scht.
 	 */
 	public void deleteNutzer(Nutzer n) throws IllegalArgumentException {
+		
+		init();
 
 		// Alle Auspraegungen der Kontakte, welche im Eigentumsverh�ltnis mit
 		// dem Nutzer stehen, aus der DB entfernen

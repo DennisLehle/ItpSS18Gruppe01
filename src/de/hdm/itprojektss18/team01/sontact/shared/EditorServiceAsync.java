@@ -47,7 +47,7 @@ public interface EditorServiceAsync {
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#findNutzerByEmail(String email);
 	 */
-	void findNutzerByEmail(String email, AsyncCallback<Nutzer> callback);
+	void getUserByGMail(String email, AsyncCallback<Nutzer> callback);
 
 	
 	// Abschnitt Kontakt:

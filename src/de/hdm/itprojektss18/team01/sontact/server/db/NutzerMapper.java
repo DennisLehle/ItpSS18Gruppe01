@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
@@ -61,56 +62,87 @@ public class NutzerMapper {
 	 * 
 	 * @author thies
 	 */
-	public Nutzer insert(Nutzer n) {
-
-		// DbConnection herstellen
-		Connection con = DBConnection.connection();
-
-		/**
-		 * Try und Catch gehÃ¶ren zum Exception Handling Try = Versuch erst dies
-		 * Catch = Wenn Try nicht geht versuch es so ..
-		 */
+	
+	public Nutzer insert(Nutzer n){
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		
+		//Query für die Abfrage der hoechsten ID (Primärschlüssel) in der Datenbank
+		String maxIdSQL = "SELECT MAX(id) AS maxid FROM nutzer";
+		
+		
+		//Query für den Insert
+		String insertSQL = "INSERT INTO nutzer (id, email) VALUES (?,?)";		
+		
+		
+		
 		try {
-			// Anglegen eines leeren Statements
-			Statement stmt = con.createStatement();
+			
+			con = DBConnection.connection(); 
+			stmt = con.prepareStatement(maxIdSQL);
+			
 
-			// Statement als Query an die DB schicken
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Nutzer ");
-
-			// RÃœckgabe enthÃ¤lt nur ein Tupel
-			if (rs.next()) {
-
-				// EnthÃ¤lt den maximalen, nun um 1 inkrementierten
-				// PrimÃ¤rschlÃ¼ssel
-				n.setId(rs.getInt("maxid") + 1);
-
-				PreparedStatement prestmt = con.prepareStatement("INSERT INTO Nutzer (id, email " + ") VALUES('"
-						+ n.getId() + "', '" + n.getEmailAddress() + "')");
-
-				// INSERT-Statement ausfï¿½hren
-				prestmt.execute();
-			}
+			//MAX ID Query ausfuehren
+			ResultSet rs = stmt.executeQuery();
+			
+			
+			//...um diese dann um 1 inkrementiert der ID des BO zuzuweisen
+		    if(rs.next()){
+		    	n.setId(rs.getInt("maxId")+1);
+		    }	   
+		    
+		    	
+			//Jetzt erfolgt der Insert
+		    stmt = con.prepareStatement(insertSQL);
+		    
+		    
+		    //Setzen der ? Platzhalter als Values
+		    stmt.setInt(1, n.getId());
+		    stmt.setString(2, n.getEmailAddress());
+		    
+		    
+		    //INSERT-Query ausführen
+		    stmt.executeUpdate();
+		    
+		    
 		} catch (SQLException e2) {
 			e2.printStackTrace();
-		}
+			}			
+		
 		return n;
-	}
-
-	public void delete(Nutzer n) {
-		Connection con = DBConnection.connection();
-
+	}	
+	
+	
+	/**
+	 * Löschen eines NutzersObjekts aus der Datenbank.
+	 * @param n
+	 */
+	
+	public void delete (Nutzer n) {
+		
+		Connection con = null; 
+		PreparedStatement stmt = null;
+		
+		String deleteSQL = "DELETE FROM nutzer WHERE id=?";
+		
 		try {
-			// SQL Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("DELETE FROM Nutzer WHERE id=" + n.getId());
-
-			// Statement als Query an die DB schicken
-			prestmt.execute();
+			
+			con = DBConnection.connection();
+			
+			stmt = con.prepareStatement(deleteSQL);
+			stmt.setInt(1, n.getId());
+			
+			stmt.executeUpdate();
 		}
-
+		
 		catch (SQLException e2) {
 			e2.printStackTrace();
+			
 		}
 	}
+
 
 	/**
 	 * Anhand dieser Methode werden Nutzer die sich einloggen mit ihrer Email
@@ -119,35 +151,46 @@ public class NutzerMapper {
 	 * @param emailadress
 	 * @return
 	 */
-	public Nutzer findUserByGMail(String emailadress) {
-
-		Connection con = DBConnection.connection();
-		/**
-		 * Try und Catch gehören zum Exception Handling Try = Versuch erst dies
-		 * Catch = Wenn Try nicht geht versuch es so ..
-		 */
-
+	
+	public Nutzer findUserByGMail(String email) {
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM nutzer WHERE email=?";
+		
+		
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Nutzer WHERE email=?");
-			stmt.setString(1, emailadress);
-
-			/**
-			 * Statement ausfüllen und an die DB senden
-			 */
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setString(1, email);
+			
+			//Execute SQL Statement
 			ResultSet rs = stmt.executeQuery();
-
-			if (rs.next()) {
+			
+			if(rs.next()) {
+				
+				//Ergebnis-Tupel in Objekt umwandeln
 				Nutzer n = new Nutzer();
-				n.setId(rs.getInt("id"));
-				n.setEmailAddress(rs.getString("email"));
-
+				
+				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				n.setId(rs.getInt(1));
+				n.setEmailAddress(rs.getString(2));
+				
 				return n;
 			}
-		} catch (SQLException e2) {
-			e2.printStackTrace();
 		}
+		
+		catch (SQLException e2) {
+			
+			e2.printStackTrace();
+			return null;
+		}
+		
 		return null;
 	}
+	
 }
 
 // /**

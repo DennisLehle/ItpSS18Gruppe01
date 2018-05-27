@@ -1,6 +1,7 @@
 package de.hdm.itprojektss18.team01.sontact.server;
 
 
+import java.sql.Timestamp;
 import java.util.Vector;
 
 import org.junit.jupiter.api.Test;
@@ -65,10 +66,80 @@ class EditorServiceImplTest extends GWTTestCase {
 	
 	/**
 	 * Test Case für die Erstellung eines Nutzers.
+	 * CHECK MELANIE
+	 */
+
+	public void createNutzer() {
+		
+		//Variable anlegen die übergeben werden soll.
+//		String email = "kan.kup@gmail.com";
+//		String email1 = "mieschaafshar@gmail.com";
+		String email2 = "mmiedl93@gmail.com";
+				
+		//Verbindung zur Test Klasse herstellen 
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		//Prüfen ob die Verbindung steht. Kann auch nur bis hier her durchgeführt werden um JUnit Test positiv zu sehen.
+		assertNotNull(editor);
+		
+		//Variable übergeben die Eingefügt werden soll/sollen.
+//		editor.createNutzer(email);
+//		editor.createNutzer(email1);
+		editor.createNutzer(email2);
+	}
+	
+	/**
+	 * Test Case für die L�schung eines Nutzers aus unserer Datenbank.
+	 * CHECK MELANIE mit allen Kontakten und Auspraegungen 
+	 */
+
+	public void deleteNutzer() {
+		
+		Nutzer n = new Nutzer();
+		n.setId(3);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		editor.deleteNutzer(n);
+		
+	}
+	
+	/**
+	 * Test Case für das Auslesen eines Nutzers anhand seiner GMail Adresse.
+	 * CHECK MELANIE
+	 */
+
+	public void getUserByGmail() {
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getUserByGMail("mmiedl93@gmail.com"));
+	}
+	
+	
+	/*
+	   * ***************************************************************************
+	   * ABSCHNITT, Anfang: Methoden fuer Kontakt-Objekte Test
+	   * ***************************************************************************
+	   */
+	
+	/**
+	 * Test Case für die Erstellung eines Kontakts.
+	 * Anmerkung: Wird der Kontakt in die Default-Kontaktliste gespeichert?
 	 * CHECK
 	 */
-	
 
+	public void createKontakt() {
+		
+		Nutzer n = new Nutzer();
+		n.setId(3);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		editor.createKontakt("Hans", "Gretel", n);
+//		editor.createKontakt("Petra", "Pfiffig", n);
+//		editor.createKontakt("Lisa", "Lustig", n);
+	}
+	
 	
 	public void createKontakt1() {
 		EditorServiceImpl editor = new EditorServiceImpl();
@@ -85,43 +156,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		
 	}
-	
-	
-	public void createNutzer() {
-		//Variable anlegen die übergeben werden soll.
-		String email = "kan.kup@gmail.com";
-		String email1 = "mieschaafshar@gmail.com";
-		//Verbindung zur Test Klasse herstellen 
-		EditorServiceImpl editor = new EditorServiceImpl();
-		//Prüfen ob die Verbindung steht. Kann auch nur bis hier her durchgeführt werden um JUnit Test positiv zu sehen.
-		assertNotNull(editor);
-		//Variable übergeben die Eingefügt werden soll/sollen.
-		editor.createNutzer(email);
-		editor.createNutzer(email1);
-	}
-	
-	/*
-	   * ***************************************************************************
-	   * ABSCHNITT, Anfang: Methoden fuer Kontakt-Objekte Test
-	   * ***************************************************************************
-	   */
-	
-	/**
-	 * Test Case für die Erstellung eines Kontakts.
-	 * Anmerkung: Wird der Kontakt in die Default-Kontaktliste gespeichert?
-	 * CHECK
-	 */
-	
-	public void createKontakt() {
-		
-		Nutzer n = new Nutzer();
-		n.setId(1);
-		
-		EditorServiceImpl editor = new EditorServiceImpl();
-		editor.createKontakt("Max", "Mustermann", n);
-		editor.createKontakt("Petra", "Pfiffig", n);
-		editor.createKontakt("Lisa", "Lustig", n);
-	}
+
 	
 	/**
 	 * Test Case für das Updaten eines Kontakts.
@@ -155,37 +190,42 @@ class EditorServiceImplTest extends GWTTestCase {
 		 * Test Case fuer das Erstellen einer Auspraegung
 		 * CHECK
 		 */
-	
+
 	public void createAuspraegung() {
 		Nutzer n = new Nutzer();
-		n.setId(1);
+		n.setId(3);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 
 			
-		//Max Mustermann
-		editor.createAuspraegung("0176/ 232222", 6 , 1 , n);
+//		//Max Mustermann
+//		editor.createAuspraegung("0176/ 232222", 6 , 1 , n);
+//		
+//		editor.createAuspraegung("0172/ 333333", 6 , 1 , n);
+//	
+//		editor.createAuspraegung("maxmustermann@gmx.de", 14 , 1 , n);
+//		
+//	
+//		//Petra Pfiffig
+//		
+//		editor.createAuspraegung("0178/ 52555", 6 , 2 , n);
+//		
+//		editor.createAuspraegung("0172/ 44444", 6 , 2 , n);
+//		
+//		editor.createAuspraegung("petrapfiffig@web.de", 14 , 2 , n);
+//				
+//		//Lisa Luftig
+//		
+//		editor.createAuspraegung("0152/ 71777", 6 , 3, n);
+//		
+//		editor.createAuspraegung("0152/ 11111", 6 , 3 , n);
+//		
+//		editor.createAuspraegung("lisaluftig@yahoo.de", 14 , 3 , n);
 		
-		editor.createAuspraegung("0172/ 333333", 6 , 1 , n);
+		//Hans Gretel
 		
-		editor.createAuspraegung("maxmustermann@gmx.de", 14 , 1 , n);
+		editor.createAuspraegung("43", 18, 4, n);
 		
-	
-		//Petra Pfiffig
-		
-		editor.createAuspraegung("0178/ 52555", 6 , 2 , n);
-		
-		editor.createAuspraegung("0172/ 44444", 6 , 2 , n);
-		
-		editor.createAuspraegung("petrapfiffig@web.de", 14 , 2 , n);
-				
-		//Lisa Luftig
-		
-		editor.createAuspraegung("0152/ 71777", 6 , 3, n);
-		
-		editor.createAuspraegung("0152/ 11111", 6 , 3 , n);
-		
-		editor.createAuspraegung("lisaluftig@yahoo.de", 14 , 3 , n);
 	}
 	
 	/**

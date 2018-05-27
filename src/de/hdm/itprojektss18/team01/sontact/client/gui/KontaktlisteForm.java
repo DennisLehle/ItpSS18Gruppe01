@@ -29,10 +29,10 @@ public class KontaktlisteForm extends VerticalPanel {
 	Kontaktliste selectedKontaktliste = null;
 
 	SontactTreeViewModel sontactTree = null;
-	Label titel = new Label("Kontaktliste: ");
+	
 	TextBox txtBox = new TextBox();
 
-	HorizontalPanel hpBtnPanel = new HorizontalPanel();
+	
 
 	/**
 	 * Konstruktor der zum Einsatz kommt, wenn eine Kontaktliste bereits vorhanden
@@ -41,7 +41,7 @@ public class KontaktlisteForm extends VerticalPanel {
 	 * @param Kontaktliste
 	 */
 	public KontaktlisteForm(Kontaktliste kl) {
-		
+
 		this.selectedKontaktliste = kl;
 		RootPanel.get("content").clear();
 
@@ -56,33 +56,31 @@ public class KontaktlisteForm extends VerticalPanel {
 			public void onSuccess(Kontaktliste result) {
 				selectedKontaktliste = result;
 
-				HorizontalPanel headPanel = new HorizontalPanel();
-				headPanel.add(new HTML("<h2>Kontaktliste: <em>" + selectedKontaktliste.getTitel() + "</em></h2>"));
+				HorizontalPanel headerPanel = new HorizontalPanel();
+				HorizontalPanel BtnPanel = new HorizontalPanel();
+				VerticalPanel vp = new VerticalPanel();
 				
-				if(selectedKontaktliste != null) {
-					RootPanel.get("content").add(new HTML("<div class='info'><p><span class='fa fa-info-circle'></span>"
-							+ " Das ist die Kontaktliste... </p></div>"));
-				} else {
-					//Wenn keine Kontaktliste ausgewählt wird, wird Window neu geladen.
-					Window.alert("leider hast du keine Kontaktliste ausgewählt.");
-					Window.Location.reload();
-				}
+				headerPanel.add(new HTML("<h2>Kontaktliste: <em>" + selectedKontaktliste.getTitel() + "</em></h2>"));
 
+			
 				// L�sch-Button instanziieren und dem Panel zuweisen
 				Button deleteKlBtn = new Button("Kontaktliste löschen");
-				headPanel.add(deleteKlBtn);
-				
+				BtnPanel.add(deleteKlBtn);
+
 				// ClickHandler f�r das L�schen einer Kontaktliste
 				deleteKlBtn.addClickHandler(new deleteClickHandler());
-				headPanel.add(deleteKlBtn);
-			
+				BtnPanel.add(deleteKlBtn);
+
 				// Update-Button intanziieren und dem Panel zuweisen
 				Button editKontaktlisteBtn = new Button("Kontaktliste bearbeiten");
-				
+
 				// ClickHandler f�r das Updaten einer Kontaktliste
 				editKontaktlisteBtn.addClickHandler(new updateKontaktlisteClickHandler());
-				headPanel.add(editKontaktlisteBtn);
-				RootPanel.get("content").add(headPanel);
+				BtnPanel.add(editKontaktlisteBtn);
+				
+				vp.add(headerPanel);
+				vp.add(BtnPanel);
+				RootPanel.get("content").add(vp);
 
 			}
 
@@ -93,13 +91,15 @@ public class KontaktlisteForm extends VerticalPanel {
 	 * Konstruktor der zum Einsatz kommt, wenn eine Kontaktliste neu erstellt wird
 	 */
 	public KontaktlisteForm(final Nutzer n) {
-		//RootPanel leeren damit neuer Content geladen werden kann.
+		// RootPanel leeren damit neuer Content geladen werden kann.
 		RootPanel.get("content").clear();
-		
-		HorizontalPanel headerPanel = new HorizontalPanel();	
-		headerPanel.add(new Label("Neue Kontaktliste erstellen"));
 
-		//Button für den Abbruch der Erstellung.
+		HorizontalPanel headerPanel = new HorizontalPanel();
+		headerPanel.add(new HTML("<h2>Neue Kontaktliste erstellen</h2>"));
+		
+		HorizontalPanel BtnPanel = new HorizontalPanel();
+
+		// Button für den Abbruch der Erstellung.
 		Button quitBtn = new Button("Abbrechen");
 		quitBtn.addClickHandler(new ClickHandler() {
 
@@ -111,17 +111,25 @@ public class KontaktlisteForm extends VerticalPanel {
 			}
 		});
 
-		headerPanel.add(quitBtn);
+		BtnPanel.add(quitBtn);
 
-		Button saveBtn = new Button("Neue Kontaktliste +");
+		Button saveBtn = new Button("erstellen");
 		saveBtn.addClickHandler(new speichernKontaktlisteClickHandler());
-		headerPanel.add(saveBtn);
-
-		RootPanel.get("content").add(headerPanel);
-
-		RootPanel.get("contentHeader").add(new HTML("<h2>Name der Kontaktliste</h2>"));
-
-		RootPanel.get("content").add(txtBox);
+		
+		BtnPanel.add(saveBtn);
+		
+		VerticalPanel vp = new VerticalPanel();
+		
+		vp.add(headerPanel);
+		vp.add(new Label("Name der Kontaktliste:"));
+		txtBox.getElement().setPropertyString("placeholder", "Titel der Kontaktliste...");
+		vp.add(txtBox);
+		vp.add(BtnPanel);
+		
+		vp.setSpacing(20);
+		BtnPanel.setSpacing(20);
+		
+		RootPanel.get("content").add(vp);
 
 	}
 
@@ -149,11 +157,11 @@ public class KontaktlisteForm extends VerticalPanel {
 				public void onSuccess(Vector<Kontakt> result) {
 					// Wenn Kontakte vorhanden sind...
 					if (result.size() > 0) {
-						Window.alert("Die Kontaktliste " + selectedKontaktliste.getTitel() + " enth�lt " + result.size()
+						Window.alert("Die Kontaktliste " + selectedKontaktliste.getTitel() + " enthält " + result.size()
 								+ " Kontakt(e). Bitte zuerst alle Kontakte aus der Liste entfernen.");
 					} else {
 						if (Window.confirm(
-								"M�chten Sie die Kontaktliste " + selectedKontaktliste.getTitel() + "l�schen?")) {
+								"Kontaktliste: " + selectedKontaktliste.getTitel() + "unwiderruflich löschen?")) {
 							loescheKontaktliste();
 						}
 					}
@@ -170,7 +178,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 						@Override
 						public void onSuccess(Void result) {
-							Window.alert("Kontaktliste wurde gel�scht");
+							Window.alert("Kontaktliste wurde gelöscht");
 							Window.Location.reload();
 
 						}
@@ -188,17 +196,17 @@ public class KontaktlisteForm extends VerticalPanel {
 	 * ClickHandler zum Sperichern einer neu angelegten Kontaktliste
 	 */
 	public class speichernKontaktlisteClickHandler implements ClickHandler {
-		
+
 		@Override
 		public void onClick(ClickEvent event) {
 			Nutzer n = new Nutzer();
-			
-			//Cookies des Nutzers holen.
-			
+
+			// Cookies des Nutzers holen.
+
 			n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 			n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
-		
-			ev.createKontaktliste(txtBox.getText(),n , new AsyncCallback<Kontaktliste>() {
+
+			ev.createKontaktliste(txtBox.getText(), n, new AsyncCallback<Kontaktliste>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -209,13 +217,13 @@ public class KontaktlisteForm extends VerticalPanel {
 				@Override
 				public void onSuccess(Kontaktliste result) {
 					RootPanel.get("content").add(new KontaktlisteForm(result));
-					
-					//Refresh der Seite für die Aktualisierug des Baumes.
+
+					// Refresh der Seite für die Aktualisierug des Baumes.
 					Window.Location.reload();
 
 				}
 			});
-			
+
 		}
 
 	}
@@ -229,11 +237,13 @@ public class KontaktlisteForm extends VerticalPanel {
 	private class updateKontaktlisteClickHandler implements ClickHandler {
 		@Override
 		public void onClick(ClickEvent event) {
-			
+
 			RootPanel.get("content").clear();
 			
+			HorizontalPanel BtnPanel = new HorizontalPanel();
 			HorizontalPanel headerPanel = new HorizontalPanel();
-			headerPanel.add(new HTML("<h2>Kontaktliste:  <em>" + selectedKontaktliste.getTitel()+ "</em> bearbeiten</h2>"));
+			headerPanel.add(
+					new HTML("<h2>Kontaktliste:  <em>" + selectedKontaktliste.getTitel() + "</em> bearbeiten</h2>"));
 
 			Button cancelBtn = new Button("abbrechen");
 
@@ -245,7 +255,7 @@ public class KontaktlisteForm extends VerticalPanel {
 				}
 			});
 
-			headerPanel.add(cancelBtn);
+			BtnPanel.add(cancelBtn);
 
 			// Instanziierung Button zum Speichern der �nderungen an der selektierten
 			// Kontaktliste
@@ -269,21 +279,27 @@ public class KontaktlisteForm extends VerticalPanel {
 						public void onSuccess(Void result) {
 							RootPanel.get("content").add(new KontaktlisteForm(selectedKontaktliste));
 							Window.Location.reload();
-							
+
 						}
-					
+
 					});
-					
+
 				}
 			});
+
+			BtnPanel.add(saveBtn);
 			
-			headerPanel.add(saveBtn);
-			RootPanel.get("content").add(headerPanel);
+			VerticalPanel vp = new VerticalPanel();
+			vp.add(headerPanel);
+			vp.add(txtBox);
+			vp.add(BtnPanel);
+			RootPanel.get("content").add(vp);
+			selectedKontaktliste.setTitel(txtBox.getText());
 			
-			txtBox.setText(selectedKontaktliste.getTitel());
-			RootPanel.get("content").add(txtBox);
-			selectedKontaktliste.setTitel(txtBox.getValue());
+			BtnPanel.setSpacing(20);
+			vp.setSpacing(20);
 			
+
 		}
 
 	}

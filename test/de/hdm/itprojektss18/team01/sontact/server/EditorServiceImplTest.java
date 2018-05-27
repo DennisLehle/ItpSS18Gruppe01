@@ -290,14 +290,16 @@ class EditorServiceImplTest extends GWTTestCase {
 	/**
 	 * Test Case fuer das Erhalten einer Eigenschaft anhand ihrer ID
 	 * Trotzdem testen, auch wenn nicht ben�tigt? So haben wir Gewissheit, dass es funktioniert.
-	 * UNCHECK
+	 * CHECK MELANIE
 	 */
 	
-//	public Eigenschaft findEigenschaftById() {
-//		
-//		EditorServiceImpl editor = new EditorServiceImpl();
-//		
-//	}
+	public void getEigenschaftById() {
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getEigenschaftById(17));
+		
+	}
 	
 	/**
 	 * Test Case fuer das Erhalten der Eigenschaften mit ID 1-17
@@ -321,21 +323,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		
 		System.out.println(editor.getEigenschaftAuswahl());
-		
-		
 	}
-	
-	/**
-	 * Test Case fuer das Erhalten einer Eigenschaft, die einer einer Auspraegung eines Kontaktes zugeordnet ist.
-	 * Trotzdem testen, auch wenn nicht ben�tigt? So haben wir Gewissheit, dass es funktioniert.
-	 * UNCHECK
-	 */
-	
-//	public Eigenschaft findEigenschaftForAuspraegung() {
-//		
-//		EditorServiceImpl editor = new EditorServiceImpl();
-//		
-//	}
 	
 	
 	/**

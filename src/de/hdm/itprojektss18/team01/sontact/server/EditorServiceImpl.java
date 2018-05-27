@@ -484,17 +484,32 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		init();
 		this.eMapper.delete(e);
 	}
+	
+	/**
+	 * Gibt eine Eigenschaft anhand ihrer ID zurück. 
+	 * @return Eigenschaft
+	 * @throws IllegalArgumentException
+	 */
+	public Eigenschaft getEigenschaftById(int eigenschaftId) throws IllegalArgumentException {
+		
+		init();
+		
+		return this.eMapper.findEigenschaftById(eigenschaftId);
+	}
 
 	/**
-	 * Gibt die vordefinierte Auswahl der Eigenschaften zurï¿½ck. @return @throws
-	 * IllegalArgumentException @throws
+	 * Gibt die vordefinierte Auswahl der Eigenschaften zurï¿½ck. 
+	 * @return Vector <Eigenschaft>
+	 * @throws IllegalArgumentException 
 	 */
+	
 	public Vector<Eigenschaft> getEigenschaftAuswahl() throws IllegalArgumentException {
 		
 		init();
 		
 		return this.eMapper.findEigenschaftAuswahl();
 	}
+	
 
 	/*
 	 * *************************************************************************

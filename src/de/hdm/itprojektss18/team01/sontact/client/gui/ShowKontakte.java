@@ -27,10 +27,10 @@ import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
-
 /**
- * Diese Klasse zeigt <code>Kontakt</code> Objekte eines Nutzers an. 
- * Diese werden in einem CellTable dargestellt und können von dort aus gelöscht oder angezeigt werden.
+ * Diese Klasse zeigt <code>Kontakt</code> Objekte eines Nutzers an. Diese
+ * werden in einem CellTable dargestellt und können von dort aus gelöscht oder
+ * angezeigt werden.
  * 
  * @author Dennis Lehle, Kevin Batista, Ugur Bayrak
  *
@@ -121,7 +121,8 @@ public class ShowKontakte extends VerticalPanel {
 		};
 
 		/**
-		 * Implementierung der Checkbox fürs auswählen von einem oder mehrere Kontakten.
+		 * Implementierung der Checkbox fürs auswählen von einem oder mehrere
+		 * Kontakten.
 		 */
 		Column<Kontakt, Boolean> checkColumn = new Column<Kontakt, Boolean>(new CheckboxCell(true, false)) {
 			@Override
@@ -153,8 +154,8 @@ public class ShowKontakte extends VerticalPanel {
 		this.add(kontaktTable);
 
 		/**
-		 * Erstellung von Buttons mit <code>ClickHandlern()</code> für Interaktionen mit
-		 * den Kontakten.
+		 * Erstellung von Buttons mit <code>ClickHandlern()</code> für Interaktionen
+		 * mit den Kontakten.
 		 */
 		this.deleteKontakt = new Button("Löschen");
 		this.showKontakt = new Button("Kontakt anzeigen");

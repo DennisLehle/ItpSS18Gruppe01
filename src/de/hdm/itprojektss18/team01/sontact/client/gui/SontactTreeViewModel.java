@@ -113,6 +113,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 			if (selection instanceof Kontaktliste) {
 					RootPanel.get("content").add(new KontaktlisteForm((Kontaktliste) selection));
 			} else if (selection instanceof Kontakt) {
+				RootPanel.get("content").add(new KontaktForm((Kontakt) selection));
 
 			}
 
@@ -163,7 +164,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 
 		this.selectedKontaktliste = selectedKontaktliste;
 		this.kontaktlisteForm.setSelectedKontaktliste(selectedKontaktliste);
-		this.kontaktForm.setSelectedKontaktliste(selectedKontaktliste);
+		this.kontaktForm.setSelectedKontakt(selectedKontakt);
 
 		this.selectedKontakt = null;
 		this.kontaktForm.setSelectedKontakt(null);

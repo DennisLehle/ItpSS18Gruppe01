@@ -576,6 +576,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Auspraegung getAuspraegungById(int auspraegungId) throws IllegalArgumentException {
+		
+		init();
+		
 		return this.aMapper.findAuspraegungById(auspraegungId);
 	}
 
@@ -584,6 +587,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Vector<Auspraegung> getAllAuspraegungenByKontakt(int kontaktId) throws IllegalArgumentException {
+		
+		init();
+		
 		return this.aMapper.findAuspraegungByKontakt(kontaktId);
 	}
 

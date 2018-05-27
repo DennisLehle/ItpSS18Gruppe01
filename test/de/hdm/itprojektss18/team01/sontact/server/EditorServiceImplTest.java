@@ -272,6 +272,33 @@ class EditorServiceImplTest extends GWTTestCase {
 	}
 	
 	
+	/**
+	 * Test Case fuer das Auslesen einer Auspraegung anhand ihrer Id
+	 * CHECK MELANIE
+	 */
+
+	public void getAuspraegungById() {
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getAuspraegungById(8));	
+		
+	}
+	
+	/**
+	 * Test Case fuer das Auslesen Auspraegungen anhand ihrer KontaktId
+	 * CHECK MELANIE
+	 */
+
+	public void getAllAuspraegungenByKontakt() {
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getAllAuspraegungenByKontakt(3));	
+		
+	}
+	
+	
 	
 	/*
 	   * ***************************************************************************

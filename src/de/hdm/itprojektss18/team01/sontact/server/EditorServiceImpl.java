@@ -490,6 +490,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * IllegalArgumentException @throws
 	 */
 	public Vector<Eigenschaft> getEigenschaftAuswahl() throws IllegalArgumentException {
+		
+		init();
+		
 		return this.eMapper.findEigenschaftAuswahl();
 	}
 

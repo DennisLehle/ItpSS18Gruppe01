@@ -301,15 +301,29 @@ class EditorServiceImplTest extends GWTTestCase {
 	
 	/**
 	 * Test Case fuer das Erhalten der Eigenschaften mit ID 1-17
-	 * Trotzdem testen, auch wenn nicht benï¿½tigt? So haben wir Gewissheit, dass es funktioniert.
-	 * UNCHECK
+	 * CHECK MELANIE
 	 */
 	
-//	public Eigenschaft findEigenschaftByAuswahl() {
+	public void getEigenschaftAuswahl() {
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		//Keine Instanziierung von Eigenschaftsobjekten für die Ausgabe notwendig.
 //		
-//		EditorServiceImpl editor = new EditorServiceImpl();
+//		Eigenschaft e = new Eigenschaft();
+//		e.setId(3);
 //		
-//	}
+//		Eigenschaft e1 = new Eigenschaft();
+//		e1.setId(5);
+//		
+//		Eigenschaft e2 = new Eigenschaft();
+//		e2.setId(18);
+		
+		
+		System.out.println(editor.getEigenschaftAuswahl());
+		
+		
+	}
 	
 	/**
 	 * Test Case fuer das Erhalten einer Eigenschaft, die einer einer Auspraegung eines Kontaktes zugeordnet ist.

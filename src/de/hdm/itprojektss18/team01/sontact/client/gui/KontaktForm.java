@@ -1,7 +1,10 @@
 package de.hdm.itprojektss18.team01.sontact.client.gui;
 
+import java.util.Date;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -19,8 +22,8 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * Klasse welche Formulare für Kontaktd darstellt, diese erlauben
- * Interaktionsmöglichkeiten um Kontakte Anzuzeigen, zu Bearbeiten, zu Löschen
+ * Klasse welche Formulare fï¿½r Kontaktd darstellt, diese erlauben
+ * Interaktionsmï¿½glichkeiten um Kontakte Anzuzeigen, zu Bearbeiten, zu Lï¿½schen
  * oder Neuanzulegen.
  * 
  * @author Kevin Batista, Dennis Lehle, Ugur Bayrak
@@ -88,16 +91,16 @@ public class KontaktForm extends VerticalPanel {
 				editKontaktBtn.addClickHandler(new updateKontaktClickHandler());
 				BtnPanel.add(editKontaktBtn);
 				
-				// 
+				// Panel fuer das Erstellungs- und Modifikationsdatum
 				VerticalPanel datePanel = new VerticalPanel();
 				
-			
-				String erstelldate = selectedKontakt.getErstellDat().toString();
-				String moddate = selectedKontakt.getModDat().toString();
-
-				datePanel.add(new HTML("<h2>Datum: <em>" + erstelldate + " "
-						+ moddate + "</em></h2>"));
-
+				DateTimeFormat dateFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM);
+				erstellungsdatum.setText("Erstellungsdatum : " + dateFormat.format(selectedKontakt.getErstellDat()));
+				modifikationsdatum.setText("Modifikationsdatum : " + dateFormat.format(selectedKontakt.getModDat()));
+				
+				datePanel.add(erstellungsdatum);
+				datePanel.add(modifikationsdatum);
+				
 				vp.add(headerPanel);
 				vp.add(BtnPanel);
 				vp.add(datePanel);

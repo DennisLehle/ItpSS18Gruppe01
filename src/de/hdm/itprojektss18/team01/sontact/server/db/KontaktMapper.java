@@ -270,7 +270,7 @@ public class KontaktMapper {
 	 * 
 	 */
 
-	public Vector<Kontakt> findKontaktByNutzerId(int ownerId) {
+	public Vector<Kontakt> findAllByOwner(int ownerId) {
 
 		// Leerer Kontakt Vektor für ale Kontakte eines Nutzers.
 		Vector<Kontakt> result = new Vector<Kontakt>();
@@ -291,6 +291,8 @@ public class KontaktMapper {
 				k.setId(rs.getInt("id"));
 				k.setVorname(rs.getString("vorname"));
 				k.setNachname(rs.getString("nachname"));
+				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
+				k.setModDat(rs.getTimestamp("modifikationsdatum"));
 				k.setOwnerId(rs.getInt("ownerid"));
 
 				// Kontakt Objekte des Nutzers in einen Kontakt Vektor speichern.
@@ -315,7 +317,7 @@ public class KontaktMapper {
 	 * @param ownerId
 	 * @return
 	 */
-	public Kontakt findNutzerKontaktByIdentifier(int ownerId) {
+	public Kontakt findNutzerKontaktByIdentifier(int nutzerId) {
 
 		// Datenbank Verbdinung aufbauen.
 		Connection con = DBConnection.connection();
@@ -324,7 +326,7 @@ public class KontaktMapper {
 
 			// SQL Statement anlegen
 			PreparedStatement prestmt = con
-					.prepareStatement("SELECT * FROM Kontakt " + "WHERE ownerid =" + ownerId + " AND identifier = 'r'");
+					.prepareStatement("SELECT * FROM Kontakt " + "WHERE ownerid =" + nutzerId + " AND identifier = 'r'");
 
 			// Statement als Query an die DB schicken
 			ResultSet rs = prestmt.executeQuery();
@@ -334,6 +336,8 @@ public class KontaktMapper {
 				k.setId(rs.getInt("id"));
 				k.setVorname(rs.getString("vorname"));
 				k.setNachname(rs.getString("nachname"));
+				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
+				k.setModDat(rs.getTimestamp("modifikationsdatum"));
 				k.setOwnerId(rs.getInt("ownerid"));
 				k.setIdentifier(rs.getString("identifier").charAt(0));
 				// Kontakt Objekte des Nutzers in einen Kontakt Vektor speichern.
@@ -376,6 +380,8 @@ public class KontaktMapper {
 				k.setId(rs.getInt("id"));
 				k.setVorname(rs.getString("vorname"));
 				k.setNachname(rs.getString("nachname"));
+				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
+				k.setModDat(rs.getTimestamp("modifikationsdatum"));
 				k.setOwnerId(rs.getInt("ownerid"));
 			}
 			return k;
@@ -405,21 +411,23 @@ public class KontaktMapper {
 			Vector<Kontakt> list = new Vector<Kontakt>();
 
 			// SQL Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Kontakt WHERE nachname like'" + name
-					+ "' OR vorname like '" + name + " WHERE ownerid = " + // id des owner? // + JOIN auf Berechtigung
+			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Kontakt WHERE nachname like %'" + name
+					+ "'% OR vorname like %'" + name + "'% WHERE ownerid = " + // id des owner? // + JOIN auf Berechtigung
 																			// und zurueck auf Kontakt -> +
 					"' ORDER BY nachname");
 
 			// Statement als Query an die DB schicken
-			ResultSet result = prestmt.executeQuery();
+			ResultSet rs = prestmt.executeQuery();
 
 			// Ergebnistuppel in Objekt umwandeln
 			Kontakt k = new Kontakt();
-			while (result.next()) {
-				k.setId(result.getInt("id"));
-				k.setVorname(result.getString("vorname"));
-				k.setNachname(result.getString("nachname"));
-				k.setOwnerId(result.getInt("ownerid"));
+			while (rs.next()) {
+				k.setId(rs.getInt("id"));
+				k.setVorname(rs.getString("vorname"));
+				k.setNachname(rs.getString("nachname"));
+				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
+				k.setModDat(rs.getTimestamp("modifikationsdatum"));
+				k.setOwnerId(rs.getInt("ownerid"));
 			}
 			return list;
 		} catch (SQLException e2) {

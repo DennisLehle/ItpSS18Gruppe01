@@ -187,7 +187,7 @@ public interface EditorService extends RemoteService{
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getAuspraegungById (Auspraegung a);
 	 */
-	public Auspraegung getAuspraegungById(Auspraegung a) throws IllegalArgumentException;
+	public Auspraegung getAuspraegungById(int auspraegungId) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getAllAuspraegungenByKontakt (Kontakt k);

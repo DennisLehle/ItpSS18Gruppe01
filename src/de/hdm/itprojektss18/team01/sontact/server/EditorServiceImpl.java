@@ -975,7 +975,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param kontaktlisteId
 	 * @return
 	 */
-	public Vector<Auspraegung> getAllSharedAuspraegungenByKontakt(int kontaktlisteId) {
+	public Vector<Auspraegung> getAllSharedAuspraegungenByKontakt(int kontaktId) {
 
 		Vector<Berechtigung> bv = this.bMapper.findAll();
 		Vector<Auspraegung> av = new Vector<Auspraegung>();

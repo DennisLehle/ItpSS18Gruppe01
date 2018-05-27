@@ -234,34 +234,47 @@ public class AuspraegungMapper {
 	/**
 	 * Auspraegung anhand der eindeutig bestimmtbaren ID finden
 	 */
-	public Auspraegung findAuspraegungById(int id){
+	
+	public Auspraegung findAuspraegungById(int id) {
 		
-		Connection con = DBConnection.connection();
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM auspraegung WHERE id=? ORDER BY id";
+		
 		
 		try {
-			// SQL-Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement(
-					"SELECT * FROM Auspraegung WHERE id = " + id);
 			
-		    // Statement ausfï¿½hren
-		    ResultSet rs = prestmt.executeQuery();
-		    
-		    if (rs.next()) {
-		    	Auspraegung a = new Auspraegung();
-				a.setId(rs.getInt("id"));
-				a.setWert(rs.getString("wert"));
-				a.setEigenschaftId(rs.getInt("eigenschaftid"));
-				a.setKontaktId(rs.getInt("kontaktid"));
-				a.setOwnerId(rs.getInt("ownerid"));
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, id);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next()) {
 				
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+				//Ergebnis-Tupel in Objekt umwandeln
+				Auspraegung a = new Auspraegung();
+				
+				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				a.setId(rs.getInt(1));
+				a.setWert(rs.getString(2));
+				a.setEigenschaftId(rs.getInt(3));
+				a.setKontaktId(rs.getInt(4));
+				a.setOwnerId(rs.getInt(5));
 
+				return a;
+			}
+		}
 		
+		catch (SQLException e2) {
+			
+			e2.printStackTrace();
+			return null;
+		}
+		
+		return null;
 	}
 	
 	
@@ -271,83 +284,119 @@ public class AuspraegungMapper {
 	 * @param Kontakt
 	 * @return Auspraegungsobjekte
 	 */
+	
+	
 	public Vector<Auspraegung> findAuspraegungByEigenschaft(Eigenschaft e, Kontakt k){
-		Connection con = DBConnection.connection();
-		Vector<Auspraegung> result = new Vector<Auspraegung>();
-		
-		try {
-			// SQL-Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement(
-					"SELECT * FROM Auspraegung WHERE eigenschaftid = " + e.getId() + "AND kontaktid " + k.getId());
 			
-		    // Statement ausfï¿½hren
-		    ResultSet rs = prestmt.executeQuery();
-		    
-		    while (rs.next()) {
-		    	Auspraegung a = new Auspraegung();
-				a.setId(rs.getInt("id"));
-				a.setWert(rs.getString("wert"));
-				a.setEigenschaftId(rs.getInt("eigenschaftid"));
-				a.setKontaktId(rs.getInt("kontaktid"));
-				a.setOwnerId(rs.getInt("ownerid"));
+			Connection con = null;
+			PreparedStatement stmt = null;
+			
+			String selectByKey = "SELECT * FROM auspraegung WHERE eigenschaftid=? AND kontaktid=?";
+			
+			//Erstellung des Ergebnisvektors
+			Vector<Auspraegung> result = new Vector<Auspraegung>();
+			
+			
+			try {
 				
-		        // Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
-		        result.addElement(a);
+				con = DBConnection.connection();
+				stmt = con.prepareStatement(selectByKey);
+				stmt.setInt(1, e.getId());
+				stmt.setInt(2, k.getId());
 				
+				//Execute SQL Statement
+				ResultSet rs = stmt.executeQuery();
+				
+				while(rs.next()) {
+					
+					//Ergebnis-Tupel in Objekt umwandeln
+					Auspraegung a = new Auspraegung();
+					
+					//Setzen der Attribute den Datensätzen aus der DB entsprechend
+					a.setId(rs.getInt(1));
+					a.setWert(rs.getString(2));
+					a.setEigenschaftId(rs.getInt(3));
+					a.setKontaktId(rs.getInt(4));
+					a.setOwnerId(rs.getInt(5));
+					
+					// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
+					result.addElement(a);
+				}
 			}
 			
-		} catch (Exception exeception) {
-			exeception.printStackTrace();
+			catch (SQLException e2) {
+				
+				e2.printStackTrace();
+				return null;
+			}
+			
+			return result;
 		}
-		
-		return result;
-		
-	}
+	
+	
 
 	public Vector<Auspraegung> findAuspraegungByKontakt(int kontaktId){
-		Connection con = DBConnection.connection();
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM auspraegung WHERE kontaktid=?";
+		
+		//Erstellung des Ergebnisvektors
 		Vector<Auspraegung> result = new Vector<Auspraegung>();
 		
+		
 		try {
-			// SQL-Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement(
-					"SELECT * FROM Auspraegung WHERE kontaktid = " + kontaktId);
 			
-		    // Statement ausfï¿½hren
-		    ResultSet rs = prestmt.executeQuery();
-		    
-		    while (rs.next()) {
-		    	Auspraegung a = new Auspraegung();
-				a.setId(rs.getInt("id"));
-				a.setWert(rs.getString("wert"));
-				a.setEigenschaftId(rs.getInt("eigenschaftid"));
-				a.setKontaktId(rs.getInt("kontaktid"));
-				a.setOwnerId(rs.getInt("ownerid"));
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, kontaktId);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
 				
-		        // Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
-		        result.addElement(a);
+				//Ergebnis-Tupel in Objekt umwandeln
+				Auspraegung a = new Auspraegung();
 				
+				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				a.setId(rs.getInt(1));
+				a.setWert(rs.getString(2));
+				a.setEigenschaftId(rs.getInt(3));
+				a.setKontaktId(rs.getInt(4));
+				a.setOwnerId(rs.getInt(5));
+				
+				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
+				result.addElement(a);
 			}
+		}
+		
+		catch (SQLException e2) {
 			
-		} catch (Exception exeception) {
-			exeception.printStackTrace();
+			e2.printStackTrace();
+			return null;
 		}
 		
 		return result;
-		
 	}
+
 	
 	public void deleteAllByOwner(Nutzer n) {
-		Connection con = DBConnection.connection();
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "DELETE FROM Auspraegung WHERE ownerid=?";
 		
 		try {
-		//SQL Statement anlegen
-		PreparedStatement prestmt = con.prepareStatement(
-				"DELETE FROM Auspraegung WHERE ownerid=" 
-				+ n.getId());
+			
+			con = DBConnection.connection();
+			
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, n.getId());
 		
-		//Statement als Query an die DB schicken
-		prestmt.execute();
+			stmt.executeUpdate();
 		}
 		
 		catch (SQLException e2){

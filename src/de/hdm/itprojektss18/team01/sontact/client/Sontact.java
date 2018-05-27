@@ -56,7 +56,7 @@ public class Sontact implements EntryPoint {
 				loginInfo = result;
 				if (loginInfo.isLoggedIn()) {
 
-					editorVerwaltung.findNutzerByEmail(loginInfo.getEmailAddress(), new AsyncCallback<Nutzer>() {
+					editorVerwaltung.getUserByGMail(loginInfo.getEmailAddress(), new AsyncCallback<Nutzer>() {
 
 						@Override
 						public void onFailure(Throwable error) {
@@ -85,7 +85,7 @@ public class Sontact implements EntryPoint {
 									@Override
 									public void onSuccess(Nutzer result) {
 										Nutzer n = result;
-										editorVerwaltung.findNutzerByEmail(n.getEmailAddress(),
+										editorVerwaltung.getUserByGMail(n.getEmailAddress(),
 												new AsyncCallback<Nutzer>() {
 
 													@Override

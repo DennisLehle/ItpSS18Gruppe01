@@ -468,16 +468,16 @@ class EditorServiceImplTest extends GWTTestCase {
 
 /**
  * Test Case fuer die Zuweisung eines Kontakts zu einer Kontaktliste
- * 
+ * CHECK MELANIE
  */
-	
+
 	public void addKontaktToKontaktliste() {
 
 		Nutzer n = new Nutzer();
 		n.setId(1);
 		
 		Kontaktliste kl = new Kontaktliste();
-		kl.setId(2);
+		kl.setId(1);
 		
 		Kontakt k = new Kontakt();
 		k.setId(2);
@@ -491,20 +491,19 @@ class EditorServiceImplTest extends GWTTestCase {
 	
 	/**
 	 * Test Case fuer das Entfernen eines Kontakts aus einer Kontaktliste
-	 *
+	 * CHECK MELANIE
 	 */
 
-	
 	public void removeKontaktFromKontaktliste() {
 		
 		Nutzer n = new Nutzer();
 		n.setId(1);
 				
 		Kontaktliste kl = new Kontaktliste();
-		kl.setId(3);
+		kl.setId(1);
 		
 		Kontakt k = new Kontakt();
-		k.setId(1);
+		k.setId(2);
 
 		EditorServiceImpl editor = new EditorServiceImpl();
 		

@@ -152,7 +152,7 @@ public class KontaktlisteKontaktMapper {
 				 				+ "ON kontaktlistekontakt.kontaktid = kontakt.id " 
 				 				+ "JOIN kontaktliste "
 				 				+ "ON kontaktlistekontakt.kontaktlisteid = kontaktliste.id " 
-				 				+ "WHERE kontaktlistekontakt.kontaktlisteid=?";
+				 				+ "WHERE kontaktlistekontakt.kontaktlisteid= " + kontaktlisteId;
 		 
 		 //Vector erzeugen, der die Kontakte einer Kontaktliste speichert
 		 Vector <Kontakt> result = new Vector<Kontakt>();
@@ -162,13 +162,11 @@ public class KontaktlisteKontaktMapper {
 				con = DBConnection.connection();
 				
 				stmt = con.prepareStatement(selectByKey);
-				stmt.setInt(1, kontaktlisteId);
 				
 				ResultSet rs = stmt.executeQuery();
 				
 				//Für jeden Eintrag im Suchergebnis wird nun ein Objekt erstellt
 			    Kontaktliste kl = new Kontaktliste();
-			    kl.setId(kontaktlisteId);
 			    kl.setTitel("titel");
 			    
 				
@@ -177,12 +175,12 @@ public class KontaktlisteKontaktMapper {
 				while (rs.next()) {
 					
 					Kontakt k = new Kontakt();
-					k.setId(rs.getInt(k.getId()));
-				    k.setVorname(rs.getString(k.getVorname()));
-				    k.setNachname(rs.getString(k.getNachname()));
-				    k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
-				    k.setModDat(rs.getTimestamp("modifikationsdatum"));
-				    k.setOwnerId(rs.getInt(k.getOwnerId()));
+				      k.setId(rs.getInt("id"));
+				      k.setVorname(rs.getString("vorname"));
+				      k.setNachname(rs.getString("nachname"));
+				      k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
+				      k.setModDat(rs.getTimestamp("modifikationsdatum"));
+				      k.setOwnerId(rs.getInt("ownerid"));
 					
 					//Statt return wird hier der Vektor erweitert
 					result.addElement(k);

@@ -54,7 +54,7 @@ public class KontaktlisteKontaktMapper {
 		    stmt.setInt(2, k.getId());
 		    
 		    
-		    //INSERT-Query ausführen
+		    //INSERT-Query ausfï¿½hren
 		    stmt.executeUpdate();
 		    
 				
@@ -165,22 +165,22 @@ public class KontaktlisteKontaktMapper {
 				
 				ResultSet rs = stmt.executeQuery();
 				
-				//Für jeden Eintrag im Suchergebnis wird nun ein Objekt erstellt
+				//Fï¿½r jeden Eintrag im Suchergebnis wird nun ein Objekt erstellt
 			    Kontaktliste kl = new Kontaktliste();
 			    kl.setTitel("titel");
 			    
 				
-				//While Schleife für das Durchlaufen vieler Zeilen
+				//While Schleife fï¿½r das Durchlaufen vieler Zeilen
 				//Schreiben der Objekt-Attribute aus ResultSet
 				while (rs.next()) {
 					
 					Kontakt k = new Kontakt();
-				      k.setId(rs.getInt("id"));
-				      k.setVorname(rs.getString("vorname"));
-				      k.setNachname(rs.getString("nachname"));
-				      k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
-				      k.setModDat(rs.getTimestamp("modifikationsdatum"));
-				      k.setOwnerId(rs.getInt("ownerid"));
+					k.setId(rs.getInt("id"));
+				    k.setVorname(rs.getString("vorname"));
+				    k.setNachname(rs.getString("nachname"));
+				    k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
+				    k.setModDat(rs.getTimestamp("modifikationsdatum"));
+				    k.setOwnerId(rs.getInt("ownerid"));
 					
 					//Statt return wird hier der Vektor erweitert
 					result.addElement(k);

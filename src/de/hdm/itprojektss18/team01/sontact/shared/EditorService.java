@@ -164,6 +164,8 @@ public interface EditorService extends RemoteService{
 	 */
 	public Vector<Eigenschaft> getEigenschaftAuswahl() throws IllegalArgumentException;
 	
+	public String getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException;
+	
 	
 	// Abschnitt Auspr�gung:
 	

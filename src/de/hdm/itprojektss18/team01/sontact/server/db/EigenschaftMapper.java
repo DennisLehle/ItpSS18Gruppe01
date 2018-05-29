@@ -265,7 +265,7 @@ public class EigenschaftMapper {
 	 * @return Eigenschaft
 	 */
 	
-	public Eigenschaft findEigenschaftForAuspraegung (Auspraegung a) {
+	public String findEigenschaftForAuspraegung (int eigenschaftId) {
 		
 		Connection con = null;
 		PreparedStatement stmt = null; 
@@ -276,7 +276,7 @@ public class EigenschaftMapper {
 			
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByAuswahl);
-			stmt.setInt(1, a.getEigenschaftId());
+			stmt.setInt(1, eigenschaftId);
 			
 			ResultSet rs = stmt.executeQuery();
 			
@@ -289,7 +289,7 @@ public class EigenschaftMapper {
 				e.setId(rs.getInt(1));
 				e.setBezeichnung(rs.getString(2));
 				
-				return e; 		
+				return e.getBezeichnung(); 		
 			}
 		}
 		

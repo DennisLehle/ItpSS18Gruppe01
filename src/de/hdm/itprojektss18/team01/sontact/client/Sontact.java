@@ -68,7 +68,6 @@ public class Sontact implements EntryPoint {
 						public void onSuccess(Nutzer nutzer) {
 							if (nutzer != null) {
 								RootPanel.get("content").clear();
-								
 								start(nutzer);
 							} else {
 								RootPanel.get("content").clear();
@@ -189,7 +188,7 @@ public class Sontact implements EntryPoint {
 	//	loginPanel.add(loginHeader);
 		loginPanel.add(loginLabel);
 		loginPanel.add(signInLink);
-		loginPanel.addStyleName("signInLink");
+		loginPanel.addStyleName("login");
 		
 		RootPanel.get("content").add(loginPanel);			
 

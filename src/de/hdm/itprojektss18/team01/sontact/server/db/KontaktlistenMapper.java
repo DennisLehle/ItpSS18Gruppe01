@@ -254,72 +254,95 @@ public class KontaktlistenMapper {
 		  * Diese Default Kontaktliste wird beim registrieren erzeugt um Kontakte speichern zu kÃ¶nnen.
 		  * @param ownerId
 		  * @return
+		  * 
+		  * Kommentar Melanie: Brauchen wir die?
 		  */
-		 public Kontaktliste findOwnersDefaultKontaktliste(Kontaktliste kl) {
-			 
-			    Connection con = DBConnection.connection();
-
-			    try {
-			    	PreparedStatement stmt = con.prepareStatement("SELECT * FROM `Kontaktliste` WHERE `ownerid` AND `titel` = 'DefaultKl'");
-
-			      ResultSet rs = stmt.executeQuery();
-
-			      // FÃ¼r jeden Eintrag im Suchergebnis wird nun ein Kontaktlisten-Objekt erstellt.
-			      Kontaktliste kl1 = new Kontaktliste();
-			      if (rs.next()) {
-			       
-			        kl1.setId(rs.getInt("id"));
-			        kl1.setTitel(rs.getString("titel"));
-			        kl1.setOwnerId(rs.getInt("ownerid"));
-			     
-
-			        // HinzufÃ¼gen des neuen Objekts zum Ergebnisvektor
-			        return kl1;
-			      }
-			    }
-			    catch (SQLException e2) {
-			      e2.printStackTrace();
-			    }
-				return null;
-			  }
-
+	
+	public Kontaktliste findOwnersDefaultKontaktliste(int nutzerId) {
 		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM kontaktliste WHERE ownerid=? AND titel = 'Alle Kontakte'";
+		
+		try {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, nutzerId);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				//Ergebnis-Tupel in Objekt umwandeln
+				Kontaktliste kl = new Kontaktliste();
+				
+				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+		        kl.setId(rs.getInt("id"));
+		        kl.setTitel(rs.getString("titel"));
+		        kl.setOwnerId(rs.getInt("ownerid"));	
+		        
+		        return kl;
+			}
+			
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+	
+		return null;
+	}
+	
+	
 		/**
 		 * Ruft alle Kontaktlisten auf die in der Db gespeichert sind.
 		 * 		 
 		 * @return Kontaktliste
+		 * 
+		 * Kommentar Melanie: Brauchen wir die?
 		 */
-		public Vector<Kontaktliste> findAll() {
-
-			// DBConnection herstellen
-			Connection con = DBConnection.connection();
+	
+	public Vector <Kontaktliste> findAll() {
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM kontaktliste ORDER BY titel";
+		
+		//Erstellung des Ergebnisvektors
+		Vector<Kontaktliste> result = new Vector<Kontaktliste>();
+		
+		try {
 			
-			Vector<Kontaktliste> result = new Vector<Kontaktliste>();
-
-			try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
 				
-				// SQL-Statement anlegen
-				PreparedStatement prestmt = con.prepareStatement(
-				"SELECT * FROM Kontaktliste " + "ORDER BY titel");
-
-				ResultSet rs = prestmt.executeQuery();
-				//Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
-				while (rs.next()) {
-					Kontaktliste kl = new Kontaktliste();
-					kl.setId(rs.getInt("id"));
-					kl.setTitel(rs.getString("titel"));
-					kl.setOwnerId(rs.getInt("ownerid"));
-
-					// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
-					 result.addElement(kl);
-				}
-			} catch (SQLException e2) {
-				e2.printStackTrace();
+				//Ergebnis-Tupel in Objekt umwandeln
+				Kontaktliste kl = new Kontaktliste();
+				
+				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+		        kl.setId(rs.getInt("id"));
+		        kl.setTitel(rs.getString("titel"));
+		        kl.setOwnerId(rs.getInt("ownerid"));
+				
+				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
+				result.addElement(kl);
 			}
-
-			// Rï¿½ckgabe des Ergebnisvektors
 			return result;
 		}
+		
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		return null;
+	}
+		
 		
 		/**
 		 * Findet ein bestimmtes Kontaktlisten-Objekt aus der Datenbank.

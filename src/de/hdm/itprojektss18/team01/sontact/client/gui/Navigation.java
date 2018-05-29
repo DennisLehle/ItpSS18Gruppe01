@@ -21,10 +21,11 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 public class Navigation extends VerticalPanel {
 	
 	Label kontaktlisteLbl = new Label("Meine Kontaktlisten:");
+	
 	Button neueKontaktlisteBtn = new Button(
 			"<image src='/images/kontaktliste.png' width='20px' height='20px' align='center' /> Kontaktliste");
 	
-	Button neuerKontaktBtn = new Button("<image src='/images/add-contacts.png' width='20px' height='20px' align='center' /> Kontaktliste");
+	Button neuerKontaktBtn = new Button("<image src='/images/add-contacts.png' width='20px' height='20px' align='center' />");
 	/**
 	 * Konstruktor der Navigations-Klasse.
 	 */
@@ -57,7 +58,9 @@ public class Navigation extends VerticalPanel {
 		});
 		
 
+
 		neueKontaktlisteBtn.addClickHandler(new ClickHandler() {
+
 			
 			@Override
 			public void onClick(ClickEvent event) {

@@ -146,6 +146,7 @@ public class KontaktlisteForm extends VerticalPanel {
 	 * @author Batista
 	 *
 	 */
+
 	private class deleteClickHandler implements ClickHandler {
 
 		@Override

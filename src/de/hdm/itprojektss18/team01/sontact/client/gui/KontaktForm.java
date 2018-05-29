@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.KontaktlisteKontakt;
@@ -125,37 +126,38 @@ public class KontaktForm extends VerticalPanel {
 					@Override
 					public void onSuccess(Vector<Auspraegung> result) {
 
-						TextBox eTextBox = new TextBox();
-						TextBox aTextBox = new TextBox();
 						Vector<Auspraegung> av = new Vector<>();
 						av = result;
 
-						int count = auspraegungFlex.getRowCount();
-
 						for (int i = 0; i < av.size(); i++) {
-							if (av != null) {
-								ev.getEigenschaftForAuspraegung(av.elementAt(i).getEigenschaftId(),
-										new AsyncCallback<String>() {
+							int acount = 0;
+							
+							TextBox aTextBox = new TextBox();
+							aTextBox.setText(av.elementAt(i).getWert());
+							auspraegungFlex.setWidget(acount + 1, 1, aTextBox);
 
-											@Override
-											public void onFailure(Throwable arg0) {
-												// TODO Auto-generated method stub
+							ev.getEigenschaftForAuspraegung(av.elementAt(i).getEigenschaftId(),
+									new AsyncCallback<Eigenschaft>() {
 
-											}
+										@Override
+										public void onFailure(Throwable caught) {
+											// TODO Auto-generated method stub
+										}
 
-											@Override
-											public void onSuccess(String result) {
-												eTextBox.setText(result);
-												auspraegungFlex.setWidget(count + 1, 0, eTextBox);
-
-											}
-										});
-								aTextBox.setText(av.elementAt(i).getWert());
-								auspraegungFlex.setWidget(count + 1, 1, aTextBox);
-
-							}
+										@Override
+										public void onSuccess(Eigenschaft result) {
+											int ecount = 0;
+											Eigenschaft e = result;
+											TextBox eTextBox = new TextBox();
+											eTextBox.setText(e.getBezeichnung());
+											auspraegungFlex.setWidget(ecount +1 , 0, eTextBox);
+											
+										}
+									});
+							
 
 						}
+
 					}
 				});
 

@@ -108,7 +108,7 @@ public class KontaktlisteKontaktMapper {
 	 * @param k das aus der DB zu l�schende "Objekt"
 	 */
 	
-	public void removeKontaktFromKontaktliste(int kontaktlisteid, Kontakt k) {
+	public void removeKontaktFromKontaktliste(Kontaktliste kl, Kontakt k) {
 			
 			Connection con = null; 
 			PreparedStatement stmt = null;
@@ -120,7 +120,7 @@ public class KontaktlisteKontaktMapper {
 				con = DBConnection.connection();
 				
 				stmt = con.prepareStatement(deleteSQL);
-				stmt.setInt(1, kontaktlisteid);
+				stmt.setInt(1, kl.getId());
 				stmt.setInt(2, k.getId());
 				
 				stmt.executeUpdate();
@@ -152,7 +152,7 @@ public class KontaktlisteKontaktMapper {
 				 				+ "ON kontaktlistekontakt.kontaktid = kontakt.id " 
 				 				+ "JOIN kontaktliste "
 				 				+ "ON kontaktlistekontakt.kontaktlisteid = kontaktliste.id " 
-				 				+ "WHERE kontaktlistekontakt.kontaktlisteid=?";
+				 				+ "WHERE kontaktlistekontakt.kontaktlisteid= " + kontaktlisteId;
 		 
 		 //Vector erzeugen, der die Kontakte einer Kontaktliste speichert
 		 Vector <Kontakt> result = new Vector<Kontakt>();
@@ -162,7 +162,6 @@ public class KontaktlisteKontaktMapper {
 				con = DBConnection.connection();
 				
 				stmt = con.prepareStatement(selectByKey);
-				stmt.setInt(1, kontaktlisteId);
 				
 				ResultSet rs = stmt.executeQuery();
 				

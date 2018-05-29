@@ -20,10 +20,11 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 public class Navigation extends VerticalPanel {
 	
-	Label klLb = new Label("Meine Kontaktlisten:");
-	Button neueKontaktliste = new Button(
+	Label kontaktlisteLbl = new Label("Meine Kontaktlisten:");
+	Button neueKontaktlisteBtn = new Button(
 			"<image src='/images/kontaktliste.png' width='20px' height='20px' align='center' /> Kontaktliste");
-
+	
+	Button neuerKontaktBtn = new Button("<image src='/images/add-contacts.png' width='20px' height='20px' align='center' /> Kontaktliste");
 	/**
 	 * Konstruktor der Navigations-Klasse.
 	 */
@@ -43,10 +44,8 @@ public class Navigation extends VerticalPanel {
 		SontactTreeViewModel navTreeModel = new SontactTreeViewModel(nutzer);
 		CellTree navTree = new CellTree(navTreeModel, null);
 
-		/**
-		 * CLickHandler um neue <code>Kontaktliste</code> zu erstellen.
-		 */
-		neueKontaktliste.addClickHandler(new ClickHandler() {
+		neueKontaktlisteBtn.addClickHandler(new ClickHandler() {
+
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -56,13 +55,25 @@ public class Navigation extends VerticalPanel {
 			}
 
 		});
-	
 		
-		this.add(neueKontaktliste);
-	
+
+		neueKontaktlisteBtn.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				RootPanel.get("content").clear();
+				RootPanel.get("content").add(new KontaktForm(nutzer));
+				
+				
+			}
+		});
 		sc.add(navTree);
+
+		this.add(kontaktlisteLbl);
+		this.add(neueKontaktlisteBtn);
+		this.add(neuerKontaktBtn);
 		this.add(sc);
-		
+
 	}
 
 }

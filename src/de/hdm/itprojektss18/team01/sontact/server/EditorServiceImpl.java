@@ -643,6 +643,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.createAuspraegung(a.getWert(), e.getId(), a.getKontaktId(), n);
 	}
 
+	public String getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException {
+		return eMapper.findEigenschaftForAuspraegung(eigenschaftId);
+		
+	}
 	/**
 	 * Das Entfernen einer selbstdefinierten Eigenschaft mit ihren Auspraegungen des
 	 * Kontakts.
@@ -1091,13 +1095,18 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Für die Suchfunktion, müssen alle möglichen Suchkombinationen abgedeckt
 	 * werden, damit die Suche benutzerfreundlich gewährleistet werden kann.
 	 */
-	public Vector<Kontakt> Suche() throws IllegalArgumentException {
+	public Vector<Kontakt> Suche (Nutzer n, Berechtigung b, Auspraegung a, Eigenschaft e) 
+			throws IllegalArgumentException {
 		
-		Vector<Kontakt> kv = new Vector<Kontakt>();
-		//getAllKontakteByInhalt() done
-		//TODO Binary Search()
-		
-		return kv; 	
+	Vector <Kontakt> kv = this.getAllKontakteByInhalt(n, a, e);
+	Vector <Kontakt> ks = this.getAllSharedKontakteBySharedKontaktliste(b.getReceiverId());
+	
+	Vector<Kontakt> k = new Vector<Kontakt>();
+	k.addAll(kv);
+	k.addAll(ks);
+	
+	//TODO  --> this.kMapper.Suchfunktion  
+		return k; 	
 	}
 
 	/*

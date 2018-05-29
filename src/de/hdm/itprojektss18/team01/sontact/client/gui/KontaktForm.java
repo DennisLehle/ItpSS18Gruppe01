@@ -1,6 +1,6 @@
 package de.hdm.itprojektss18.team01.sontact.client.gui;
 
-import java.util.Date;
+import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -9,6 +9,7 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -18,6 +19,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.KontaktlisteKontakt;
@@ -110,13 +112,59 @@ public class KontaktForm extends VerticalPanel {
 				datePanel.add(erstellungsdatum);
 				datePanel.add(modifikationsdatum);
 
+				FlexTable auspraegungFlex = new FlexTable();
+
+				ev.getAllAuspraegungenByKontakt(selectedKontakt.getId(), new AsyncCallback<Vector<Auspraegung>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.getMessage();
+
+					}
+
+					@Override
+					public void onSuccess(Vector<Auspraegung> result) {
+
+						TextBox eTextBox = new TextBox();
+						TextBox aTextBox = new TextBox();
+						Vector<Auspraegung> av = new Vector<>();
+						av = result;
+
+						int count = auspraegungFlex.getRowCount();
+
+						for (int i = 0; i < av.size(); i++) {
+							if (av != null) {
+								ev.getEigenschaftForAuspraegung(av.elementAt(i).getEigenschaftId(),
+										new AsyncCallback<String>() {
+
+											@Override
+											public void onFailure(Throwable arg0) {
+												// TODO Auto-generated method stub
+
+											}
+
+											@Override
+											public void onSuccess(String result) {
+												eTextBox.setText(result);
+												auspraegungFlex.setWidget(count + 1, 0, eTextBox);
+
+											}
+										});
+								aTextBox.setText(av.elementAt(i).getWert());
+								auspraegungFlex.setWidget(count + 1, 1, aTextBox);
+
+							}
+
+						}
+					}
+				});
+
 				vp.add(headerPanel);
+				vp.add(auspraegungFlex);
 				vp.add(BtnPanel);
 				vp.add(datePanel);
 				RootPanel.get("content").add(vp);
-
 			}
-
 		});
 	}
 
@@ -251,7 +299,7 @@ public class KontaktForm extends VerticalPanel {
 			
 					Kontaktliste kl = sontactTree.getSelectedKontaktliste();
 					
-					ev.removeKontaktFromKontaktliste(kl.getId(), selectedKontakt, new AsyncCallback<Void>() {
+					ev.removeKontaktFromKontaktliste(kl, selectedKontakt, new AsyncCallback<Void>() {
 								@Override
 								public void onFailure(Throwable error) {
 									error.getMessage().toString();
@@ -264,12 +312,12 @@ public class KontaktForm extends VerticalPanel {
 									Window.alert("Kontakt wurde aus der Kontaktliste gelöscht");
 									Window.Location.reload();
 								}
-							});
-				}
-			});
-		}
+							
+				});
+			}
+		});
 	}
-
+	}
 	/**
 	 * ClickHandler zum Speichern eines neu angelegten Kontakts
 	 */

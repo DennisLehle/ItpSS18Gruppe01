@@ -68,7 +68,6 @@ public class Sontact implements EntryPoint {
 						public void onSuccess(Nutzer nutzer) {
 							if (nutzer != null) {
 								RootPanel.get("content").clear();
-								
 								start(nutzer);
 							} else {
 								RootPanel.get("content").clear();

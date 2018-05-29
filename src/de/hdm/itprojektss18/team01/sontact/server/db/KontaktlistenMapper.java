@@ -389,38 +389,6 @@ public class KontaktlistenMapper {
 		return null;
 	}
 
-//		public Kontaktliste findById(int id) {
-//
-//			// DBConnection herstellen
-//			Connection con = DBConnection.connection();
-//
-//			try {
-//				
-//				// SQL-Statement anlegen
-//				PreparedStatement prestmt = con.prepareStatement(
-//						"SELECT * FROM Kontaktliste WHERE id =" + id);
-//							
-//				// SQL Statement wird als Query an die DB geschickt und 
-//				//in die Rï¿½ckgabe von rs gespeichert 
-//				ResultSet rs = prestmt.executeQuery();
-//				
-//				Kontaktliste kl = new Kontaktliste();
-//				
-//				// Ergebnis-Tupel in Objekt umwandeln
-//				if (rs.next()) {
-//					kl.setId(rs.getInt("id"));
-//					kl.setTitel(rs.getString("titel"));
-//					kl.setOwnerId(rs.getInt("ownerid"));		
-//				}
-//				
-//				return kl;
-//			} 
-//			catch (SQLException e2) {
-//				e2.printStackTrace();
-//				return null;
-//			}
-//		}
-
 		
 		/**
 		 * Diese Erweiterungs Methode filtert Kontakte fÃ¼r eine Kontaktliste heraus.
@@ -452,38 +420,78 @@ public class KontaktlistenMapper {
 		 * @param titel
 		 * @return Kontaktliste
 		 */
-		public Kontaktliste findByTitel(Nutzer n, String titel) {
-			
-			// DBConnection herstellen
-			Connection con = DBConnection.connection();
-
-			try {
-			
-							
-				// SQL-Statement anlegen
-				PreparedStatement prestmt = con.prepareStatement(
-						"SELECT * FROM `kontaktliste` WHERE `ownerid` ="+n.getId() + " AND `titel` = \"Alle Kontakte\" ");
+	
+	
+	public Kontaktliste findByTitel(Nutzer n, String titel) {
 		
-										
-				// SQL Statement wird als Query an die DB geschickt und 
-				//in die Rï¿½ckgabe von rs gespeichert 
-				ResultSet rs = prestmt.executeQuery();
-							
-							
-				// Ergebnis-Tupel in Objekt umwandeln
-				Kontaktliste kl = new Kontaktliste(); 
-				if (rs.next()) {
-					kl.setId(rs.getInt("id"));
-					kl.setTitel(rs.getString("titel"));
-					kl.setOwnerId(rs.getInt("ownerid"));		
-				}
-							
-				return kl;
-			} 
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM kontaktliste WHERE ownerid=? AND titel=?";
+		
+		
+		try {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, n.getId());
+			stmt.setString(2, titel);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next()) {
 				
-			catch (SQLException e2) {
-				e2.printStackTrace();
+				//Ergebnis-Tupel in Objekt umwandeln
+				Kontaktliste kl = new Kontaktliste();
+				
+				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				kl.setId(rs.getInt("id"));
+				kl.setTitel(rs.getString("titel"));
+				kl.setOwnerId(rs.getInt("ownerid"));
+				
+				return kl;
 			}
-			return null;
+		} 
+		
+		catch (SQLException e2) {
+			e2.printStackTrace();
 		}
+		
+		return null;
+	}
+//		public Kontaktliste findByTitel(Nutzer n, String titel) {
+//			
+//			// DBConnection herstellen
+//			Connection con = DBConnection.connection();
+//
+//			try {
+//			
+//							
+//				// SQL-Statement anlegen
+//				PreparedStatement prestmt = con.prepareStatement(
+//						"SELECT * FROM `kontaktliste` WHERE `ownerid` ="+n.getId() + " AND `titel` = \"Alle Kontakte\" ");
+//		
+//										
+//				// SQL Statement wird als Query an die DB geschickt und 
+//				//in die Rï¿½ckgabe von rs gespeichert 
+//				ResultSet rs = prestmt.executeQuery();
+//							
+//							
+//				// Ergebnis-Tupel in Objekt umwandeln
+//				Kontaktliste kl = new Kontaktliste(); 
+//				if (rs.next()) {
+//					kl.setId(rs.getInt("id"));
+//					kl.setTitel(rs.getString("titel"));
+//					kl.setOwnerId(rs.getInt("ownerid"));		
+//				}
+//							
+//				return kl;
+//			} 
+//				
+//			catch (SQLException e2) {
+//				e2.printStackTrace();
+//			}
+//			return null;
+//		}
 }

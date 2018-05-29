@@ -493,6 +493,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	public Kontaktliste findKontaktlisteByTitel(Nutzer n, String titel) 
 			throws IllegalArgumentException {
+		
+		init(); 
+		
 		return this.klMapper.findByTitel(n, titel);
 
 	}

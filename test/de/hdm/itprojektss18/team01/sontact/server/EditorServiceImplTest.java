@@ -608,6 +608,21 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 	}
 	
+	/**
+	 * Test Case fuer das Auslesen einer Kontaktliste anhand ihrer ID
+	 * CHECK
+	 */
+	
+	public void findKontaktlisteByTitel() {
+		
+		Nutzer n = new Nutzer();
+		n.setId(3);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.findKontaktlisteByTitel(n, "Alle Kontakte"));
+		
+	}
 	
 	/**
 	 * Test Case fuer das L�schen eines Kontakts

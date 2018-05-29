@@ -431,6 +431,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public void deleteKontaktliste(Kontaktliste kl) throws IllegalArgumentException {
+		
+		init();
 
 		// Alle Kontakte der Kontaktliste aus der DB entfernen.
 		Vector<Kontakt> removeAllKontakte = klkMapper.findAllKontakteByKontaktliste(kl.getId());

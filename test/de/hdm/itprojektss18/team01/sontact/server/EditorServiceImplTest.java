@@ -510,6 +510,25 @@ class EditorServiceImplTest extends GWTTestCase {
 		editor.saveKontaktliste(kl);
 	}
 	
+	/**
+	 * Test Case fuer das Löschen einer Kontaktliste
+	 * CHECK MELANIE
+	 */
+	
+	public void deleteKontaktliste() {
+		
+		Nutzer n = new Nutzer();
+		n.setId(1);
+		
+		Kontaktliste kl = new Kontaktliste();
+		kl.setId(4);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		editor.deleteKontaktliste(kl);
+		
+	}
+	
 
 /**
  * Test Case fuer die Zuweisung eines Kontakts zu einer Kontaktliste

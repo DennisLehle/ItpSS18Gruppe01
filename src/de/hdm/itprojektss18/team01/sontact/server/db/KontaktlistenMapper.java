@@ -95,41 +95,6 @@ public class KontaktlistenMapper {
 		return kl;
 	}	
 
-	
-//	 public Kontaktliste insert(Kontaktliste kl){
-//			
-//			// DBConnection herstellen
-//			Connection con = DBConnection.connection();
-//			
-//			try {
-//				// Leeres SQL Statement anlegen
-//			    Statement stmt = con.createStatement();
-//
-//				// Statement als Query an die DB schicken
-//			    ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Kontaktliste ");
-//			     
-//				// R�ckgabe beinhaltet nur eine Tupel
-//			    if(rs.next()){
-//			    	  	
-//			    	// kl enth�lt den bisher maximalen, nun um 1 inkrementierten Prim�rschl�ssel
-//			    	kl.setId(rs.getInt("maxid") + 1);	    	  	
-//			    	
-//					// INSERT-Statement anlegen
-//			    	PreparedStatement prestmt = con.
-//			    			prepareStatement("INSERT INTO Kontaktliste (id, titel, ownerid) "
-//			    	  				+ "VALUES ('"
-//			    	  				+ kl.getId() + "', '" 
-//									+ kl.getTitel() + "', '"
-//									+ kl.getOwnerId() + "')");
-//
-//			    	// INSERT-Statement ausf�hren
-//					prestmt.execute();
-//				}
-//			} catch (SQLException e2) {
-//				e2.printStackTrace();
-//			}
-//			return kl;
-//		}
 	 
 		/**
 		 * Aktualisierung eines Kontaktlisten-Objekts in der Datenbank.
@@ -137,26 +102,36 @@ public class KontaktlistenMapper {
 		 * @param kontaktliste
 		 * @return Kontaktliste
 		 */
-		public Kontaktliste update(Kontaktliste kl)  {
-			String sql = "UPDATE Kontaktliste SET titel=? WHERE id=?";
+	
+	public Kontaktliste update (Kontaktliste kl) {
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String updateSQL = "UPDATE Kontaktliste SET titel=? WHERE id=?";
+		
+		try {
 			
-			// DBConnection herstellen
-			Connection con = DBConnection.connection();
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(updateSQL);
 			
-			try {
-				PreparedStatement stmt = con.prepareStatement(sql);
-		    	
-		    	stmt.setString(1, kl.getTitel());
-		    	stmt.setInt(2, kl.getId());
-		    	stmt.executeUpdate();
-		    	
-		    	System.out.println("Updated");
-
-			} catch (SQLException e2) {
-				e2.printStackTrace();
-			}
-			return kl;
+			stmt.setString(1, kl.getTitel());
+		    stmt.setInt(2, kl.getId());
+			
+			stmt.executeUpdate(); 
+			
+			System.out.println("Updated");
+		
 		}
+		
+		catch (SQLException e2) {
+			e2.printStackTrace();
+			
+		}
+		
+		return kl;
+	}
+	
 
 		/**
 		 * L�schen eines Kontaktlisten-Objekts aus der Datenbank.

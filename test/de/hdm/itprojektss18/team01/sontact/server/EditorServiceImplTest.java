@@ -502,8 +502,8 @@ class EditorServiceImplTest extends GWTTestCase {
 		n.setId(1);
 		
 		Kontaktliste kl = new Kontaktliste();
-		kl.setId(1);
-		kl.setTitel("Geschaeft");
+		kl.setId(4);
+		kl.setTitel("Freizeit");
 
 		EditorServiceImpl editor = new EditorServiceImpl();
 		

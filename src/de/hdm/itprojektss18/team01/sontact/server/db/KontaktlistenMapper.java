@@ -350,37 +350,76 @@ public class KontaktlistenMapper {
 		 * @param kontaktliste
 		 * @return void
 		 */
-		public Kontaktliste findById(int id) {
-
-			// DBConnection herstellen
-			Connection con = DBConnection.connection();
-
-			try {
+	
+	public Kontaktliste findById(int id) {
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM kontaktliste WHERE id=? ORDER BY id";
+		
+		
+		try {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, id);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next()) {
 				
-				// SQL-Statement anlegen
-				PreparedStatement prestmt = con.prepareStatement(
-						"SELECT * FROM Kontaktliste WHERE id =" + id);
-							
-				// SQL Statement wird als Query an die DB geschickt und 
-				//in die Rï¿½ckgabe von rs gespeichert 
-				ResultSet rs = prestmt.executeQuery();
-				
+				//Ergebnis-Tupel in Objekt umwandeln
 				Kontaktliste kl = new Kontaktliste();
 				
-				// Ergebnis-Tupel in Objekt umwandeln
-				if (rs.next()) {
-					kl.setId(rs.getInt("id"));
-					kl.setTitel(rs.getString("titel"));
-					kl.setOwnerId(rs.getInt("ownerid"));		
-				}
+				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				kl.setId(rs.getInt("id"));
+				kl.setTitel(rs.getString("titel"));
+				kl.setOwnerId(rs.getInt("ownerid"));
 				
 				return kl;
-			} 
-			catch (SQLException e2) {
-				e2.printStackTrace();
-				return null;
 			}
+		} 
+		
+		catch (SQLException e2) {
+			e2.printStackTrace();
 		}
+		
+		return null;
+	}
+
+//		public Kontaktliste findById(int id) {
+//
+//			// DBConnection herstellen
+//			Connection con = DBConnection.connection();
+//
+//			try {
+//				
+//				// SQL-Statement anlegen
+//				PreparedStatement prestmt = con.prepareStatement(
+//						"SELECT * FROM Kontaktliste WHERE id =" + id);
+//							
+//				// SQL Statement wird als Query an die DB geschickt und 
+//				//in die Rï¿½ckgabe von rs gespeichert 
+//				ResultSet rs = prestmt.executeQuery();
+//				
+//				Kontaktliste kl = new Kontaktliste();
+//				
+//				// Ergebnis-Tupel in Objekt umwandeln
+//				if (rs.next()) {
+//					kl.setId(rs.getInt("id"));
+//					kl.setTitel(rs.getString("titel"));
+//					kl.setOwnerId(rs.getInt("ownerid"));		
+//				}
+//				
+//				return kl;
+//			} 
+//			catch (SQLException e2) {
+//				e2.printStackTrace();
+//				return null;
+//			}
+//		}
 
 		
 		/**

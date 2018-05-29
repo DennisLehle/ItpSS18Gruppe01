@@ -504,6 +504,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @return
 	 */
 	public Kontaktliste getKontaktlisteById(int id) {
+		
+		init();
+		
 		return this.klMapper.findById(id);
 	}
 

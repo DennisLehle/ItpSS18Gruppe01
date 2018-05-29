@@ -580,10 +580,10 @@ class EditorServiceImplTest extends GWTTestCase {
 	}
 	
 	/**
-	 * Test Case fuer das Entfernen eines Kontakts aus einer Kontaktliste
+	 * Test Case fuer das Auslesen aller Kontakte eines Owners
 	 *
 	 */
-	@Test
+	
 	public void getKontaktlistenByOwner() {
 		
 		Nutzer n = new Nutzer();
@@ -592,6 +592,20 @@ class EditorServiceImplTest extends GWTTestCase {
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		System.out.println(editor.getKontaktlistenByOwner(n));
+	}
+	
+	
+	/**
+	 * Test Case fuer das Auslesen einer Kontaktliste anhand ihrer ID
+	 * CHECK
+	 */
+
+	public void getKontaktlisteById() {
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getKontaktlisteById(3));
+		
 	}
 	
 	

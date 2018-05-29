@@ -162,51 +162,38 @@ public class KontaktlistenMapper {
 			
 		}
 	}
-//		public void delete(Kontaktliste kl) {
-//
-//			// DBConnection herstellen
-//			Connection con = DBConnection.connection();
-//
-//			try {
-//
-//				// Dem SQL Statement wird der lokalen Variable �bergeben
-//				PreparedStatement prestmt = con.prepareStatement(
-//						"DELETE FROM Kontaktliste WHERE id = "
-//						+ kl.getId());
-//				
-//				// DELETE-Statement ausf�hren
-//				prestmt.execute();
-//				
-//			} catch (SQLException e2) {
-//				e2.printStackTrace();
-//			}
-//		}
-		
+
+	
 		/**
 		 * Loeschen aller <code>Kontaktlisten</code>-Objekte die einem <code>Owner</code> zugewiesen sind. 
 		 * 
 		 * @param ownerId
 		 * @return void
 		 */
-		public void deleteAllByOwner(Nutzer n) {
-
-			// DBConnection herstellen
-			Connection con = DBConnection.connection();
-
-			try {
-
-				// Dem SQL Statement wird der lokalen Variable �bergeben
-				PreparedStatement prestmt = con.prepareStatement(
-						"DELETE FROM Kontaktliste WHERE ownerid = "
-						+ n.getId());
-				
-				// DELETE-Statement ausf�hren
-				prestmt.execute();
-				
-			} catch (SQLException e2) {
-				e2.printStackTrace();
-			}
+	
+	public void deleteAllByOwner (Nutzer n) {
+		
+		Connection con = null; 
+		PreparedStatement stmt = null;
+		
+		String deleteSQL = "DELETE FROM kontaktliste WHERE ownerid=?";
+		
+		try {
+			
+			con = DBConnection.connection();
+			
+			stmt = con.prepareStatement(deleteSQL);
+			stmt.setInt(1, n.getId());
+			
+			stmt.executeUpdate();
 		}
+		
+		catch (SQLException e2) {
+			e2.printStackTrace();
+			
+		}
+	}
+
 		
 		/**
 		 * Findet Kontaktlisten-Objekte eines Owners die er erstellt hat.

@@ -68,7 +68,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case fÃ¼r die Erstellung eines Nutzers.
 	 * CHECK MELANIE
 	 */
-
+	
 	public void createNutzer() {
 		
 		//Variable anlegen die Ã¼bergeben werden soll.
@@ -90,13 +90,17 @@ class EditorServiceImplTest extends GWTTestCase {
 	
 	/**
 	 * Test Case fÃ¼r die Löschung eines Nutzers aus unserer Datenbank.
-	 * CHECK MELANIE mit allen Kontakten und Auspraegungen 
+	 * UNCHECK --> KontaktlisteKontaktMapper nicht berücksichtigt 
 	 */
 
 	public void deleteNutzer() {
 		
 		Nutzer n = new Nutzer();
 		n.setId(3);
+		
+		Kontaktliste kl = new Kontaktliste();
+		
+		Kontakt k = new Kontakt();
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -235,7 +239,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		 * Test Case fuer das Erstellen einer Auspraegung
 		 * CHECK
 		 */
-
+	
 	public void createAuspraegung() {
 		Nutzer n = new Nutzer();
 		n.setId(3);
@@ -267,9 +271,9 @@ class EditorServiceImplTest extends GWTTestCase {
 //		
 //		editor.createAuspraegung("lisaluftig@yahoo.de", 14 , 3 , n);
 		
-		//Hans Gretel
+		//Test Melanie
 		
-		editor.createAuspraegung("43", 18, 4, n);
+		editor.createAuspraegung("43", 18, 5, n);
 		
 	}
 	

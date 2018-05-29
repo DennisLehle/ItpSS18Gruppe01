@@ -156,6 +156,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public void deleteNutzer(Nutzer n) throws IllegalArgumentException {
 
 		init();
+		
+//		//Verknüpfung aus Zwischentabelle KontaktlisteKontakt löschen
+//		this.klkMapper.removeKontaktFromKontaktliste(kl, k);
 
 		// Alle Auspraegungen der Kontakte, welche im Eigentumsverhï¿½ltnis mit
 		// dem Nutzer stehen, aus der DB entfernen
@@ -168,6 +171,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Alle Kontaktlisten, welche im Eigentumsverhï¿½ltnis mit dem Nutzer
 		// stehen, aus der DB entfernen
 		this.klMapper.deleteAllByOwner(n);
+		
 
 		// Alle Von- + Mit- Berechtigungen aus der DB entfernen
 		// TO-DO ...

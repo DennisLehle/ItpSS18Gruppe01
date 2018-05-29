@@ -209,6 +209,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Kontaktliste und Kontakt der zwischen Tabelle hinzufügen.
 		this.addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Alle Kontakte"), 
 				kMapper.insert(kontakt));
+		
 
 	}
 
@@ -231,7 +232,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		kontakt.setIdentifier('r');
 
 		kontakt.setId(1);
-		init();
+
 
 		// Kontakt in db vorhanden...
 		this.kMapper.insert(kontakt);
@@ -293,6 +294,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Kontakt getKontaktById(int id) throws IllegalArgumentException {
+		
+		init();
 		return this.kMapper.findKontaktById(id);
 	}
 
@@ -311,8 +314,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Auslesen der Kontakte anhand des Namens.
 	 */
 	// Beschr�nkung auf eigene Kontakte?
-	public Vector<Kontakt> getKontaktByName(String name) throws IllegalArgumentException {
-		return this.kMapper.findKontaktByName(name);
+	public Vector<Kontakt> getKontaktByName(String name, Nutzer n) throws IllegalArgumentException {
+		
+		init();
+		
+		return this.kMapper.findKontaktByName(name, n);
 	}
 
 	/**
@@ -320,6 +326,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Vector<Kontakt> getAllKontakteByOwner(Nutzer n) throws IllegalArgumentException {
+		
+		init(); 
 		return this.kMapper.findAllByOwner(n.getId());
 	}
 

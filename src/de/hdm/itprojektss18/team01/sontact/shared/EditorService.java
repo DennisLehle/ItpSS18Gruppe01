@@ -80,7 +80,7 @@ public interface EditorService extends RemoteService{
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontaktByName(String name);
 	 */
-	public Vector<Kontakt> getKontaktByName(String name) throws IllegalArgumentException;
+	public Vector<Kontakt> getKontaktByName(String name, Nutzer n) throws IllegalArgumentException;
 	
 	public Vector<Kontakt> getAllKontakteByOwner(Nutzer n) throws IllegalArgumentException;
 

@@ -643,6 +643,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.createAuspraegung(a.getWert(), e.getId(), a.getKontaktId(), n);
 	}
 
+	public String getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException {
+		return eMapper.findEigenschaftForAuspraegung(eigenschaftId);
+		
+	}
 	/**
 	 * Das Entfernen einer selbstdefinierten Eigenschaft mit ihren Auspraegungen des
 	 * Kontakts.

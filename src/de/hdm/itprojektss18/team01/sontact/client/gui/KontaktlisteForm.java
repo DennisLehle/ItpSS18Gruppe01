@@ -156,8 +156,9 @@ public class KontaktlisteForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			// Check, ob Kontakte in der Liste enthalten sind
-			ev.getKontakteByKontaktliste(selectedKontaktliste.getId(), new AsyncCallback<Vector<Kontakt>>() {
+			
+			Window.alert("Sind Sie sicher die Kontaktliste " + selectedKontaktliste.getTitel() + " löschen zu wollen?");
+			ev.deleteKontaktliste(selectedKontaktliste, new AsyncCallback<Void>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -165,42 +166,11 @@ public class KontaktlisteForm extends VerticalPanel {
 				}
 
 				@Override
-				public void onSuccess(Vector<Kontakt> result) {
-					// Wenn Kontakte vorhanden sind...
-					if (result.size() > 0) {
-						Window.alert("Die Kontaktliste " + selectedKontaktliste.getTitel() + " enthält " + result.size()
-								+ " Kontakt(e). Bitte zuerst alle Kontakte aus der Liste entfernen.");
-					} else {
-						if (Window.confirm(
-								"Kontaktliste: " + selectedKontaktliste.getTitel() + "unwiderruflich löschen?")) {
-							loescheKontaktliste();
+				public void onSuccess(Void result) {
+					Window.Location.reload();
 						}
-					}
-				}
-
-				public void loescheKontaktliste() {
-					ev.deleteKontaktliste(selectedKontaktliste, new AsyncCallback<Void>() {
-
-						@Override
-						public void onFailure(Throwable error) {
-							error.getMessage().toString();
-
-						}
-
-						@Override
-						public void onSuccess(Void result) {
-							Window.alert("Kontaktliste wurde gelöscht");
-							Window.Location.reload();
-
-						}
-
 					});
-
 				}
-			});
-
-		}
-
 	}
 
 	/**

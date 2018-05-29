@@ -54,7 +54,7 @@ public class KontaktlisteKontaktMapper {
 		    stmt.setInt(2, k.getId());
 		    
 		    
-		    //INSERT-Query ausführen
+		    //INSERT-Query ausfï¿½hren
 		    stmt.executeUpdate();
 		    
 				
@@ -108,7 +108,7 @@ public class KontaktlisteKontaktMapper {
 	 * @param k das aus der DB zu lï¿½schende "Objekt"
 	 */
 	
-	public void removeKontaktFromKontaktliste(Kontaktliste kl, Kontakt k) {
+	public void removeKontaktFromKontaktliste(int kontaktlisteid, Kontakt k) {
 			
 			Connection con = null; 
 			PreparedStatement stmt = null;
@@ -120,7 +120,7 @@ public class KontaktlisteKontaktMapper {
 				con = DBConnection.connection();
 				
 				stmt = con.prepareStatement(deleteSQL);
-				stmt.setInt(1, kl.getId());
+				stmt.setInt(1, kontaktlisteid);
 				stmt.setInt(2, k.getId());
 				
 				stmt.executeUpdate();
@@ -166,23 +166,22 @@ public class KontaktlisteKontaktMapper {
 				
 				ResultSet rs = stmt.executeQuery();
 				
-				//Für jeden Eintrag im Suchergebnis wird nun ein Objekt erstellt
+				//Fï¿½r jeden Eintrag im Suchergebnis wird nun ein Objekt erstellt
 			    Kontaktliste kl = new Kontaktliste();
-			    kl.setId(kontaktlisteId);
 			    kl.setTitel("titel");
 			    
 				
-				//While Schleife für das Durchlaufen vieler Zeilen
+				//While Schleife fï¿½r das Durchlaufen vieler Zeilen
 				//Schreiben der Objekt-Attribute aus ResultSet
 				while (rs.next()) {
 					
 					Kontakt k = new Kontakt();
-					k.setId(rs.getInt(k.getId()));
-				    k.setVorname(rs.getString(k.getVorname()));
-				    k.setNachname(rs.getString(k.getNachname()));
+					k.setId(rs.getInt("id"));
+				    k.setVorname(rs.getString("vorname"));
+				    k.setNachname(rs.getString("nachname"));
 				    k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
 				    k.setModDat(rs.getTimestamp("modifikationsdatum"));
-				    k.setOwnerId(rs.getInt(k.getOwnerId()));
+				    k.setOwnerId(rs.getInt("ownerid"));
 					
 					//Statt return wird hier der Vektor erweitert
 					result.addElement(k);

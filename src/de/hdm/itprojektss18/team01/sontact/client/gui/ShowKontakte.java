@@ -15,8 +15,11 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
@@ -46,15 +49,18 @@ public class ShowKontakte extends VerticalPanel {
 
 	private Button deleteKontakt;
 	private Button showKontakt = new Button("Kontakt anzeigen");
-	private Label titel = new Label();
 
 	HorizontalPanel hp = new HorizontalPanel();
+	HorizontalPanel head = new HorizontalPanel();
+	ScrollPanel sp = new ScrollPanel();
 
 	/**
 	 * Konstruktor der Klasse
 	 */
 	public ShowKontakte(final Nutzer n) {
 
+		head.add(new HTML("<h2>Übersicht Ihrer Kontakte</h2>"));
+		RootPanel.get("content").add(head);
 		// Methode die beim Start dieser Klasse aufgerufen wird.
 		onLoad(n);
 		// Buttons die inizialisiert werden bei Start dieser Klasse
@@ -64,10 +70,6 @@ public class ShowKontakte extends VerticalPanel {
 
 	protected void onLoad(final Nutzer n) {
 
-		/**
-		 * Initialisierung des Labels und eines CellTabels für die Kontakte
-		 */
-		this.add(titel);
 		kontaktTable = new CellTable<Kontakt>();
 
 		ev.getAllKontakteByOwner(n, new AsyncCallback<Vector<Kontakt>>() {
@@ -121,8 +123,7 @@ public class ShowKontakte extends VerticalPanel {
 		};
 
 		/**
-		 * Implementierung der Checkbox fürs auswählen von einem oder mehrere
-		 * Kontakten.
+		 * Implementierung der Checkbox fürs auswählen von einem oder mehrere Kontakten.
 		 */
 		Column<Kontakt, Boolean> checkColumn = new Column<Kontakt, Boolean>(new CheckboxCell(true, false)) {
 			@Override
@@ -142,7 +143,9 @@ public class ShowKontakte extends VerticalPanel {
 
 		kontaktTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		kontaktTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
-
+		kontaktTable.setWidth("80%", true);
+		kontaktTable.setColumnWidth(vornameCol, "100px");
+		kontaktTable.setColumnWidth(nachnameCol, "200px");
 		kontaktTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Kontakt>createCheckboxManager());
 
 		ListDataProvider<Kontakt> dataProvider = new ListDataProvider<Kontakt>();
@@ -154,12 +157,14 @@ public class ShowKontakte extends VerticalPanel {
 		this.add(kontaktTable);
 
 		/**
-		 * Erstellung von Buttons mit <code>ClickHandlern()</code> für Interaktionen
-		 * mit den Kontakten.
+		 * Erstellung von Buttons mit <code>ClickHandlern()</code> für Interaktionen mit
+		 * den Kontakten.
 		 */
 		this.deleteKontakt = new Button("Löschen");
 		this.showKontakt = new Button("Kontakt anzeigen");
-		titel.setText("Meine Kontakte");
+		sp.setSize("900px", "400px");
+		sp.add(kontaktTable);
+		this.add(sp);
 		this.add(hp);
 
 		/**
@@ -173,21 +178,26 @@ public class ShowKontakte extends VerticalPanel {
 
 				Kontakt k = selectionModel.getSelectedObject();
 
-				ev.getKontaktById(k.getId(), new AsyncCallback<Kontakt>() {
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert("Der ausgewählte Kontakt konnte nicht angezeigt werden.");
+				if (k == null) {
+					MessageBox.alertWidget("Hinweis", "Bitte wählen Sie einen Kontakt aus.");
+				} else {
+					RootPanel.get("content").clear();
+					ev.getKontaktById(k.getId(), new AsyncCallback<Kontakt>() {
+						@Override
+						public void onFailure(Throwable caught) {
+							Window.alert("Der ausgewählte Kontakt konnte nicht angezeigt werden.");
 
-					}
+						}
 
-					@Override
-					public void onSuccess(Kontakt result) {
+						@Override
+						public void onSuccess(Kontakt result) {
 
-					}
-				});
-				clear();
-				add(new KontaktForm());
+						}
+					});
+					clear();
+					add(new KontaktForm(k));
 
+				}
 			}
 		});
 
@@ -210,7 +220,7 @@ public class ShowKontakte extends VerticalPanel {
 					@Override
 					public void onSuccess(Void result) {
 						if (selectionModel.getSelectedSet().size() > 0) {
-							clear();
+							Window.Location.reload();
 							onLoad(n);
 						}
 					}

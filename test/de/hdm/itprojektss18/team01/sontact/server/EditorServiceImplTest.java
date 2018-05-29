@@ -212,7 +212,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		System.out.println(editor.getKontaktById(3));
 	}
 	
-	@Test
+
 	public void getKontaktByName() {
 		
 		Nutzer n = new Nutzer();
@@ -478,7 +478,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case fuer das Erstellen einer Kontaktliste
 	 * CHECK
 	 */
-	
+
 	public void createKontaktliste() {
 		
 		Nutzer n = new Nutzer();
@@ -487,8 +487,8 @@ class EditorServiceImplTest extends GWTTestCase {
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		//Ich erstelle eine Kontaktliste und �bergebe einen Nutzer
-		editor.createKontaktliste("Familie", n);
-		editor.createKontaktliste("Freunde", n);
+		editor.createKontaktliste("Privat", n);
+//		editor.createKontaktliste("Freunde", n);
 	}
 	
 	/**

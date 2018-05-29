@@ -43,40 +43,93 @@ public class KontaktlistenMapper {
 	 * @param kontaktliste
 	 * @return Kontaktliste
 	 */
-	 public Kontaktliste insert(Kontaktliste kl){
+	
+	public Kontaktliste insert (Kontaktliste kl) {
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		
+		//Query für die Abfrage der hoechsten ID (Primärschlüssel) in der Datenbank
+		String maxIdSQL = "SELECT MAX(id) AS maxid FROM kontaktliste";
+		
+		
+		//Query für den Insert
+		String insertSQL = "INSERT INTO Kontaktliste (id, titel, ownerid) VALUES (?,?,?)";		
+		
+		
+		try {
 			
-			// DBConnection herstellen
-			Connection con = DBConnection.connection();
+			con = DBConnection.connection(); 
+			stmt = con.prepareStatement(maxIdSQL);
 			
-			try {
-				// Leeres SQL Statement anlegen
-			    Statement stmt = con.createStatement();
 
-				// Statement als Query an die DB schicken
-			    ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Kontaktliste ");
-			     
-				// Rï¿½ckgabe beinhaltet nur eine Tupel
-			    if(rs.next()){
-			    	  	
-			    	// kl enthï¿½lt den bisher maximalen, nun um 1 inkrementierten Primï¿½rschlï¿½ssel
-			    	kl.setId(rs.getInt("maxid") + 1);	    	  	
-			    	
-					// INSERT-Statement anlegen
-			    	PreparedStatement prestmt = con.
-			    			prepareStatement("INSERT INTO Kontaktliste (id, titel, ownerid) "
-			    	  				+ "VALUES ('"
-			    	  				+ kl.getId() + "', '" 
-									+ kl.getTitel() + "', '"
-									+ kl.getOwnerId() + "')");
+			//MAX ID Query ausfuehren
+			ResultSet rs = stmt.executeQuery();
+			
+			
+			//...um diese dann um 1 inkrementiert der ID des BO zuzuweisen
+		    if(rs.next()){
+		    	kl.setId(rs.getInt("maxId")+1);
+		    }	   
+		    
+		    	
+			//Jetzt erfolgt der Insert
+		    stmt = con.prepareStatement(insertSQL);
+		    
 
-			    	// INSERT-Statement ausfï¿½hren
-					prestmt.execute();
-				}
-			} catch (SQLException e2) {
-				e2.printStackTrace();
-			}
-			return kl;
-		}
+		    //Setzen der ? Platzhalter als Values
+		    stmt.setInt(1, kl.getId());
+		    stmt.setString(2, kl.getTitel());
+		    stmt.setInt(3, kl.getOwnerId());
+		   
+		    
+		    //INSERT-Query ausführen
+		    stmt.executeUpdate();
+		    
+		    
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			}			
+		
+		return kl;
+	}	
+
+	
+//	 public Kontaktliste insert(Kontaktliste kl){
+//			
+//			// DBConnection herstellen
+//			Connection con = DBConnection.connection();
+//			
+//			try {
+//				// Leeres SQL Statement anlegen
+//			    Statement stmt = con.createStatement();
+//
+//				// Statement als Query an die DB schicken
+//			    ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Kontaktliste ");
+//			     
+//				// Rï¿½ckgabe beinhaltet nur eine Tupel
+//			    if(rs.next()){
+//			    	  	
+//			    	// kl enthï¿½lt den bisher maximalen, nun um 1 inkrementierten Primï¿½rschlï¿½ssel
+//			    	kl.setId(rs.getInt("maxid") + 1);	    	  	
+//			    	
+//					// INSERT-Statement anlegen
+//			    	PreparedStatement prestmt = con.
+//			    			prepareStatement("INSERT INTO Kontaktliste (id, titel, ownerid) "
+//			    	  				+ "VALUES ('"
+//			    	  				+ kl.getId() + "', '" 
+//									+ kl.getTitel() + "', '"
+//									+ kl.getOwnerId() + "')");
+//
+//			    	// INSERT-Statement ausfï¿½hren
+//					prestmt.execute();
+//				}
+//			} catch (SQLException e2) {
+//				e2.printStackTrace();
+//			}
+//			return kl;
+//		}
 	 
 		/**
 		 * Aktualisierung eines Kontaktlisten-Objekts in der Datenbank.

@@ -188,7 +188,7 @@ public class Sontact implements EntryPoint {
 	//	loginPanel.add(loginHeader);
 		loginPanel.add(loginLabel);
 		loginPanel.add(signInLink);
-		loginPanel.addStyleName("signInLink");
+		loginPanel.addStyleName("login");
 		
 		RootPanel.get("content").add(loginPanel);			
 

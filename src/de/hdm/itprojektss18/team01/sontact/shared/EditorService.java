@@ -80,7 +80,7 @@ public interface EditorService extends RemoteService{
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontaktByName(String name);
 	 */
-	public Vector<Kontakt> getKontaktByName(String name) throws IllegalArgumentException;
+	public Vector<Kontakt> getKontaktByName(String name, Nutzer n) throws IllegalArgumentException;
 	
 	public Vector<Kontakt> getAllKontakteByOwner(Nutzer n) throws IllegalArgumentException;
 
@@ -164,7 +164,7 @@ public interface EditorService extends RemoteService{
 	 */
 	public Vector<Eigenschaft> getEigenschaftAuswahl() throws IllegalArgumentException;
 	
-	public String getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException;
+	public Eigenschaft getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException;
 	
 	
 	// Abschnitt Auspr�gung:

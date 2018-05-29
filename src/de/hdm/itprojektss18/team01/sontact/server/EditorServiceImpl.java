@@ -4,9 +4,21 @@ import java.sql.Timestamp;
 import java.util.Vector;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import de.hdm.itprojektss18.team01.sontact.server.db.*;
-import de.hdm.itprojektss18.team01.sontact.shared.*;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.*;
+
+import de.hdm.itprojektss18.team01.sontact.server.db.AuspraegungMapper;
+import de.hdm.itprojektss18.team01.sontact.server.db.BerechtigungMapper;
+import de.hdm.itprojektss18.team01.sontact.server.db.EigenschaftMapper;
+import de.hdm.itprojektss18.team01.sontact.server.db.KontaktMapper;
+import de.hdm.itprojektss18.team01.sontact.server.db.KontaktlisteKontaktMapper;
+import de.hdm.itprojektss18.team01.sontact.server.db.KontaktlistenMapper;
+import de.hdm.itprojektss18.team01.sontact.server.db.NutzerMapper;
+import de.hdm.itprojektss18.team01.sontact.shared.EditorService;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 public class EditorServiceImpl extends RemoteServiceServlet implements EditorService {
 
@@ -156,6 +168,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public void deleteNutzer(Nutzer n) throws IllegalArgumentException {
 
 		init();
+		
+//		//Verknüpfung aus Zwischentabelle KontaktlisteKontakt löschen
+//		this.klkMapper.removeKontaktFromKontaktliste(kl, k);
 
 		// Alle Auspraegungen der Kontakte, welche im Eigentumsverhï¿½ltnis mit
 		// dem Nutzer stehen, aus der DB entfernen
@@ -168,6 +183,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Alle Kontaktlisten, welche im Eigentumsverhï¿½ltnis mit dem Nutzer
 		// stehen, aus der DB entfernen
 		this.klMapper.deleteAllByOwner(n);
+		
 
 		// Alle Von- + Mit- Berechtigungen aus der DB entfernen
 		// TO-DO ...
@@ -209,6 +225,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Kontaktliste und Kontakt der zwischen Tabelle hinzufÃ¼gen.
 		this.addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Alle Kontakte"), 
 				kMapper.insert(kontakt));
+		
 
 	}
 
@@ -231,7 +248,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		kontakt.setIdentifier('r');
 
 		kontakt.setId(1);
-		init();
+
 
 		// Kontakt in db vorhanden...
 		this.kMapper.insert(kontakt);
@@ -293,6 +310,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Kontakt getKontaktById(int id) throws IllegalArgumentException {
+		
+		init();
 		return this.kMapper.findKontaktById(id);
 	}
 
@@ -311,8 +330,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Auslesen der Kontakte anhand des Namens.
 	 */
 	// Beschrï¿½nkung auf eigene Kontakte?
-	public Vector<Kontakt> getKontaktByName(String name) throws IllegalArgumentException {
-		return this.kMapper.findKontaktByName(name);
+	public Vector<Kontakt> getKontaktByName(String name, Nutzer n) throws IllegalArgumentException {
+		
+		init();
+		
+		return this.kMapper.findKontaktByName(name, n);
 	}
 
 	/**
@@ -320,6 +342,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Vector<Kontakt> getAllKontakteByOwner(Nutzer n) throws IllegalArgumentException {
+		
+		init(); 
 		return this.kMapper.findAllByOwner(n.getId());
 	}
 
@@ -423,6 +447,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public void deleteKontaktliste(Kontaktliste kl) throws IllegalArgumentException {
+		
+		init();
 
 		// Alle Kontakte der Kontaktliste aus der DB entfernen.
 		Vector<Kontakt> removeAllKontakte = klkMapper.findAllKontakteByKontaktliste(kl.getId());
@@ -470,6 +496,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	public Kontaktliste findKontaktlisteByTitel(Nutzer n, String titel) 
 			throws IllegalArgumentException {
+		
+		init(); 
+		
 		return this.klMapper.findByTitel(n, titel);
 
 	}
@@ -481,6 +510,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @return
 	 */
 	public Kontaktliste getKontaktlisteById(int id) {
+		
+		init();
+		
 		return this.klMapper.findById(id);
 	}
 
@@ -646,7 +678,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.createAuspraegung(a.getWert(), e.getId(), a.getKontaktId(), n);
 	}
 
-	public String getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException {
+	public Eigenschaft getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException {
 		return eMapper.findEigenschaftForAuspraegung(eigenschaftId);
 		
 	}

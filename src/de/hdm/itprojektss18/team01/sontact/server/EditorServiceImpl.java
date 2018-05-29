@@ -4,9 +4,21 @@ import java.sql.Timestamp;
 import java.util.Vector;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import de.hdm.itprojektss18.team01.sontact.server.db.*;
-import de.hdm.itprojektss18.team01.sontact.shared.*;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.*;
+
+import de.hdm.itprojektss18.team01.sontact.server.db.AuspraegungMapper;
+import de.hdm.itprojektss18.team01.sontact.server.db.BerechtigungMapper;
+import de.hdm.itprojektss18.team01.sontact.server.db.EigenschaftMapper;
+import de.hdm.itprojektss18.team01.sontact.server.db.KontaktMapper;
+import de.hdm.itprojektss18.team01.sontact.server.db.KontaktlisteKontaktMapper;
+import de.hdm.itprojektss18.team01.sontact.server.db.KontaktlistenMapper;
+import de.hdm.itprojektss18.team01.sontact.server.db.NutzerMapper;
+import de.hdm.itprojektss18.team01.sontact.shared.EditorService;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 public class EditorServiceImpl extends RemoteServiceServlet implements EditorService {
 
@@ -643,7 +655,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.createAuspraegung(a.getWert(), e.getId(), a.getKontaktId(), n);
 	}
 
-	public String getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException {
+	public Eigenschaft getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException {
 		return eMapper.findEigenschaftForAuspraegung(eigenschaftId);
 		
 	}

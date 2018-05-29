@@ -185,7 +185,7 @@ public interface EditorServiceAsync {
 	void getStatusForObject(int objectId, AsyncCallback<Boolean> callback);
 
 
-	void getEigenschaftForAuspraegung(int eigenschaftId, AsyncCallback<String> callback);
+	void getEigenschaftForAuspraegung(int eigenschaftId, AsyncCallback<Eigenschaft> callback);
 
 
 

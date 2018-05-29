@@ -4,12 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Vector;
 
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 
 /**
  * <code>EigenschaftMapper</code>, welcher <code>Eigenschaft</code>-Objekte
@@ -221,7 +218,7 @@ public class EigenschaftMapper {
 		Connection con = null; 
 		PreparedStatement stmt = null; 
 		
-		String selectByAuswahl = "SELECT * FROM eigenschaft WHERE id BETWEEN 1 AND 17";
+		String selectByAuswahl = "SELECT * FROM eigenschaft";
 		
 		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
 		Vector <Eigenschaft> result = new Vector<Eigenschaft>();
@@ -265,31 +262,27 @@ public class EigenschaftMapper {
 	 * @return Eigenschaft
 	 */
 	
-	public String findEigenschaftForAuspraegung (int eigenschaftId) {
+	public Eigenschaft findEigenschaftForAuspraegung (int eigenschaftId) {
 		
 		Connection con = null;
 		PreparedStatement stmt = null; 
 		
-		String selectByAuswahl = "SELECT * FROM eigenschaft WHERE id=?";
+		String selectByAuswahl = "SELECT * FROM eigenschaft WHERE id = ?";
 		
 		try {
 			
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByAuswahl);
 			stmt.setInt(1, eigenschaftId);
+		
 			
 			ResultSet rs = stmt.executeQuery();
 			
-			if(rs.next()) {
-
-				//Ergebnis-Tupel in Objekt umwandeln
-				Eigenschaft e = new Eigenschaft();
-				
-				//Setzen der Attribute den Datensätzen aus der DB entsprechend
-				e.setId(rs.getInt(1));
-				e.setBezeichnung(rs.getString(2));
-				
-				return e.getBezeichnung(); 		
+			if (rs.next()) {
+		        Eigenschaft e = new Eigenschaft();
+		        e.setId(rs.getInt("id"));
+		        e.setBezeichnung(rs.getString("bezeichnung"));
+		        return e;
 			}
 		}
 		

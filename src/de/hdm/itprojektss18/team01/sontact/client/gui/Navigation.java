@@ -6,6 +6,7 @@ import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
@@ -31,6 +32,14 @@ public class Navigation extends VerticalPanel {
 	public Navigation(final Nutzer nutzer) {
 
 		/**
+		 * ScrollPanel für den Baum.
+		 */
+		ScrollPanel sc = new ScrollPanel();
+		sc.setSize("200px", "550px");
+		sc.setVerticalScrollPosition(10);
+		
+		
+		/**
 		 * Anlegen des Baumes für die Navigation in Kontaktlisten.
 		 */
 		SontactTreeViewModel navTreeModel = new SontactTreeViewModel(nutzer);
@@ -38,17 +47,20 @@ public class Navigation extends VerticalPanel {
 
 		neueKontaktlisteBtn.addClickHandler(new ClickHandler() {
 
+
 			@Override
 			public void onClick(ClickEvent event) {
 				//Wird instanziiert wenn eine neue Kontaktliste erstellt werden soll.
-				//Klasse besitzt 2 Konstruktoren.
 				RootPanel.get("content").clear();
 				RootPanel.get("content").add(new KontaktlisteForm(nutzer));
 			}
 
 		});
 		
-		neuerKontaktBtn.addClickHandler(new ClickHandler() {
+
+
+		neueKontaktlisteBtn.addClickHandler(new ClickHandler() {
+
 			
 			@Override
 			public void onClick(ClickEvent event) {
@@ -58,11 +70,13 @@ public class Navigation extends VerticalPanel {
 				
 			}
 		});
+		sc.add(navTree);
 
 		this.add(kontaktlisteLbl);
 		this.add(neueKontaktlisteBtn);
 		this.add(neuerKontaktBtn);
-		this.add(navTree);
+		this.add(sc);
+
 	}
 
 }

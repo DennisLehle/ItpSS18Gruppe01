@@ -1,31 +1,19 @@
 /** Add css rules here for your application. */
 /** Example rules used by the template application (remove for your app) */
-PM
->
-Install-Package
- 
-bootstrap
- 
--Version
- 
-4
-.1
-.1
 
+PM> Install-Package bootstrap-Version 4.1.1
 
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,700');
 
-@import
-	url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
-	;
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 
-@import
-	url("https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css")
-	;
+@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css");
+
 
 /*
- * Seitenweite Regeln
+ * Richtlinien für die Seitenregelung
  */
+
 div {
 	height: 90vh;
 	width: 90vw;
@@ -48,6 +36,7 @@ body>div>div {
 	width: 100%;
 }
 
+/** Beginn des Headers */
 #top {
 	cursor: default;
 	display: flex;
@@ -153,6 +142,7 @@ h1 a {
 	box-sizing: border-box;
 }
 
+/** Beginn des Contents */
 #content {
 	width: 77%;
 	min-height: 550px;
@@ -172,6 +162,7 @@ h1 a {
 	padding-bottom: 30px;
 }
 
+/** Beginn des Navigators */
 #navigator {
 	float: left;
 	background: #999 url('/images/3.png') no-repeat;
@@ -179,6 +170,7 @@ h1 a {
 	color: white;
 }
 
+/** Beginn des Footers */
 #footer {
 	padding: 10px 0px;
 	text-align: center;
@@ -201,7 +193,43 @@ h1 a {
 	text-decoration: none;
 }
 
-}
+/* Beginn des Logins */ 
+/* .login { */
+/*     top: 0px; */
+/*     left: 0px; */
+/*     bottom: 0px; */
+/*     right: 0px; */
+/*     position: absolute; */
+/*     background: rgba(200,200,200,.8) url('https://st2.depositphotos.com/3008028/5542/i/950/depositphotos_55423195-stock-photo-light-grey-background.jpg'); */
+/*     display: block; */
+/*     padding: 200px 30% 0px 30%; */
+/* } */
+
+/* .login tbody { */
+/*     background: #fff; */
+/*     padding: 40px; */
+/*     display: block; */
+/*     box-shadow: 0px 0px 8px #999; */
+/* } */
+
+/* .login h1 { */
+/* 	padding: 20px 0px 20px 30px; */
+/* 	margin-left: 0px; */
+/*     margin-bottom: 20px; */
+/*     width: 100%; */
+/* 	background-position: 50%; */
+/* } */
+
+/* .login a { */
+/*     margin: 30px 40px 0px 40px; */
+/*     padding: 10px 20px; */
+/*     background: #1c9cd8; */
+/*     display: block; */
+/*     color: #fff; */
+/*     text-decoration: none; */
+/*     text-align: center; */
+/* } */
+
 .ButtonStyle {
 	color: #125485;
 	text-align: center;

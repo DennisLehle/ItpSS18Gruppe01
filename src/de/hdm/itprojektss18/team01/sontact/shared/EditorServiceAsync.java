@@ -75,7 +75,7 @@ public interface EditorServiceAsync {
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontaktByName(String name);
 	 */
-	void getKontaktByName(String name, AsyncCallback<Vector<Kontakt>> callback);
+	void getKontaktByName(String name, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 	
 	void getAllKontakteByOwner(Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 	

@@ -128,16 +128,28 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Anmerkung: Wird der Kontakt in die Default-Kontaktliste gespeichert?
 	 * CHECK
 	 */
-
+	
 	public void createKontakt() {
 		
 		Nutzer n = new Nutzer();
 		n.setId(3);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
-		editor.createKontakt("Hans", "Gretel", n);
+		editor.createKontakt("Test", "Melanie", n);
 //		editor.createKontakt("Petra", "Pfiffig", n);
 //		editor.createKontakt("Lisa", "Lustig", n);
+	}
+	
+	
+	public void createKontaktRegistrierung() {
+		
+		Nutzer n = new Nutzer();
+		n.setId(3);
+		n.setEmailAddress("mmiedl93@gmail.com");
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		editor.createKontaktRegistrierung("Melanie", "Miedl", n);
+		
 	}
 	
 	
@@ -162,21 +174,54 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case für das Updaten eines Kontakts.
 	 * CHECK
 	 */
- 	
+ 
 	public void saveKontakt() {
 	
 		Nutzer n = new Nutzer();
 		n.setId(1);
 		
 		Kontakt k = new Kontakt();
-		k.setId(3);
-		k.setVorname("Lisa");
-		k.setNachname("Lustig");
+		k.setId(5);
+		k.setVorname("Hansi");
+		k.setNachname("Greteli");
 		k.setOwnerId(1);
 	
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		editor.saveKontakt(k);
+	}
+	
+	
+	public void getAllKontakteByOwner() {
+		
+		Nutzer n = new Nutzer();
+		n.setId(1);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getAllKontakteByOwner(n));
+		
+		
+	}
+	
+	
+	public void getKontaktById() {
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getKontaktById(3));
+	}
+	
+	@Test
+	public void getKontaktByName() {
+		
+		Nutzer n = new Nutzer();
+		n.setId(3);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getKontaktByName("Melanie", n));
+		
 	}
 	
 	
@@ -532,10 +577,10 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Muss noch angepasst werden
 	 * UNCHECK
 	 */
-	
+
 	public void removeKontakt() {
 		Kontakt k = new Kontakt();
-		k.setId(3);
+		k.setId(5);
 
 		EditorServiceImpl editor = new EditorServiceImpl();
 		

@@ -22,6 +22,8 @@ import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.KontaktlisteKontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
@@ -85,6 +87,14 @@ public class KontaktForm extends VerticalPanel {
 				// ClickHandler f�r das L�schen eines Kontakts
 				deleteKontaktBtn.addClickHandler(new deleteClickHandler());
 				BtnPanel.add(deleteKontaktBtn);
+
+				// L�sch-Button instanziieren und dem Panel zuweisen
+				Button deleteKontaktFromKlBtn = new Button("Aus der Kontaktliste löschen");
+				BtnPanel.add(deleteKontaktFromKlBtn);
+
+				// ClickHandler f�r das L�schen eines Kontakts
+				deleteKontaktFromKlBtn.addClickHandler(new deleteFromKontaktlisteClickHandler());
+				BtnPanel.add(deleteKontaktFromKlBtn);
 
 				// Update-Button intanziieren und dem Panel zuweisen
 				Button editKontaktBtn = new Button("Kontakt bearbeiten");
@@ -150,6 +160,7 @@ public class KontaktForm extends VerticalPanel {
 
 					}
 				});
+
 				vp.add(headerPanel);
 				vp.add(auspraegungFlex);
 				vp.add(BtnPanel);
@@ -263,6 +274,52 @@ public class KontaktForm extends VerticalPanel {
 
 	}
 
+	// Zum löschen eines Kontaktes aus einer speziellen Kontaktliste
+	private class deleteFromKontaktlisteClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			// Check, ob Kontakte in der Liste enthalten sind
+			ev.getKontaktById(selectedKontakt.getId(), new AsyncCallback<Kontakt>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					caught.getMessage().toString();
+				}
+
+				@Override
+				public void onSuccess(Kontakt result) {
+					// Wenn Kontakte vorhanden sind...
+					Window.confirm("Kontakt: " + selectedKontakt.getVorname() + selectedKontakt.getNachname()
+							+ "unwiderruflich aus der Kontaktliste löschen?");
+					{
+						loescheKontaktAusKontaktliste();
+					}
+				}
+
+				public void loescheKontaktAusKontaktliste() {
+			
+					Kontaktliste kl = sontactTree.getSelectedKontaktliste();
+					
+					ev.removeKontaktFromKontaktliste(kl, selectedKontakt, new AsyncCallback<Void>() {
+								@Override
+								public void onFailure(Throwable error) {
+									error.getMessage().toString();
+
+								}
+
+								@Override
+								public void onSuccess(Void result) {
+									Window.alert("hey");
+									Window.alert("Kontakt wurde aus der Kontaktliste gelöscht");
+									Window.Location.reload();
+								}
+							
+				});
+			}
+		});
+	}
+	}
 	/**
 	 * ClickHandler zum Speichern eines neu angelegten Kontakts
 	 */
@@ -277,24 +334,30 @@ public class KontaktForm extends VerticalPanel {
 			n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 			n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
-			ev.createKontakt(vornameTxtBox.getText(), nachnameTxtBox.getText(), n, new AsyncCallback<Void>() {
+			if (vornameTxtBox.getText() == "" || nachnameTxtBox.getText() == "") {
+				MessageBox.alertWidget("Bitte geben Sie alle Felder an",
+						"Vorname: " + vornameTxtBox.getText() + "Nachname: " + nachnameTxtBox.getText());
+			} else {
 
-				@Override
-				public void onFailure(Throwable caught) {
-					caught.getMessage().toString();
+				ev.createKontakt(vornameTxtBox.getText(), nachnameTxtBox.getText(), n, new AsyncCallback<Void>() {
 
-				}
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.getMessage().toString();
 
-				@Override
-				public void onSuccess(Void result) {
-					RootPanel.get("content").add(new KontaktForm());
+					}
 
-					// Refresh der Seite für die Aktualisierug des Baumes.
-					Window.Location.reload();
+					@Override
+					public void onSuccess(Void result) {
+						RootPanel.get("content").add(new KontaktForm());
 
-				}
-			});
+						// Refresh der Seite für die Aktualisierug des Baumes.
+						Window.Location.reload();
 
+					}
+
+				});
+			}
 		}
 
 	}
@@ -362,11 +425,24 @@ public class KontaktForm extends VerticalPanel {
 			BtnPanel.add(saveBtn);
 
 			VerticalPanel vp = new VerticalPanel();
+			HorizontalPanel hpVorname = new HorizontalPanel();
+			HorizontalPanel hpNachname = new HorizontalPanel();
+			VerticalPanel vpName = new VerticalPanel();
+
 			vp.add(headerPanel);
-			vp.add(vornameTxtBox);
-			vp.add(nachnameTxtBox);
-			vp.add(BtnPanel);
+			hpVorname.add(new Label("Vorname: "));
+			hpVorname.add(vornameTxtBox);
+
+			hpNachname.add(new Label("Nachname: "));
+			hpNachname.add(nachnameTxtBox);
+
+			vpName.add(hpVorname);
+			vpName.add(hpNachname);
+			vpName.add(BtnPanel);
 			RootPanel.get("content").add(vp);
+
+			RootPanel.get("content").add(vpName);
+			RootPanel.get("content").add(vpName);
 			selectedKontakt.setVorname(vornameTxtBox.getText());
 			selectedKontakt.setNachname(nachnameTxtBox.getText());
 
@@ -395,5 +471,4 @@ public class KontaktForm extends VerticalPanel {
 	public void setSontactTreeViewModel(SontactTreeViewModel sontactTreeViewModel) {
 		sontactTree = sontactTreeViewModel;
 	}
-
 }

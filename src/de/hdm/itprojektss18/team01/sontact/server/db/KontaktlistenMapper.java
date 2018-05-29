@@ -204,36 +204,50 @@ public class KontaktlistenMapper {
 		 * @return 
 		 * @return void
 		 */
-		 public Vector<Kontaktliste> findKontaktlistenByOwner(int ownerId) {
-			 
-			    Connection con = DBConnection.connection();
-			    Vector<Kontaktliste> result = new Vector<Kontaktliste>();
-
-			    try {
-			    	PreparedStatement stmt = con.prepareStatement("SELECT * FROM Kontaktliste WHERE ownerid = "
-			    			+ ownerId );
-
-			      ResultSet rs = stmt.executeQuery();
-
-			      // Für jeden Eintrag im Suchergebnis wird nun ein Account-Objekt erstellt.
-			      while (rs.next()) {
-			        Kontaktliste kl1 = new Kontaktliste();
-			        kl1.setId(rs.getInt("id"));
-			        kl1.setTitel(rs.getString("titel"));
-			        kl1.setOwnerId(rs.getInt("ownerid"));
-			     
-
-			        // Hinzufügen des neuen Objekts zum Ergebnisvektor
-			        result.addElement(kl1);
-			      }
-			    }
-			    catch (SQLException e2) {
-			      e2.printStackTrace();
-			    }
-
-			    // Ergebnisvektor zurückgeben 
-			    return result;
-			  }
+	
+	public Vector <Kontaktliste> findKontaktlistenByOwner (int ownerId) {
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM kontaktliste WHERE ownerid=?";
+		
+		//Erstellung des Ergebnisvektors
+		Vector<Kontaktliste> result = new Vector<Kontaktliste>();
+		
+		
+		try {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, ownerId);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				//Ergebnis-Tupel in Objekt umwandeln
+				Kontaktliste kl = new Kontaktliste();
+				
+				//Setzen der Attribute den Datens�tzen aus der DB entsprechend
+		        kl.setId(rs.getInt("id"));
+		        kl.setTitel(rs.getString("titel"));
+		        kl.setOwnerId(rs.getInt("ownerid"));
+				
+				// Hinzuf�gen des neuen Objekts zum Ergebnisvektor
+				result.addElement(kl);
+			}
+			return result;
+		}
+		
+		catch (SQLException e2) {
+			
+			e2.printStackTrace();
+		}
+		
+		return null;
+	}
 		 
 		 /**
 		  * Findet ein Default Kontaktlisten-Objekt eines Nutzers.

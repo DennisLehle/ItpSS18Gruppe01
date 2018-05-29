@@ -172,8 +172,7 @@ public class KontaktlistenMapper {
 			    Vector<Kontaktliste> result = new Vector<Kontaktliste>();
 
 			    try {
-			    	PreparedStatement stmt = con.prepareStatement("SELECT * FROM Kontaktliste WHERE ownerid = "
-			    			+ ownerId );
+			    	PreparedStatement stmt = con.prepareStatement("SELECT * FROM `kontaktliste` WHERE `ownerid` ="+ownerId);
 
 			      ResultSet rs = stmt.executeQuery();
 

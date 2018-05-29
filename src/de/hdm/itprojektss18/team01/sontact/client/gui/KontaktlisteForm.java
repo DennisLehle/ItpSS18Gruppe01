@@ -60,6 +60,10 @@ public class KontaktlisteForm extends VerticalPanel {
 
 			@Override
 			public void onSuccess(Kontaktliste result) {
+				
+				Nutzer n = new Nutzer();
+				n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+				n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 				selectedKontaktliste = result;
 
 				HorizontalPanel headerPanel = new HorizontalPanel();
@@ -86,6 +90,7 @@ public class KontaktlisteForm extends VerticalPanel {
 				vp.add(headerPanel);
 				vp.add(BtnPanel);
 				RootPanel.get("content").add(vp);
+				RootPanel.get("content").add(new ShowKontakte(n, result));
 
 			}
 

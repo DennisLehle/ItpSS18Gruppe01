@@ -346,7 +346,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	/**
 	 * Es werden alle Kontakte mit dessen Inhalt aufgerufen. Der Inhalt der Kontakte zeichnet sich 
-	 * durch die Eigenschaften des jeweiligen Kontakts, sowie der dazugehörigen Ausprägungen aus. 
+	 * durch die Eigenschaften des jeweiligen Kontakts, sowie der dazugehï¿½rigen Ausprï¿½gungen aus. 
 	 * 
 	 */
 	public Vector<Kontakt> getAllKontakteByInhalt(Nutzer n, Auspraegung a, Eigenschaft e)
@@ -430,7 +430,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		if (removeAllKontakte != null) {
 			for (Kontakt k : removeAllKontakte) {
 				this.klkMapper.removeKontaktFromKontaktliste(kl, k);
-				this.removeKontakt(k);
+				
+				//Kontakte werden permanent aus der Db entfernt. Dies soll nicht geschehen da wir nur die Verbdinung
+				//des Kontaktes aus der Kontaktliste entfernen aber nicht den Kontakt an sich.
+			//	this.removeKontakt(k);
 
 			}
 		}
@@ -443,7 +446,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 */
 	public Vector<Kontaktliste> getKontaktlistenByOwner(Nutzer n) throws IllegalArgumentException {
-		init();
+		//init();
 		return this.klMapper.findKontaktlistenByOwner(n.getId());
 	}
 
@@ -526,7 +529,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
-	 * Gibt eine Eigenschaft anhand ihrer ID zurück.
+	 * Gibt eine Eigenschaft anhand ihrer ID zurï¿½ck.
 	 * 
 	 * @return Eigenschaft
 	 * @throws IllegalArgumentException
@@ -785,7 +788,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 							b2.setObjectId(av.elementAt(a).getId());
 							b2.setType(av.elementAt(a).getType());
 
-							// Löschen der Vektoreinträge und den Berechtigungen
+							// Lï¿½schen der Vektoreintrï¿½ge und den Berechtigungen
 							this.bMapper.delete(b2);
 						}
 					}
@@ -798,12 +801,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 					b1.setObjectId(kv.elementAt(k).getId());
 					b1.setType(kv.elementAt(k).getType());
 
-					// Löschen der Vektoreinträge und den Berechtigungen
+					// Lï¿½schen der Vektoreintrï¿½ge und den Berechtigungen
 					this.bMapper.delete(b1);
 				}
 			}
 
-			// Löschen der Kontaktlisten-Berechtigung
+			// Lï¿½schen der Kontaktlisten-Berechtigung
 			this.bMapper.delete(b);
 
 		} else if (b.getType() == 'k') {
@@ -1069,8 +1072,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	/**
-	 * Gibt über Rückgabewert boolean den Status eines Objektes (Kontakt k, Kontaktliste l oder
-	 * Auspraegung a) zurück, ob dieser geteilt ist.
+	 * Gibt ï¿½ber Rï¿½ckgabewert boolean den Status eines Objektes (Kontakt k, Kontaktliste l oder
+	 * Auspraegung a) zurï¿½ck, ob dieser geteilt ist.
 	 */
 	public boolean getStatusForObject(int objectId) throws IllegalArgumentException {
 
@@ -1092,8 +1095,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
-	 * Für die Suchfunktion, müssen alle möglichen Suchkombinationen abgedeckt
-	 * werden, damit die Suche benutzerfreundlich gewährleistet werden kann.
+	 * Fï¿½r die Suchfunktion, mï¿½ssen alle mï¿½glichen Suchkombinationen abgedeckt
+	 * werden, damit die Suche benutzerfreundlich gewï¿½hrleistet werden kann.
 	 */
 	public Vector<Kontakt> Suche (Nutzer n, Berechtigung b, Auspraegung a, Eigenschaft e) 
 			throws IllegalArgumentException {

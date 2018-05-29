@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Vector;
 
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
@@ -77,40 +79,63 @@ public class KontaktMapper {
 	 * @return das bereits ï¿½bergebene Objekt, jedoch mit ggf. korrigierter
 	 *         <code>id</code>.
 	 */
-
-	public Kontakt insert(Kontakt k) {
-		Connection con = DBConnection.connection();
-
+	
+	public Kontakt insert(Kontakt k){
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		
+		//Query für die Abfrage der hoechsten ID (Primärschlüssel) in der Datenbank
+		String maxIdSQL = "SELECT MAX(id) AS maxid FROM kontakt";
+		
+		
+		//Query für den Insert
+		String insertSQL = "INSERT INTO kontakt (id, vorname, nachname, erstellungsdatum, modifikationsdatum, ownerid, identifier) VALUES (?,?,?,?,?,?,?)";		
+		
+		
+		
 		try {
-			// Leeres SQL Statement anlegen
-			Statement stmt = con.createStatement();
+			
+			con = DBConnection.connection(); 
+			stmt = con.prepareStatement(maxIdSQL);
+			
 
-			// Statement als Query an die DB schicken
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Kontakt");
+			//MAX ID Query ausfuehren
+			ResultSet rs = stmt.executeQuery();
+			
+			
+			//...um diese dann um 1 inkrementiert der ID des BO zuzuweisen
+		    if(rs.next()){
+		    	k.setId(rs.getInt("maxId")+1);
+		    }	   
+		    
+		    	
+			//Jetzt erfolgt der Insert
+		    stmt = con.prepareStatement(insertSQL);
+		    
 
-			// Rï¿½ckgabe beinhaltet nur eine Tupel
-			if (rs.next()) {
-
-				// b enthï¿½lt den bisher maximalen, nun um 1 inkrementierten Primï¿½rschlï¿½ssel
-				k.setId(rs.getInt("maxid") + 1);
-				;
-
-				PreparedStatement prestmt = con.prepareStatement(
-						"INSERT INTO Kontakt (id, vorname, nachname, erstellungsdatum, modifikationsdatum, ownerid, identifier)"
-								+ "VALUES('" + k.getId() + "', '" + k.getVorname() + "', '" + k.getNachname() + "', '"
-								+ k.getErstellDat() + "', '" + k.getModDat() + "', '" + k.getOwnerId() + "', '"
-								+ k.getIdentifier() + "')");
-
-				// INSERT-Statement ausfï¿½hren
-				prestmt.execute();
-
-			}
+		    //Setzen der ? Platzhalter als Values
+		    stmt.setInt(1, k.getId());
+		    stmt.setString(2, k.getVorname());
+		    stmt.setString(3, k.getNachname());
+		    stmt.setTimestamp(4, k.getErstellDat());
+		    stmt.setTimestamp(5, k.getModDat());
+		    stmt.setInt(6, k.getOwnerId());
+		    stmt.setString(7, String.valueOf(k.getIdentifier()));
+		   
+		    
+		    //INSERT-Query ausführen
+		    stmt.executeUpdate();
+		    
+		    
 		} catch (SQLException e2) {
 			e2.printStackTrace();
-		}
-
+			}			
+		
 		return k;
-	}
+	}	
+
 
 	/**
 	 * Wiederholtes Schreiben eines Objekts in die Datenbank.
@@ -119,32 +144,39 @@ public class KontaktMapper {
 	 *            das Objekt, das in die DB geschrieben werden soll
 	 * @return das als Parameter ï¿½bergebene Objekt
 	 */
-
-	public Kontakt update(Kontakt k) {
-		String sql = "UPDATE Kontakt SET  vorname=?, nachname=?, ownerid=?, modifikationsdatum=? WHERE id=?";
-
-		Connection con = DBConnection.connection();
-
+	
+	public Kontakt update (Kontakt k) {
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String updateSQL = "UPDATE kontakt SET vorname=?, nachname=?, ownerid=?, modifikationsdatum=? WHERE id=?";
+		
 		try {
-			PreparedStatement stmt = con.prepareStatement(sql);
-
-			stmt.setString(1, k.getVorname());
-			stmt.setString(2, k.getNachname());
-			stmt.setInt(3, k.getOwnerId());
-			stmt.setTimestamp(4, k.getModDat());
-			stmt.setInt(5, k.getId());
-			stmt.executeUpdate();
-
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(updateSQL);
+			
+		    stmt.setInt(5, k.getId());
+		    stmt.setString(1, k.getVorname());
+		    stmt.setString(2, k.getNachname());
+		    stmt.setInt(3, k.getOwnerId());
+		    stmt.setTimestamp(4, k.getModDat());
+			
+			stmt.executeUpdate(); 
+			
+			System.out.println("Updated");
+		
 		}
-
+		
 		catch (SQLException e2) {
 			e2.printStackTrace();
+			
 		}
-		/**
-		 * Um Analogie zu insertKontakt(Kontakt k) zu wahren, geben wir k zurï¿½ck
-		 */
+		
 		return k;
 	}
+
 
 	/**
 	 * Lï¿½schen der Daten eines <code>Kontakt</code>-Objekts aus der Datenbank.
@@ -152,22 +184,30 @@ public class KontaktMapper {
 	 * @param k
 	 *            das aus der DB zu lï¿½schende "Objekt"
 	 */
-
-	public void delete(Kontakt k) {
-		Connection con = DBConnection.connection();
-
+	
+	public void delete (Kontakt k) {
+		
+		Connection con = null; 
+		PreparedStatement stmt = null;
+		
+		String deleteSQL = "DELETE FROM kontakt WHERE id=?";
+		
 		try {
-			// SQL Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("DELETE FROM Kontakt WHERE id=" + k.getId());
-
-			// Statement als Query an die DB schicken
-			prestmt.execute();
+			
+			con = DBConnection.connection();
+			
+			stmt = con.prepareStatement(deleteSQL);
+			stmt.setInt(1, k.getId());
+			
+			stmt.executeUpdate();
 		}
-
+		
 		catch (SQLException e2) {
 			e2.printStackTrace();
+			
 		}
 	}
+
 
 	// ZUORDNUNG IM KLK-MAPPER (!)
 	/**
@@ -190,22 +230,30 @@ public class KontaktMapper {
 	 * @param k
 	 *            das aus der DB zu loeschende "Objekt"
 	 */
-
-	public void deleteAllByOwner(Nutzer n) {
-		Connection con = DBConnection.connection();
-
+	
+	public void deleteAllByOwner (Nutzer n) {
+		
+		Connection con = null; 
+		PreparedStatement stmt = null;
+		
+		String deleteSQL = "DELETE FROM kontakt WHERE ownerid=?";
+		
 		try {
-			// SQL Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("DELETE FROM Kontakt WHERE ownerid=" + n.getId());
-
-			// Statement als Query an die DB schicken
-			prestmt.execute();
+			
+			con = DBConnection.connection();
+			
+			stmt = con.prepareStatement(deleteSQL);
+			stmt.setInt(1, n.getId());
+			
+			stmt.executeUpdate();
 		}
-
+		
 		catch (SQLException e2) {
 			e2.printStackTrace();
+			
 		}
 	}
+
 
 	// ZUORDNUNG IM KLK-MAPPER (!)
 
@@ -269,44 +317,54 @@ public class KontaktMapper {
 	 *         gefï¿½llter oder ggf. auch leerer Vektor zurï¿½ckgeliefert.
 	 * 
 	 */
-
+	
 	public Vector<Kontakt> findAllByOwner(int ownerId) {
-
-		// Leerer Kontakt Vektor fÃ¼r ale Kontakte eines Nutzers.
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM Kontakt WHERE ownerid=?";
+		
+		//Erstellung des Ergebnisvektors
 		Vector<Kontakt> result = new Vector<Kontakt>();
-
-		// Datenbank Verbdinung aufbauen.
-		Connection con = DBConnection.connection();
-
+		
+		
 		try {
-
-			// SQL Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Kontakt " + "WHERE ownerid =" + ownerId);
-
-			// Statement als Query an die DB schicken
-			ResultSet rs = prestmt.executeQuery();
-
-			while (rs.next()) {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, ownerId);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				//Ergebnis-Tupel in Objekt umwandeln
 				Kontakt k = new Kontakt();
+				
+				//Setzen der Attribute den Datensätzen aus der DB entsprechend
 				k.setId(rs.getInt("id"));
 				k.setVorname(rs.getString("vorname"));
 				k.setNachname(rs.getString("nachname"));
 				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
 				k.setModDat(rs.getTimestamp("modifikationsdatum"));
 				k.setOwnerId(rs.getInt("ownerid"));
-
-				// Kontakt Objekte des Nutzers in einen Kontakt Vektor speichern.
+				
+				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
 				result.addElement(k);
 			}
-
-			return result;
-
-		} catch (SQLException e2) {
-			e2.printStackTrace();
 		}
-
-		return null;
+		
+		catch (SQLException e2) {
+			
+			e2.printStackTrace();
+			return null;
+		}
+		
+		return result;
 	}
+
 
 	/**
 	 * Diese Methode wird benÃ¶tigt um den Kontakt eines Nutzers zu identifizieren
@@ -317,22 +375,29 @@ public class KontaktMapper {
 	 * @param ownerId
 	 * @return
 	 */
+	
 	public Kontakt findNutzerKontaktByIdentifier(int nutzerId) {
-
-		// Datenbank Verbdinung aufbauen.
-		Connection con = DBConnection.connection();
-
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM kontakt WHERE ownerid=? AND identifier= 'r'";
+		
 		try {
-
-			// SQL Statement anlegen
-			PreparedStatement prestmt = con
-					.prepareStatement("SELECT * FROM Kontakt " + "WHERE ownerid =" + nutzerId + " AND identifier = 'r'");
-
-			// Statement als Query an die DB schicken
-			ResultSet rs = prestmt.executeQuery();
-
-			while (rs.next()) {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, nutzerId);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				//Ergebnis-Tupel in Objekt umwandeln
 				Kontakt k = new Kontakt();
+				
+				//Setzen der Attribute den Datensätzen aus der DB entsprechend
 				k.setId(rs.getInt("id"));
 				k.setVorname(rs.getString("vorname"));
 				k.setNachname(rs.getString("nachname"));
@@ -340,15 +405,17 @@ public class KontaktMapper {
 				k.setModDat(rs.getTimestamp("modifikationsdatum"));
 				k.setOwnerId(rs.getInt("ownerid"));
 				k.setIdentifier(rs.getString("identifier").charAt(0));
-				// Kontakt Objekte des Nutzers in einen Kontakt Vektor speichern.
+				
 				return k;
+				
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
-
+	
 		return null;
 	}
+
 
 	// Methoden checken ob sie funktionieren und ob benÃ¶tigt wird.....!!
 
@@ -361,35 +428,48 @@ public class KontaktMapper {
 	 * @return Konto-Objekt, das dem ï¿½bergebenen Schlï¿½ssel entspricht, null bei
 	 *         nicht vorhandenem DB-Tupel.
 	 */
-
+	
 	public Kontakt findKontaktById(int id) {
-		// DBConnection holen
-		Connection con = (Connection) DBConnection.connection();
-
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM kontakt WHERE id=? ORDER BY id";
+		
+		
 		try {
-
-			// SQL Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Kontakt WHERE id=" + id);
-
-			// Statement als Query an die DB schicken
-			ResultSet rs = prestmt.executeQuery();
-
-			// Ergebnistuppel in Objekt umwandeln
-			Kontakt k = new Kontakt();
-			while (rs.next()) {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, id);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next()) {
+				
+				//Ergebnis-Tupel in Objekt umwandeln
+				Kontakt k = new Kontakt();
+				
+				//Setzen der Attribute den Datensätzen aus der DB entsprechend
 				k.setId(rs.getInt("id"));
 				k.setVorname(rs.getString("vorname"));
 				k.setNachname(rs.getString("nachname"));
 				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
 				k.setModDat(rs.getTimestamp("modifikationsdatum"));
 				k.setOwnerId(rs.getInt("ownerid"));
+				
+				return k;
 			}
-			return k;
-		} catch (SQLException e2) {
+		} 
+		
+		catch (SQLException e2) {
 			e2.printStackTrace();
 		}
+		
 		return null;
 	}
+
 
 	/**
 	 * Auslesen aller Kontakte eines durch ein weiteres Attribut (Name) gegebenen
@@ -403,38 +483,55 @@ public class KontaktMapper {
 	 *         gefï¿½llter oder ggf. auch leerer Vektor zurï¿½ckgeliefert.
 	 * 
 	 */
-
-	public Vector<Kontakt> findKontaktByName(String name) {
-		Connection con = DBConnection.connection();
-
+	
+	public Vector<Kontakt> findKontaktByName(String name, Nutzer n){
+		
+		Connection con = null; 
+		PreparedStatement stmt = null; 
+		
+		String selectByName = "SELECT * FROM kontakt WHERE (nachname =? OR vorname=?) AND ownerid =? ORDER BY nachname";
+		
+		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
+		Vector <Kontakt> result = new Vector<Kontakt>();
+		
 		try {
-			Vector<Kontakt> list = new Vector<Kontakt>();
-
-			// SQL Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Kontakt WHERE nachname like %'" + name
-					+ "'% OR vorname like %'" + name + "'% WHERE ownerid = " + // id des owner? // + JOIN auf Berechtigung
-																			// und zurueck auf Kontakt -> +
-					"' ORDER BY nachname");
-
-			// Statement als Query an die DB schicken
-			ResultSet rs = prestmt.executeQuery();
-
-			// Ergebnistuppel in Objekt umwandeln
-			Kontakt k = new Kontakt();
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByName);
+			stmt.setString(1, name);
+			stmt.setString(2, name);		
+			stmt.setInt(3, n.getId());
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			
+			//While Schleife für das Durchlaufen vieler Zeilen
+			//Schreiben der Objekt-Attribute aus ResultSet
 			while (rs.next()) {
+				
+				Kontakt k = new Kontakt();
 				k.setId(rs.getInt("id"));
 				k.setVorname(rs.getString("vorname"));
 				k.setNachname(rs.getString("nachname"));
 				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
 				k.setModDat(rs.getTimestamp("modifikationsdatum"));
 				k.setOwnerId(rs.getInt("ownerid"));
+				
+				//Statt return wird hier der Vektor erweitert
+				result.addElement(k);
+				
 			}
-			return list;
-		} catch (SQLException e2) {
+			
+			return result;
+		}
+		
+		catch (SQLException e2) {
 			e2.printStackTrace();
 		}
+		
 		return null;
 	}
+
 
 	/**
 	 * Auslesen aller Kontakte eines durch Fremdschlï¿½ssel (kontaktlistenId)

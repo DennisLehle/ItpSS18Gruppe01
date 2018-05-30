@@ -72,11 +72,6 @@ public interface EditorServiceAsync {
 	 */
 	void getKontaktById(int id, AsyncCallback<Kontakt> callback);
 
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontaktByName(String name);
-	 */
-	void getKontaktByName(String name, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
-	
 	void getAllKontakteByOwner(Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 	
 	void addKontaktToKontaktliste(Kontaktliste kl, Kontakt k, AsyncCallback<Void> callback);
@@ -186,6 +181,22 @@ public interface EditorServiceAsync {
 
 
 	void getEigenschaftForAuspraegung(int eigenschaftId, AsyncCallback<Eigenschaft> callback);
+
+
+	void sucheKontakt(String vorname, String nachname, String wert, String bezeichnung, Nutzer n,
+			AsyncCallback<Vector<Kontakt>> callback);
+
+
+	void getAuspraegungByWert(String wert, Nutzer n, AsyncCallback<Vector<Auspraegung>> callback);
+
+
+	void getEigenschaftByBezeichnung(String bezeichnung, AsyncCallback<Vector<Eigenschaft>> callback);
+
+
+	void getKontaktByVorname(String vorname, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
+
+
+	void getKontaktByNachname(String nachname, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
 
 

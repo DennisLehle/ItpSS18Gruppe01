@@ -80,7 +80,6 @@ public interface EditorService extends RemoteService{
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontaktByName(String name);
 	 */
-	public Vector<Kontakt> getKontaktByName(String name, Nutzer n) throws IllegalArgumentException;
 	
 	public Vector<Kontakt> getAllKontakteByOwner(Nutzer n) throws IllegalArgumentException;
 
@@ -227,6 +226,18 @@ public interface EditorService extends RemoteService{
 	
 	public boolean getStatusForObject(int objectId) throws IllegalArgumentException;
 	
+	public Vector<Kontakt> getKontaktByVorname(String vorname, Nutzer n) throws IllegalArgumentException;
+	
+	public Vector<Kontakt> getKontaktByNachname(String nachname, Nutzer n) throws IllegalArgumentException;
+
+	public Vector<Auspraegung> getAuspraegungByWert(String wert, Nutzer n) 
+			throws IllegalArgumentException;
+	
+	public Vector<Eigenschaft> getEigenschaftByBezeichnung(String bezeichnung) 
+			throws IllegalArgumentException;
+			
+	public Vector<Kontakt> sucheKontakt (String vorname, String nachname, 
+			String wert, String bezeichnung, Nutzer n) throws IllegalArgumentException;
 	
 	
 	

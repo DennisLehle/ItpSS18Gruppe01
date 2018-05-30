@@ -472,35 +472,32 @@ public class KontaktMapper {
 
 
 	/**
-	 * Auslesen aller Kontakte eines durch ein weiteres Attribut (Name) gegebenen
-	 * Kontakts.
+	 * Auslesen aller Kontakte mit einem speziellen Vornamen
 	 * 
-	 * @see findKontaktByName
-	 * @param String
-	 *            name fï¿½r zugehï¿½rige Kontakte
+	 * @see findKontaktByVorname
+	 * @param String vorname fuer zugehoerige Kontakte
 	 * @return ein Vektor mit Kontakt-Objekten, die durch den gegebenen Namen
-	 *         reprï¿½sentiert werden. Bei evtl. Exceptions wird ein partiell
-	 *         gefï¿½llter oder ggf. auch leerer Vektor zurï¿½ckgeliefert.
+	 *         repraesentiert werden. Bei evtl. Exceptions wird ein partiell
+	 *         gefuellter oder ggf. auch leerer Vektor zurueckgeliefert.
 	 * 
 	 */
 	
-	public Vector<Kontakt> findKontaktByName(String name, Nutzer n){
+	public Vector<Kontakt> findKontaktByVorname(String vorname, Nutzer n){
 		
 		Connection con = null; 
 		PreparedStatement stmt = null; 
 		
-		String selectByName = "SELECT * FROM kontakt WHERE (nachname =? OR vorname=?) AND ownerid =? ORDER BY nachname";
+		String selectByKey = "SELECT * FROM kontakt WHERE vorname=? AND ownerid=? ORDER BY vorname";
 		
-		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
+		//Vector erzeugen, der die Kontaktdatensätze aufnehmen kann
 		Vector <Kontakt> result = new Vector<Kontakt>();
 		
 		try {
 			
 			con = DBConnection.connection();
-			stmt = con.prepareStatement(selectByName);
-			stmt.setString(1, name);
-			stmt.setString(2, name);		
-			stmt.setInt(3, n.getId());
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setString(1, vorname);	
+			stmt.setInt(2, n.getId());	
 			
 			ResultSet rs = stmt.executeQuery();
 			
@@ -532,9 +529,66 @@ public class KontaktMapper {
 		return null;
 	}
 
-
 	/**
-	 * Auslesen aller Kontakte eines durch Fremdschlï¿½ssel (kontaktlistenId)
+	 * Auslesen aller Kontakte mit einem speziellen Nachnamen
+	 * 
+	 * @see findKontaktByNachname
+	 * @param String nachname fuer zugehoerige Kontakte
+	 * @return ein Vektor mit Kontakt-Objekten, die durch den gegebenen Namen
+	 *         repraesentiert werden. Bei evtl. Exceptions wird ein partiell
+	 *         gefuellter oder ggf. auch leerer Vektor zurueckgeliefert.
+	 * 
+	 */
+	
+	public Vector<Kontakt> findKontaktByNachname(String nachname, Nutzer n){
+		
+		Connection con = null; 
+		PreparedStatement stmt = null; 
+		
+		String selectByName = "SELECT * FROM kontakt WHERE nachname =? AND ownerid=?  ORDER BY nachname";
+		
+		//Vector erzeugen, der die Kontaktdatensätze aufnehmen kann
+		Vector <Kontakt> result = new Vector<Kontakt>();
+		
+		try {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByName);
+			stmt.setString(1, nachname);
+			stmt.setInt(2, n.getId());	
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			
+			//While Schleife für das Durchlaufen vieler Zeilen
+			//Schreiben der Objekt-Attribute aus ResultSet
+			while (rs.next()) {
+				
+				Kontakt k = new Kontakt();
+				k.setId(rs.getInt("id"));
+				k.setVorname(rs.getString("vorname"));
+				k.setNachname(rs.getString("nachname"));
+				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
+				k.setModDat(rs.getTimestamp("modifikationsdatum"));
+				k.setOwnerId(rs.getInt("ownerid"));
+				
+				//Statt return wird hier der Vektor erweitert
+				result.addElement(k);
+				
+			}
+			
+			return result;
+		}
+		
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Auslesen aller Kontakte eines durch Fremdschluessel (kontaktlistenId)
 	 * gegebenen Kontakts.
 	 * 
 	 * @see findKontaktByKontaktliste

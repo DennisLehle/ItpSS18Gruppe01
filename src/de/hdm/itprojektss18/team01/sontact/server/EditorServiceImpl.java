@@ -327,14 +327,21 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
-	 * Auslesen der Kontakte anhand des Namens.
+	 * Auslesen der Kontakte anhand des Vornamens.
 	 */
-	// Beschr�nkung auf eigene Kontakte?
-	public Vector<Kontakt> getKontaktByName(String name, Nutzer n) throws IllegalArgumentException {
+	public Vector<Kontakt> getKontaktByVorname(String vorname, Nutzer n) throws IllegalArgumentException {
 		
 		init();
+		return this.kMapper.findKontaktByVorname(vorname, n);
+	}
+	
+	/**
+	 * Auslesen der Kontakte anhand des Nachnamens.
+	 */
+	public Vector<Kontakt> getKontaktByNachname(String nachname, Nutzer n) throws IllegalArgumentException {
 		
-		return this.kMapper.findKontaktByName(name, n);
+		init();
+		return this.kMapper.findKontaktByNachname(nachname, n);
 	}
 
 	/**
@@ -530,7 +537,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Erzeugen einer Eigenschaft.
 	 */
-
 	public Eigenschaft createEigenschaft(String bezeichnung) throws IllegalArgumentException {
 		init();
 
@@ -571,6 +577,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		init();
 
 		return this.eMapper.findEigenschaftById(eigenschaftId);
+	}
+	
+	/**
+	 * Auslesen der Eigenschaft anhand der Bezeichnung.
+	 */
+	public Vector<Eigenschaft> getEigenschaftByBezeichnung(String bezeichnung) 
+			throws IllegalArgumentException {
+		
+		init();
+		return this.eMapper.findEigenschaftByBezeichnung(bezeichnung);
 	}
 
 	/**
@@ -655,7 +671,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
-	 * Gibt alle Auspraegungen eines Kontakts zur�ck.
+	 * Auslesen der Eigenschaft anhand der Bezeichnung.
+	 */
+	public Vector<Auspraegung> getAuspraegungByWert(String wert, Nutzer n) 
+			throws IllegalArgumentException {
+		
+		init();
+		return this.aMapper.findAuspraegungByWert(wert, n);
+	}
+	/**
+	 * Gibt alle Auspraegungen eines Kontakts zurueck.
 	 * 
 	 */
 	public Vector<Auspraegung> getAllAuspraegungenByKontakt(int kontaktId) 
@@ -1104,8 +1129,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	/**
-	 * Gibt �ber R�ckgabewert boolean den Status eines Objektes (Kontakt k, Kontaktliste l oder
-	 * Auspraegung a) zur�ck, ob dieser geteilt ist.
+	 * Gibt ueber Rueckgabewert boolean den Status eines Objektes (Kontakt k, Kontaktliste l oder
+	 * Auspraegung a) zurueck, ob dieser geteilt ist.
 	 */
 	public boolean getStatusForObject(int objectId) throws IllegalArgumentException {
 
@@ -1127,23 +1152,44 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
-	 * F�r die Suchfunktion, m�ssen alle m�glichen Suchkombinationen abgedeckt
-	 * werden, damit die Suche benutzerfreundlich gew�hrleistet werden kann.
+	 * Fuer die Suchfunktion, werden  die moeglichen Suchkombinationen abgedeckt
+	 * werden, damit die Suche eine Liste an Kontakten ausgibt .
 	 */
-	public Vector<Kontakt> Suche (Nutzer n, Berechtigung b, Auspraegung a, Eigenschaft e) 
-			throws IllegalArgumentException {
+	public Vector<Kontakt> sucheKontakt (String vorname, String nachname, 
+			String wert, String bezeichnung, Nutzer n) throws IllegalArgumentException {
+	init();
+	Vector <Kontakt> k = this.getAllKontakteByOwner(n);
 		
-	Vector <Kontakt> kv = this.getAllKontakteByInhalt(n, a, e);
-	Vector <Kontakt> ks = this.getAllSharedKontakteBySharedKontaktliste(b.getReceiverId());
-	
-	Vector<Kontakt> k = new Vector<Kontakt>();
-	k.addAll(kv);
-	k.addAll(ks);
-	
-	//TODO  --> this.kMapper.Suchfunktion  
-		return k; 	
-	}
+	Berechtigung b = new Berechtigung();
+	Vector <Kontakt> ks = this.getAllSharedKontakteByReceiver(b.getReceiverId());
 
+	Vector <Kontakt> list = new Vector <Kontakt>();
+	for (int i = 0; i < k.size(); i++) {
+		list.addAll(i, k);
+		for (int j = 0; j < ks.size(); j++) {
+			list.addAll(j, ks);
+		}
+	}
+	
+	for (Kontakt kontakt : list) {
+				
+		if (vorname != null) {
+			return this.getKontaktByVorname(vorname, n);
+		}
+		if (nachname != null) {
+			return this.getKontaktByNachname(nachname, n);
+		}
+		if (wert != null) {
+			Vector <Auspraegung> a = this.getAuspraegungByWert(wert, n);
+			
+		}
+		if (bezeichnung != null){
+			Vector <Eigenschaft> e = this.getEigenschaftByBezeichnung(bezeichnung);
+		}
+	
+	}
+	return list;
+	}
 	/*
 	 * ************************************************************************* **
 	 * ABSCHNITT ENDE: Sonstiges

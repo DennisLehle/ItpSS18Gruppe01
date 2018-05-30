@@ -11,6 +11,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -51,11 +52,11 @@ public class ShowKontakte extends VerticalPanel {
 	 * Buttons der Klasse deklarieren.
 	 */
 	private Button deleteKontakt;
-	private Button showKontakt = new Button("Kontakt anzeigen");
-	private Button addKontaktToKontaktliste = new Button("Kontaktliste hinzufügen");
+	private Button showKontakt;
+	private Button addKontaktToKontaktliste;
 	private Button deleteKontaktFromKontaktliste;
 	private Button showKontaktFromKontaktliste;
-
+	private Button addKontakt;
 	/**
 	 * Label für den Titel deklarieren.
 	 */
@@ -67,6 +68,28 @@ public class ShowKontakte extends VerticalPanel {
 	HorizontalPanel hp = new HorizontalPanel();
 	HorizontalPanel head = new HorizontalPanel();
 	ScrollPanel sp = new ScrollPanel();
+
+	
+	/**
+	 * Konstruktor der Klasse für's Anzeigen von Kontakten einer Kontaktliste, wenn
+	 * man auf eine Kontaktliste klickt
+	 * 
+	 * @param n Nutzer der übergeben wird
+	 * @param kl Kontaktliste die ausgewählt wurde
+	 *           
+	 */
+	public ShowKontakte(Kontaktliste kl) {
+
+		RootPanel.get("content").clear();
+		head.add(new HTML("<h2>Kontakt auswählen<h2>"));
+		RootPanel.get("content").add(head);
+		// Methode die beim Start dieser Klasse aufgerufen wird.
+		showAllKontakte(kl);
+
+		hp.add(addKontakt);
+		
+
+	}
 
 	/**
 	 * Konstruktor der Klasse um alle Kontakte der Kontaktliste "Alle Kontakte" beim
@@ -88,10 +111,9 @@ public class ShowKontakte extends VerticalPanel {
 	 * Konstruktor der Klasse für's Anzeigen von Kontakten einer Kontaktliste, wenn
 	 * man auf eine Kontaktliste klickt
 	 * 
-	 * @param n
-	 *            Nutzer der übergeben wird
-	 * @param kl
-	 *            Kontaktliste die ausgewählt wurde
+	 * @param n Nutzer der übergeben wird
+	 * @param kl Kontaktliste die ausgewählt wurde
+	 *           
 	 */
 	public ShowKontakte(final Nutzer n, Kontaktliste kl) {
 
@@ -201,9 +223,9 @@ public class ShowKontakte extends VerticalPanel {
 		 * Erstellung von Buttons mit <code>ClickHandlern()</code> für Interaktionen mit
 		 * den Kontakten.
 		 */
-		this.deleteKontakt = new Button("Löschen");
-		this.showKontakt = new Button("Kontakt anzeigen");
-		this.addKontaktToKontaktliste = new Button("Kontaktliste hinzufügen");
+		this.deleteKontakt = new Button("<image src='/images/trash.png' width='20px' height='20px' align='center' /> löschen");
+		this.showKontakt = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' /> anzeigen");
+		this.addKontaktToKontaktliste = new Button("<image src='/images/kontaktliste.png' width='20px' height='20px' align='center' /> hinzufügen");
 
 		sp.setSize("900px", "400px");
 		sp.add(kontaktTable);
@@ -423,8 +445,8 @@ public class ShowKontakte extends VerticalPanel {
 		this.add(sp);
 		this.add(hp);
 
-		this.deleteKontaktFromKontaktliste = new Button("Löschen entfernen");
-		this.showKontaktFromKontaktliste = new Button("Kontakt anzeigen");
+		this.deleteKontaktFromKontaktliste = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' /> löschen");
+		this.showKontaktFromKontaktliste = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' /> anzeigen");
 
 		/**
 		 * Button ClickHandler fürs anzeigen eines Kontaktes aus der Kontaktliste. Die
@@ -488,6 +510,154 @@ public class ShowKontakte extends VerticalPanel {
 				}
 			}
 		});
+	
 	}
+	/**
+	 * Methode zum hinzufügen eines Kontaktes zu einer Kontaktliste.
+	 * Es wird eine CellTable erstellt mit allen bis dato vorhandenen Kontaken
+	 * um einen auszuwählen der der Kontaktliste kl hinzuefügt werden soll.
+	 * 
+	 * @param kl Kontakliste in der ein Kontakt hizugefügt werden soll.
+	 */
+	void showAllKontakte(Kontaktliste kl) {
+		
+		Nutzer n = new Nutzer();
+		n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+		n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
+		
+		kontaktTable = new CellTable<Kontakt>();
 
+		//Alle Kontakte des Nutzers herauslesen.
+		ev.getAllKontakteByOwner(n, new AsyncCallback<Vector<Kontakt>>() {
+
+			@Override
+			public void onFailure(Throwable err) {
+				Window.alert("Fehler beim RPC Call" + err.toString());
+
+			}
+
+			// Aufruf aller Kontakt die der Nutzer erstellt hat und er als Owner hinterlegt ist.
+			public void onSuccess(Vector<Kontakt> result) {
+			
+				if (result.size() == 0) {
+					kontaktTable.setVisible(false);
+					hp.setVisible(false);
+
+				} else {
+					Window.alert("DUDU");
+					kontaktTable.setVisible(true);
+					hp.setVisible(true);
+				}
+
+				kontaktTable.setRowCount(result.size(), true);
+				kontaktTable.setVisibleRange(0, 10);
+				kontaktTable.setRowData(result);
+
+			}
+		});
+
+		/**
+		 * Tabelle Befüllen mit den aus der DB abgerufenen Kontakt Informationen.
+		 */
+		TextColumn<Kontakt> vornameCol = new TextColumn<Kontakt>() {
+
+			@Override
+			public String getValue(Kontakt vorname) {
+
+				return (String) vorname.getVorname();
+			}
+		};
+
+		TextColumn<Kontakt> nachnameCol = new TextColumn<Kontakt>() {
+
+			@Override
+			public String getValue(Kontakt nachname) {
+
+				return (String) nachname.getNachname();
+			}
+		};
+
+		/**
+		 * Implementierung der Checkbox fürs auswählen von einem oder mehrere Kontakten.
+		 */
+		Column<Kontakt, Boolean> checkColumn = new Column<Kontakt, Boolean>(new CheckboxCell(true, false)) {
+			@Override
+			public Boolean getValue(Kontakt object) {
+				return selectionModel.isSelected(object);
+			}
+		};
+
+		/**
+		 * Hinzufügen der Columns für die Darstellung der Kontakte.
+		 */
+		kontaktTable.addColumn(vornameCol, "Vorname");
+		vornameCol.setSortable(true);
+
+		kontaktTable.addColumn(nachnameCol, "Nachname");
+		nachnameCol.setSortable(true);
+
+		kontaktTable.setColumnWidth(checkColumn, 40, Unit.PX);
+		kontaktTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
+		kontaktTable.setWidth("80%", true);
+		kontaktTable.setColumnWidth(vornameCol, "100px");
+		kontaktTable.setColumnWidth(nachnameCol, "200px");
+		kontaktTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Kontakt>createCheckboxManager());
+
+		ListDataProvider<Kontakt> dataProvider = new ListDataProvider<Kontakt>();
+
+		ListHandler<Kontakt> sort = new ListHandler<Kontakt>(dataProvider.getList());
+		dataProvider.addDataDisplay(kontaktTable);
+		kontaktTable.addColumnSortHandler(sort);
+
+		this.add(kontaktTable);
+
+		/**
+		 * Erstellung von Buttons mit <code>ClickHandlern()</code> für Interaktionen mit
+		 * den Kontakten.
+		 */
+		this.addKontakt = new Button("Kontakt hinzufügen");
+
+		sp.setSize("900px", "400px");
+		sp.add(kontaktTable);
+		this.add(sp);
+		this.add(hp);
+		
+		
+		/**
+		 * Button ClickHandler zum hinzufügen der bereits ausgewählten Kontaktliste.
+		 */
+		addKontakt.addClickHandler(new ClickHandler() {
+
+			public void onClick(ClickEvent event) {
+
+				//Selektierte Kontaktliste
+				Kontakt k = selectionModel.getSelectedObject();
+				//Sicherheitsabfrage ob selektierter Kontakt null ist.
+				if(k == null) {
+					Window.alert("Bitte wähle einen Kontakt aus.");
+				} else {
+				//Es wird die selektierte Kontaktliste übergeben und der Kontakt der zuvor ausgewählt wurde. (Kostruktor übergabe)
+				ev.addKontaktToKontaktliste(kl, k, new AsyncCallback<Void>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Hoppala" + caught.toString());
+					}
+
+					@Override
+					public void onSuccess(Void result) {
+							Window.Location.reload();
+						
+					}
+				});
+				}
+			}
+
+		});
+
+		
+		
+		
+		
+	}
 }

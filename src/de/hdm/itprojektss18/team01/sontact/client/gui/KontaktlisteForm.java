@@ -72,20 +72,26 @@ public class KontaktlisteForm extends VerticalPanel {
 
 				headerPanel.add(new HTML("<h2>Kontaktliste: <em>" + selectedKontaktliste.getTitel() + "</em></h2>"));
 
+				// Update-Button intanziieren und dem Panel zuweisen
+				Button editKontaktlisteBtn = new Button("<image src='/images/edit.png' width='20px' height='20px' align='center' /> bearbeiten");
+
+				// ClickHandler f�r das Updaten einer Kontaktliste
+				editKontaktlisteBtn.addClickHandler(new updateKontaktlisteClickHandler());
+				BtnPanel.add(editKontaktlisteBtn);
+				
 				// L�sch-Button instanziieren und dem Panel zuweisen
-				Button deleteKlBtn = new Button("Kontaktliste löschen");
+				Button deleteKlBtn = new Button("<image src='/images/trash.png' width='20px' height='20px' align='center' />  löschen");
 				BtnPanel.add(deleteKlBtn);
 
 				// ClickHandler f�r das L�schen einer Kontaktliste
 				deleteKlBtn.addClickHandler(new deleteClickHandler());
 				BtnPanel.add(deleteKlBtn);
+				
+				Button addKontaktBtn = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' /> hinzufügen");
+				
+				addKontaktBtn.addClickHandler(new addKontaktClickHandler());
+				BtnPanel.add(addKontaktBtn);
 
-				// Update-Button intanziieren und dem Panel zuweisen
-				Button editKontaktlisteBtn = new Button("Kontaktliste bearbeiten");
-
-				// ClickHandler f�r das Updaten einer Kontaktliste
-				editKontaktlisteBtn.addClickHandler(new updateKontaktlisteClickHandler());
-				BtnPanel.add(editKontaktlisteBtn);
 
 				vp.add(headerPanel);
 				vp.add(BtnPanel);
@@ -208,7 +214,19 @@ public class KontaktlisteForm extends VerticalPanel {
 		}
 
 	}
-
+	
+	private class addKontaktClickHandler implements ClickHandler {
+	public void onClick(ClickEvent event) {
+		
+		Kontaktliste kl = selectedKontaktliste;
+		
+		RootPanel.get("content").add(new ShowKontakte(kl));
+		
+	}
+	
+	
+}
+	
 	/**
 	 * ClickHandler f�r das Updaten einer Kontaktliste
 	 * 

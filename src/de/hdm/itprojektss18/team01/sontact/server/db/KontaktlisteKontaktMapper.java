@@ -223,18 +223,5 @@ public class KontaktlisteKontaktMapper {
 			}
 		}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

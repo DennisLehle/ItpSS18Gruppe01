@@ -980,16 +980,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			if (bv != null && receiverId == bv.elementAt(b).getReceiverId() 
 					&& bv.elementAt(b).getType() == 'k') {
 
-				this.getKontaktById(bv.elementAt(b).getObjectId());
-
-				Kontakt k = new Kontakt();
-				k.setId(bv.elementAt(b).getObjectId());
-				k.setVorname(k.getVorname());
-				k.setNachname(k.getNachname());
-				k.setErstellDat(k.getErstellDat());
-				k.setModDat(k.getModDat());
-				k.setOwnerId(k.getOwnerId());
+				Kontakt k = this.getKontaktById(bv.elementAt(b).getObjectId());
 				kv.addElement(k);
+
 			}
 		}
 

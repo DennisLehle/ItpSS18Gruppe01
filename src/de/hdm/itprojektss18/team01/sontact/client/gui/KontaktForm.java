@@ -49,6 +49,8 @@ public class KontaktForm extends VerticalPanel {
 	Label erstellungsdatum = new Label();
 	Label modifikationsdatum = new Label();
 
+	FlexTable KontaktProfilFelx = new FlexTable();
+
 	public KontaktForm() {
 	}
 
@@ -81,7 +83,8 @@ public class KontaktForm extends VerticalPanel {
 						+ selectedKontakt.getNachname() + "</em></h2>"));
 
 				// Update-Button intanziieren und dem Panel zuweisen
-				Button editKontaktBtn = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' /> bearbeiten");
+				Button editKontaktBtn = new Button(
+						"<image src='/images/user.png' width='20px' height='20px' align='center' /> bearbeiten");
 
 				// ClickHandler f�r das Updaten eines Kontakts
 				editKontaktBtn.addClickHandler(new updateKontaktClickHandler());
@@ -97,44 +100,44 @@ public class KontaktForm extends VerticalPanel {
 				datePanel.add(erstellungsdatum);
 				datePanel.add(modifikationsdatum);
 
-				FlexTable auspraegungFlex = new FlexTable();
-
-				ev.getAllAuspraegungenByKontakt(selectedKontakt.getId(), new AsyncCallback<Vector<Auspraegung>>() {
+				int id = selectedKontakt.getId();
+				ev.getAllAuspraegungenByKontakt(id, new AsyncCallback<Vector<Auspraegung>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						caught.getMessage();
+						caught.getMessage().toString();
 
 					}
 
 					@Override
 					public void onSuccess(Vector<Auspraegung> result) {
+						Vector<Auspraegung> auspraegungen = new Vector<>();
+						auspraegungen = result;
 
-						Vector<Auspraegung> av = new Vector<>();
-						av = result;
+						for (int i = 0; i < auspraegungen.size(); i++) {
 
-						for (int i = 0; i < av.size(); i++) {
-							int acount = 0;
+							Label auspraegungLabel = new Label();
+							auspraegungLabel.setText(auspraegungen.elementAt(i).getWert());
 
-							TextBox aTextBox = new TextBox();
-							aTextBox.setText(av.elementAt(i).getWert());
-							auspraegungFlex.setWidget(acount + 1, 1, aTextBox);
-
-							ev.getEigenschaftForAuspraegung(av.elementAt(i).getEigenschaftId(),
+							ev.getEigenschaftForAuspraegung(auspraegungen.elementAt(i).getEigenschaftId(),
 									new AsyncCallback<Eigenschaft>() {
 
 										@Override
 										public void onFailure(Throwable caught) {
-											// TODO Auto-generated method stub
+											caught.getMessage().toString();
+
 										}
 
 										@Override
 										public void onSuccess(Eigenschaft result) {
-											int ecount = 0;
-											Eigenschaft e = result;
-											TextBox eTextBox = new TextBox();
-											eTextBox.setText(e.getBezeichnung());
-											auspraegungFlex.setWidget(ecount + 1, 0, eTextBox);
+
+											Label eigenschaftLabel = new Label();
+											eigenschaftLabel.setText(result.getBezeichnung());
+											int count = KontaktProfilFelx.getRowCount();
+											KontaktProfilFelx.setWidget(count, 0, eigenschaftLabel);
+											KontaktProfilFelx.setWidget(count, 1, auspraegungLabel);
+											int count2 = KontaktProfilFelx.getRowCount();
+											count = count2 + 1;
 
 										}
 									});
@@ -142,10 +145,11 @@ public class KontaktForm extends VerticalPanel {
 						}
 
 					}
+
 				});
 
 				vp.add(headerPanel);
-				vp.add(auspraegungFlex);
+				vp.add(KontaktProfilFelx);
 				vp.add(BtnPanel);
 				vp.add(datePanel);
 				RootPanel.get("content").add(vp);
@@ -204,7 +208,6 @@ public class KontaktForm extends VerticalPanel {
 
 	// ClickHandler
 
-	
 	/**
 	 * ClickHandler zum Speichern eines neu angelegten Kontakts
 	 */

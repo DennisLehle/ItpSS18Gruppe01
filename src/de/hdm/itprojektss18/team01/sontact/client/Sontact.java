@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18.team01.sontact.client.gui.MessageBox;
 import de.hdm.itprojektss18.team01.sontact.client.gui.Navigation;
-import de.hdm.itprojektss18.team01.sontact.client.gui.RegistrierungsFormular;
+import de.hdm.itprojektss18.team01.sontact.client.gui.RegistrierungsForm;
 import de.hdm.itprojektss18.team01.sontact.client.gui.ShowKontakte;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.LoginService;
@@ -95,7 +95,7 @@ public class Sontact implements EntryPoint {
 
 													@Override
 													public void onSuccess(final Nutzer nutzer) {
-													RootPanel.get("content").add(new RegistrierungsFormular(nutzer));
+													RootPanel.get("content").add(new RegistrierungsForm(nutzer));
 													
 													}
 												});

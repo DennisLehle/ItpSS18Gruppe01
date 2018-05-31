@@ -10,8 +10,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import de.hdm.itprojektss18.team01.sontact.shared.CommonSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorService;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
-import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorService;
-import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorServiceAsync;
+import de.hdm.itprojektss18.team01.sontact.shared.ReportGenerator;
+import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
@@ -39,7 +39,7 @@ public class ClientsideSettings extends CommonSettings {
 	 * Remote Service Proxy zur Verbindungsaufnahme mit dem Server-seitgen
 	 * Dienst namens <code>ReportGenerator</code>.
 	 */
-	private static ReportGeneratorServiceAsync reportGeneratorVerwaltung = null;
+	private static ReportGeneratorAsync reportGeneratorVerwaltung = null;
 
 	/**
 	 * Name des Client-seitigen Loggers.
@@ -187,14 +187,14 @@ public class ClientsideSettings extends CommonSettings {
 	 * @author Peter Thies
 	 * @since 28.02.2012
 	 */
-	public static ReportGeneratorServiceAsync getReportGeneratorService() {
+	public static ReportGeneratorAsync getReportGeneratorService() {
 		/**
 		 * Gab es bislang noch keine ReportGenerator-Instanz, wird eine neue
 		 * erstellt. Auch ein sogenannter <Singleton>
 		 */
 		if (reportGeneratorVerwaltung == null) {
 
-			reportGeneratorVerwaltung = GWT.create(ReportGeneratorService.class);
+			reportGeneratorVerwaltung = GWT.create(ReportGenerator.class);
 			final AsyncCallback<Void> initReportGeneratorServiceCallback = new AsyncCallback<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {

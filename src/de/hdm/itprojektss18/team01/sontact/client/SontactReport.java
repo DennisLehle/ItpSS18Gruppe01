@@ -20,7 +20,7 @@ import de.hdm.itprojektss18.team01.sontact.client.gui.ShowKontakte;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.LoginService;
 import de.hdm.itprojektss18.team01.sontact.shared.LoginServiceAsync;
-import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorServiceAsync;
+import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.LoginInfo;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
@@ -50,7 +50,7 @@ public class SontactReport implements EntryPoint {
 	 * ReportService und EditorService werden auf null gesetzt. Diese werden neu
 	 * geladen, dies Dient zur Sicherheit.
 	 */
-	ReportGeneratorServiceAsync reportGeneratorService = null;
+	ReportGeneratorAsync reportGeneratorService = null;
 	EditorServiceAsync editorService = null;
 
 	/**

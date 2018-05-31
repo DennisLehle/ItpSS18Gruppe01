@@ -239,6 +239,6 @@ public interface EditorService extends RemoteService{
 	public Vector<Kontakt> sucheKontakt (String vorname, String nachname, 
 			String wert, String bezeichnung, Nutzer n) throws IllegalArgumentException;
 	
-	
+	public Berechtigung getABerechtigungByReceiver(Nutzer n) throws IllegalArgumentException;
 	
 }

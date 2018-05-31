@@ -169,7 +169,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		init();
 		
-//		//Verknüpfung aus Zwischentabelle KontaktlisteKontakt löschen
+//		//Verknï¿½pfung aus Zwischentabelle KontaktlisteKontakt lï¿½schen
 //		this.klkMapper.removeKontaktFromKontaktliste(kl, k);
 
 		// Alle Auspraegungen der Kontakte, welche im Eigentumsverhï¿½ltnis mit
@@ -1046,13 +1046,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			if (bv != null && receiverId == bv.elementAt(b).getReceiverId() 
 					&& bv.elementAt(b).getType() == 'l') {
-				this.getKontaktlisteById(bv.elementAt(b).getObjectId());
-
-				Kontaktliste kl = new Kontaktliste();
-				kl.setId(bv.elementAt(b).getObjectId());
-				kl.setTitel(kl.getTitel());
-				kl.setOwnerId(kl.getOwnerId());
-				klv.addElement(kl);
+				Kontaktliste kl1 = this.getKontaktlisteById(bv.elementAt(b).getObjectId());
+				
+				klv.addElement(kl1);
 			}
 		}
 
@@ -1115,6 +1111,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 		return null;
 	}
+	
+	/**
+	 * Suchte fÃ¼r den Nutzer eine einzelne Berechtigung fÃ¼r einen einzelnen Kontakt heraus den
+	 * er zuvor selektiert hat. Damit man ihn auch einzeln entfernen kann.
+	 */
+	public Berechtigung getABerechtigungByReceiver(Nutzer n) throws IllegalArgumentException {
+		return this.bMapper.findASingleBerechtigung(n.getId());
+	}
+	
 
 	/*
 	 * ************************************************************************* 

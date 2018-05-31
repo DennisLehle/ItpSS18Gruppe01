@@ -164,8 +164,6 @@ public class ShowKontaktliste extends VerticalPanel {
 		sp.add(kontaktListenTable2);
 		this.add(sp);
 		this.add(hp3);
-		//RootPanel.get("content").add(hp3);
-		//RootPanel.get("content").add(this);
 
 		/**
 		 * Button ClickHandler zum hinzufügen eines Kontaktes einer speziellen Kontaktliste.

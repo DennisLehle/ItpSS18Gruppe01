@@ -196,6 +196,10 @@ public interface EditorServiceAsync {
 	void getABerechtigungByReceiver(Nutzer n, AsyncCallback<Berechtigung> callback);
 
 
+	void sucheKontakt(String vorname, String nachname, String wert, String bezeichnung, Nutzer n,
+			AsyncCallback<Vector<Kontakt>> callback);
+
+
 
 	
 	

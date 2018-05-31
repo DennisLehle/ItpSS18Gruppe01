@@ -841,11 +841,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param ownerId
 	 * @return Berechtigungen
 	 */
-	public Vector<Berechtigung> getAllBerechtigungenByOwner(int ownerId) 
+	public Vector<Berechtigung> getAllBerechtigungenByOwner(int nutzerId) 
 			throws IllegalArgumentException {
 		init();
 		
-		Vector<Berechtigung> b = this.bMapper.findAllBerechtigungenByOwner(ownerId);
+		Vector<Berechtigung> b = this.bMapper.findAllBerechtigungenByOwner(nutzerId);
 		return b;
 	}
 
@@ -856,11 +856,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param receiverId
 	 * @return Berechtigungen
 	 */
-	public Vector<Berechtigung> getAllBerechtigungenByReceiver(int receiverId) 
+	public Vector<Berechtigung> getAllBerechtigungenByReceiver(int nutzerId) 
 			throws IllegalArgumentException {
 		init();
 
-		Vector<Berechtigung> b = this.bMapper.findAllBerechtigungenByReceiver(receiverId);
+		Vector<Berechtigung> b = this.bMapper.findAllBerechtigungenByReceiver(nutzerId);
 		return b;
 	}
 
@@ -883,15 +883,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param ownerId
 	 * @return Vector<Kontakt>
 	 */
-	public Vector<Kontakt> getAllSharedKontakteByOwner(int ownerId) 
+	public Vector<Kontakt> getAllSharedKontakteByOwner(int nutzerId) 
 			throws IllegalArgumentException {
 		init();
 
-		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(ownerId);
+		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(nutzerId);
 		Vector<Kontakt> kv = new Vector<Kontakt>();
 
 		for (int b = 0; b < bv.size(); b++) {
-			if (bv != null && ownerId == bv.elementAt(b).getOwnerId() 
+			if (bv != null && nutzerId == bv.elementAt(b).getOwnerId() 
 					&& bv.elementAt(b).getType() == 'k') {
 
 				this.getKontaktById(bv.elementAt(b).getObjectId());
@@ -914,18 +914,18 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Gibt alle <code>Kontakt</code>-Objekte aus, welche mit dem Nutzer geteilt
 	 * wurden.
 	 * 
-	 * @param receiverId
+	 * @param nutzerId
 	 * @return Vector<Kontakt>
 	 */
-	public Vector<Kontakt> getAllSharedKontakteByReceiver(int receiverId) 
+	public Vector<Kontakt> getAllSharedKontakteByReceiver(int nutzerId) 
 			throws IllegalArgumentException {
 		init();
 
-		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(receiverId);
+		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(nutzerId);
 		Vector<Kontakt> kv = new Vector<Kontakt>();
 
 		for (int b = 0; b < bv.size(); b++) {
-			if (bv != null && receiverId == bv.elementAt(b).getReceiverId() 
+			if (bv != null && nutzerId == bv.elementAt(b).getReceiverId() 
 					&& bv.elementAt(b).getType() == 'k') {
 
 				this.getKontaktById(bv.elementAt(b).getObjectId());
@@ -938,6 +938,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 				k.setModDat(k.getModDat());
 				k.setOwnerId(k.getOwnerId());
 				kv.addElement(k);
+				
 			}
 		}
 
@@ -948,19 +949,19 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Gibt alle <code>Kontaktliste</code>-Objekte aus, welche vom Nutzer geteilt
 	 * wurden.
 	 * 
-	 * @param ownerId
+	 * @param nutzerId
 	 * @return Vector<Kontakt>
 	 */
-	public Vector<Kontaktliste> getAllSharedKontaktlistenByOwner(int ownerId) 
+	public Vector<Kontaktliste> getAllSharedKontaktlistenByOwner(int nutzerId) 
 			throws IllegalArgumentException {
 		init();
 
-		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(ownerId);
+		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(nutzerId);
 		Vector<Kontaktliste> klv = new Vector<Kontaktliste>();
 
 		for (int b = 0; b < bv.size(); b++) {
 
-			if (bv != null && ownerId == bv.elementAt(b).getOwnerId() 
+			if (bv != null && nutzerId == bv.elementAt(b).getOwnerId() 
 					&& bv.elementAt(b).getType() == 'l') {
 
 				this.getKontaktlisteById(bv.elementAt(b).getObjectId());
@@ -980,19 +981,19 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Gibt alle <code>Kontaktliste</code>-Objekte aus, welche mit dem Nutzer
 	 * geteilt wurden.
 	 * 
-	 * @param receiverId
+	 * @param nutzerId
 	 * @return Vector<Kontakt>
 	 */
-	public Vector<Kontaktliste> getAllSharedKontaktlistenByReceiver(int receiverId) 
+	public Vector<Kontaktliste> getAllSharedKontaktlistenByReceiver(int nutzerId) 
 			throws IllegalArgumentException {
 		init();
 
-		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(receiverId);
+		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(nutzerId);
 		Vector<Kontaktliste> klv = new Vector<Kontaktliste>();
 
 		for (int b = 0; b < bv.size(); b++) {
 
-			if (bv != null && receiverId == bv.elementAt(b).getReceiverId() 
+			if (bv != null && nutzerId == bv.elementAt(b).getReceiverId() 
 					&& bv.elementAt(b).getType() == 'l') {
 				this.getKontaktlisteById(bv.elementAt(b).getObjectId());
 
@@ -1034,7 +1035,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			}
 
 		}
-		return null;
+		return kv;
 	}
 
 	/**

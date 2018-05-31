@@ -363,10 +363,10 @@ public class AuspraegungMapper {
 				//Setzen der Attribute den Datensätzen aus der DB entsprechend
 				a.setId(rs.getInt(1));
 				a.setWert(rs.getString(2));
-				a.setEigenschaftId(rs.getInt(3));
-				a.setKontaktId(rs.getInt(4));
-				a.setOwnerId(rs.getInt(5));
-				
+				a.setOwnerId(rs.getInt(3));
+				a.setEigenschaftId(rs.getInt(4));
+				a.setKontaktId(rs.getInt(5));
+
 				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
 				result.addElement(a);
 			}

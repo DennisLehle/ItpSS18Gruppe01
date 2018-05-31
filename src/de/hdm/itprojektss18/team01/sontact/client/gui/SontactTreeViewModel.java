@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.view.client.ListDataProvider;
@@ -348,18 +349,34 @@ public class SontactTreeViewModel implements TreeViewModel {
 
 				@Override
 				public void onSuccess(Vector<Kontaktliste> result) {
-
 					// Alle gefundenen Kontaktlisten werden dem DataProvider hinzugef�gt
 					for (Kontaktliste kontaktliste : result) {
 						kontaktlisteDataProvider.getList().add(kontaktliste);
 					}
-				}
+					//Wenn die eigenen Kontakte in dem Baum eingepflegt wurden werden nun die von
+					//anderen Nutzern geteilten Kontaktlisten eingepflegt.
+					ev.getAllSharedKontaktlistenByReceiver(n.getId(), new AsyncCallback<Vector<Kontaktliste>>() {
 
+						@Override
+						public void onFailure(Throwable error) {
+							error.getMessage().toString();
+							
+						}
+
+						@Override
+						public void onSuccess(Vector<Kontaktliste> result) {
+							//Geteilten Kontaktlisten deren Namen jetzt bekannt sind hinzufügen.
+							for (Kontaktliste kontaktliste : result) {
+								kontaktlisteDataProvider.getList().add(kontaktliste);
+						}
+						}
+					});
+					}
 			});
-
 			return new DefaultNodeInfo<Kontaktliste>(kontaktlisteDataProvider, new KontaktlisteCell(), selectionModel,
 					null);
 		}
+
 
 		/*
 		 * Wenn Value eine Instanz von Kontaktliste ist werden die Kontakte aus der
@@ -385,10 +402,10 @@ public class SontactTreeViewModel implements TreeViewModel {
 			});
 
 			return new DefaultNodeInfo<Kontakt>(kontaktLDP, new KontaktCell(), selectionModel, null);
+	
 		}
 		return null;
 	}
-
 	/**
 	 * �berpr�fung ob das Objekt ein Blatt ist.
 	 */

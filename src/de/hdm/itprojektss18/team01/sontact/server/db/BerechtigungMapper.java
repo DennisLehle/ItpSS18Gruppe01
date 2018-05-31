@@ -92,7 +92,7 @@ public class BerechtigungMapper {
 			// SQL Statement wird der lokalen Variable ï¿½bergeben
 			PreparedStatement prestmt = con.prepareStatement(
 					" DELETE FROM Berechtigung WHERE"
-						+ " ownerid = " + b.getOwnerId()
+						//+ " ownerid = " + b.getOwnerId()
 						+ " AND receiverid = " + b.getReceiverId() 
 						+ " AND objectid = " + b.getObjectId() 		
 						+ " AND type = '" + b.getType() + "'");
@@ -186,13 +186,13 @@ public class BerechtigungMapper {
 
 	
 	/**
-	 * Gibt alle Objekt-Berechtigungen über jene Objekte aus,
+	 * Gibt alle Objekt-Berechtigungen ï¿½ber jene Objekte aus,
 	 * welche vom Nutzer geteilt wurden.
 	 * 
 	 * @param ownerId
 	 * @return Berechtigungen
 	 */
-	public Vector<Berechtigung> findAllBerechtigungenByOwner(int ownerId) {
+	public Vector<Berechtigung> findAllBerechtigungenByOwner(int nutzerId) {
 
 		// DBConnection herstellen
 		Connection con = DBConnection.connection();
@@ -202,7 +202,7 @@ public class BerechtigungMapper {
 		try {
 
 			// SQL-Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Berechtigung WHERE ownerid=" + ownerId);
+			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Berechtigung WHERE ownerid=" + nutzerId);
 
 			ResultSet rs = prestmt.executeQuery();
 			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
@@ -227,13 +227,13 @@ public class BerechtigungMapper {
 
 	
 	/**
-	 * Gibt alle Objekt-Berechtigungen über jene Objekte aus,
+	 * Gibt alle Objekt-Berechtigungen ï¿½ber jene Objekte aus,
 	 * welche mit dem Nutzergeteilt wurden. 
 	 * 
 	 * @param receiverId
 	 * @return Berechtigungen
 	 */
-	public Vector<Berechtigung> findAllBerechtigungenByReceiver(int receiverId) {
+	public Vector<Berechtigung> findAllBerechtigungenByReceiver(int nutzerId) {
 		// DBConnection herstellen
 		Connection con = DBConnection.connection();
 
@@ -242,7 +242,7 @@ public class BerechtigungMapper {
 
 			// SQL-Statement anlegen
 			PreparedStatement prestmt = con
-					.prepareStatement("SELECT * FROM Berechtigung WHERE receiverid=" + receiverId);
+					.prepareStatement("SELECT * FROM Berechtigung WHERE receiverid=" + nutzerId);
 
 			ResultSet rs = prestmt.executeQuery();
 
@@ -264,5 +264,43 @@ public class BerechtigungMapper {
 
 		// Rï¿½ckgabe des Ergebnisvektors
 		return result;
+	}
+	
+	/**
+	 * Gibt eine spezielle Berechtigung eines Objekts zurÃ¼ck.
+	 * Welche mit dem Receiver geteilt wurde.
+	 * 
+	 * @param receiverId
+	 * @return Berechtigungen
+	 */
+	public Berechtigung findASingleBerechtigung(int receiverId) {
+		// DBConnection herstellen
+		Connection con = DBConnection.connection();
+
+		try {
+
+			// SQL-Statement anlegen
+			PreparedStatement prestmt = con
+					.prepareStatement("SELECT * FROM berechtigung WHERE receiverid =" + receiverId);
+
+			ResultSet rs = prestmt.executeQuery();
+
+			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
+			if(rs.next()) {
+				Berechtigung b = new Berechtigung();
+				b.setId(rs.getInt("id"));
+				b.setOwnerId(rs.getInt("ownerid"));
+				b.setReceiverId(rs.getInt("receiverid"));
+				b.setObjectId(rs.getInt("objectid"));
+				b.setType(rs.getString("type").charAt(0));
+				
+				return b;
+
+			}
+	
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		return null;
 	}
 }

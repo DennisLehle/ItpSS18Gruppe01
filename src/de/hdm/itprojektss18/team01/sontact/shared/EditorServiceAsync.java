@@ -147,7 +147,6 @@ public interface EditorServiceAsync {
 
 	void getKontaktlisteById(int id, AsyncCallback<Kontaktliste> callback);
 
-
 	void createKontaktlisteRegistrierung(Nutzer n, AsyncCallback<Kontaktliste> callback);
 
 
@@ -192,6 +191,13 @@ public interface EditorServiceAsync {
 
 
 	void getKontaktByNachname(String nachname, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
+
+
+	void getABerechtigungByReceiver(Nutzer n, AsyncCallback<Berechtigung> callback);
+
+
+	void sucheKontakt(String vorname, String nachname, String wert, String bezeichnung, Nutzer n,
+			AsyncCallback<Vector<Kontakt>> callback);
 
 
 

@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
-import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorServiceAsync;
+import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 
@@ -25,7 +25,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 public class NavigationReport extends VerticalPanel{
 	
 
-	ReportGeneratorServiceAsync reportverwaltung = ClientsideSettings.getReportGeneratorService();
+	ReportGeneratorAsync reportverwaltung = ClientsideSettings.getReportGeneratorService();
 	/**
 	 * Buttons der Navigation. 
 	 * final, damit Callbacks sie verändern können.

@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
@@ -49,6 +50,8 @@ public class KontaktForm extends VerticalPanel {
 	Label erstellungsdatum = new Label();
 	Label modifikationsdatum = new Label();
 
+	FlexTable KontaktProfilFelx = new FlexTable();
+
 	public KontaktForm() {
 	}
 
@@ -60,6 +63,7 @@ public class KontaktForm extends VerticalPanel {
 	public KontaktForm(Kontakt k) {
 
 		this.selectedKontakt = k;
+		
 		RootPanel.get("content").clear();
 
 		ev.getKontaktById(k.getId(), new AsyncCallback<Kontakt>() {
@@ -80,28 +84,20 @@ public class KontaktForm extends VerticalPanel {
 				headerPanel.add(new HTML("<h2>Kontakt: <em>" + selectedKontakt.getVorname() + " "
 						+ selectedKontakt.getNachname() + "</em></h2>"));
 
-				// L�sch-Button instanziieren und dem Panel zuweisen
-				Button deleteKontaktBtn = new Button("Kontakt löschen");
-				BtnPanel.add(deleteKontaktBtn);
-
-				// ClickHandler f�r das L�schen eines Kontakts
-				deleteKontaktBtn.addClickHandler(new deleteClickHandler());
-				BtnPanel.add(deleteKontaktBtn);
-
-				// L�sch-Button instanziieren und dem Panel zuweisen
-				Button deleteKontaktFromKlBtn = new Button("Aus der Kontaktliste löschen");
-				BtnPanel.add(deleteKontaktFromKlBtn);
-
-				// ClickHandler f�r das L�schen eines Kontakts
-				deleteKontaktFromKlBtn.addClickHandler(new deleteFromKontaktlisteClickHandler());
-				BtnPanel.add(deleteKontaktFromKlBtn);
-
 				// Update-Button intanziieren und dem Panel zuweisen
-				Button editKontaktBtn = new Button("Kontakt bearbeiten");
+				Button editKontaktBtn = new Button(
+						"<image src='/images/user.png' width='20px' height='20px' align='center' /> bearbeiten");
 
 				// ClickHandler f�r das Updaten eines Kontakts
 				editKontaktBtn.addClickHandler(new updateKontaktClickHandler());
 				BtnPanel.add(editKontaktBtn);
+				
+				// Update-Button intanziieren und dem Panel zuweisen
+				Button deleteBtn = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' /> löschen");
+
+				// ClickHandler f�r das Updaten eines Kontakts
+				deleteBtn.addClickHandler(new deleteKontaktFromKontaktlisteClickHandler());
+				BtnPanel.add(deleteBtn);
 
 				// Panel fuer das Erstellungs- und Modifikationsdatum
 				VerticalPanel datePanel = new VerticalPanel();
@@ -113,56 +109,56 @@ public class KontaktForm extends VerticalPanel {
 				datePanel.add(erstellungsdatum);
 				datePanel.add(modifikationsdatum);
 
-				FlexTable auspraegungFlex = new FlexTable();
-
-				ev.getAllAuspraegungenByKontakt(selectedKontakt.getId(), new AsyncCallback<Vector<Auspraegung>>() {
+				int id = selectedKontakt.getId();
+				ev.getAllAuspraegungenByKontakt(id, new AsyncCallback<Vector<Auspraegung>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						caught.getMessage();
+						caught.getMessage().toString();
 
 					}
 
 					@Override
 					public void onSuccess(Vector<Auspraegung> result) {
+						Vector<Auspraegung> auspraegungen = new Vector<>();
+						auspraegungen = result;
 
-						Vector<Auspraegung> av = new Vector<>();
-						av = result;
+						for (int i = 0; i < auspraegungen.size(); i++) {
 
-						for (int i = 0; i < av.size(); i++) {
-							int acount = 0;
-							
-							TextBox aTextBox = new TextBox();
-							aTextBox.setText(av.elementAt(i).getWert());
-							auspraegungFlex.setWidget(acount + 1, 1, aTextBox);
+							Label auspraegungLabel = new Label();
+							auspraegungLabel.setText(auspraegungen.elementAt(i).getWert());
 
-							ev.getEigenschaftForAuspraegung(av.elementAt(i).getEigenschaftId(),
+							ev.getEigenschaftForAuspraegung(auspraegungen.elementAt(i).getEigenschaftId(),
 									new AsyncCallback<Eigenschaft>() {
 
 										@Override
 										public void onFailure(Throwable caught) {
-											// TODO Auto-generated method stub
+											caught.getMessage().toString();
+
 										}
 
 										@Override
 										public void onSuccess(Eigenschaft result) {
-											int ecount = 0;
-											Eigenschaft e = result;
-											TextBox eTextBox = new TextBox();
-											eTextBox.setText(e.getBezeichnung());
-											auspraegungFlex.setWidget(ecount +1 , 0, eTextBox);
-											
+
+											Label eigenschaftLabel = new Label();
+											eigenschaftLabel.setText(result.getBezeichnung());
+											int count = KontaktProfilFelx.getRowCount();
+											KontaktProfilFelx.setWidget(count, 0, eigenschaftLabel);
+											KontaktProfilFelx.setWidget(count, 1, auspraegungLabel);
+											int count2 = KontaktProfilFelx.getRowCount();
+											count = count2 + 1;
+
 										}
 									});
-							
 
 						}
 
 					}
+
 				});
 
 				vp.add(headerPanel);
-				vp.add(auspraegungFlex);
+				vp.add(KontaktProfilFelx);
 				vp.add(BtnPanel);
 				vp.add(datePanel);
 				RootPanel.get("content").add(vp);
@@ -220,106 +216,138 @@ public class KontaktForm extends VerticalPanel {
 	}
 
 	// ClickHandler
-
-	/**
-	 * ClickHandler f�r das L�schen eines Kontakts
-	 * 
-	 * @author Batista
-	 *
-	 */
-	private class deleteClickHandler implements ClickHandler {
+	
+	public class deleteKontaktFromKontaktlisteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			// Check, ob Kontakte in der Liste enthalten sind
-			ev.getKontaktById(selectedKontakt.getId(), new AsyncCallback<Kontakt>() {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					caught.getMessage().toString();
-				}
-
-				@Override
-				public void onSuccess(Kontakt result) {
-					// Wenn Kontakte vorhanden sind...
-					Window.confirm("Kontakt: " + selectedKontakt.getVorname() + selectedKontakt.getNachname()
-							+ "unwiderruflich löschen?");
-					{
-						loescheKontakt();
-					}
-				}
-
-				public void loescheKontakt() {
-					ev.removeKontakt(selectedKontakt, new AsyncCallback<Void>() {
-
-						@Override
-						public void onFailure(Throwable error) {
-							error.getMessage().toString();
-
-						}
-
-						@Override
-						public void onSuccess(Void result) {
-							Window.alert("Kontakt wurde gelöscht");
-							Window.Location.reload();
-
-						}
-
-					});
-
-				}
-			});
-
-		}
-
-	}
-
-	// Zum löschen eines Kontaktes aus einer speziellen Kontaktliste
-	private class deleteFromKontaktlisteClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			// Check, ob Kontakte in der Liste enthalten sind
-			ev.getKontaktById(selectedKontakt.getId(), new AsyncCallback<Kontakt>() {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					caught.getMessage().toString();
-				}
-
-				@Override
-				public void onSuccess(Kontakt result) {
-					// Wenn Kontakte vorhanden sind...
-					Window.confirm("Kontakt: " + selectedKontakt.getVorname() + selectedKontakt.getNachname()
-							+ "unwiderruflich aus der Kontaktliste löschen?");
-					{
-						loescheKontaktAusKontaktliste();
-					}
-				}
-
-				public void loescheKontaktAusKontaktliste() {
+		
+	
 			
-					Kontaktliste kl = sontactTree.getSelectedKontaktliste();
+			// Nutzer Cookies setzen und dann per Nutzer holen.
+			Nutzer n = new Nutzer();
+			n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+			n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
+			Window.confirm("Das löschen hier löscht den Kontakt aus allen Kontaktlisten. Sind Sie sicher?");
+			/*
+			 * Wenn der KontaktOwner ungleich der Nutzer Id ist kann der Nutzer die
+			 * Berechtigung dafür auslesen und entfernen.
+			 */
+			if (selectedKontakt.getOwnerId() != n.getId()) {
+				Window.alert("Teilhaberschaft wird entfernt und Kontakt wird aus ihrer Kontaktliste entfernt..");
+				ev.getABerechtigungByReceiver(n, new AsyncCallback<Berechtigung>() {
 					
-					ev.removeKontaktFromKontaktliste(kl, selectedKontakt, new AsyncCallback<Void>() {
-								@Override
-								public void onFailure(Throwable error) {
-									error.getMessage().toString();
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Hoppala" + caught.toString());
+					}
 
-								}
+					@Override
+					public void onSuccess(Berechtigung result) {
+						Berechtigung b = result;
 
-								@Override
-								public void onSuccess(Void result) {
-									Window.alert("hey");
-									Window.alert("Kontakt wurde aus der Kontaktliste gelöscht");
-									Window.Location.reload();
-								}
-							
+						b.setReceiverId(n.getId());
+						b.setType('k');
+						b.setObjectId(selectedKontakt.getId());
+
+						// Berechtigungs-Objekt übergeben.
+						ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
+
+							@Override
+							public void onFailure(Throwable caught) {
+								caught.getMessage().toString();
+							}
+
+							@Override
+							public void onSuccess(Void result) {
+
+								/*
+								 * Kontaktliste anhand der KontaktlisteId des selektierten Kontaktes wird
+								 * herausgesucht.
+								 */
+								ev.findKontaktlisteByTitel(n, "Alle Kontakte", new AsyncCallback<Kontaktliste>() {
+
+									@Override
+									public void onFailure(Throwable caught) {
+										caught.getMessage().toString();
+
+									}
+
+									@Override
+									public void onSuccess(Kontaktliste result) {
+
+										// Kontakt wird aus der Kontaktliste entfernt.
+										ev.removeKontaktFromKontaktliste(result, selectedKontakt, new AsyncCallback<Void>() {
+
+											@Override
+											public void onFailure(Throwable caught) {
+												caught.getMessage().toString();
+
+											}
+
+											@Override
+											public void onSuccess(Void result) {
+												/*
+												 * Ab hier wurde die Berechtigung entfernt und der gewählte Kontakt
+												 * aus der Kontaktliste entfernt.
+												 */
+												Window.Location.reload();
+
+											}
+
+										});
+
+									}
+
+								});
+
+							}
+
+						});
+					}
 				});
-			}
-		});
+			} else {
+				/*
+				 * Wenn Nutzer Id == OwnerId des Kontaktes entspricht darf man den Kontakt
+				 * permanent entfernen. Und der Kontakt wird auch bei allen Nutzern aus den
+				 * Kontaktlisten entfernt.
+				 */
+				ev.getKontaktlisteById(selectedKontakt.getKontaktlisteId(), new AsyncCallback<Kontaktliste>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.getMessage().toString();
+						
+					}
+
+					@Override
+					public void onSuccess(Kontaktliste result) {
+						
+						//Kontak
+						ev.removeKontaktFromKontaktliste(result, selectedKontakt, new AsyncCallback<Void>() {
+							@Override
+							public void onFailure(Throwable caught) {
+								caught.getMessage().toString();
+							}
+
+							@Override
+							public void onSuccess(Void result) {
+								Window.alert("EHy");
+								Window.Location.reload();
+								
+							}
+						});
+					}
+					
+				});
+				
+			}	
+		}		
 	}
-	}
+	
+	
+	
+	
 	/**
 	 * ClickHandler zum Speichern eines neu angelegten Kontakts
 	 */

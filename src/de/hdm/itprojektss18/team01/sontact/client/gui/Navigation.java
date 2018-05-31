@@ -59,7 +59,7 @@ public class Navigation extends VerticalPanel {
 		
 
 
-		neueKontaktlisteBtn.addClickHandler(new ClickHandler() {
+		neuerKontaktBtn.addClickHandler(new ClickHandler() {
 
 			
 			@Override

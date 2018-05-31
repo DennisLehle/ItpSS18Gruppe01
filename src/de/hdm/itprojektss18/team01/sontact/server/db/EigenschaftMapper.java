@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 
 /**
  * <code>EigenschaftMapper</code>, welcher <code>Eigenschaft</code>-Objekte
@@ -293,6 +294,60 @@ public class EigenschaftMapper {
 		}
 		
 		return null; 
+	}
+	
+	/**
+	 * Auslesen aller Eigenschaften mit einer speziellen Bezeichnung
+	 * 
+	 * @see findEigenschaftByBezeichnung
+	 * @param String bezeichnung fuer zugehoerige Eigenschaften
+	 * @return ein Vektor mit Eigenschaften-Objekten, die durch die gegebene Bezeichnung
+	 *         repraesentiert werden. Bei evtl. Exceptions wird ein partiell
+	 *         gefuellter oder ggf. auch leerer Vektor zurueckgeliefert.
+	 * 
+	 */
+	
+	public Vector<Eigenschaft> findEigenschaftByBezeichnung(String bezeichnung){
+		
+		Connection con = null; 
+		PreparedStatement stmt = null; 
+		
+		String selectByKey = "SELECT * FROM eigenschaft WHERE bezeichnung=? ORDER BY bezeichnung";
+		
+		//Vector erzeugen, der die Eigenschaftsdatensätze aufnehmen kann
+		Vector <Eigenschaft> result = new Vector<Eigenschaft>();
+		
+		try {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setString(1, bezeichnung);		
+
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			
+			//While Schleife für das Durchlaufen vieler Zeilen
+			//Schreiben der Objekt-Attribute aus ResultSet
+			while (rs.next()) {
+				
+				Eigenschaft e = new Eigenschaft();
+				e.setId(rs.getInt("id"));
+				e.setBezeichnung(rs.getString("bezeichnung"));	
+				
+				//Statt return wird hier der Vektor erweitert
+				result.addElement(e);
+				
+			}
+			
+			return result;
+		}
+		
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		
+		return null;
 	}
 
 }

@@ -192,7 +192,7 @@ public class BerechtigungMapper {
 	 * @param ownerId
 	 * @return Berechtigungen
 	 */
-	public Vector<Berechtigung> findAllBerechtigungenByOwner(int ownerId) {
+	public Vector<Berechtigung> findAllBerechtigungenByOwner(int nutzerId) {
 
 		// DBConnection herstellen
 		Connection con = DBConnection.connection();
@@ -202,7 +202,7 @@ public class BerechtigungMapper {
 		try {
 
 			// SQL-Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Berechtigung WHERE ownerid=" + ownerId);
+			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Berechtigung WHERE ownerid=" + nutzerId);
 
 			ResultSet rs = prestmt.executeQuery();
 			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
@@ -233,7 +233,7 @@ public class BerechtigungMapper {
 	 * @param receiverId
 	 * @return Berechtigungen
 	 */
-	public Vector<Berechtigung> findAllBerechtigungenByReceiver(int receiverId) {
+	public Vector<Berechtigung> findAllBerechtigungenByReceiver(int nutzerId) {
 		// DBConnection herstellen
 		Connection con = DBConnection.connection();
 
@@ -242,7 +242,7 @@ public class BerechtigungMapper {
 
 			// SQL-Statement anlegen
 			PreparedStatement prestmt = con
-					.prepareStatement("SELECT * FROM Berechtigung WHERE receiverid=" + receiverId);
+					.prepareStatement("SELECT * FROM Berechtigung WHERE receiverid=" + nutzerId);
 
 			ResultSet rs = prestmt.executeQuery();
 

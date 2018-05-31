@@ -130,7 +130,7 @@ public class ShowKontaktliste extends VerticalPanel {
 		/**
 		 * Implementierung der Checkbox fürs auswählen von einem oder mehrere Kontakten.
 		 */
-		Column<Kontaktliste, Boolean> prüfeColumn = new Column<Kontaktliste, Boolean>(new CheckboxCell(true, false)) {
+		Column<Kontaktliste, Boolean> checkColumn = new Column<Kontaktliste, Boolean>(new CheckboxCell(true, false)) {
 			@Override
 			public Boolean getValue(Kontaktliste object) {
 				return selectionModel.isSelected(object);
@@ -143,8 +143,8 @@ public class ShowKontaktliste extends VerticalPanel {
 		kontaktListenTable2.addColumn(NameDerKLColumn, "Kontaktlisten: ");
 		NameDerKLColumn.setSortable(true);
 
-		kontaktListenTable2.setColumnWidth(prüfeColumn, 40, Unit.PX);
-		kontaktListenTable2.addColumn(prüfeColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
+		kontaktListenTable2.setColumnWidth(checkColumn, 40, Unit.PX);
+		kontaktListenTable2.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
 		kontaktListenTable2.setWidth("80%", true);
 		kontaktListenTable2.setColumnWidth(NameDerKLColumn, "100px");
 		kontaktListenTable2.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Kontaktliste>createCheckboxManager());

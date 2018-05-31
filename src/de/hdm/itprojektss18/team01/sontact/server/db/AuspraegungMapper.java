@@ -380,7 +380,6 @@ public class AuspraegungMapper {
 		
 		return result;
 	}
-
 	
 	public void deleteAllByOwner(Nutzer n) {
 		
@@ -402,6 +401,64 @@ public class AuspraegungMapper {
 		catch (SQLException e2){
 			e2.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Auslesen aller Auspraegungen mit einem speziellen Wert
+	 * 
+	 * @see findAuspraegungByWert
+	 * @param String wert fuer zugehoerige Auspraegung
+	 * @return ein Vektor mit Auspraegungs-Objekten, die durch den gegebenen Wert
+	 *         repraesentiert werden. Bei evtl. Exceptions wird ein partiell
+	 *         gefuellter oder ggf. auch leerer Vektor zurueckgeliefert.
+	 * 
+	 */
+	public Vector<Auspraegung> findAuspraegungByWert(String wert, Nutzer n){
+		
+		Connection con = null; 
+		PreparedStatement stmt = null; 
+		
+		String selectByKey = "SELECT * FROM auspraegung WHERE wert=? AND ownerid=? ORDER BY wert";
+		
+		//Vector erzeugen, der die Eigenschaftsdatensätze aufnehmen kann
+		Vector <Auspraegung> result = new Vector<Auspraegung>();
+		
+		try {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setString(1, wert);	
+			stmt.setInt(2, n.getId());	
+
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			
+			//While Schleife für das Durchlaufen vieler Zeilen
+			//Schreiben der Objekt-Attribute aus ResultSet
+			while (rs.next()) {
+				
+				Auspraegung a = new Auspraegung();
+				a.setId(rs.getInt("id"));
+				a.setWert(rs.getString("wert"));	
+				a.setEigenschaftId(rs.getInt("eigenschaftid"));	
+				a.setKontaktId(rs.getInt("kontaktid"));
+				a.setOwnerId(rs.getInt("ownerid"));
+
+
+				//Statt return wird hier der Vektor erweitert
+				result.addElement(a);
+				
+			}
+			
+			return result;
+		}
+		
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 }

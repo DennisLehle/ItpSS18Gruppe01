@@ -129,7 +129,7 @@ public class Sontact implements EntryPoint {
 		
 		
 		//Setzen von Cookies für spätere Identifizierung eines Nutzers.
-		Cookies.setCookie("nutzerGMail", loginInfo.getEmailAddress()); 	
+		Cookies.setCookie("nutzerGMail", nutzer.getEmailAddress()); 	
 		
 		//Wenn ein nutzer vorhanden wird die nutzerId noch gesetzt.
 		Cookies.setCookie("nutzerID", String.valueOf(nutzer.getId()));

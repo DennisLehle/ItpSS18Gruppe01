@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.KontaktlisteKontakt;
@@ -47,6 +48,8 @@ public class KontaktForm extends VerticalPanel {
 
 	Label erstellungsdatum = new Label();
 	Label modifikationsdatum = new Label();
+
+	FlexTable KontaktProfilFelx = new FlexTable();
 
 	public KontaktForm() {
 	}
@@ -79,24 +82,9 @@ public class KontaktForm extends VerticalPanel {
 				headerPanel.add(new HTML("<h2>Kontakt: <em>" + selectedKontakt.getVorname() + " "
 						+ selectedKontakt.getNachname() + "</em></h2>"));
 
-				// L�sch-Button instanziieren und dem Panel zuweisen
-				Button deleteKontaktBtn = new Button("Kontakt löschen");
-				BtnPanel.add(deleteKontaktBtn);
-
-				// ClickHandler f�r das L�schen eines Kontakts
-				deleteKontaktBtn.addClickHandler(new deleteClickHandler());
-				BtnPanel.add(deleteKontaktBtn);
-
-				// L�sch-Button instanziieren und dem Panel zuweisen
-				Button deleteKontaktFromKlBtn = new Button("Aus der Kontaktliste löschen");
-				BtnPanel.add(deleteKontaktFromKlBtn);
-
-				// ClickHandler f�r das L�schen eines Kontakts
-				deleteKontaktFromKlBtn.addClickHandler(new deleteFromKontaktlisteClickHandler());
-				BtnPanel.add(deleteKontaktFromKlBtn);
-
 				// Update-Button intanziieren und dem Panel zuweisen
-				Button editKontaktBtn = new Button("Kontakt bearbeiten");
+				Button editKontaktBtn = new Button(
+						"<image src='/images/user.png' width='20px' height='20px' align='center' /> bearbeiten");
 
 				// ClickHandler f�r das Updaten eines Kontakts
 				editKontaktBtn.addClickHandler(new updateKontaktClickHandler());
@@ -112,55 +100,56 @@ public class KontaktForm extends VerticalPanel {
 				datePanel.add(erstellungsdatum);
 				datePanel.add(modifikationsdatum);
 
-				FlexTable auspraegungFlex = new FlexTable();
-
-				ev.getAllAuspraegungenByKontakt(selectedKontakt.getId(), new AsyncCallback<Vector<Auspraegung>>() {
+				int id = selectedKontakt.getId();
+				ev.getAllAuspraegungenByKontakt(id, new AsyncCallback<Vector<Auspraegung>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						caught.getMessage();
+						caught.getMessage().toString();
 
 					}
 
 					@Override
 					public void onSuccess(Vector<Auspraegung> result) {
+						Vector<Auspraegung> auspraegungen = new Vector<>();
+						auspraegungen = result;
 
-						TextBox eTextBox = new TextBox();
-						TextBox aTextBox = new TextBox();
-						Vector<Auspraegung> av = new Vector<>();
-						av = result;
+						for (int i = 0; i < auspraegungen.size(); i++) {
 
-						int count = auspraegungFlex.getRowCount();
+							Label auspraegungLabel = new Label();
+							auspraegungLabel.setText(auspraegungen.elementAt(i).getWert());
 
-						for (int i = 0; i < av.size(); i++) {
-							if (av != null) {
-								ev.getEigenschaftForAuspraegung(av.elementAt(i).getEigenschaftId(),
-										new AsyncCallback<String>() {
+							ev.getEigenschaftForAuspraegung(auspraegungen.elementAt(i).getEigenschaftId(),
+									new AsyncCallback<Eigenschaft>() {
 
-											@Override
-											public void onFailure(Throwable arg0) {
-												// TODO Auto-generated method stub
+										@Override
+										public void onFailure(Throwable caught) {
+											caught.getMessage().toString();
 
-											}
+										}
 
-											@Override
-											public void onSuccess(String result) {
-												eTextBox.setText(result);
-												auspraegungFlex.setWidget(count + 1, 0, eTextBox);
+										@Override
+										public void onSuccess(Eigenschaft result) {
 
-											}
-										});
-								aTextBox.setText(av.elementAt(i).getWert());
-								auspraegungFlex.setWidget(count + 1, 1, aTextBox);
+											Label eigenschaftLabel = new Label();
+											eigenschaftLabel.setText(result.getBezeichnung());
+											int count = KontaktProfilFelx.getRowCount();
+											KontaktProfilFelx.setWidget(count, 0, eigenschaftLabel);
+											KontaktProfilFelx.setWidget(count, 1, auspraegungLabel);
+											int count2 = KontaktProfilFelx.getRowCount();
+											count = count2 + 1;
 
-							}
+										}
+									});
 
 						}
+
 					}
+
 				});
 
 				vp.add(headerPanel);
-				vp.add(auspraegungFlex);
+				vp.add(KontaktProfilFelx);
 				vp.add(BtnPanel);
 				vp.add(datePanel);
 				RootPanel.get("content").add(vp);
@@ -219,105 +208,6 @@ public class KontaktForm extends VerticalPanel {
 
 	// ClickHandler
 
-	/**
-	 * ClickHandler f�r das L�schen eines Kontakts
-	 * 
-	 * @author Batista
-	 *
-	 */
-	private class deleteClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			// Check, ob Kontakte in der Liste enthalten sind
-			ev.getKontaktById(selectedKontakt.getId(), new AsyncCallback<Kontakt>() {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					caught.getMessage().toString();
-				}
-
-				@Override
-				public void onSuccess(Kontakt result) {
-					// Wenn Kontakte vorhanden sind...
-					Window.confirm("Kontakt: " + selectedKontakt.getVorname() + selectedKontakt.getNachname()
-							+ "unwiderruflich löschen?");
-					{
-						loescheKontakt();
-					}
-				}
-
-				public void loescheKontakt() {
-					ev.removeKontakt(selectedKontakt, new AsyncCallback<Void>() {
-
-						@Override
-						public void onFailure(Throwable error) {
-							error.getMessage().toString();
-
-						}
-
-						@Override
-						public void onSuccess(Void result) {
-							Window.alert("Kontakt wurde gelöscht");
-							Window.Location.reload();
-
-						}
-
-					});
-
-				}
-			});
-
-		}
-
-	}
-
-	// Zum löschen eines Kontaktes aus einer speziellen Kontaktliste
-	private class deleteFromKontaktlisteClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			// Check, ob Kontakte in der Liste enthalten sind
-			ev.getKontaktById(selectedKontakt.getId(), new AsyncCallback<Kontakt>() {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					caught.getMessage().toString();
-				}
-
-				@Override
-				public void onSuccess(Kontakt result) {
-					// Wenn Kontakte vorhanden sind...
-					Window.confirm("Kontakt: " + selectedKontakt.getVorname() + selectedKontakt.getNachname()
-							+ "unwiderruflich aus der Kontaktliste löschen?");
-					{
-						loescheKontaktAusKontaktliste();
-					}
-				}
-
-				public void loescheKontaktAusKontaktliste() {
-			
-					Kontaktliste kl = sontactTree.getSelectedKontaktliste();
-					
-					ev.removeKontaktFromKontaktliste(kl, selectedKontakt, new AsyncCallback<Void>() {
-								@Override
-								public void onFailure(Throwable error) {
-									error.getMessage().toString();
-
-								}
-
-								@Override
-								public void onSuccess(Void result) {
-									Window.alert("hey");
-									Window.alert("Kontakt wurde aus der Kontaktliste gelöscht");
-									Window.Location.reload();
-								}
-							
-				});
-			}
-		});
-	}
-	}
 	/**
 	 * ClickHandler zum Speichern eines neu angelegten Kontakts
 	 */

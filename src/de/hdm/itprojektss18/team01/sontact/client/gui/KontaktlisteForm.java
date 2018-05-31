@@ -60,6 +60,10 @@ public class KontaktlisteForm extends VerticalPanel {
 
 			@Override
 			public void onSuccess(Kontaktliste result) {
+				
+				Nutzer n = new Nutzer();
+				n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+				n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 				selectedKontaktliste = result;
 
 				HorizontalPanel headerPanel = new HorizontalPanel();
@@ -68,24 +72,31 @@ public class KontaktlisteForm extends VerticalPanel {
 
 				headerPanel.add(new HTML("<h2>Kontaktliste: <em>" + selectedKontaktliste.getTitel() + "</em></h2>"));
 
+				// Update-Button intanziieren und dem Panel zuweisen
+				Button editKontaktlisteBtn = new Button("<image src='/images/edit.png' width='20px' height='20px' align='center' /> bearbeiten");
+
+				// ClickHandler f�r das Updaten einer Kontaktliste
+				editKontaktlisteBtn.addClickHandler(new updateKontaktlisteClickHandler());
+				BtnPanel.add(editKontaktlisteBtn);
+				
 				// L�sch-Button instanziieren und dem Panel zuweisen
-				Button deleteKlBtn = new Button("Kontaktliste löschen");
+				Button deleteKlBtn = new Button("<image src='/images/trash.png' width='20px' height='20px' align='center' />  löschen");
 				BtnPanel.add(deleteKlBtn);
 
 				// ClickHandler f�r das L�schen einer Kontaktliste
 				deleteKlBtn.addClickHandler(new deleteClickHandler());
 				BtnPanel.add(deleteKlBtn);
+				
+				Button addKontaktBtn = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' /> hinzufügen");
+				
+				addKontaktBtn.addClickHandler(new addKontaktClickHandler());
+				BtnPanel.add(addKontaktBtn);
 
-				// Update-Button intanziieren und dem Panel zuweisen
-				Button editKontaktlisteBtn = new Button("Kontaktliste bearbeiten");
-
-				// ClickHandler f�r das Updaten einer Kontaktliste
-				editKontaktlisteBtn.addClickHandler(new updateKontaktlisteClickHandler());
-				BtnPanel.add(editKontaktlisteBtn);
 
 				vp.add(headerPanel);
 				vp.add(BtnPanel);
 				RootPanel.get("content").add(vp);
+				RootPanel.get("content").add(new ShowKontakte(n, result));
 
 			}
 
@@ -146,12 +157,14 @@ public class KontaktlisteForm extends VerticalPanel {
 	 * @author Batista
 	 *
 	 */
+
 	private class deleteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			// Check, ob Kontakte in der Liste enthalten sind
-			ev.getKontakteByKontaktliste(selectedKontaktliste.getId(), new AsyncCallback<Vector<Kontakt>>() {
+			
+			Window.alert("Sind Sie sicher die Kontaktliste " + selectedKontaktliste.getTitel() + " löschen zu wollen?");
+			ev.deleteKontaktliste(selectedKontaktliste, new AsyncCallback<Void>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -159,42 +172,11 @@ public class KontaktlisteForm extends VerticalPanel {
 				}
 
 				@Override
-				public void onSuccess(Vector<Kontakt> result) {
-					// Wenn Kontakte vorhanden sind...
-					if (result.size() > 0) {
-						Window.alert("Die Kontaktliste " + selectedKontaktliste.getTitel() + " enthält " + result.size()
-								+ " Kontakt(e). Bitte zuerst alle Kontakte aus der Liste entfernen.");
-					} else {
-						if (Window.confirm(
-								"Kontaktliste: " + selectedKontaktliste.getTitel() + "unwiderruflich löschen?")) {
-							loescheKontaktliste();
+				public void onSuccess(Void result) {
+					Window.Location.reload();
 						}
-					}
-				}
-
-				public void loescheKontaktliste() {
-					ev.deleteKontaktliste(selectedKontaktliste, new AsyncCallback<Void>() {
-
-						@Override
-						public void onFailure(Throwable error) {
-							error.getMessage().toString();
-
-						}
-
-						@Override
-						public void onSuccess(Void result) {
-							Window.alert("Kontaktliste wurde gelöscht");
-							Window.Location.reload();
-
-						}
-
 					});
-
 				}
-			});
-
-		}
-
 	}
 
 	/**
@@ -232,7 +214,19 @@ public class KontaktlisteForm extends VerticalPanel {
 		}
 
 	}
-
+	
+	private class addKontaktClickHandler implements ClickHandler {
+	public void onClick(ClickEvent event) {
+		
+		Kontaktliste kl = selectedKontaktliste;
+		
+		RootPanel.get("content").add(new ShowKontakte(kl));
+		
+	}
+	
+	
+}
+	
 	/**
 	 * ClickHandler f�r das Updaten einer Kontaktliste
 	 * 

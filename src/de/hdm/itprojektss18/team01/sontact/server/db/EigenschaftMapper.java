@@ -4,12 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Vector;
 
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 
 /**
  * <code>EigenschaftMapper</code>, welcher <code>Eigenschaft</code>-Objekte
@@ -221,7 +219,7 @@ public class EigenschaftMapper {
 		Connection con = null; 
 		PreparedStatement stmt = null; 
 		
-		String selectByAuswahl = "SELECT * FROM eigenschaft WHERE id BETWEEN 1 AND 17";
+		String selectByAuswahl = "SELECT * FROM eigenschaft";
 		
 		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
 		Vector <Eigenschaft> result = new Vector<Eigenschaft>();
@@ -265,31 +263,27 @@ public class EigenschaftMapper {
 	 * @return Eigenschaft
 	 */
 	
-	public String findEigenschaftForAuspraegung (int eigenschaftId) {
+	public Eigenschaft findEigenschaftForAuspraegung (int eigenschaftId) {
 		
 		Connection con = null;
 		PreparedStatement stmt = null; 
 		
-		String selectByAuswahl = "SELECT * FROM eigenschaft WHERE id=?";
+		String selectByAuswahl = "SELECT * FROM eigenschaft WHERE id = ?";
 		
 		try {
 			
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByAuswahl);
 			stmt.setInt(1, eigenschaftId);
+		
 			
 			ResultSet rs = stmt.executeQuery();
 			
-			if(rs.next()) {
-
-				//Ergebnis-Tupel in Objekt umwandeln
-				Eigenschaft e = new Eigenschaft();
-				
-				//Setzen der Attribute den Datensätzen aus der DB entsprechend
-				e.setId(rs.getInt(1));
-				e.setBezeichnung(rs.getString(2));
-				
-				return e.getBezeichnung(); 		
+			if (rs.next()) {
+		        Eigenschaft e = new Eigenschaft();
+		        e.setId(rs.getInt("id"));
+		        e.setBezeichnung(rs.getString("bezeichnung"));
+		        return e;
 			}
 		}
 		
@@ -300,6 +294,60 @@ public class EigenschaftMapper {
 		}
 		
 		return null; 
+	}
+	
+	/**
+	 * Auslesen aller Eigenschaften mit einer speziellen Bezeichnung
+	 * 
+	 * @see findEigenschaftByBezeichnung
+	 * @param String bezeichnung fuer zugehoerige Eigenschaften
+	 * @return ein Vektor mit Eigenschaften-Objekten, die durch die gegebene Bezeichnung
+	 *         repraesentiert werden. Bei evtl. Exceptions wird ein partiell
+	 *         gefuellter oder ggf. auch leerer Vektor zurueckgeliefert.
+	 * 
+	 */
+	
+	public Vector<Eigenschaft> findEigenschaftByBezeichnung(String bezeichnung){
+		
+		Connection con = null; 
+		PreparedStatement stmt = null; 
+		
+		String selectByKey = "SELECT * FROM eigenschaft WHERE bezeichnung=? ORDER BY bezeichnung";
+		
+		//Vector erzeugen, der die Eigenschaftsdatensätze aufnehmen kann
+		Vector <Eigenschaft> result = new Vector<Eigenschaft>();
+		
+		try {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setString(1, bezeichnung);		
+
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			
+			//While Schleife für das Durchlaufen vieler Zeilen
+			//Schreiben der Objekt-Attribute aus ResultSet
+			while (rs.next()) {
+				
+				Eigenschaft e = new Eigenschaft();
+				e.setId(rs.getInt("id"));
+				e.setBezeichnung(rs.getString("bezeichnung"));	
+				
+				//Statt return wird hier der Vektor erweitert
+				result.addElement(e);
+				
+			}
+			
+			return result;
+		}
+		
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		
+		return null;
 	}
 
 }

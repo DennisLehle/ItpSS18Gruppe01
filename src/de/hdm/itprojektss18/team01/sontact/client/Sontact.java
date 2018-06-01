@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18.team01.sontact.client.gui.MessageBox;
 import de.hdm.itprojektss18.team01.sontact.client.gui.Navigation;
-import de.hdm.itprojektss18.team01.sontact.client.gui.RegistrierungsFormular;
+import de.hdm.itprojektss18.team01.sontact.client.gui.RegistrierungsForm;
 import de.hdm.itprojektss18.team01.sontact.client.gui.ShowKontakte;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.LoginService;
@@ -32,12 +32,13 @@ public class Sontact implements EntryPoint {
 
 	private LoginInfo loginInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
-	private Label loginLabel = new Label("Please sign in to your Google Account to access the Sontact application.");
-	private Anchor signInLink = new Anchor("Sign In");
+	private Label loginLabel = new Label("Nur ein Schritt trennt Sie noch von der Kontaktverwaltung. Melden Sie sich jetzt mit einem Google-Konto an, um Sontact nutzen zu können.");
+	private Anchor signInLink = new Anchor("Mit Google anmelden");
 
 	LoginServiceAsync loginService = GWT.create(LoginService.class);
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditorVerwaltung();
 	ClientsideSettings clientSettings = new ClientsideSettings();
+	
 	/**
 	 * This is the entry point method.
 	 */
@@ -95,7 +96,7 @@ public class Sontact implements EntryPoint {
 
 													@Override
 													public void onSuccess(final Nutzer nutzer) {
-													RootPanel.get("content").add(new RegistrierungsFormular(nutzer));
+													RootPanel.get("content").add(new RegistrierungsForm(nutzer));
 													
 													}
 												});
@@ -165,10 +166,9 @@ public class Sontact implements EntryPoint {
 		HorizontalPanel footer = new HorizontalPanel();
 		Anchor startseite = new Anchor("Startseite", "Sontact.html");
 		HTML copyrightText1 = new HTML(" | ");
-		HTML copyrightText2 = new HTML(" | © 2018 Sontact, IT-Projekt Gruppe01, Hochschule der\n" + 
-				"					Medien Stuttgart | ");
+		HTML copyrightText2 = new HTML(" | © 2018 Sontact, IT-Projekt Gruppe01, Hochschule der\n" + "Medien Stuttgart | ");
 		Anchor reportGeneratorLink = new Anchor (" ReportGenerator", "SontactReport.html");
-		Anchor impressumLink = new Anchor("Impressum");
+	//	Anchor impressumLink = new Anchor("Impressum");
 		footer.add(startseite);
 		footer.add(copyrightText1);
 		footer.add(reportGeneratorLink);
@@ -178,12 +178,7 @@ public class Sontact implements EntryPoint {
 
 	}
 
-	void loadLogin() {
-		// Assemble login panel.
-		VerticalPanel loginPanel = new VerticalPanel();
-		Label loginLabel = new Label("Nur ein Schritt trennt Sie noch von der Kontaktverwaltung. Melden Sie sich jetzt mit einem Google-Konto an, um Sontact nutzen zu können.");
-		Anchor signInLink = new Anchor("Mit Google anmelden");
-		
+	void loadLogin() {		
 		signInLink.setHref(loginInfo.getLoginUrl());
 	//	loginPanel.add(loginHeader);
 		loginPanel.add(loginLabel);

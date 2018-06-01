@@ -65,7 +65,7 @@ public interface EditorServiceAsync {
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#removeKontakt(Kontakt k);
 	 */
-	void removeKontakt(Kontakt k, AsyncCallback<Void> callback);
+	void deleteKontakt(Kontakt k, AsyncCallback<Void> callback);
 
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontaktById(int id);
@@ -173,14 +173,12 @@ public interface EditorServiceAsync {
 	void getAllSharedKontaktlistenByReceiver(int receiverId, AsyncCallback<Vector<Kontaktliste>> callback);
 
 
-	void getAllSharedKontakteBySharedKontaktliste(int kontaktlisteId, AsyncCallback<Vector<Kontakt>> callback);
-
-
 	void getStatusForObject(int objectId, AsyncCallback<Boolean> callback);
 
 
 	void getEigenschaftForAuspraegung(int eigenschaftId, AsyncCallback<Eigenschaft> callback);
 
+	
 	void getAuspraegungByWert(String wert, Nutzer n, AsyncCallback<Vector<Auspraegung>> callback);
 
 

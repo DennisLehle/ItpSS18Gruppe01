@@ -66,7 +66,7 @@ public class AuspraegungMapper {
 		
 		
 		//Query für den Insert
-		String insertSQL = "INSERT INTO auspraegung (id, wert, eigenschaftid, kontaktid, ownerid) VALUES (?,?,?,?,?)";		
+		String insertSQL = "INSERT INTO auspraegung (id, wert, eigenschaftid, kontaktid) VALUES (?,?,?,?)";		
 		
 		
 	    //Query für die Aktualisierung des Modifikationsdatums von dem dazugehörigen Kontakt
@@ -98,7 +98,6 @@ public class AuspraegungMapper {
 		    stmt.setString(2, a.getWert());
 		    stmt.setInt(3, a.getEigenschaftId());
 		    stmt.setInt(4, a.getKontaktId());
-		    stmt.setInt(5, a.getOwnerId());
 		    
 		    
 		    //INSERT-Query ausführen
@@ -138,7 +137,7 @@ public class AuspraegungMapper {
 		PreparedStatement stmt = null;
 		
 		
-		String updateSQL = "UPDATE auspraegung SET wert=?, eigenschaftid=?, kontaktid=?, ownerid=? WHERE id=?";
+		String updateSQL = "UPDATE auspraegung SET wert=?, eigenschaftid=?, kontaktid=? WHERE id=?";
 		
 		
 	    //Query für die Aktualisierung des Modifikationsdatums von dem dazugehörigen Kontakt
@@ -152,8 +151,7 @@ public class AuspraegungMapper {
 			stmt.setString(1, a.getWert());
 			stmt.setInt(2, a.getEigenschaftId());
 			stmt.setInt(3, a.getKontaktId());
-			stmt.setInt(4, a.getOwnerId());
-			stmt.setInt(5, a.getId());
+			stmt.setInt(4, a.getId());
 			
 			stmt.executeUpdate(); 
 			
@@ -258,11 +256,10 @@ public class AuspraegungMapper {
 				Auspraegung a = new Auspraegung();
 				
 				//Setzen der Attribute den Datensätzen aus der DB entsprechend
-				a.setId(rs.getInt(1));
-				a.setWert(rs.getString(2));
-				a.setEigenschaftId(rs.getInt(3));
-				a.setKontaktId(rs.getInt(4));
-				a.setOwnerId(rs.getInt(5));
+				a.setId(rs.getInt("id"));
+				a.setWert(rs.getString("wert"));
+				a.setEigenschaftId(rs.getInt("eigenschaftid"));
+				a.setKontaktId(rs.getInt("kontaktid"));
 
 				return a;
 			}
@@ -313,11 +310,10 @@ public class AuspraegungMapper {
 					Auspraegung a = new Auspraegung();
 					
 					//Setzen der Attribute den Datensätzen aus der DB entsprechend
-					a.setId(rs.getInt(1));
-					a.setWert(rs.getString(2));
-					a.setEigenschaftId(rs.getInt(3));
-					a.setKontaktId(rs.getInt(4));
-					a.setOwnerId(rs.getInt(5));
+					a.setId(rs.getInt("id"));
+					a.setWert(rs.getString("wert"));
+					a.setEigenschaftId(rs.getInt("eigenschaftid"));
+					a.setKontaktId(rs.getInt("kontaktid"));
 					
 					// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
 					result.addElement(a);
@@ -361,12 +357,11 @@ public class AuspraegungMapper {
 				Auspraegung a = new Auspraegung();
 				
 				//Setzen der Attribute den Datensätzen aus der DB entsprechend
-				a.setId(rs.getInt(1));
-				a.setWert(rs.getString(2));
-				a.setEigenschaftId(rs.getInt(3));
-				a.setKontaktId(rs.getInt(4));
-				a.setOwnerId(rs.getInt(5));
-				
+				a.setId(rs.getInt("id"));
+				a.setWert(rs.getString("wert"));
+				a.setEigenschaftId(rs.getInt("eigenschaftid"));
+				a.setKontaktId(rs.getInt("kontaktid"));
+
 				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
 				result.addElement(a);
 			}
@@ -381,27 +376,27 @@ public class AuspraegungMapper {
 		return result;
 	}
 	
-	public void deleteAllByOwner(Nutzer n) {
-		
-		Connection con = null;
-		PreparedStatement stmt = null;
-		
-		String selectByKey = "DELETE FROM Auspraegung WHERE ownerid=?";
-		
-		try {
-			
-			con = DBConnection.connection();
-			
-			stmt = con.prepareStatement(selectByKey);
-			stmt.setInt(1, n.getId());
-		
-			stmt.executeUpdate();
-		}
-		
-		catch (SQLException e2){
-			e2.printStackTrace();
-		}
-	}
+//	public void deleteAllByOwner(Nutzer n) {
+//		
+//		Connection con = null;
+//		PreparedStatement stmt = null;
+//		
+//		String selectByKey = "DELETE FROM Auspraegung WHERE ownerid=?";
+//		
+//		try {
+//			
+//			con = DBConnection.connection();
+//			
+//			stmt = con.prepareStatement(selectByKey);
+//			stmt.setInt(1, n.getId());
+//		
+//			stmt.executeUpdate();
+//		}
+//		
+//		catch (SQLException e2){
+//			e2.printStackTrace();
+//		}
+//	}
 	
 	/**
 	 * Auslesen aller Auspraegungen mit einem speziellen Wert
@@ -418,7 +413,7 @@ public class AuspraegungMapper {
 		Connection con = null; 
 		PreparedStatement stmt = null; 
 		
-		String selectByKey = "SELECT * FROM auspraegung WHERE wert=? AND ownerid=? ORDER BY wert";
+		String selectByKey = "SELECT * FROM auspraegung WHERE wert=? ORDER BY wert";
 		
 		//Vector erzeugen, der die Eigenschaftsdatensätze aufnehmen kann
 		Vector <Auspraegung> result = new Vector<Auspraegung>();
@@ -427,8 +422,7 @@ public class AuspraegungMapper {
 			
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
-			stmt.setString(1, wert);	
-			stmt.setInt(2, n.getId());	
+			stmt.setString(1, wert);		
 
 			
 			ResultSet rs = stmt.executeQuery();
@@ -443,7 +437,6 @@ public class AuspraegungMapper {
 				a.setWert(rs.getString("wert"));	
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));	
 				a.setKontaktId(rs.getInt("kontaktid"));
-				a.setOwnerId(rs.getInt("ownerid"));
 
 
 				//Statt return wird hier der Vektor erweitert

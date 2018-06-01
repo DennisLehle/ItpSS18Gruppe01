@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 
 /**
  * Die Klasse <code>BerechtigungMapper</code> bildet auf der Datenbank alle
@@ -39,41 +41,58 @@ public class BerechtigungMapper {
 	 * @return Berechtigung
 	 */
 	public Berechtigung insert(Berechtigung b) {
-
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
-
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		
+		//Query für die Abfrage der hoechsten ID (Primärschlüssel) in der Datenbank
+		String maxIdSQL = "SELECT MAX(id) AS maxid FROM berechtigung";
+		
+		
+		//Query für den Insert
+		String insertSQL = "INSERT INTO berechtigung (id, ownerid, receiverid, objectid, type) VALUES (?,?,?,?,?)";		
+		
+		
+		
 		try {
-			// Leeres SQL Statement anlegen
-			Statement stmt = con.createStatement();
+			
+			con = DBConnection.connection(); 
+			stmt = con.prepareStatement(maxIdSQL);
+			
 
-			// Statement als Query an die DB schicken
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Berechtigung");
-
-			// Rï¿½ckgabe beinhaltet nur eine Tupel
-			if (rs.next()) {
-
-				// b enthï¿½lt den bisher maximalen, nun um 1 inkrementierten Primï¿½rschlï¿½ssel
-				b.setId(rs.getInt("maxid") + 1);
-
-				// INSERT-Statement anlegen
-				PreparedStatement prestmt = con
-						.prepareStatement("INSERT INTO Berechtigung (id, ownerid, receiverid, objectid, type) VALUES ('" 
-								+ b.getId() + "', '" 
-								+ b.getOwnerId() + "', '"
-								+ b.getReceiverId() + "', '" 
-								+ b.getObjectId() + "', '"
-								+ b.getType() + "')");
-								
-
-				// INSERT-Statement ausfï¿½hren
-				prestmt.execute();
-			}
+			//MAX ID Query ausfuehren
+			ResultSet rs = stmt.executeQuery();
+			
+			
+			//...um diese dann um 1 inkrementiert der ID des BO zuzuweisen
+		    if(rs.next()){
+		    	b.setId(rs.getInt("maxId")+1);
+		    }	   
+		    
+		    	
+			//Jetzt erfolgt der Insert
+		    stmt = con.prepareStatement(insertSQL);
+		    
+		  
+		    //Setzen der ? Platzhalter als Values
+		    stmt.setInt(1, b.getId());
+		    stmt.setInt(2, b.getOwnerId());
+		    stmt.setInt(3, b.getReceiverId());
+		    stmt.setInt(4, b.getObjectId());
+		    stmt.setString(5, String.valueOf(b.getType()));
+		    
+		    
+		    //INSERT-Query ausführen
+		    stmt.executeUpdate();
+		    
+		    
 		} catch (SQLException e2) {
 			e2.printStackTrace();
-		}
+			}			
+		
 		return b;
-	}
+	}	
 
 	
 	/**
@@ -84,25 +103,25 @@ public class BerechtigungMapper {
 	 */
 
 	public void delete (Berechtigung b) {
-
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
-
+		
+		Connection con = null; 
+		PreparedStatement stmt = null;
+		
+		String deleteSQL = "DELETE FROM berechtigung WHERE id=?";
+		
 		try {
-			// SQL Statement wird der lokalen Variable ï¿½bergeben
-			PreparedStatement prestmt = con.prepareStatement(
-					" DELETE FROM Berechtigung WHERE"
-						//+ " ownerid = " + b.getOwnerId()
-						+ " AND receiverid = " + b.getReceiverId() 
-						+ " AND objectid = " + b.getObjectId() 		
-						+ " AND type = '" + b.getType() + "'");
 			
+			con = DBConnection.connection();
 			
-			// DELETE-Statement ausfï¿½hren
-			prestmt.execute();
+			stmt = con.prepareStatement(deleteSQL);
+			stmt.setInt(1, b.getId());
 			
-		} catch (SQLException e2) {
+			stmt.executeUpdate();
+		}
+		
+		catch (SQLException e2) {
 			e2.printStackTrace();
+			
 		}
 	}
 
@@ -112,36 +131,49 @@ public class BerechtigungMapper {
 	 * @param berechtigung
 	 * @return void
 	 */
+	
 	public Berechtigung findById(int id) {
-
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
-
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM berechtigung WHERE id=? ORDER BY id";
+		
+		
 		try {
-
-			// SQL-Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Berechtigung WHERE id = " + id);
-
-			// SQL Statement wird als Query an die DB geschickt und
-			// in die Rï¿½ckgabe von rs gespeichert
-			ResultSet rs = prestmt.executeQuery();
-
-			Berechtigung b = new Berechtigung();
-
-			// Ergebnis-Tupel in Objekt umwandeln
-			if (rs.next()) {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, id);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next()) {
+				
+				//Ergebnis-Tupel in Objekt umwandeln
+				Berechtigung b = new Berechtigung();
+				
+				
+				//Setzen der Attribute den Datensätzen aus der DB entsprechend
 				b.setId(rs.getInt("id"));
 				b.setOwnerId(rs.getInt("ownerid"));
 				b.setReceiverId(rs.getInt("receiverid"));
-				b.setObjectId(rs.getInt("object"));
+				b.setObjectId(rs.getInt("objectid"));
 				b.setType(rs.getString("type").charAt(0));
+				
+				
+				return b;
 			}
-
-			return b;
-		} catch (SQLException e2) {
+		}
+		
+		catch (SQLException e2) {
+			
 			e2.printStackTrace();
 			return null;
 		}
+		
+		return null;
 	}
 	
 	
@@ -152,35 +184,46 @@ public class BerechtigungMapper {
 	 * @return void
 	 */
 	public Vector<Berechtigung> findAll() {
-
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
-
-		Vector<Berechtigung> result = new Vector<Berechtigung>();
-
+		
+		Connection con = null; 
+		PreparedStatement stmt = null; 
+		
+		String selectAll = "SELECT * FROM berechtigung";
+		
+		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
+		Vector <Berechtigung> result = new Vector<Berechtigung>();
+		
+		
 		try {
-
-			// SQL-Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Berechtigung");
-
-			ResultSet rs = prestmt.executeQuery();
-			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectAll);
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			
+			//While Schleife für das Durchlaufen vieler Zeilen
+			//Schreiben der Objekt-Attribute aus ResultSet
 			while (rs.next()) {
+				
+				//Ergebnis-Tupel in Objekt umwandeln
 				Berechtigung b = new Berechtigung();
+				
 				b.setId(rs.getInt("id"));
 				b.setOwnerId(rs.getInt("ownerid"));
 				b.setReceiverId(rs.getInt("receiverid"));
 				b.setObjectId(rs.getInt("objectid"));
 				b.setType(rs.getString("type").charAt(0));
-
-				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
+				
+				//Statt return wird hier der Vektor erweitert
 				result.addElement(b);
 			}
-		} catch (SQLException e2) {
+		}
+		
+		catch (SQLException e2) {
 			e2.printStackTrace();
 		}
-
-		// Rï¿½ckgabe des Ergebnisvektors
+		
 		return result;
 	}
 
@@ -193,35 +236,48 @@ public class BerechtigungMapper {
 	 * @return Berechtigungen
 	 */
 	public Vector<Berechtigung> findAllBerechtigungenByOwner(int nutzerId) {
-
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
-
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM berechtigung WHERE ownerid=?";
+		
+		//Erstellung des Ergebnisvektors
 		Vector<Berechtigung> result = new Vector<Berechtigung>();
-
+		
+		
 		try {
-
-			// SQL-Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Berechtigung WHERE ownerid=" + nutzerId);
-
-			ResultSet rs = prestmt.executeQuery();
-			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
-			while (rs.next()) {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, nutzerId);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				//Ergebnis-Tupel in Objekt umwandeln
 				Berechtigung b = new Berechtigung();
+				
+				//Setzen der Attribute den Datensätzen aus der DB entsprechend
 				b.setId(rs.getInt("id"));
 				b.setOwnerId(rs.getInt("ownerid"));
 				b.setReceiverId(rs.getInt("receiverid"));
 				b.setObjectId(rs.getInt("objectid"));
 				b.setType(rs.getString("type").charAt(0));
-
+				
 				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
 				result.addElement(b);
 			}
-		} catch (SQLException e2) {
-			e2.printStackTrace();
 		}
-
-		// Rï¿½ckgabe des Ergebnisvektors
+		
+		catch (SQLException e2) {
+			
+			e2.printStackTrace();
+			return null;
+		}
+		
 		return result;
 	}
 
@@ -234,73 +290,91 @@ public class BerechtigungMapper {
 	 * @return Berechtigungen
 	 */
 	public Vector<Berechtigung> findAllBerechtigungenByReceiver(int nutzerId) {
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
-
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM berechtigung WHERE receiverid=?";
+		
+		//Erstellung des Ergebnisvektors
 		Vector<Berechtigung> result = new Vector<Berechtigung>();
+		
+		
 		try {
-
-			// SQL-Statement anlegen
-			PreparedStatement prestmt = con
-					.prepareStatement("SELECT * FROM Berechtigung WHERE receiverid=" + nutzerId);
-
-			ResultSet rs = prestmt.executeQuery();
-
-			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
-			while (rs.next()) {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, nutzerId);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				//Ergebnis-Tupel in Objekt umwandeln
 				Berechtigung b = new Berechtigung();
-				b.setId(rs.getInt("id"));
-				b.setOwnerId(rs.getInt("ownerid"));
-				b.setReceiverId(rs.getInt("receiverid"));
-				b.setObjectId(rs.getInt("objectid"));
-				b.setType(rs.getString("type").charAt(0));
-
-				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
-				result.addElement(b);
-			}
-		} catch (SQLException e2) {
-			e2.printStackTrace();
-		}
-
-		// Rï¿½ckgabe des Ergebnisvektors
-		return result;
-	}
-	
-	/**
-	 * Gibt eine spezielle Berechtigung eines Objekts zurÃ¼ck.
-	 * Welche mit dem Receiver geteilt wurde.
-	 * 
-	 * @param receiverId
-	 * @return Berechtigungen
-	 */
-	public Berechtigung findASingleBerechtigung(int receiverId) {
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
-
-		try {
-
-			// SQL-Statement anlegen
-			PreparedStatement prestmt = con
-					.prepareStatement("SELECT * FROM berechtigung WHERE receiverid =" + receiverId);
-
-			ResultSet rs = prestmt.executeQuery();
-
-			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
-			if(rs.next()) {
-				Berechtigung b = new Berechtigung();
+				
+				//Setzen der Attribute den Datensätzen aus der DB entsprechend
 				b.setId(rs.getInt("id"));
 				b.setOwnerId(rs.getInt("ownerid"));
 				b.setReceiverId(rs.getInt("receiverid"));
 				b.setObjectId(rs.getInt("objectid"));
 				b.setType(rs.getString("type").charAt(0));
 				
-				return b;
-
+				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
+				result.addElement(b);
 			}
-	
-		} catch (SQLException e2) {
-			e2.printStackTrace();
 		}
-		return null;
+		
+		catch (SQLException e2) {
+			
+			e2.printStackTrace();
+			return null;
+		}
+		
+		return result;
 	}
+	
+	
+//	--> ?
+	
+//	/**
+//	 * Gibt eine spezielle Berechtigung eines Objekts zurÃ¼ck.
+//	 * Welche mit dem Receiver geteilt wurde.
+//	 * 
+//	 * @param receiverId
+//	 * @return Berechtigungen
+//	 */
+//	public Berechtigung findASingleBerechtigung(int receiverId) {
+//		// DBConnection herstellen
+//		Connection con = DBConnection.connection();
+//
+//		try {
+//
+//			// SQL-Statement anlegen
+//			PreparedStatement prestmt = con
+//					.prepareStatement("SELECT * FROM berechtigung WHERE receiverid =" + receiverId);
+//
+//			ResultSet rs = prestmt.executeQuery();
+//
+//			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
+//			if(rs.next()) {
+//				Berechtigung b = new Berechtigung();
+//				b.setId(rs.getInt("id"));
+//				b.setOwnerId(rs.getInt("ownerid"));
+//				b.setReceiverId(rs.getInt("receiverid"));
+//				b.setObjectId(rs.getInt("objectid"));
+//				b.setType(rs.getString("type").charAt(0));
+//				
+//				return b;
+//
+//			}
+//	
+//		} catch (SQLException e2) {
+//			e2.printStackTrace();
+//		}
+//		return null;
+//	}
+	
+	
 }

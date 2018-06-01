@@ -7,27 +7,21 @@ PM>Install-Package bootstrap -Version 4.1.1
 @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css");
 
 /*
- * Seitenweite Regeln
+ * Allgemeine Regeln für die Seitenrichtlinien
  */
-div {
-  height: 90vh;
-  width: 90vw;
-}
 
+
+* {
+	margin: 0;
+	padding: 0;
+}
 
 html,body {
 	height: 100%;
 	
 }
 
-body > div {
-	width: 90%;
-	height: 100%;
-}
 
-body > div > div{
-	width: 100%;
-}
 
 #topR {
 	cursor: default;
@@ -37,7 +31,7 @@ body > div > div{
 	justify-content: space-between;
 	padding-right: 30px;
 	box-sizing: border-box;
-	background: #999 url('http://1.bp.blogspot.com/-rtGjmU_cBgs/USf8_93SNBI/AAAAAAAANkQ/wxRNRP82Fw0/s1600/wallpaper-abstrakt-hintergrund-mit-blauen-streifen.jpg') no-repeat left 50%;
+	background: #999 url('https://i.pinimg.com/originals/df/c3/09/dfc309dd3b5d8971c5425ea1f8a28f3d.jpg') no-repeat left 50%;
 	background-size: cover;	color: white;
 }
 
@@ -149,9 +143,10 @@ h2{
 
 #navigatorR {
 	float: left;
-	background: #999 url('https://i.pinimg.com/originals/29/6d/82/296d82d638ab0db314288c13cb6c3953.jpg') no-repeat left 50%;
-	background-size: cover;	color: white;
-	
+	background-size: cover;	
+	background: #cfcfcf;
+	width: 23%;
+	min-height: 500px
 }
 
 #footerR {

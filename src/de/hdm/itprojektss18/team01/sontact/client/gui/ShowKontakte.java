@@ -440,7 +440,7 @@ public class ShowKontakte extends VerticalPanel {
 					 * permanent entfernen. Und der Kontakt wird auch bei allen Nutzern aus den
 					 * Kontaktlisten entfernt.
 					 */
-					ev.removeKontakt(k, new AsyncCallback<Void>() {
+					ev.deleteKontakt(k, new AsyncCallback<Void>() {
 						@Override
 						public void onFailure(Throwable caught) {
 							caught.getMessage().toString();

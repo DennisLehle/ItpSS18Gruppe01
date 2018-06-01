@@ -101,26 +101,46 @@ public class BerechtigungMapper {
 	 */
 
 	public void delete (Berechtigung b) {
-
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
-
+		
+		Connection con = null; 
+		PreparedStatement stmt = null;
+		
+		String deleteSQL = "DELETE FROM berechtigung WHERE id=?";
+		
 		try {
-			// SQL Statement wird der lokalen Variable �bergeben
-			PreparedStatement prestmt = con.prepareStatement(
-					" DELETE FROM Berechtigung WHERE"
-						+ " ownerid = " + b.getOwnerId()
-						+ " AND receiverid = " + b.getReceiverId() 
-						+ " AND objectid = " + b.getObjectId() 		
-						+ " AND type = '" + b.getType() + "'");
 			
+			con = DBConnection.connection();
 			
-			// DELETE-Statement ausf�hren
-			prestmt.execute();
+			stmt = con.prepareStatement(deleteSQL);
+			stmt.setInt(1, b.getId());
 			
-		} catch (SQLException e2) {
-			e2.printStackTrace();
+			stmt.executeUpdate();
 		}
+		
+		catch (SQLException e2) {
+			e2.printStackTrace();
+			
+		}
+
+//		// DBConnection herstellen
+//		Connection con = DBConnection.connection();
+//
+//		try {
+//			// SQL Statement wird der lokalen Variable �bergeben
+//			PreparedStatement prestmt = con.prepareStatement(
+//					" DELETE FROM Berechtigung WHERE"
+//						+ " ownerid = " + b.getOwnerId()
+//						+ " AND receiverid = " + b.getReceiverId() 
+//						+ " AND objectid = " + b.getObjectId() 		
+//						+ " AND type = '" + b.getType() + "'");
+//			
+//			
+//			// DELETE-Statement ausf�hren
+//			prestmt.execute();
+//			
+//		} catch (SQLException e2) {
+//			e2.printStackTrace();
+//		}
 	}
 
 	/**

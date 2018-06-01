@@ -712,6 +712,24 @@ class EditorServiceImplTest extends GWTTestCase {
 	}
 	
 	/**
+	 * Berechtigungseintrag in der Tabelle Berechtigung f�r Objekt K, KL oder A entfernen.
+	 * IMPL-Methode createBerechtigung();
+	 * CHECK
+	 */
+	
+	public void deleteBerechtigung() {
+		
+		Berechtigung b = new Berechtigung();
+		b.setId(8);
+		b.setType('l');
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		editor.deleteBerechtigung(b);
+	}
+	
+	
+	/**
 	 * Test ShareKontakt:
 	 * IMPL-Methode shareObject();
 	 */

@@ -23,6 +23,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 public class EditorServiceImpl extends RemoteServiceServlet implements EditorService {
 
 	public EditorServiceImpl() throws IllegalArgumentException {
+		
 	}
 
 	/**
@@ -110,10 +111,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	
 	/**
-	 * Erzeugen eines neuen Nutzers, dieser angelegt und anschlieï¿½end in der DB 
+	 * Erzeugen eines neuen Nutzers, dieser angelegt und anschlieï¿½end in der DB
 	 * gespeichert wird.
 	 * 
-	 * @param String emailAdress
+	 * @param String
+	 *            emailAdress
 	 * @return Nutzer
 	 */
 	public Nutzer createNutzer(String emailAddress) throws IllegalArgumentException {
@@ -121,9 +123,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		Nutzer nutzer = new Nutzer();
 		nutzer.setEmailAddress(emailAddress);
 
-		//Setzen einer vorlaeufigen Id, die in der DB nach Verfï¿½gbarkeit angepasst wird.		 
+		// Setzen einer vorlaeufigen Id, die in der DB nach Verfï¿½gbarkeit angepasst
+		// wird.
 		nutzer.setId(1);
-		
+
 		// Speichern eines Nutzers in der DB.
 		return this.nMapper.insert(nutzer);
 	}
@@ -159,35 +162,85 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return null;
 	}
 
-	/**
-	 * Ein Nutzer wird mit all seinen hinterlegten Objekten aus der Datenbank geloescht.
-	 * @param Nutzer 
-	 * @return void
-	 */
+//	/**
+//	 * Ein Nutzer wird mit all seinen hinterlegten Objekten aus der Datenbank geloescht.
+//	 * @param Nutzer 
+//	 * @return void
+//	 */
+//	public void deleteNutzer(Nutzer n) throws IllegalArgumentException {
+//		
+////		//Verknï¿½pfung aus Zwischentabelle KontaktlisteKontakt lï¿½schen
+////		this.klkMapper.removeKontaktFromKontaktliste(kl, k);
+//
+//		// Alle Auspraegungen der Kontakte, welche im Eigentumsverhaeltnis mit
+//		// dem Nutzer stehen, aus der DB entfernen
+//		this.aMapper.deleteAllByOwner(n);
+//
+//		// Alle Kontakte, welche im Eigentumsverhaeltnis mit dem Nutzer stehen,
+//		// aus der DB entfernen
+//		this.kMapper.deleteAllByOwner(n);
+//
+//		// Alle Kontaktlisten, die im Eigentumsverhaeltnis mit dem Nutzer
+//		// stehen, aus der DB entfernen
+//		this.klMapper.deleteAllByOwner(n);
+//		
+//
+//		// Alle Von- + Mit- Berechtigungen aus der DB entfernen
+//		// TO-DO ...
+//
+//		// Loeschen des Nutzers
+//		this.nMapper.delete(n);
+//	}
+	
+	
 	public void deleteNutzer(Nutzer n) throws IllegalArgumentException {
 		
-//		//Verknï¿½pfung aus Zwischentabelle KontaktlisteKontakt lï¿½schen
-//		this.klkMapper.removeKontaktFromKontaktliste(kl, k);
-
-		// Alle Auspraegungen der Kontakte, welche im Eigentumsverhaeltnis mit
-		// dem Nutzer stehen, aus der DB entfernen
-		this.aMapper.deleteAllByOwner(n);
-
-		// Alle Kontakte, welche im Eigentumsverhaeltnis mit dem Nutzer stehen,
-		// aus der DB entfernen
-		this.kMapper.deleteAllByOwner(n);
-
-		// Alle Kontaktlisten, die im Eigentumsverhaeltnis mit dem Nutzer
-		// stehen, aus der DB entfernen
-		this.klMapper.deleteAllByOwner(n);
+		/* entfernt alle Berechtigungen auf Kontakt-, Kontaktlisten- oder Aupraegungs- Objekte,
+		 * welche nutzerseitig gesetzt sind
+		 */
+		Vector<Berechtigung> bvo = this.getAllBerechtigungenByOwner(n.getId());
+		if(bvo != null) {
+			for(Berechtigung b : bvo) {
+				this.bMapper.delete(b);
+			}
+		}
 		
+		/* entfernt alle Kontaktlisten, welche mit dem Nutzer in einer Eigentumsbeziehung stehen 
+		 * sowie alle Eintraege der Kontaktliste (aus KontaktlisteKontakt)
+		 * und Berechtigungen auf die Kontaktliste
+		 */
+		Vector<Kontaktliste> klv = this.getKontaktlistenByOwner(n);
+		if(klv != null) {
+			for(Kontaktliste kl : klv) {
+				this.deleteKontaktliste(kl);
+			}
+		}
+		
+		/* entfernt alle Kontakte, welche mit dem Nutzer in einer Eigentumsbeziehung stehen 
+		 * sowie alle Auspraegungen eines jeden Kontaktes, 
+		 * alle Kontaktlisteneinträge und alle Berechtigungen auf den Kontakt
+		 */
+		Vector<Kontakt> kv = this.getAllKontakteByOwner(n);
+		if(kv != null) {
+			for(Kontakt k: kv) {
+				this.deleteKontakt(k);
+			}
+		}
+		
+		/* entfernt alle Berechtigungen auf Kontakt-, Kontaktliste- oder Auspraegungs- Objekte,
+		 * welche fuer den Nutzer gesetzt sind
 
-		// Alle Von- + Mit- Berechtigungen aus der DB entfernen
-		// TO-DO ...
-
-		// Loeschen des Nutzers
-		this.nMapper.delete(n);
+		 */
+		Vector<Berechtigung> bvr = this.getAllBerechtigungenByReceiver(n.getId());
+		if(bvr != null) {
+			for(Berechtigung b : bvo) {
+				this.bMapper.delete(b);
+			}
+		}
+		// entfernen des Nutzer 
+		this.nMapper.delete(n);		
 	}
+	
 	/*
 	 * ************************************************************************* 
 	 * ABSCHNITT - Ende: Methoden fuer Nutzer
@@ -289,39 +342,43 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Loeschen eines Kontakts mit seinen Auspraegungen seinen
 	 * Kontaktlistenzugehoerigkeiten und seinen Berechtigungen
-	 * @param Kontakt k 
+	 * 
+	 * @param Kontakt k
 	 * @return void
 	 */
-	public void removeKontakt(Kontakt k) throws IllegalArgumentException {
+	public void deleteKontakt(Kontakt k) throws IllegalArgumentException {
 
-		//Zunaechst alle Auspraegungen des Kontakts aus der DB entfernen.
-		Vector<Auspraegung> deleteAllAuspraegungen = 
-				getAllAuspraegungenByKontakt(k.getId());
-		
-		//Die Schleife liest die existierenden Auspraegungen aus.
-		if (deleteAllAuspraegungen != null) {
-			for (Auspraegung a : deleteAllAuspraegungen) {
+		/*
+		 * zunächst Abruf aller Berechtgigungen: Abgleich aller Berechtigungen
+		 * (objektId) mit der Id des Kontaktes bei Übereinstummung entfernen der
+		 * Berechtigungen für den Kontakt mit allen zugehörigen Berechtigungen die
+		 * Auspraegungen des Kontaktes k
+		 */
+		Vector<Berechtigung> bv = this.bMapper.findAll();
+		for (Berechtigung b : bv) {
+			if (b.getObjectId() == k.getId()) {
+				this.deleteBerechtigung(b);
+			}
+		}
+
+		// entfernen des Kontaktes aus allen Kontatklisten
+		this.klkMapper.deleteKontaktFromAllLists(k);
+
+		// entfernen jeder einzelnen Auspraegung a des Kontaktes k
+		Vector<Auspraegung> av = getAllAuspraegungenByKontakt(k.getId());
+		if (av != null) {
+			for (Auspraegung a : av) {
 				this.aMapper.delete(a);
 			}
 		}
-		//Die Kontakte werden aus allen hinterlegten Kontaktlisten entfernt.
-		this.klkMapper.deleteKontaktFromAllLists(k);
 
-		// (!) Berechtigungen fuer den Kontakt entfernen -> ownerGesetteteBerechtigugen
-
-		// (!) Berechtigungen fuer den Kontakt entfernen ->
-		// ownerGesetteteBerechtigugen
-
-		//Der Kontakt wird aus der DB geloescht.
+		// entfernen des Kontaktes
 		this.kMapper.delete(k);
 	}
+	
 
 	/**
-	 * removeBerechtigung() -> Wenn ein Teilhaber den Kontakt loescht.
-	 */
-
-	/**
-	 * Auslesen eines Kontakts anhand seiner Id.
+	 * Auslesen eines Kontaktes anhand seiner Id.
 	 * 
 	 */
 	public Kontakt getKontaktById(int id) throws IllegalArgumentException {
@@ -490,23 +547,35 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
-	 * Loeschen einer Kontaktliste. Eine Kontaktliste wird mit dem gesamten Objektinhalt aus der DB entfernt. 
+	 * Loeschen einer Kontaktliste. Eine Kontaktliste wird mit dem gesamten
+	 * Objektinhalt aus der DB entfernt.
+	 * 
 	 * @param Kontaktliste kl
 	 * @return void
 	 */
 	public void deleteKontaktliste(Kontaktliste kl) throws IllegalArgumentException {
 		init();
-		// Alle Kontakte der Kontaktliste aus der DB entfernen.
-		Vector<Kontakt> removeAllKontakte = klkMapper.findAllKontakteByKontaktliste(kl.getId());
-		if (removeAllKontakte != null) {
-			for (Kontakt k : removeAllKontakte) {
+		
+		/* zunächst Abruf aller Berechtgigungen:
+		 * Abgleich aller Berechtigungen (objektId) mit der Id der Kontaktliste
+		 * bei Übereinstummung entfernen der Berechtigungen für die Kontaktliste mit allen 
+		 * zugehörigen Berechtigungen auf die Kontakte und Auspraegungen der Kontaktliste kl
+		 */
+		Vector<Berechtigung> bv = this.bMapper.findAll();
+		for(Berechtigung b : bv) {
+			if(b.getObjectId() == kl.getId()) {
+				this.deleteBerechtigung(b);
+			}	
+		}
+
+		// entfernen alle Kontakt-Einträge der Kontaktliste kl aus <code>KontaktlisteKontakt</code>
+		Vector<Kontakt> kv = klkMapper.findAllKontakteByKontaktliste(kl.getId());
+		if (kv != null) {
+			for (Kontakt k : kv) {
 				this.klkMapper.removeKontaktFromKontaktliste(kl, k);
-				
-				//Kontakte werden permanent aus der Db entfernt. Dies soll nicht geschehen da wir nur die Verbdinung
-				//des Kontaktes aus der Kontaktliste entfernen aber nicht den Kontakt an sich.
-			//	this.removeKontakt(k);
 			}
 		}
+		// entfernen der leeren Kontaktliste 
 		this.klMapper.delete(kl);
 	}
 
@@ -956,7 +1025,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * *************************************************************************
 	 */
 
-	// noch offen (...)
+	// Check noch offen (...)
 
 	/**
 	 * Gibt alle <code>Kontakt</code>-Objekte aus, welche vom Nutzer geteilt wurden.
@@ -964,26 +1033,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param ownerId
 	 * @return Vector<Kontakt>
 	 */
-	public Vector<Kontakt> getAllSharedKontakteByOwner(int nutzerId) 
-			throws IllegalArgumentException {
+	public Vector<Kontakt> getAllSharedKontakteByOwner(int nutzerId) throws IllegalArgumentException {
 		init();
 
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(nutzerId);
 		Vector<Kontakt> kv = new Vector<Kontakt>();
 
 		for (int b = 0; b < bv.size(); b++) {
-			if (bv != null && nutzerId == bv.elementAt(b).getOwnerId() 
-					&& bv.elementAt(b).getType() == 'k') {
-
-				this.getKontaktById(bv.elementAt(b).getObjectId());
-
-				Kontakt k = new Kontakt();
-				k.setId(bv.elementAt(b).getObjectId());
-				k.setVorname(k.getVorname());
-				k.setNachname(k.getNachname());
-				k.setErstellDat(k.getErstellDat());
-				k.setModDat(k.getModDat());
-				k.setOwnerId(k.getOwnerId());
+			if (bv != null && nutzerId == bv.elementAt(b).getOwnerId()&& bv.elementAt(b).getType() == 'k') {
+				Kontakt k = this.getKontaktById(bv.elementAt(b).getObjectId());
 				kv.addElement(k);
 			}
 		}
@@ -998,20 +1056,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param nutzerId
 	 * @return Vector<Kontakt>
 	 */
-	public Vector<Kontakt> getAllSharedKontakteByReceiver(int nutzerId) 
-			throws IllegalArgumentException {
+	public Vector<Kontakt> getAllSharedKontakteByReceiver(int nutzerId) throws IllegalArgumentException {
 		init();
 
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(nutzerId);
 		Vector<Kontakt> kv = new Vector<Kontakt>();
 
 		for (int b = 0; b < bv.size(); b++) {
-			if (bv != null && nutzerId == bv.elementAt(b).getReceiverId() 
-					&& bv.elementAt(b).getType() == 'k') {
-
+			if (bv != null && nutzerId == bv.elementAt(b).getReceiverId() && bv.elementAt(b).getType() == 'k') {
 				Kontakt k = this.getKontaktById(bv.elementAt(b).getObjectId());
 				kv.addElement(k);
-
 			}
 		}
 
@@ -1025,24 +1079,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param nutzerId
 	 * @return Vector<Kontakt>
 	 */
-	public Vector<Kontaktliste> getAllSharedKontaktlistenByOwner(int nutzerId) 
-			throws IllegalArgumentException {
+	public Vector<Kontaktliste> getAllSharedKontaktlistenByOwner(int nutzerId) throws IllegalArgumentException {
 		init();
 
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(nutzerId);
 		Vector<Kontaktliste> klv = new Vector<Kontaktliste>();
 
 		for (int b = 0; b < bv.size(); b++) {
-
-			if (bv != null && nutzerId == bv.elementAt(b).getOwnerId() 
-					&& bv.elementAt(b).getType() == 'l') {
-
-				this.getKontaktlisteById(bv.elementAt(b).getObjectId());
-
-				Kontaktliste kl = new Kontaktliste();
-				kl.setId(bv.elementAt(b).getObjectId());
-				kl.setTitel(kl.getTitel());
-				kl.setOwnerId(kl.getOwnerId());
+			if (bv != null && nutzerId == bv.elementAt(b).getOwnerId() && bv.elementAt(b).getType() == 'l') {
+				Kontaktliste kl = this.getKontaktlisteById(bv.elementAt(b).getObjectId());
 				klv.addElement(kl);
 			}
 		}
@@ -1057,92 +1102,62 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param nutzerId
 	 * @return Vector<Kontakt>
 	 */
-	public Vector<Kontaktliste> getAllSharedKontaktlistenByReceiver(int nutzerId) 
-			throws IllegalArgumentException {
+	public Vector<Kontaktliste> getAllSharedKontaktlistenByReceiver(int nutzerId) throws IllegalArgumentException {
 		init();
 
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(nutzerId);
 		Vector<Kontaktliste> klv = new Vector<Kontaktliste>();
 
 		for (int b = 0; b < bv.size(); b++) {
-
-			if (bv != null && nutzerId == bv.elementAt(b).getReceiverId() 
-					&& bv.elementAt(b).getType() == 'l') {
-				Kontaktliste kl1 = this.getKontaktlisteById(bv.elementAt(b).getObjectId());
-				
-				klv.addElement(kl1);
+			if (bv != null && nutzerId == bv.elementAt(b).getReceiverId() && bv.elementAt(b).getType() == 'l') {
+				Kontaktliste kl = this.getKontaktlisteById(bv.elementAt(b).getObjectId());
+				klv.addElement(kl);
 			}
 		}
 
 		return klv;
 	}
 
+	
 	/**
-	 * Gibt alle Kontakte einer geteilten Kontakliste aus.
-	 * 
-	 * @param kontaktlisteId
-	 * @return Vector<Kontakt>
-	 * 
-	 */
-	public Vector<Kontakt> getAllSharedKontakteBySharedKontaktliste(int kontaktlisteId) {
-
-		Vector<Berechtigung> bv = this.bMapper.findAll();
-		Vector<Kontakt> kv = new Vector<Kontakt>();
-		for (int b = 0; b < bv.size(); b++) {
-			if (bv != null && bv.elementAt(b).getType() == 'l') {
-				this.getKontakteByKontaktliste(bv.elementAt(b).getObjectId());
-
-				Kontakt k = new Kontakt();
-				k.setId(bv.elementAt(b).getObjectId());
-				k.setVorname(k.getVorname());
-				k.setNachname(k.getNachname());
-				k.setErstellDat(k.getErstellDat());
-				k.setModDat(k.getModDat());
-				k.setOwnerId(k.getOwnerId());
-				kv.addElement(k);
-
-			}
-
-		}
-		return kv;
-	}
-
-	/**
-	 * Gibt alle geteilten Auspraegungen zu einem Kontakt aus.
+	 * Gibt alle geteilten Auspraegungen zu einem Kontakt k aus.
 	 * 
 	 * @param kontaktlisteId
 	 * @return
 	 */
-	public Vector<Auspraegung> getAllSharedAuspraegungenByKontakt(int kontaktId) {
+	public Vector<Auspraegung> getAllSharedAuspraegungenByKontakt(Kontakt k) {
 
 		Vector<Berechtigung> bv = this.bMapper.findAll();
 		Vector<Auspraegung> av = new Vector<Auspraegung>();
-		for (int b = 0; b < bv.size(); b++) {
-			if (bv != null && bv.elementAt(b).getType() == 'a') {
-				this.getAuspraegungById(bv.elementAt(b).getObjectId());
 
-				Auspraegung a = new Auspraegung();
-				a.setId(bv.elementAt(b).getObjectId());
-				a.setWert(a.getWert());
-				a.setEigenschaftId(a.getEigenschaftId());
-				a.setKontaktId(a.getKontaktId());
-				a.setOwnerId(a.getOwnerId());
-				av.addElement(a);
+		for (Berechtigung b : bv) {
+			if (bv != null && b.getType() == 'a') {
+				Auspraegung a = this.getAuspraegungById(b.getObjectId());
+				if (a.getKontaktId() == k.getId()) {
+					av.addElement(a);
+				}
 			}
-
 		}
-		return null;
-	}
-	
-	/**
-	 * Suchte fÃ¼r den Nutzer eine einzelne Berechtigung fÃ¼r einen einzelnen Kontakt heraus den
-	 * er zuvor selektiert hat. Damit man ihn auch einzeln entfernen kann.
-	 */
-	public Berechtigung getABerechtigungByReceiver(Nutzer n) throws IllegalArgumentException {
-		return this.bMapper.findASingleBerechtigung(n.getId());
-	}
-	
 
+		return av;
+	}
+	
+	
+	
+	
+	
+//	--> ?
+	
+//	/**
+//	 * Suchte fÃ¼r den Nutzer eine einzelne Berechtigung fÃ¼r einen einzelnen Kontakt heraus den
+//	 * er zuvor selektiert hat. Damit man ihn auch einzeln entfernen kann.
+//	 */
+//	public Berechtigung getABerechtigungByReceiver(Nutzer n) throws IllegalArgumentException {
+//		return this.bMapper.findASingleBerechtigung(n.getId());
+//	}
+	
+	
+	
 	/*
 	 * ************************************************************************* 
 	 * ABSCHNITT ENDE: Abruf der geteilten Objekte
@@ -1156,36 +1171,48 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	/**
-	 * Gibt den Status eines Objektetyps (Kontakt k, Kontaktliste l oder
-	 * Auspraegung a) zurueck und prï¿½ft ob dieses bereits geteilt wurde.
-	 * 
+	 * Prüft über einen boolean, ob sich ein Objekt (Kontakt k, Kontaktliste l oder
+	 * Auspraegung a) sich in einem geteilten Status befindet.
 	 */
 	public boolean getStatusForObject(int objectId) throws IllegalArgumentException {
 
-		// Die Berechtigung wird ausgelesen der alle Berechtigungen des Objekts zurï¿½ckgibt
+		// Auslesen alle Berechtigungen
 		Vector<Berechtigung> bv = this.bMapper.findAll();
 
-		//Die Schleife durchlï¿½uft die Liste und gleicht das Objekt mit dem erhalten Objekt ab.  
-		for (int b = 0; b < bv.size(); b++) {
-			if (objectId == bv.elementAt(b).getObjectId()) {
-				//Die Prï¿½fung wird zurï¿½ckgegeben. 
+		// Abgleich der ObjectId mit den geteilten Objekte
+		for (Berechtigung b : bv) {
+			if (objectId == b.getObjectId()) {
 				return true;
 			}
 		}
 		return false;
 	}
-
+	
+	
 	/**
-	 * Aktualisierung des Modifikationsdatums, durch aufrufen der Methode. 
+	 * Aktualisierung des Modifikationsdatums, durch aufrufen der Methode.
 	 */
 	public void saveModifikationsdatum(int id) throws IllegalArgumentException {
 		init();
 		this.kMapper.updateModifikationsdatum(id);
 	}
+	
+	
+	
+	
+	
 
 	@Override
 	public Vector<Kontakt> sucheKontakt(String vorname, String nachname, String wert, String bezeichnung, Nutzer n)
 			throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	// --> ?
+	@Override
+	public Berechtigung getABerechtigungByReceiver(Nutzer n) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -266,41 +266,46 @@ public class BerechtigungMapper {
 		return result;
 	}
 	
-	/**
-	 * Gibt eine spezielle Berechtigung eines Objekts zurück.
-	 * Welche mit dem Receiver geteilt wurde.
-	 * 
-	 * @param receiverId
-	 * @return Berechtigungen
-	 */
-	public Berechtigung findASingleBerechtigung(int receiverId) {
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
-
-		try {
-
-			// SQL-Statement anlegen
-			PreparedStatement prestmt = con
-					.prepareStatement("SELECT * FROM berechtigung WHERE receiverid =" + receiverId);
-
-			ResultSet rs = prestmt.executeQuery();
-
-			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
-			if(rs.next()) {
-				Berechtigung b = new Berechtigung();
-				b.setId(rs.getInt("id"));
-				b.setOwnerId(rs.getInt("ownerid"));
-				b.setReceiverId(rs.getInt("receiverid"));
-				b.setObjectId(rs.getInt("objectid"));
-				b.setType(rs.getString("type").charAt(0));
-				
-				return b;
-
-			}
 	
-		} catch (SQLException e2) {
-			e2.printStackTrace();
-		}
-		return null;
-	}
+//	--> ?
+	
+//	/**
+//	 * Gibt eine spezielle Berechtigung eines Objekts zurück.
+//	 * Welche mit dem Receiver geteilt wurde.
+//	 * 
+//	 * @param receiverId
+//	 * @return Berechtigungen
+//	 */
+//	public Berechtigung findASingleBerechtigung(int receiverId) {
+//		// DBConnection herstellen
+//		Connection con = DBConnection.connection();
+//
+//		try {
+//
+//			// SQL-Statement anlegen
+//			PreparedStatement prestmt = con
+//					.prepareStatement("SELECT * FROM berechtigung WHERE receiverid =" + receiverId);
+//
+//			ResultSet rs = prestmt.executeQuery();
+//
+//			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
+//			if(rs.next()) {
+//				Berechtigung b = new Berechtigung();
+//				b.setId(rs.getInt("id"));
+//				b.setOwnerId(rs.getInt("ownerid"));
+//				b.setReceiverId(rs.getInt("receiverid"));
+//				b.setObjectId(rs.getInt("objectid"));
+//				b.setType(rs.getString("type").charAt(0));
+//				
+//				return b;
+//
+//			}
+//	
+//		} catch (SQLException e2) {
+//			e2.printStackTrace();
+//		}
+//		return null;
+//	}
+	
+	
 }

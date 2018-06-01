@@ -636,7 +636,7 @@ class EditorServiceImplTest extends GWTTestCase {
 
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		editor.removeKontakt(k);
+		editor.deleteKontakt(k);
 	}
 	
 	
@@ -940,7 +940,7 @@ class EditorServiceImplTest extends GWTTestCase {
 				
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		System.out.println(editor.getAllSharedKontakteBySharedKontaktliste(kl.getId()));
+		System.out.println(/* editor. */);
 	}
 
 }

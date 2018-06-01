@@ -395,33 +395,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return this.kMapper.findNutzerKontaktByIdentifier(n.getId());
 	}
 
-	/**
-	 * Auslesen der Kontakte anhand des Vornamens. Bei der Eingabe eines Vornamens 
-	 * wird in der Ausgabe eine Liste an Kontakten zur�ckgegeben, die mit dem 
-	 * Vornamen zu identifizieren sind. 
-	 *@param String vorname 
-	 *@param Nutzer n
-	 *@return Vector <Kontakt>
-	 */
-	public Vector<Kontakt> getKontaktByVorname(String vorname, Nutzer n) 
-			throws IllegalArgumentException {
-		init();
-		return this.kMapper.findKontaktByVorname(vorname, n);
-	}
 	
-	/**
-	 * Auslesen der Kontakte anhand des Nachnamens. Bei der Eingabe eines Nachnamens 
-	 * wird in der Ausgabe eine Liste an Kontakten zur�ckgegeben, die mit dem 
-	 * Nachnamen zu identifizieren sind. 
-	 * *@param String nachname 
-	 *@param Nutzer n
-	 *@return Vector <Kontakt>
-	 */
-	public Vector<Kontakt> getKontaktByNachname(String nachname, Nutzer n) 
-			throws IllegalArgumentException {
-		init();
-		return this.kMapper.findKontaktByNachname(nachname, n);
-	}
 
 	/**
 	 * Auslesen aller Kontakte, bei diesen der Nutzer als Eigentuemer hinterlegt ist.
@@ -457,40 +431,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.klkMapper.removeKontaktFromKontaktliste(kl, k);
 	}
 
-	/**
-	 * Es werden alle Kontakte mit dem zugehoerigen Inhalt aufgerufen. Der Inhalt 
-	 * der Kontakte zeichnet sich durch die Eigenschaften des jeweiligen Kontakts, 
-	 * sowie der dazugehoerigen Auspraegungen aus. 
-	 * @param Nutzer n 
-	 * @param Auspraegung a
-	 * @param Eigenschaft e
-	 * @return kv
-	 */
-	public Vector<Kontakt> getAllKontakteByInhalt(Nutzer n, Auspraegung a, Eigenschaft e)
-			throws IllegalArgumentException {
-	
-		Vector<Kontakt> kv = new Vector<Kontakt>();
-
-		//Pruefung ob der Kontakt existiert.
-		for (int i = 0; i < kv.size(); i++) {
-			if (kv != null) {
-				Kontakt k = new Kontakt();
-				
-				//Der Kontakt wird ausgelesen und identifziert.
-				k.setId(kv.elementAt(i).getId());
-				k.setVorname(k.getVorname());
-				k.setNachname(k.getNachname());
-				k.setOwnerId(k.getOwnerId());
-				
-				//Der Liste wird der Kontakt zurueckgegeben.
-				kv.addElement(k);
-			}
-			//die Inhalte werden zugehoerig abgerufen.
-			this.aMapper.findAuspraegungByKontakt(a.getKontaktId());
-			this.eMapper.findEigenschaftById(e.getId());
-		}
-		return kv;
-	}
 	/*
 	 * ************************************************************************* 
 	 * ABSCHNITT - Ende: Methoden fuer Kontakt
@@ -678,16 +618,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		return this.eMapper.findEigenschaftById(eigenschaftId);
 	}
-	
-	/**
-	 * Auslesen der Eigenschaft anhand der Bezeichnung.
-	 */
-	public Vector<Eigenschaft> getEigenschaftByBezeichnung(String bezeichnung) 
-			throws IllegalArgumentException {
-		
-		init();
-		return this.eMapper.findEigenschaftByBezeichnung(bezeichnung);
-	}
 
 	/**
 	 * Gibt die vordefinierte Auswahl der Eigenschaften zur�ck.
@@ -770,15 +700,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return this.aMapper.findAuspraegungById(auspraegungId);
 	}
 
-	/**
-	 * Auslesen der Eigenschaft anhand der definierten Bezeichnung.
-	 */
-	public Vector<Auspraegung> getAuspraegungByWert(String wert, Nutzer n) 
-			throws IllegalArgumentException {
-		
-		init();
-		return this.aMapper.findAuspraegungByWert(wert, n);
-	}
+	
 	
 	/**
 	 * Ruft eine Liste aller Auspraegungen des zugehoerigen Kontakts auf.
@@ -1167,7 +1089,102 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	/*
 	 * ************************************************************************* 
-	 * ABSCHNITT BEGINN: Sonstiges
+	 * ABSCHNITT BEGINN: Suchfunktion
+	 * *************************************************************************
+	 */
+
+	/**
+	 * Auslesen der Kontakte anhand des Vornamens. Bei der Eingabe eines Vornamens 
+	 * wird in der Ausgabe eine Liste an Kontakten zur�ckgegeben, die mit dem 
+	 * Vornamen zu identifizieren sind. 
+	 *@param String vorname 
+	 *@param Nutzer n
+	 *@return Vector <Kontakt>
+	 */
+	public Vector<Kontakt> getKontaktByVorname(String vorname, Nutzer n) 
+			throws IllegalArgumentException {
+		init();
+		return this.kMapper.findKontaktByVorname(vorname, n);
+	}
+	
+	/**
+	 * Auslesen der Kontakte anhand des Nachnamens. Bei der Eingabe eines Nachnamens
+	 * wird in der Ausgabe eine Liste an Kontakten zur�ckgegeben, die mit dem
+	 * Nachnamen zu identifizieren sind. *@param String nachname
+	 * 
+	 * @param Nutzer n
+	 * @return Vector <Kontakt>
+	 */
+	public Vector<Kontakt> getKontaktByNachname(String nachname, Nutzer n) 
+			throws IllegalArgumentException {
+		init();
+		return this.kMapper.findKontaktByNachname(nachname, n);
+	}
+	
+	/**
+	 * Auslesen der Auspraegung anhand der definierten Bezeichnung.
+	 */
+	public Vector<Kontakt> getAuspraegungByWert(String wert) 
+			throws IllegalArgumentException {
+		
+		init();
+		return this.aMapper.findAuspraegungByWert(wert);
+	}
+	
+	/**
+	 * Auslesen der Eigenschaft anhand der Bezeichnung.
+	 */
+	public Vector<Kontakt> getEigenschaftByBezeichnung(String bezeichnung) 
+			throws IllegalArgumentException {
+		
+		init();
+		return this.eMapper.findEigenschaftByBezeichnung(bezeichnung);
+	}
+
+	/**
+	 * Es werden alle Kontakte mit dem zugehoerigen Inhalt aufgerufen. Der Inhalt 
+	 * der Kontakte zeichnet sich durch die Eigenschaften des jeweiligen Kontakts, 
+	 * sowie der dazugehoerigen Auspraegungen aus. 
+	 * @param Nutzer n 
+	 * @param Auspraegung a
+	 * @param Eigenschaft e
+	 * @return kv
+	 */
+	public Vector<Kontakt> getAllKontakteByInhalt(Nutzer n, Auspraegung a, Eigenschaft e)
+			throws IllegalArgumentException {
+	
+		Vector<Kontakt> kv = new Vector<Kontakt>();
+
+		//Pruefung ob der Kontakt existiert.
+		for (int i = 0; i < kv.size(); i++) {
+			if (kv != null) {
+				Kontakt k = new Kontakt();
+				
+				//Der Kontakt wird ausgelesen und identifziert.
+				k.setId(kv.elementAt(i).getId());
+				k.setVorname(k.getVorname());
+				k.setNachname(k.getNachname());
+				k.setOwnerId(k.getOwnerId());
+				
+				//Der Liste wird der Kontakt zurueckgegeben.
+				kv.addElement(k);
+			}
+			//die Inhalte werden zugehoerig abgerufen.
+			this.aMapper.findAuspraegungByKontakt(a.getKontaktId());
+			this.eMapper.findEigenschaftById(e.getId());
+		}
+		return kv;
+	}	
+	
+	/*
+	 * ************************************************************************* 
+	 * ABSCHNITT Ende - Suchfunktion 
+	 * *************************************************************************
+	 */
+	
+	/*
+	 * ************************************************************************* 
+	 * ABSCHNITT Beginn -  Sonstiges
 	 * *************************************************************************
 	 */
 
@@ -1189,7 +1206,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return false;
 	}
 	
-	
 	/**
 	 * Aktualisierung des Modifikationsdatums, durch aufrufen der Methode.
 	 */
@@ -1198,30 +1214,25 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.kMapper.updateModifikationsdatum(id);
 	}
 	
-	
-	
-	
-	
-
 	@Override
 	public Vector<Kontakt> sucheKontakt(String vorname, String nachname, String wert, String bezeichnung, Nutzer n)
 			throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
+	
 	// --> ?
 	@Override
 	public Berechtigung getABerechtigungByReceiver(Nutzer n) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	/*
 	 * ************************************************************************* **
-	 * ABSCHNITT ENDE: Sonstiges
+	 * ABSCHNITT Ende - Sonstiges
 	 * *************************************************************************
 	 */
+
+	
 
 }

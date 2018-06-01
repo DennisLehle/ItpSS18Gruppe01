@@ -228,10 +228,10 @@ public interface EditorService extends RemoteService{
 	
 	public Vector<Kontakt> getKontaktByNachname(String nachname, Nutzer n) throws IllegalArgumentException;
 
-	public Vector<Auspraegung> getAuspraegungByWert(String wert, Nutzer n) 
+	public Vector<Kontakt> getAuspraegungByWert(String wert) 
 			throws IllegalArgumentException;
 	
-	public Vector<Eigenschaft> getEigenschaftByBezeichnung(String bezeichnung) 
+	public Vector<Kontakt> getEigenschaftByBezeichnung(String bezeichnung) 
 			throws IllegalArgumentException;
 			
 	public Vector<Kontakt> sucheKontakt (String vorname, String nachname, 

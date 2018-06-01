@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 
@@ -307,15 +308,18 @@ public class EigenschaftMapper {
 	 * 
 	 */
 	
-	public Vector<Eigenschaft> findEigenschaftByBezeichnung(String bezeichnung){
+	public Vector<Kontakt> findEigenschaftByBezeichnung(String bezeichnung){
 		
 		Connection con = null; 
 		PreparedStatement stmt = null; 
 		
-		String selectByKey = "SELECT * FROM eigenschaft WHERE bezeichnung=? ORDER BY bezeichnung";
+		String selectByKey = "SELECT * FROM eigenschaft"
+				+ "JOIN auspraegung ON eigenschaft.id = auspraegung.eigenschaftid "
+				+ "JOIN kontakt ON auspraegung.kontaktid = kontakt.id" 
+				+ "WHERE bezeichnung=? " ;
 		
-		//Vector erzeugen, der die Eigenschaftsdatensätze aufnehmen kann
-		Vector <Eigenschaft> result = new Vector<Eigenschaft>();
+		//Vector erzeugen, der die Eigenschaftsdatensaetze aufnehmen kann
+		Vector<Kontakt> result = new Vector<Kontakt>();
 		
 		try {
 			
@@ -326,17 +330,24 @@ public class EigenschaftMapper {
 			
 			ResultSet rs = stmt.executeQuery();
 			
+			//Fuer jeden Eintrag im Suchergebnis wird nun ein Objekt erstellt
+		    Eigenschaft e = new Eigenschaft();
+		    e.setBezeichnung("bezeichnung");
 			
 			//While Schleife für das Durchlaufen vieler Zeilen
 			//Schreiben der Objekt-Attribute aus ResultSet
 			while (rs.next()) {
 				
-				Eigenschaft e = new Eigenschaft();
-				e.setId(rs.getInt("id"));
-				e.setBezeichnung(rs.getString("bezeichnung"));	
+				Kontakt k = new Kontakt();
+				k.setId(rs.getInt("id"));
+			    k.setVorname(rs.getString("vorname"));
+			    k.setNachname(rs.getString("nachname"));
+			    k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
+			    k.setModDat(rs.getTimestamp("modifikationsdatum"));
+			    k.setOwnerId(rs.getInt("ownerid"));
 				
 				//Statt return wird hier der Vektor erweitert
-				result.addElement(e);
+				result.addElement(k);
 				
 			}
 			

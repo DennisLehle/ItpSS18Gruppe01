@@ -179,10 +179,10 @@ public interface EditorServiceAsync {
 	void getEigenschaftForAuspraegung(int eigenschaftId, AsyncCallback<Eigenschaft> callback);
 
 	
-	void getAuspraegungByWert(String wert, Nutzer n, AsyncCallback<Vector<Auspraegung>> callback);
+	void getAuspraegungByWert(String wert, AsyncCallback<Vector<Kontakt>> callback);
 
 
-	void getEigenschaftByBezeichnung(String bezeichnung, AsyncCallback<Vector<Eigenschaft>> callback);
+	void getEigenschaftByBezeichnung(String bezeichnung, AsyncCallback<Vector<Kontakt>> callback);
 
 
 	void getKontaktByVorname(String vorname, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);

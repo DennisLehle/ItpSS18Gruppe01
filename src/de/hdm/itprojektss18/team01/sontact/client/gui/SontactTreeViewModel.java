@@ -373,10 +373,9 @@ public class SontactTreeViewModel implements TreeViewModel {
 					});
 					}
 			});
-			return new DefaultNodeInfo<Kontaktliste>(kontaktlisteDataProvider, new KontaktlisteCell(), selectionModel,
-					null);
+			return new DefaultNodeInfo<Kontaktliste>(kontaktlisteDataProvider, new KontaktlisteCell(), selectionModel, null);
 		}
-
+	
 
 		/*
 		 * Wenn Value eine Instanz von Kontaktliste ist werden die Kontakte aus der

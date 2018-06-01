@@ -830,7 +830,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * CHECK
 	 */
 	
-	@Test
+
 	public void getAllBerechtigungenByOwner() {
 		Nutzer n = new Nutzer();
 		n.setId(1);
@@ -838,6 +838,22 @@ class EditorServiceImplTest extends GWTTestCase {
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		System.out.println(editor.getAllBerechtigungenByOwner(n.getId()));
+		
+	}
+	
+	/**
+	 * Die Ausgabe aller Einträge in der Berechtigungstabelle nach der ReceiverId
+	 * IMPL-Methode getAllBerechtigungenByReceiver();
+	 * CHECK
+	 */
+	
+	public void getAllBerechtigungenByReceiver() {
+		Nutzer n = new Nutzer();
+		n.setId(1);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getAllBerechtigungenByReceiver(n.getId()));
 		
 	}
 	

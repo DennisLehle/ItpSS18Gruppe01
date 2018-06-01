@@ -720,8 +720,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	public Auspraegung createAuspraegung(String wert, int eigenschaftId, 
-			int kontaktId, Nutzer n /** int ownerId */
-	) throws IllegalArgumentException {
+			int kontaktId, Nutzer n) throws IllegalArgumentException {
 
 		init();
 
@@ -729,7 +728,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		a.setWert(wert);
 		a.setEigenschaftId(eigenschaftId);
 		a.setKontaktId(kontaktId);
-		a.setOwnerId(n.getId() /** ownerId */
+		a.setOwnerId(n.getId() 
 		);
 
 		a.setId(1);

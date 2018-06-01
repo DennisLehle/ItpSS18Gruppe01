@@ -218,7 +218,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		System.out.println(editor.getKontaktById(3));
 	}
 	
-@Test
+
 	public void getKontaktByVorname() {
 		
 		Nutzer n = new Nutzer();
@@ -670,10 +670,10 @@ class EditorServiceImplTest extends GWTTestCase {
 		kl.setTitel("Geschaeft");
 		kl.setOwnerId(n1.getId());
 						
-		Kontaktliste kl1 = new Kontaktliste();
-		kl1.setId(2);
-		kl1.setTitel("Freunde");
-		kl1.setOwnerId(n1.getId());
+//		Kontaktliste kl1 = new Kontaktliste();
+//		kl1.setId(2);
+//		kl1.setTitel("Freunde");
+//		kl1.setOwnerId(n1.getId());
 		
 //		Kontakt k = new Kontakt();
 //		k.setId(1);
@@ -697,7 +697,7 @@ class EditorServiceImplTest extends GWTTestCase {
 //		a2.setId(8);
 		
 		editor.createBerechtigung(n1.getId(), n2.getId(), kl.getId(), kl.getType());
-		editor.createBerechtigung(n1.getId(), n2.getId(), kl1.getId(), kl1.getType());
+//		editor.createBerechtigung(n1.getId(), n2.getId(), kl1.getId(), kl1.getType());
 		
 		
 //		editor.createBerechtigung(n1.getId(), n2.getId(), k.getId(), k.getType());
@@ -710,6 +710,24 @@ class EditorServiceImplTest extends GWTTestCase {
 //		editor.createBerechtigung(n1.getId(), n2.getId(), a2.getId(), a2.getType());
 		
 	}
+	
+	/**
+	 * Berechtigungseintrag in der Tabelle Berechtigung fï¿½r Objekt K, KL oder A entfernen.
+	 * IMPL-Methode deleteBerechtigung();
+	 * CHECK Melanie
+	 */
+	
+	public void deleteBerechtigung() {
+		
+		Berechtigung b = new Berechtigung();
+		b.setId(8);
+		b.setType('l');
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		editor.deleteBerechtigung(b);
+	}
+	
 	
 	/**
 	 * Test ShareKontakt:
@@ -804,6 +822,39 @@ class EditorServiceImplTest extends GWTTestCase {
 		b.setType('l');
 		
 		editor.deleteBerechtigung(b);
+	}
+	
+	/**
+	 * Die Ausgabe aller Einträge in der Berechtigungstabelle nach der OwnerId
+	 * IMPL-Methode getAllBerechtigungenByOwner();
+	 * CHECK
+	 */
+	
+
+	public void getAllBerechtigungenByOwner() {
+		Nutzer n = new Nutzer();
+		n.setId(1);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getAllBerechtigungenByOwner(n.getId()));
+		
+	}
+	
+	/**
+	 * Die Ausgabe aller Einträge in der Berechtigungstabelle nach der ReceiverId
+	 * IMPL-Methode getAllBerechtigungenByReceiver();
+	 * CHECK
+	 */
+	
+	public void getAllBerechtigungenByReceiver() {
+		Nutzer n = new Nutzer();
+		n.setId(1);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getAllBerechtigungenByReceiver(n.getId()));
+		
 	}
 	
 
@@ -978,7 +1029,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode getAllSharedAuspraegungenByKontakt();
 	 */
 	
-	@Test
+	
 	public void getAllSharedAuspraegungenByKontaktAndNutzer() {
 
 		EditorServiceImpl editor = new EditorServiceImpl();

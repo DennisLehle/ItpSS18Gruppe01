@@ -39,41 +39,58 @@ public class BerechtigungMapper {
 	 * @return Berechtigung
 	 */
 	public Berechtigung insert(Berechtigung b) {
-
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
-
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		
+		//Query für die Abfrage der hoechsten ID (Primärschlüssel) in der Datenbank
+		String maxIdSQL = "SELECT MAX(id) AS maxid FROM berechtigung";
+		
+		
+		//Query für den Insert
+		String insertSQL = "INSERT INTO berechtigung (id, ownerid, receiverid, objectid, type) VALUES (?,?,?,?,?)";		
+		
+		
+		
 		try {
-			// Leeres SQL Statement anlegen
-			Statement stmt = con.createStatement();
+			
+			con = DBConnection.connection(); 
+			stmt = con.prepareStatement(maxIdSQL);
+			
 
-			// Statement als Query an die DB schicken
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Berechtigung");
-
-			// Rï¿½ckgabe beinhaltet nur eine Tupel
-			if (rs.next()) {
-
-				// b enthï¿½lt den bisher maximalen, nun um 1 inkrementierten Primï¿½rschlï¿½ssel
-				b.setId(rs.getInt("maxid") + 1);
-
-				// INSERT-Statement anlegen
-				PreparedStatement prestmt = con
-						.prepareStatement("INSERT INTO Berechtigung (id, ownerid, receiverid, objectid, type) VALUES ('" 
-								+ b.getId() + "', '" 
-								+ b.getOwnerId() + "', '"
-								+ b.getReceiverId() + "', '" 
-								+ b.getObjectId() + "', '"
-								+ b.getType() + "')");
-								
-
-				// INSERT-Statement ausfï¿½hren
-				prestmt.execute();
-			}
+			//MAX ID Query ausfuehren
+			ResultSet rs = stmt.executeQuery();
+			
+			
+			//...um diese dann um 1 inkrementiert der ID des BO zuzuweisen
+		    if(rs.next()){
+		    	b.setId(rs.getInt("maxId")+1);
+		    }	   
+		    
+		    	
+			//Jetzt erfolgt der Insert
+		    stmt = con.prepareStatement(insertSQL);
+		    
+		  
+		    //Setzen der ? Platzhalter als Values
+		    stmt.setInt(1, b.getId());
+		    stmt.setInt(2, b.getOwnerId());
+		    stmt.setInt(3, b.getReceiverId());
+		    stmt.setInt(4, b.getObjectId());
+		    stmt.setString(5, String.valueOf(b.getType()));
+		    
+		    
+		    //INSERT-Query ausführen
+		    stmt.executeUpdate();
+		    
+		    
 		} catch (SQLException e2) {
 			e2.printStackTrace();
-		}
+			}			
+		
 		return b;
-	}
+	}	
 
 	
 	/**

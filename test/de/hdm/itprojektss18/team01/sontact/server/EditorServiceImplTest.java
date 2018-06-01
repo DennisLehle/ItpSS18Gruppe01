@@ -713,8 +713,8 @@ class EditorServiceImplTest extends GWTTestCase {
 	
 	/**
 	 * Berechtigungseintrag in der Tabelle Berechtigung fï¿½r Objekt K, KL oder A entfernen.
-	 * IMPL-Methode createBerechtigung();
-	 * CHECK
+	 * IMPL-Methode deleteBerechtigung();
+	 * CHECK Melanie
 	 */
 	
 	public void deleteBerechtigung() {
@@ -822,6 +822,23 @@ class EditorServiceImplTest extends GWTTestCase {
 		b.setType('l');
 		
 		editor.deleteBerechtigung(b);
+	}
+	
+	/**
+	 * Die Ausgabe aller Einträge in der Berechtigungstabelle nach der OwnerId
+	 * IMPL-Methode getAllBerechtigungenByOwner();
+	 * CHECK
+	 */
+	
+	@Test
+	public void getAllBerechtigungenByOwner() {
+		Nutzer n = new Nutzer();
+		n.setId(1);
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getAllBerechtigungenByOwner(n.getId()));
+		
 	}
 	
 

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 
@@ -191,7 +192,7 @@ public class BerechtigungMapper {
 		
 		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
 		Vector <Berechtigung> result = new Vector<Berechtigung>();
-		Berechtigung b = new Berechtigung();
+		
 		
 		try {
 			
@@ -204,6 +205,9 @@ public class BerechtigungMapper {
 			//While Schleife für das Durchlaufen vieler Zeilen
 			//Schreiben der Objekt-Attribute aus ResultSet
 			while (rs.next()) {
+				
+				//Ergebnis-Tupel in Objekt umwandeln
+				Berechtigung b = new Berechtigung();
 				
 				b.setId(rs.getInt("id"));
 				b.setOwnerId(rs.getInt("ownerid"));
@@ -232,35 +236,48 @@ public class BerechtigungMapper {
 	 * @return Berechtigungen
 	 */
 	public Vector<Berechtigung> findAllBerechtigungenByOwner(int nutzerId) {
-
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
-
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM berechtigung WHERE ownerid=?";
+		
+		//Erstellung des Ergebnisvektors
 		Vector<Berechtigung> result = new Vector<Berechtigung>();
-
+		
+		
 		try {
-
-			// SQL-Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Berechtigung WHERE ownerid=" + nutzerId);
-
-			ResultSet rs = prestmt.executeQuery();
-			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
-			while (rs.next()) {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, nutzerId);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				//Ergebnis-Tupel in Objekt umwandeln
 				Berechtigung b = new Berechtigung();
+				
+				//Setzen der Attribute den Datensätzen aus der DB entsprechend
 				b.setId(rs.getInt("id"));
 				b.setOwnerId(rs.getInt("ownerid"));
 				b.setReceiverId(rs.getInt("receiverid"));
 				b.setObjectId(rs.getInt("objectid"));
 				b.setType(rs.getString("type").charAt(0));
-
+				
 				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
 				result.addElement(b);
 			}
-		} catch (SQLException e2) {
-			e2.printStackTrace();
 		}
-
-		// Rï¿½ckgabe des Ergebnisvektors
+		
+		catch (SQLException e2) {
+			
+			e2.printStackTrace();
+			return null;
+		}
+		
 		return result;
 	}
 

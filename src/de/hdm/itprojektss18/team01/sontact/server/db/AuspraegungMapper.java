@@ -9,6 +9,7 @@ import java.util.Vector;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 
@@ -407,16 +408,18 @@ public class AuspraegungMapper {
 	 *         gefuellter oder ggf. auch leerer Vektor zurueckgeliefert.
 	 * 
 	 */
-	public Vector<Auspraegung> findAuspraegungByWert(String wert, Nutzer n){
+	public Vector<Kontakt> findAuspraegungByWert(String wert){
 		
 		Connection con = null; 
 		PreparedStatement stmt = null; 
 		
-		String selectByKey = "SELECT * FROM auspraegung WHERE wert=? ORDER BY wert";
+		String selectByKey = "SELECT * FROM auspraegung "
+				+ "JOIN kontakt ON auspraegung.kontaktid = kontakt.id" 
+				+ "WHERE wert=? ";
 		
-		//Vector erzeugen, der die Eigenschaftsdatensätze aufnehmen kann
-		Vector <Auspraegung> result = new Vector<Auspraegung>();
-		
+		//Vector erzeugen, der die Auspraegungsdatensaetze aufnehmen kann
+		Vector <Kontakt> result = new Vector<Kontakt>();
+
 		try {
 			
 			con = DBConnection.connection();
@@ -426,20 +429,24 @@ public class AuspraegungMapper {
 			
 			ResultSet rs = stmt.executeQuery();
 			
-			
+			//Fuer jeden Eintrag im Suchergebnis wird nun ein Objekt erstellt
+		    Auspraegung a = new Auspraegung();
+		    a.setWert("wert");
+		    
 			//While Schleife für das Durchlaufen vieler Zeilen
 			//Schreiben der Objekt-Attribute aus ResultSet
 			while (rs.next()) {
 				
-				Auspraegung a = new Auspraegung();
-				a.setId(rs.getInt("id"));
-				a.setWert(rs.getString("wert"));	
-				a.setEigenschaftId(rs.getInt("eigenschaftid"));	
-				a.setKontaktId(rs.getInt("kontaktid"));
-
-
+				Kontakt k = new Kontakt();
+				k.setId(rs.getInt("id"));
+			    k.setVorname(rs.getString("vorname"));
+			    k.setNachname(rs.getString("nachname"));
+			    k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
+			    k.setModDat(rs.getTimestamp("modifikationsdatum"));
+			    k.setOwnerId(rs.getInt("ownerid"));
+			  
 				//Statt return wird hier der Vektor erweitert
-				result.addElement(a);
+				result.addElement(k);
 				
 			}
 			

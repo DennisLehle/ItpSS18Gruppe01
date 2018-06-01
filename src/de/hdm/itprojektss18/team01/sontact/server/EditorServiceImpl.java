@@ -547,8 +547,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
-	 * Loeschen einer Kontaktliste. Eine Kontaktliste wird mit dem gesamten
-	 * Objektinhalt aus der DB entfernt.
+	 * Loeschen einer Kontaktliste. Eine Kontaktliste wird mit allen
+	 * zusammenhaengenden Objekten aus der DB entfernt.
 	 * 
 	 * @param Kontaktliste kl
 	 * @return void
@@ -1117,31 +1117,35 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		return klv;
 	}
-
 	
 	/**
-	 * Gibt alle geteilten Auspraegungen zu einem Kontakt k aus.
+	 * Gibt alle geteilten Auspraegungen zu einem geteilten Kontakt k mit einem Nutzer n aus.
 	 * 
-	 * @param kontaktlisteId
-	 * @return
+	 * @param Kontakt k, Nutzer n 
+	 * @return Vector<Auspraegung>
 	 */
-	public Vector<Auspraegung> getAllSharedAuspraegungenByKontakt(Kontakt k) {
+	public Vector<Auspraegung> getAllSharedAuspraegungenByKontaktAndNutzer(Kontakt k, Nutzer n) {
+		init();
 
 		Vector<Berechtigung> bv = this.bMapper.findAll();
-		Vector<Auspraegung> av = new Vector<Auspraegung>();
-
-		for (Berechtigung b : bv) {
-			if (bv != null && b.getType() == 'a') {
-				Auspraegung a = this.getAuspraegungById(b.getObjectId());
-				if (a.getKontaktId() == k.getId()) {
-					av.addElement(a);
+		Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(k.getId());
+		
+		Vector<Auspraegung> avshare = new Vector<Auspraegung>();
+		
+		for (Auspraegung a : av) {
+		
+			for (Berechtigung b : bv) {
+			
+				if (a.getId() == b.getObjectId() && b.getReceiverId() == n.getId()) {
+				
+					this.getAuspraegungById(a.getId());
+					avshare.addElement(a);
 				}
 			}
 		}
 
-		return av;
+		return avshare;
 	}
-	
 	
 	
 	

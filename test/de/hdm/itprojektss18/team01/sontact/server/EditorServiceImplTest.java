@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import java.util.Vector;
 
 import org.junit.jupiter.api.Test;
+
+import com.google.gwt.editor.client.Editor;
 import com.google.gwt.junit.client.GWTTestCase;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
@@ -714,7 +716,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode shareObject();
 	 */
 	// CHECK
-
+	
 	public void shareObjectListe() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
@@ -758,10 +760,50 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test DeleteBerechtigung:
 	 * IMPL-Methode deleteBerechtigung();
 	 */
-	// CHECK
+	
 	public void deleteBerechtigung(Berechtigung berechtigung) {
+		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		Berechtigung b = new Berechtigung();		
+		Nutzer n1 = new Nutzer();
+		Nutzer n2 = new Nutzer();
+			n1.setId(1);
+			n2.setId(2);
+			
+		Kontaktliste kl = new Kontaktliste(); 
+			kl.setId(2);
+			kl.setOwnerId(n1.getId());	
+			
+		Kontakt k1 = new Kontakt(); 
+		k1.setId(3);
+			k1.setOwnerId(n1.getId());
+		
+		Kontakt k2 = new Kontakt(); 
+			k2.setId(2);
+			k2.setOwnerId(n1.getId());
+
+		KontaktlisteKontakt klk1 = new KontaktlisteKontakt(); 
+			klk1.setKontaktlisteId(kl.getId());
+			klk1.setKontaktId(k1.getId());
+		
+		KontaktlisteKontakt klk2 = new KontaktlisteKontakt(); 
+			klk2.setKontaktlisteId(kl.getId());
+			klk2.setKontaktId(k2.getId());
+
+		Auspraegung a1 = new Auspraegung(); 
+			a1.setId(7);
+			a1.setKontaktId(k1.getId());
+		Auspraegung a2 = new Auspraegung(); 
+			a2.setId(8);
+			a1.setKontaktId(k1.getId());
+			
+		Berechtigung b = new Berechtigung();
+		//b.setId(1);
+		b.setOwnerId(n1.getId());
+		b.setReceiverId(n2.getId());
+		b.setObjectId(kl.getId());
+		b.setType('l');
+		
+		editor.deleteBerechtigung(b);
 	}
 	
 
@@ -770,8 +812,14 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode getAllSharedKontakteByOwner();
 	 */
 	// CHECK
+	
 	public void getAllSharedKontakteByOwner ()  {
 
+		Nutzer n1 = new Nutzer();
+		Nutzer n2 = new Nutzer();
+			n1.setId(1);
+			n2.setId(2);
+			
 		Berechtigung b = new Berechtigung();
 		b.setOwnerId(1);
 		
@@ -805,7 +853,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		System.out.println(editor.getAllSharedKontakteByOwner(b.getOwnerId()));
+		System.out.println(editor.getAllSharedKontakteByOwner(n2.getId()));
 }
 
 	/**
@@ -813,8 +861,14 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode getAllSharedKontaktlistenByReceiver();
 	 **/
 	// CHECK
+	
 	public void getAllSharedKontakteByReceiver ()  {
 
+		Nutzer n1 = new Nutzer();
+		Nutzer n2 = new Nutzer();
+			n1.setId(1);
+			n2.setId(2);
+			
 		Berechtigung b = new Berechtigung();
 		b.setReceiverId(2);
 		
@@ -847,14 +901,10 @@ class EditorServiceImplTest extends GWTTestCase {
 			
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		System.out.println(editor.getAllSharedKontakteByReceiver(b.getReceiverId()));
+		System.out.println(editor.getAllSharedKontakteByReceiver(n2.getId()));
 			
 }
 
-//	public Vector<Berechtigung> getAllBerechtigungenByOwner(){
-//		
-//		
-//	}
 	
 	
 	/**
@@ -863,7 +913,13 @@ class EditorServiceImplTest extends GWTTestCase {
 	 */
 	//CHECK
 	
+ 
 	public void getAllSharedKontaktlistenByOwner() {
+		
+		Nutzer n1 = new Nutzer();
+		Nutzer n2 = new Nutzer();
+			n1.setId(1);
+			n2.setId(2);
 		
 		Berechtigung b = new Berechtigung();
 		b.setOwnerId(1);
@@ -883,7 +939,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		System.out.println(editor.getAllSharedKontaktlistenByOwner(b.getOwnerId()));
+		System.out.println(editor.getAllSharedKontaktlistenByOwner(1));
 		
 		}
 	
@@ -912,36 +968,36 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		System.out.println(editor.getAllSharedKontaktlistenByOwner(b.getReceiverId()));
+		System.out.println(editor.getAllSharedKontaktlistenByReceiver(2));
 		
 		}
 
 	
 	/**
-	 * Test getAllSharedKontakteBySharedKontaktlisten:
-	 * IMPL-Methode getAllSharedKontakteBySharedKontaktlisten();
+	 * Test getAllSharedAuspraegungenByKontakt:
+	 * IMPL-Methode getAllSharedAuspraegungenByKontakt();
 	 */
-	// UNCHECK
-	public void getAllSharedKontakteBySharedKontaktlisten ()  {
+	
+	@Test
+	public void getAllSharedAuspraegungenByKontaktAndNutzer() {
 
-		Berechtigung b = new Berechtigung();
-		b.setOwnerId(1);
-		
-		Kontaktliste kl = new Kontaktliste();
-		kl.setId(1);
-		kl.setOwnerId(1);
-		kl.setTitel(kl.getTitel());
-				
-		Vector<Kontakt> kv = new Vector<Kontakt>();
-		Kontakt k = new Kontakt();
-		k.setId(2);
-		k.setOwnerId(1);
-		kv.addElement(k);
-				
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		System.out.println(/* editor. */);
+		Nutzer n1 = new Nutzer();
+		Nutzer n2 = new Nutzer();
+			n1.setId(1);
+			n2.setId(2);
+			
+		Kontakt k1 = new Kontakt(); 
+		k1.setId(3);
+			k1.setOwnerId(n1.getId());
+			
+		System.out.println(editor.getAllSharedAuspraegungenByKontaktAndNutzer(k1, n2));
+			
 	}
+	
+	
+	
 
 }
 	

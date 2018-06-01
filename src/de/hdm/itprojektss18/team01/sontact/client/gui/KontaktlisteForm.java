@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
@@ -60,7 +61,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 			@Override
 			public void onSuccess(Kontaktliste result) {
-				
+
 				Nutzer n = new Nutzer();
 				n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 				n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
@@ -73,25 +74,27 @@ public class KontaktlisteForm extends VerticalPanel {
 				headerPanel.add(new HTML("<h2>Kontaktliste: <em>" + selectedKontaktliste.getTitel() + "</em></h2>"));
 
 				// Update-Button intanziieren und dem Panel zuweisen
-				Button editKontaktlisteBtn = new Button("<image src='/images/edit.png' width='20px' height='20px' align='center' /> bearbeiten");
+				Button editKontaktlisteBtn = new Button(
+						"<image src='/images/edit.png' width='20px' height='20px' align='center' /> bearbeiten");
 
 				// ClickHandler f�r das Updaten einer Kontaktliste
 				editKontaktlisteBtn.addClickHandler(new updateKontaktlisteClickHandler());
 				BtnPanel.add(editKontaktlisteBtn);
-				
+
 				// L�sch-Button instanziieren und dem Panel zuweisen
-				Button deleteKlBtn = new Button("<image src='/images/trash.png' width='20px' height='20px' align='center' />  löschen");
+				Button deleteKlBtn = new Button(
+						"<image src='/images/trash.png' width='20px' height='20px' align='center' />  löschen");
 				BtnPanel.add(deleteKlBtn);
 
 				// ClickHandler f�r das L�schen einer Kontaktliste
 				deleteKlBtn.addClickHandler(new deleteClickHandler());
 				BtnPanel.add(deleteKlBtn);
-				
-				Button addKontaktBtn = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' /> hinzufügen");
-				
+
+				Button addKontaktBtn = new Button(
+						"<image src='/images/user.png' width='20px' height='20px' align='center' /> hinzufügen");
+
 				addKontaktBtn.addClickHandler(new addKontaktClickHandler());
 				BtnPanel.add(addKontaktBtn);
-
 
 				vp.add(headerPanel);
 				vp.add(BtnPanel);
@@ -163,20 +166,77 @@ public class KontaktlisteForm extends VerticalPanel {
 		@Override
 		public void onClick(ClickEvent event) {
 			
-			Window.alert("Sind Sie sicher die Kontaktliste " + selectedKontaktliste.getTitel() + " löschen zu wollen?");
-			ev.deleteKontaktliste(selectedKontaktliste, new AsyncCallback<Void>() {
+			Window.alert(
+					"Sind Sie sicher die Kontaktliste " + selectedKontaktliste.getTitel() + " löschen zu wollen?");
 
-				@Override
-				public void onFailure(Throwable caught) {
-					caught.getMessage().toString();
-				}
+			Nutzer n = new Nutzer();
+			n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+			n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
-				@Override
-				public void onSuccess(Void result) {
-					Window.Location.reload();
-						}
-					});
-				}
+			// Wenn man nicht der Owner ist wird erst die Berechtigung entfernt.
+			if (n.getId() != selectedKontaktliste.getOwnerId()) {
+				// Nutzer Cookies setzen und dann per Nutzer holen.
+
+				ev.getABerechtigungByReceiver(n, new AsyncCallback<Berechtigung>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.getMessage().toString();
+
+					}
+
+					@Override
+					public void onSuccess(Berechtigung result) {
+						
+						ev.deleteBerechtigung(result, new AsyncCallback<Void>() {
+
+							@Override
+							public void onFailure(Throwable caught) {
+								caught.getMessage().toString();
+							}
+
+							@Override
+							public void onSuccess(Void result) {
+								//Kontaktliste wurde nun entfernt und wird ausgeblendet.
+								removeFromParent();
+							}
+							
+						});
+						removeFromParent();
+//						//Anschließent nach der Berehcitgungslöschung wird die Kontaktliste entfernt.
+//						ev.de(selectedKontaktliste, new AsyncCallback<Void>() {
+//
+//							@Override
+//							public void onFailure(Throwable caught) {
+//								caught.getMessage().toString();
+//							}
+//
+//							@Override
+//							public void onSuccess(Void result) {
+//								removeFromParent();
+//							}
+//						});
+
+					}
+
+				});
+
+				// Ist man Owner der Kontaktliste wird die Kontaktliste direkt gelöscht.
+			} else {
+				ev.deleteKontaktliste(selectedKontaktliste, new AsyncCallback<Void>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.getMessage().toString();
+					}
+
+					@Override
+					public void onSuccess(Void result) {
+
+					}
+				});
+			}
+		}
 	}
 
 	/**
@@ -214,19 +274,18 @@ public class KontaktlisteForm extends VerticalPanel {
 		}
 
 	}
-	
+
 	private class addKontaktClickHandler implements ClickHandler {
-	public void onClick(ClickEvent event) {
-		
-		Kontaktliste kl = selectedKontaktliste;
-		
-		RootPanel.get("content").add(new ShowKontakte(kl));
-		
+		public void onClick(ClickEvent event) {
+
+			Kontaktliste kl = selectedKontaktliste;
+
+			RootPanel.get("content").add(new ShowKontakte(kl));
+
+		}
+
 	}
-	
-	
-}
-	
+
 	/**
 	 * ClickHandler f�r das Updaten einer Kontaktliste
 	 * 

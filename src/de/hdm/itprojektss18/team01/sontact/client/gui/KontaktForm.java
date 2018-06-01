@@ -92,12 +92,12 @@ public class KontaktForm extends VerticalPanel {
 				editKontaktBtn.addClickHandler(new updateKontaktClickHandler());
 				BtnPanel.add(editKontaktBtn);
 				
-				// Update-Button intanziieren und dem Panel zuweisen
-				Button deleteBtn = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' /> löschen");
-
-				// ClickHandler f�r das Updaten eines Kontakts
-				deleteBtn.addClickHandler(new deleteKontaktFromKontaktlisteClickHandler());
-				BtnPanel.add(deleteBtn);
+//				// Update-Button intanziieren und dem Panel zuweisen
+//				Button deleteBtn = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' /> löschen");
+//
+//				// ClickHandler f�r das Updaten eines Kontakts
+//				deleteBtn.addClickHandler(new deleteKontaktFromKontaktlisteClickHandler());
+//				BtnPanel.add(deleteBtn);
 
 				// Panel fuer das Erstellungs- und Modifikationsdatum
 				VerticalPanel datePanel = new VerticalPanel();
@@ -217,136 +217,136 @@ public class KontaktForm extends VerticalPanel {
 
 	// ClickHandler
 	
-	public class deleteKontaktFromKontaktlisteClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-		
-	
-			
-			// Nutzer Cookies setzen und dann per Nutzer holen.
-			Nutzer n = new Nutzer();
-			n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
-			n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
-			Window.confirm("Das löschen hier löscht den Kontakt aus allen Kontaktlisten. Sind Sie sicher?");
-			/*
-			 * Wenn der KontaktOwner ungleich der Nutzer Id ist kann der Nutzer die
-			 * Berechtigung dafür auslesen und entfernen.
-			 */
-			if (selectedKontakt.getOwnerId() != n.getId()) {
-				Window.alert("Teilhaberschaft wird entfernt und Kontakt wird aus ihrer Kontaktliste entfernt..");
-				ev.getABerechtigungByReceiver(n, new AsyncCallback<Berechtigung>() {
-					
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert("Hoppala" + caught.toString());
-					}
-
-					@Override
-					public void onSuccess(Berechtigung result) {
-						Berechtigung b = result;
-
-						b.setReceiverId(n.getId());
-						b.setType('k');
-						b.setObjectId(selectedKontakt.getId());
-
-						// Berechtigungs-Objekt übergeben.
-						ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
-
-							@Override
-							public void onFailure(Throwable caught) {
-								caught.getMessage().toString();
-							}
-
-							@Override
-							public void onSuccess(Void result) {
-
-								/*
-								 * Kontaktliste anhand der KontaktlisteId des selektierten Kontaktes wird
-								 * herausgesucht.
-								 */
-								ev.findKontaktlisteByTitel(n, "Alle Kontakte", new AsyncCallback<Kontaktliste>() {
-
-									@Override
-									public void onFailure(Throwable caught) {
-										caught.getMessage().toString();
-
-									}
-
-									@Override
-									public void onSuccess(Kontaktliste result) {
-
-										// Kontakt wird aus der Kontaktliste entfernt.
-										ev.removeKontaktFromKontaktliste(result, selectedKontakt, new AsyncCallback<Void>() {
-
-											@Override
-											public void onFailure(Throwable caught) {
-												caught.getMessage().toString();
-
-											}
-
-											@Override
-											public void onSuccess(Void result) {
-												/*
-												 * Ab hier wurde die Berechtigung entfernt und der gewählte Kontakt
-												 * aus der Kontaktliste entfernt.
-												 */
-												Window.Location.reload();
-
-											}
-
-										});
-
-									}
-
-								});
-
-							}
-
-						});
-					}
-				});
-			} else {
-				/*
-				 * Wenn Nutzer Id == OwnerId des Kontaktes entspricht darf man den Kontakt
-				 * permanent entfernen. Und der Kontakt wird auch bei allen Nutzern aus den
-				 * Kontaktlisten entfernt.
-				 */
-				ev.getKontaktlisteById(selectedKontakt.getKontaktlisteId(), new AsyncCallback<Kontaktliste>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						caught.getMessage().toString();
-						
-					}
-
-					@Override
-					public void onSuccess(Kontaktliste result) {
-						
-						//Kontak
-						ev.removeKontaktFromKontaktliste(result, selectedKontakt, new AsyncCallback<Void>() {
-							@Override
-							public void onFailure(Throwable caught) {
-								caught.getMessage().toString();
-							}
-
-							@Override
-							public void onSuccess(Void result) {
-								Window.alert("EHy");
-								Window.Location.reload();
-								
-							}
-						});
-					}
-					
-				});
-				
-			}	
-		}		
-	}
-	
-	
-	
+//	public class deleteKontaktFromKontaktlisteClickHandler implements ClickHandler {
+//
+//		@Override
+//		public void onClick(ClickEvent event) {
+//		
+//	
+//			
+//			// Nutzer Cookies setzen und dann per Nutzer holen.
+//			Nutzer n = new Nutzer();
+//			n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+//			n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
+//			Window.confirm("Das löschen hier löscht den Kontakt aus allen Kontaktlisten. Sind Sie sicher?");
+//			/*
+//			 * Wenn der KontaktOwner ungleich der Nutzer Id ist kann der Nutzer die
+//			 * Berechtigung dafür auslesen und entfernen.
+//			 */
+//			if (selectedKontakt.getOwnerId() != n.getId()) {
+//				Window.alert("Teilhaberschaft wird entfernt und Kontakt wird aus ihrer Kontaktliste entfernt..");
+//				ev.getABerechtigungByReceiver(n, new AsyncCallback<Berechtigung>() {
+//					
+//					@Override
+//					public void onFailure(Throwable caught) {
+//						Window.alert("Hoppala" + caught.toString());
+//					}
+//
+//					@Override
+//					public void onSuccess(Berechtigung result) {
+//						Berechtigung b = result;
+//
+//						b.setReceiverId(n.getId());
+//						b.setType('k');
+//						b.setObjectId(selectedKontakt.getId());
+//
+//						// Berechtigungs-Objekt übergeben.
+//						ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
+//
+//							@Override
+//							public void onFailure(Throwable caught) {
+//								caught.getMessage().toString();
+//							}
+//
+//							@Override
+//							public void onSuccess(Void result) {
+//
+//								/*
+//								 * Kontaktliste anhand der KontaktlisteId des selektierten Kontaktes wird
+//								 * herausgesucht.
+//								 */
+//								ev.findKontaktlisteByTitel(n, "Alle Kontakte", new AsyncCallback<Kontaktliste>() {
+//
+//									@Override
+//									public void onFailure(Throwable caught) {
+//										caught.getMessage().toString();
+//
+//									}
+//
+//									@Override
+//									public void onSuccess(Kontaktliste result) {
+//
+//										// Kontakt wird aus der Kontaktliste entfernt.
+//										ev.removeKontaktFromKontaktliste(result, selectedKontakt, new AsyncCallback<Void>() {
+//
+//											@Override
+//											public void onFailure(Throwable caught) {
+//												caught.getMessage().toString();
+//
+//											}
+//
+//											@Override
+//											public void onSuccess(Void result) {
+//												/*
+//												 * Ab hier wurde die Berechtigung entfernt und der gewählte Kontakt
+//												 * aus der Kontaktliste entfernt.
+//												 */
+//												Window.Location.reload();
+//
+//											}
+//
+//										});
+//
+//									}
+//
+//								});
+//
+//							}
+//
+//						});
+//					}
+//				});
+//			} else {
+//				/*
+//				 * Wenn Nutzer Id == OwnerId des Kontaktes entspricht darf man den Kontakt
+//				 * permanent entfernen. Und der Kontakt wird auch bei allen Nutzern aus den
+//				 * Kontaktlisten entfernt.
+//				 */
+//				ev.getKontaktlisteById(selectedKontakt.getKontaktlisteId(), new AsyncCallback<Kontaktliste>() {
+//
+//					@Override
+//					public void onFailure(Throwable caught) {
+//						caught.getMessage().toString();
+//						
+//					}
+//
+//					@Override
+//					public void onSuccess(Kontaktliste result) {
+//						
+//						//Kontak
+//						ev.removeKontaktFromKontaktliste(result, selectedKontakt, new AsyncCallback<Void>() {
+//							@Override
+//							public void onFailure(Throwable caught) {
+//								caught.getMessage().toString();
+//							}
+//
+//							@Override
+//							public void onSuccess(Void result) {
+//								Window.alert("EHy");
+//								Window.Location.reload();
+//								
+//							}
+//						});
+//					}
+//					
+//				});
+//				
+//			}	
+//		}		
+//	}
+//	
+//	
+//	
 	
 	/**
 	 * ClickHandler zum Speichern eines neu angelegten Kontakts

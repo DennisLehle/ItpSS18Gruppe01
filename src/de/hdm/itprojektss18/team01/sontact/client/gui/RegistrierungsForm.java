@@ -15,9 +15,12 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
@@ -45,7 +48,7 @@ public class RegistrierungsForm extends VerticalPanel {
 	ScrollPanel sp = new ScrollPanel();
 
 	public RegistrierungsForm(Nutzer nutzer) {
-		k.setId(2);
+		
 
 		// RootPanel leeren damit neuer Content geladen werden kann.
 		RootPanel.get("content").clear();
@@ -113,38 +116,45 @@ public class RegistrierungsForm extends VerticalPanel {
 		@Override
 		public void onClick(ClickEvent event) {
 			
-			int count = kontaktFlex.getRowCount();
 			
-			while(count != 0) {
+			for (int i = 0; i < kontaktFlex.getRowCount(); i++) {
 				
-				TextBox eigenschaftTb = new TextBox();
-				TextBox auspraegungTb = new TextBox();
+				Eigenschaft e = new Eigenschaft();
+				Widget w = kontaktFlex.getWidget(i, 0);
+				if(w instanceof TextBox) {
+					if (!((TextBox) w).getValue().isEmpty()) {
+						e.setBezeichnung(((TextBox) w).getValue());
+					}
+				}
 				
-				eigenschaftTb = (TextBox) kontaktFlex.getWidget(count, 0);
-				auspraegungTb = (TextBox) kontaktFlex.getWidget(count, 1);
-				count--;
-				
-				ev.createAuspraegungForNewEigenschaft(eigenschaftTb.getText(), auspraegungTb.getText(), k,
-						new AsyncCallback<Void>() {
+				Auspraegung a = new Auspraegung();
+				Widget v = kontaktFlex.getWidget(i, 1);
+				if(v instanceof TextBox) {
+					if (!((TextBox)v).getValue().isEmpty()) {
+						a.setWert(((TextBox)v).getValue());
+					}
+				}
+					ev.createAuspraegungForNewEigenschaft(e.getBezeichnung(), a.getWert(), k,
+							new AsyncCallback<Void>() {
 
-							@Override
-							public void onFailure(Throwable caught) {
-								// TODO Auto-generated method stub
+								@Override
+								public void onFailure(Throwable caught) {
+									// TODO Auto-generated method stub
 
-							}
+								}
 
-							@Override
-							public void onSuccess(Void result) {
-								Window.alert("passt");
+								@Override
+								public void onSuccess(Void result) {
+									Window.alert("passt");
 
-							}
-						});
-				
+								}
+							});
+
+			
+
+			
 			}
-			
 
-
-			RootPanel.get("content").add(new KontaktForm());
 
 		}
 
@@ -167,13 +177,9 @@ public class RegistrierungsForm extends VerticalPanel {
 			kontaktFlex.setWidget(count, 1, txtBoxWert);
 			int count2 = kontaktFlex.getRowCount();
 			count = count2 + 1;
+		
 			
-			VerticalPanel vp = new VerticalPanel();
-			
-			vp.add(txtBoxEigenschaft);
-			vp.add(txtBoxWert);
-			
-			RootPanel.get("content").add(vp);
+			RootPanel.get("content").add(kontaktFlex);
 
 		}
 

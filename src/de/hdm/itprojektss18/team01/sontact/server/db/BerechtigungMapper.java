@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 
 /**
  * Die Klasse <code>BerechtigungMapper</code> bildet auf der Datenbank alle
@@ -121,26 +122,6 @@ public class BerechtigungMapper {
 			e2.printStackTrace();
 			
 		}
-
-//		// DBConnection herstellen
-//		Connection con = DBConnection.connection();
-//
-//		try {
-//			// SQL Statement wird der lokalen Variable ï¿½bergeben
-//			PreparedStatement prestmt = con.prepareStatement(
-//					" DELETE FROM Berechtigung WHERE"
-//						+ " ownerid = " + b.getOwnerId()
-//						+ " AND receiverid = " + b.getReceiverId() 
-//						+ " AND objectid = " + b.getObjectId() 		
-//						+ " AND type = '" + b.getType() + "'");
-//			
-//			
-//			// DELETE-Statement ausfï¿½hren
-//			prestmt.execute();
-//			
-//		} catch (SQLException e2) {
-//			e2.printStackTrace();
-//		}
 	}
 
 	/**
@@ -149,36 +130,49 @@ public class BerechtigungMapper {
 	 * @param berechtigung
 	 * @return void
 	 */
+	
 	public Berechtigung findById(int id) {
-
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
-
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM berechtigung WHERE id=? ORDER BY id";
+		
+		
 		try {
-
-			// SQL-Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Berechtigung WHERE id = " + id);
-
-			// SQL Statement wird als Query an die DB geschickt und
-			// in die Rï¿½ckgabe von rs gespeichert
-			ResultSet rs = prestmt.executeQuery();
-
-			Berechtigung b = new Berechtigung();
-
-			// Ergebnis-Tupel in Objekt umwandeln
-			if (rs.next()) {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, id);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next()) {
+				
+				//Ergebnis-Tupel in Objekt umwandeln
+				Berechtigung b = new Berechtigung();
+				
+				
+				//Setzen der Attribute den Datensätzen aus der DB entsprechend
 				b.setId(rs.getInt("id"));
 				b.setOwnerId(rs.getInt("ownerid"));
 				b.setReceiverId(rs.getInt("receiverid"));
-				b.setObjectId(rs.getInt("object"));
+				b.setObjectId(rs.getInt("objectid"));
 				b.setType(rs.getString("type").charAt(0));
+				
+				
+				return b;
 			}
-
-			return b;
-		} catch (SQLException e2) {
+		}
+		
+		catch (SQLException e2) {
+			
 			e2.printStackTrace();
 			return null;
 		}
+		
+		return null;
 	}
 	
 	

@@ -63,7 +63,9 @@ public class RegistrierungsForm extends VerticalPanel {
 
 		// Button addEigenschaftBtn = new Button();
 
-		// Button für den Abbruch der Erstellung.
+
+		// Button fï¿½r den Abbruch der Erstellung.
+
 		Button quitBtn = new Button("Abbrechen");
 		quitBtn.addClickHandler(new ClickHandler() {
 
@@ -165,6 +167,13 @@ public class RegistrierungsForm extends VerticalPanel {
 			kontaktFlex.setWidget(count, 1, txtBoxWert);
 			int count2 = kontaktFlex.getRowCount();
 			count = count2 + 1;
+			
+			VerticalPanel vp = new VerticalPanel();
+			
+			vp.add(txtBoxEigenschaft);
+			vp.add(txtBoxWert);
+			
+			RootPanel.get("content").add(vp);
 
 		}
 
@@ -206,6 +215,11 @@ public class RegistrierungsForm extends VerticalPanel {
 								BtnPanel.add(createEigenschaftBtn);
 								Button speichernBtn = new Button("speichern");
 								speichernBtn.addClickHandler(new EigenschaftenSpeichern());
+								BtnPanel.add(speichernBtn);
+								
+								RootPanel.get("content").add(headerPanel);
+								RootPanel.get("content").add(BtnPanel);
+
 
 							}
 

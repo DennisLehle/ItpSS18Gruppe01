@@ -165,9 +165,8 @@ public class KontaktlisteForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			
-			Window.alert(
-					"Sind Sie sicher die Kontaktliste " + selectedKontaktliste.getTitel() + " löschen zu wollen?");
+
+			Window.alert("Sind Sie sicher die Kontaktliste " + selectedKontaktliste.getTitel() + " löschen zu wollen?");
 
 			Nutzer n = new Nutzer();
 			n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
@@ -177,45 +176,45 @@ public class KontaktlisteForm extends VerticalPanel {
 			if (n.getId() != selectedKontaktliste.getOwnerId()) {
 				// Nutzer Cookies setzen und dann per Nutzer holen.
 
-				ev.getABerechtigungByReceiver(n, new AsyncCallback<Berechtigung>() {
+				/*
+				 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und 
+				 * wenn es eine Übereinstimmung gibt wird die Berechtigung entfernt.
+				 */
+				ev.getAllBerechtigungenByReceiver(n.getId(), new AsyncCallback<Vector<Berechtigung>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
 						caught.getMessage().toString();
-
 					}
 
 					@Override
-					public void onSuccess(Berechtigung result) {
-						
-						ev.deleteBerechtigung(result, new AsyncCallback<Void>() {
+					public void onSuccess(Vector<Berechtigung> result) {
+						Vector<Berechtigung> berecht = result;
 
-							@Override
-							public void onFailure(Throwable caught) {
-								caught.getMessage().toString();
-							}
+						for (int i = 0; i < berecht.size(); i++) {
 
-							@Override
-							public void onSuccess(Void result) {
-								//Kontaktliste wurde nun entfernt und wird ausgeblendet.
-								removeFromParent();
+							if (berecht.elementAt(i).getObjectId() == selectedKontaktliste.getId()) {
+								Berechtigung b = new Berechtigung();
+								b.setObjectId(selectedKontaktliste.getId());
+								b.setOwnerId(selectedKontaktliste.getOwnerId());
+								b.setReceiverId(n.getId());
+								b.setType(selectedKontaktliste.getType());
+
+								ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
+									@Override
+									public void onFailure(Throwable caught) {
+										caught.getMessage().toString();
+
+									}
+
+									@Override
+									public void onSuccess(Void result) {
+										Window.alert("Die Teilhaberschaft wurde aufgelöst.");
+									}
+								});
+
 							}
-							
-						});
-						removeFromParent();
-//						//Anschließent nach der Berehcitgungslöschung wird die Kontaktliste entfernt.
-//						ev.de(selectedKontaktliste, new AsyncCallback<Void>() {
-//
-//							@Override
-//							public void onFailure(Throwable caught) {
-//								caught.getMessage().toString();
-//							}
-//
-//							@Override
-//							public void onSuccess(Void result) {
-//								removeFromParent();
-//							}
-//						});
+						}
 
 					}
 
@@ -232,7 +231,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 					@Override
 					public void onSuccess(Void result) {
-
+						sontactTree.deleteKontaktliste(selectedKontaktliste);
 					}
 				});
 			}

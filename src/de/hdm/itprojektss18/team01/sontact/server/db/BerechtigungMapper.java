@@ -183,35 +183,43 @@ public class BerechtigungMapper {
 	 * @return void
 	 */
 	public Vector<Berechtigung> findAll() {
-
-		// DBConnection herstellen
-		Connection con = DBConnection.connection();
-
-		Vector<Berechtigung> result = new Vector<Berechtigung>();
-
+		
+		Connection con = null; 
+		PreparedStatement stmt = null; 
+		
+		String selectAll = "SELECT * FROM berechtigung";
+		
+		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
+		Vector <Berechtigung> result = new Vector<Berechtigung>();
+		Berechtigung b = new Berechtigung();
+		
 		try {
-
-			// SQL-Statement anlegen
-			PreparedStatement prestmt = con.prepareStatement("SELECT * FROM Berechtigung");
-
-			ResultSet rs = prestmt.executeQuery();
-			// Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectAll);
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			
+			//While Schleife für das Durchlaufen vieler Zeilen
+			//Schreiben der Objekt-Attribute aus ResultSet
 			while (rs.next()) {
-				Berechtigung b = new Berechtigung();
+				
 				b.setId(rs.getInt("id"));
 				b.setOwnerId(rs.getInt("ownerid"));
 				b.setReceiverId(rs.getInt("receiverid"));
 				b.setObjectId(rs.getInt("objectid"));
 				b.setType(rs.getString("type").charAt(0));
-
-				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
+				
+				//Statt return wird hier der Vektor erweitert
 				result.addElement(b);
 			}
-		} catch (SQLException e2) {
+		}
+		
+		catch (SQLException e2) {
 			e2.printStackTrace();
 		}
-
-		// Rï¿½ckgabe des Ergebnisvektors
+		
 		return result;
 	}
 

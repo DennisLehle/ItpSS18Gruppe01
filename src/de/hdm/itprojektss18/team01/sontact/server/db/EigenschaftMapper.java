@@ -188,8 +188,8 @@ public class EigenschaftMapper {
 				Eigenschaft e = new Eigenschaft();
 				
 				//Setzen der Attribute den Datensätzen aus der DB entsprechend
-				e.setId(rs.getInt(1));
-				e.setBezeichnung(rs.getString(2));
+				e.setId(rs.getInt("id"));
+				e.setBezeichnung(rs.getString("bezeichnung"));
 				
 				return e;
 			}
@@ -237,8 +237,8 @@ public class EigenschaftMapper {
 			while (rs.next()) {
 				
 				Eigenschaft e = new Eigenschaft();
-				e.setId(rs.getInt(1));
-				e.setBezeichnung(rs.getString(2));
+				e.setId(rs.getInt("id"));
+				e.setBezeichnung(rs.getString("bezeichnung"));
 				
 				//Statt return wird hier der Vektor erweitert
 				result.addElement(e);

@@ -294,7 +294,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		a.setWert("lisaluftig@outlook.de");
 		a.setKontaktId(3);
 		a.setEigenschaftId(14);
-		a.setOwnerId(1);
+
 
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -315,7 +315,6 @@ class EditorServiceImplTest extends GWTTestCase {
 		a.setWert("lisaluftig@outlook.de");
 		a.setKontaktId(3);
 		a.setEigenschaftId(14);
-		a.setOwnerId(1);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -466,7 +465,6 @@ class EditorServiceImplTest extends GWTTestCase {
 		a.setWert("38");
 		a.setEigenschaftId(e.getId());
 		a.setKontaktId(3);
-		a.setOwnerId(1);
 		
 		
 		//Anlegen der dazugeh�rigen Auspraegung		
@@ -717,16 +715,16 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * CHECK Melanie
 	 */
 	
-	public void deleteBerechtigung() {
-		
-		Berechtigung b = new Berechtigung();
-		b.setId(8);
-		b.setType('l');
-		
-		EditorServiceImpl editor = new EditorServiceImpl();
-		
-		editor.deleteBerechtigung(b);
-	}
+//	public void deleteBerechtigung() {
+//		
+//		Berechtigung b = new Berechtigung();
+//		b.setId(8);
+//		b.setType('l');
+//		
+//		EditorServiceImpl editor = new EditorServiceImpl();
+//		
+//		editor.deleteBerechtigung(b);
+//	}
 	
 	
 	/**
@@ -779,7 +777,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode deleteBerechtigung();
 	 */
 	
-	public void deleteBerechtigung(Berechtigung berechtigung) {
+	public void deleteBerechtigung() {
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		Nutzer n1 = new Nutzer();

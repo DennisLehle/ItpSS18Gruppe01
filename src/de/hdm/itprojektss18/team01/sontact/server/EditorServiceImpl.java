@@ -728,8 +728,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		a.setWert(wert);
 		a.setEigenschaftId(eigenschaftId);
 		a.setKontaktId(kontaktId);
-		a.setOwnerId(n.getId() 
-		);
 
 		a.setId(1);
 

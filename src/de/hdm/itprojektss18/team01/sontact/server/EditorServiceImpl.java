@@ -766,6 +766,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	// CHECK
 	public void shareObject(int ownerId, int receiverId, int objectId, char type) 
 			throws IllegalArgumentException {
+		
 		init();
 		if (type == 'l') {
 			this.createBerechtigung(ownerId, receiverId, objectId, type);

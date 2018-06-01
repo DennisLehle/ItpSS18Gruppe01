@@ -162,37 +162,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return null;
 	}
 
-//	/**
-//	 * Ein Nutzer wird mit all seinen hinterlegten Objekten aus der Datenbank geloescht.
-//	 * @param Nutzer 
-//	 * @return void
-//	 */
-//	public void deleteNutzer(Nutzer n) throws IllegalArgumentException {
-//		
-////		//Verkn�pfung aus Zwischentabelle KontaktlisteKontakt l�schen
-////		this.klkMapper.removeKontaktFromKontaktliste(kl, k);
-//
-//		// Alle Auspraegungen der Kontakte, welche im Eigentumsverhaeltnis mit
-//		// dem Nutzer stehen, aus der DB entfernen
-//		this.aMapper.deleteAllByOwner(n);
-//
-//		// Alle Kontakte, welche im Eigentumsverhaeltnis mit dem Nutzer stehen,
-//		// aus der DB entfernen
-//		this.kMapper.deleteAllByOwner(n);
-//
-//		// Alle Kontaktlisten, die im Eigentumsverhaeltnis mit dem Nutzer
-//		// stehen, aus der DB entfernen
-//		this.klMapper.deleteAllByOwner(n);
-//		
-//
-//		// Alle Von- + Mit- Berechtigungen aus der DB entfernen
-//		// TO-DO ...
-//
-//		// Loeschen des Nutzers
-//		this.nMapper.delete(n);
-//	}
 	
-	
+	/**
+	 * Ein Nutzer wird mit all seinen hinterlegten Objekten aus der Datenbank geloescht.
+	 * @param Nutzer 
+	 * @return void
+	 */	
 	public void deleteNutzer(Nutzer n) throws IllegalArgumentException {
 		
 		/* entfernt alle Berechtigungen auf Kontakt-, Kontaktlisten- oder Aupraegungs- Objekte,
@@ -720,7 +695,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	public Auspraegung createAuspraegung(String wert, int eigenschaftId, 
-			int kontaktId, Nutzer n) throws IllegalArgumentException {
+			int kontaktId) throws IllegalArgumentException {
 
 		init();
 
@@ -795,12 +770,14 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Eine neue Eigenschaft fuer eine neue Auspraegung setzen
 	 *
 	 */
-	public void createAuspraegungForNewEigenschaft(Eigenschaft e, Auspraegung a, Nutzer n) {
+	public void createAuspraegungForNewEigenschaft(String bezeichnung, String wert, Kontakt k)
+			throws IllegalArgumentException {
 
 		init();
 
-		this.createEigenschaft(e.getBezeichnung());
-		this.createAuspraegung(a.getWert(), e.getId(), a.getKontaktId(), n);
+		Eigenschaft e = this.createEigenschaft(bezeichnung);
+		this.createAuspraegung(wert, e.getId(), k.getId());
+		
 	}
 
 	public Eigenschaft getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException {
@@ -1217,6 +1194,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 	/*
 	 * ************************************************************************* **

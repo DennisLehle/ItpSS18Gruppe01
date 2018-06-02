@@ -51,17 +51,6 @@ public class RegistrierungsForm extends VerticalPanel {
 
 	ScrollPanel sp = new ScrollPanel();
 	
-	public static final ProvidesKey<Eigenschaft> KEY_PROVIDER = new ProvidesKey<Eigenschaft>() {
-		public Object getKey(Eigenschaft item) {
-			return item == null ? null : item.getId();
-		}
-	};
-	
-	public static final ProvidesKey<Auspraegung> KEY_PROVIDER1 = new ProvidesKey<Auspraegung>() {
-		public Object getKey(Auspraegung item) {
-			return item == null ? null : item.getId();
-		}
-	};
 
 	public RegistrierungsForm(Nutzer nutzer) {
 		
@@ -131,9 +120,6 @@ public class RegistrierungsForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			Vector<Eigenschaft> neu = new Vector<>();
-			Vector<Auspraegung> neue = new Vector<>();
-
 			
 			for (int i = 0; i < kontaktFlex.getRowCount(); i++) {
 				
@@ -149,18 +135,10 @@ public class RegistrierungsForm extends VerticalPanel {
 				Widget v = kontaktFlex.getWidget(i, 1);
 				if(v instanceof TextBox) {
 					if (!((TextBox)v).getValue().isEmpty()) {
-						a.setWert(((TextBox)v).getText());
+						a.setWert(((TextBox)v).getValue());
 					};
 						
 				}
-				
-				if(e.getBezeichnung()!=null) {
-					 neu.add(e);
-					 }
-				
-				if(a.getWert()!=null) {
-					 neue.add(a);
-					 }
 				
 				
 					ev.createAuspraegungForNewEigenschaft(e.getBezeichnung(), a.getWert(), k,

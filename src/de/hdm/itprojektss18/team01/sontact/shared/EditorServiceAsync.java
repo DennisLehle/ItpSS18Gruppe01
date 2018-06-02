@@ -28,6 +28,8 @@ public interface EditorServiceAsync {
 	
 	// Abschnitt Nutzer:
 	
+	void findNutzerById(int nutzerId, AsyncCallback<Nutzer> callback);
+	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createNutzer(String emailAddress);
 	 */
@@ -194,6 +196,9 @@ public interface EditorServiceAsync {
 
 	void sucheKontakt(String vorname, String nachname, String wert, String bezeichnung, Nutzer n,
 			AsyncCallback<Vector<Kontakt>> callback);
+
+
+	
 
 
 

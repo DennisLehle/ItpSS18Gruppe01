@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
@@ -51,6 +52,49 @@ public class NutzerMapper {
 	}
 
 	/**
+	 * Gibt einen Nutzer anhand der Id zurÃ¼ck.
+	 * 
+	 * @param id des Nutzers.
+	 * @return
+	 */
+	public Nutzer findNutzerById(int id) {
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String selectByKey = "SELECT * FROM nutzer WHERE id=?";
+		
+		
+		try {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, id);
+			
+			//Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next()) {
+				
+				//Ergebnis-Tupel in Objekt umwandeln
+				Nutzer n = new Nutzer();
+				
+				//Setzen der Attribute den Datensï¿½tzen aus der DB entsprechend
+				n.setId(rs.getInt("id"));
+				n.setEmailAddress(rs.getString("email"));
+				
+				return n;
+			}
+		} 
+		
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Einfuegen eines <code>Nutzer</code>-Objekts in die Datenbank. Dabei wird
 	 * auch der Primaerschluessel des uebergebenen Objekts geprueft und ggf.
 	 * berichtigt.
@@ -69,11 +113,11 @@ public class NutzerMapper {
 		PreparedStatement stmt = null;
 		
 		
-		//Query für die Abfrage der hoechsten ID (Primärschlüssel) in der Datenbank
+		//Query fï¿½r die Abfrage der hoechsten ID (Primï¿½rschlï¿½ssel) in der Datenbank
 		String maxIdSQL = "SELECT MAX(id) AS maxid FROM nutzer";
 		
 		
-		//Query für den Insert
+		//Query fï¿½r den Insert
 		String insertSQL = "INSERT INTO nutzer (id, email) VALUES (?,?)";		
 		
 		
@@ -103,7 +147,7 @@ public class NutzerMapper {
 		    stmt.setString(2, n.getEmailAddress());
 		    
 		    
-		    //INSERT-Query ausführen
+		    //INSERT-Query ausfï¿½hren
 		    stmt.executeUpdate();
 		    
 		    
@@ -116,7 +160,7 @@ public class NutzerMapper {
 	
 	
 	/**
-	 * Löschen eines NutzersObjekts aus der Datenbank.
+	 * Lï¿½schen eines NutzersObjekts aus der Datenbank.
 	 * @param n
 	 */
 	
@@ -174,7 +218,7 @@ public class NutzerMapper {
 				//Ergebnis-Tupel in Objekt umwandeln
 				Nutzer n = new Nutzer();
 				
-				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				//Setzen der Attribute den Datensï¿½tzen aus der DB entsprechend
 				n.setId(rs.getInt(1));
 				n.setEmailAddress(rs.getString(2));
 				

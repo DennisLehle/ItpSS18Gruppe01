@@ -109,6 +109,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * ABSCHNITT - Beginn: Methoden fuer Nutzer
 	 * *************************************************************************
 	 */
+
 	
 	/**
 	 * Erzeugen eines neuen Nutzers, dieser angelegt und anschlieï¿½end in der DB
@@ -163,6 +164,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 	
 	/**
+	 * Diese Methode identifiziert einen Nutzer anhand seiner Id.
+	 */
+	public Nutzer findNutzerById(int nutzerId) throws IllegalArgumentException{
+		return this.nMapper.findNutzerById(nutzerId);
+	}
+	/**
 	 * Ein Nutzer wird mit all seinen hinterlegten Objekten aus der Datenbank geloescht.
 	 * @param Nutzer 
 	 * @return void
@@ -192,7 +199,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		
 		/* entfernt alle Kontakte, welche mit dem Nutzer in einer Eigentumsbeziehung stehen 
 		 * sowie alle Auspraegungen eines jeden Kontaktes, 
-		 * alle Kontaktlisteneinträge und alle Berechtigungen auf den Kontakt
+		 * alle Kontaktlisteneintrï¿½ge und alle Berechtigungen auf den Kontakt
 		 */
 		Vector<Kontakt> kv = this.getAllKontakteByOwner(n);
 		if(kv != null) {
@@ -323,9 +330,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public void deleteKontakt(Kontakt k) throws IllegalArgumentException {
 
 		/*
-		 * zunächst Abruf aller Berechtgigungen: Abgleich aller Berechtigungen
-		 * (objektId) mit der Id des Kontaktes bei Übereinstummung entfernen der
-		 * Berechtigungen für den Kontakt mit allen zugehörigen Berechtigungen die
+		 * zunï¿½chst Abruf aller Berechtgigungen: Abgleich aller Berechtigungen
+		 * (objektId) mit der Id des Kontaktes bei ï¿½bereinstummung entfernen der
+		 * Berechtigungen fï¿½r den Kontakt mit allen zugehï¿½rigen Berechtigungen die
 		 * Auspraegungen des Kontaktes k
 		 */
 		Vector<Berechtigung> bv = this.bMapper.findAll();
@@ -470,10 +477,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public void deleteKontaktliste(Kontaktliste kl) throws IllegalArgumentException {
 		init();
 		
-		/* zunächst Abruf aller Berechtgigungen:
+		/* zunï¿½chst Abruf aller Berechtgigungen:
 		 * Abgleich aller Berechtigungen (objektId) mit der Id der Kontaktliste
-		 * bei Übereinstummung entfernen der Berechtigungen für die Kontaktliste mit allen 
-		 * zugehörigen Berechtigungen auf die Kontakte und Auspraegungen der Kontaktliste kl
+		 * bei ï¿½bereinstummung entfernen der Berechtigungen fï¿½r die Kontaktliste mit allen 
+		 * zugehï¿½rigen Berechtigungen auf die Kontakte und Auspraegungen der Kontaktliste kl
 		 */
 		Vector<Berechtigung> bv = this.bMapper.findAll();
 		for(Berechtigung b : bv) {
@@ -482,7 +489,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			}	
 		}
 
-		// entfernen alle Kontakt-Einträge der Kontaktliste kl aus <code>KontaktlisteKontakt</code>
+		// entfernen alle Kontakt-Eintrï¿½ge der Kontaktliste kl aus <code>KontaktlisteKontakt</code>
 		Vector<Kontakt> kv = klkMapper.findAllKontakteByKontaktliste(kl.getId());
 		if (kv != null) {
 			for (Kontakt k : kv) {
@@ -694,7 +701,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public void createAuspraegungForNewEigenschaft(String bezeichnung, String wert, Kontakt k)
 			throws IllegalArgumentException {
 
-		init();
+		//init();
 
 		Eigenschaft e = this.createEigenschaft(bezeichnung);
 		this.createAuspraegung(wert, e.getId(), k.getId());
@@ -1165,7 +1172,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	/**
-	 * Prüft über einen boolean, ob sich ein Objekt (Kontakt k, Kontaktliste l oder
+	 * Prï¿½ft ï¿½ber einen boolean, ob sich ein Objekt (Kontakt k, Kontaktliste l oder
 	 * Auspraegung a) sich in einem geteilten Status befindet.
 	 */
 	public boolean getStatusForObject(int objectId) throws IllegalArgumentException {

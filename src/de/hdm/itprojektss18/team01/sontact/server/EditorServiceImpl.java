@@ -106,39 +106,318 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	/*
 	 * ************************************************************************* 
-	 * ABSCHNITT - Beginn: Methoden fuer Nutzer
+	 * ABSCHNITT - Beginn Methoden fuer das Erstellen von Objekten: 
+	 * 
+	 * Nutzer
+	 * Kontakt + KontaktRegistrierung
+	 * Kontaktliste + KontaktlisteRegistrierung
+	 * Eigenschaft
+	 * Auspraegung + Auspraegung fuer neue Eigenschaft
+	 * Berechtigung
 	 * *************************************************************************
 	 */
 	
+	
 	/**
-	 * Erzeugen eines neuen Nutzers, dieser angelegt und anschlieï¿½end in der DB
-	 * gespeichert wird.
+	 * Erzeugen eines neuen Nutzers, dieser wird angelegt und anschliessend in der DB
+	 * gespeichert.
 	 * 
-	 * @param String
-	 *            emailAdress
+	 * @param String emailAdress
 	 * @return Nutzer
 	 */
-	public Nutzer createNutzer(String emailAddress) throws IllegalArgumentException {
+	
+	public Nutzer createNutzer(String emailAddress) 
+			throws IllegalArgumentException {
+		
 		init();
+		
+		// Das Erstellen eines Nutzerobjektes.
 		Nutzer nutzer = new Nutzer();
+		
+		// Hier wird die (vorausgesetzte) gMail-Adresse des Nutzers hinterlegt.
 		nutzer.setEmailAddress(emailAddress);
 
-		// Setzen einer vorlaeufigen Id, die in der DB nach Verfï¿½gbarkeit angepasst
-		// wird.
+		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der 
+		// naechst hoeheren ID angepasst wird.
 		nutzer.setId(1);
 
-		// Speichern eines Nutzers in der DB.
+		// Speichern und Eintragen des erstellten Nutzers in der DB.
 		return this.nMapper.insert(nutzer);
 	}
+	
+	
+	/**
+	 * Erzeugen eines neuen Kontakts, dieser wird angelegt und anschliessend in der DB
+	 * gespeichert. Der Kontakt wird automatisch der Default Kontaktliste eines Nutzers "Alle Kontakte"
+	 * zugeordnet und steht dem Nutzer nun zu weiteren Funktionen zur Verfuegung.
+	 * 
+	 * @param String vorname
+	 * @param String nachname
+	 * @param Nutzer n
+	 * @return void
+	 */
+	
+	public void createKontakt(String vorname, String nachname, Nutzer n) 
+			throws IllegalArgumentException {
+		
+		init();
+		
+		// Das Erstellen eines Kontakt Objektes mit Vor- und Nachnamen.
+		Kontakt k = new Kontakt();
+		k.setVorname(vorname);
+		k.setNachname(nachname);
+		
+		// Setzen des Erstellungsdatums vom Typ Date. 
+		k.setErstellDat(new Timestamp(System.currentTimeMillis()));
+		
+		// Zeitgleiches setzen des Modifikationsdatums vom Typ Date. 
+		k.setModDat(new Timestamp(System.currentTimeMillis()));
+		
+		// Das Setzen der Owner-ID nach dem eingeloggten Nutzer.
+		k.setOwnerId(n.getId());
+		
+		// Kontakt wird mit einem Objektypen vom Datentyp Char gekennzeichnet.
+		k.setIdentifier('k');
+		
+		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der 
+		// naechst hoeheren ID angepasst wird.	 
+		k.setId(1);
+
+		// Kontaktliste und Kontakt werden der Zwischentabelle hinzugefuegt.
+		this.addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Alle Kontakte"), 
+				kMapper.insert(k));
+	}
+	
+	
+	/**
+	 * Erzeugen eines neuen Kontakts für den Nutzers bei der Systemregistrierung. 
+	 * Dieser Kontakt stellt eine Art "Visitenkarte" des eingeloggten Nutzers dar, 
+	 * die er mit seinen Kontaktdaten nach belieben befüllen kann.
+	 * Gleichzeitig wird die Default Kontaktliste "Alle Kontakte" angelegt, 
+	 * worin der Kontakt und alle weiteren, die vom Nutzer angelegt werden, gespeichert sind.
+	 * 
+	 * @param String vorname 
+	 * @param String nachname
+	 * @param Nutzer n 
+	 * @return Kontakt k1
+	 */
+	
+	public Kontakt createKontaktRegistrierung(String vorname, String nachname, Nutzer n)
+			throws IllegalArgumentException {
+		
+		init();
+		
+		// Das Erstellen eines Kontakt Objektes mit Vor- und Nachnamen.
+		Kontakt kontakt = new Kontakt();
+		kontakt.setVorname(vorname);
+		kontakt.setNachname(nachname);
+		
+		// Setzen des Erstellungsdatums vom Typ Date. 
+		kontakt.setErstellDat(new Timestamp(System.currentTimeMillis()));
+		
+		// Zeitgleiches setzen des Modifikationsdatums vom Typ Date. 
+		kontakt.setModDat(new Timestamp(System.currentTimeMillis()));
+		
+		// Das Setzen der Owner-ID nach dem eingeloggten Nutzer.
+		kontakt.setOwnerId(n.getId());
+		
+		// Kontakt wird mit einem Objektypen vom Datentyp Char gekennzeichnet.
+		kontakt.setIdentifier('r');
+
+		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der 
+		// naechst hoeheren ID angepasst wird.
+		kontakt.setId(1);
+		
+		// Speichern und Eintragen des erstellten Kontakts in der DB.
+		this.kMapper.insert(kontakt);
+
+		// Gespeicherter Kontakt nach Objekttypen <'r'> auslesen.
+		Kontakt k = getOwnKontakt(n);
+
+		// Erzeugung der Default-Kontaktliste <Alle Kontakte>.
+		createKontaktlisteRegistrierung(n);
+
+		// Kontaktliste und Kontakt der Zwischentabelle hinzufuegen.
+		addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Alle Kontakte"), k);
+
+		return k;
+	}
+	
+	
+	/**
+	 * Erzeugen einer neuen Kontaktliste, diese wird angelegt und anschliessend in der DB
+	 * gespeichert. Die Kontaktliste steht dem Nutzer nun zu weiteren Funktionen zur Verfuegung.
+	 * 
+	 * @param String titel
+	 * @param Nutzer n 
+	 * @return Kontaktliste
+	 */
+	
+	public Kontaktliste createKontaktliste(String titel, Nutzer n) 
+			throws IllegalArgumentException {
+		
+		init();
+		
+		// Das Erstellen eines Kontaktlisten Objektes mit Titel und Owner-ID.
+		Kontaktliste kl = new Kontaktliste();
+		kl.setTitel(titel);
+		kl.setOwnerId(n.getId());
+		
+		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der 
+		// naechst hoeheren ID angepasst wird.
+		kl.setId(1);
+		
+		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
+		return this.klMapper.insert(kl);
+	}
+	
 
 	/**
-	 * Nutzer
+	 * Erzeugen der Default Kontaktliste "Alle Kontakte" des Nutzer. 
+	 * Diese wird angelegt und anschliessend in der DB gespeichert. 
+	 * Die Kontaktliste bildet den Speicherort aller angelegten Kontakte.
 	 * 
-	 * @param n
+	 * @param Nutzer n 
+	 * @return Kontaktliste
 	 */
-	// public void setNutzer(Nutzer n) throws IllegalArgumentException {
-	// init(); nutzer = n;
-	// }
+	
+	public Kontaktliste createKontaktlisteRegistrierung(Nutzer n) 
+			throws IllegalArgumentException {
+		
+		init();
+		
+		// Das Erstellen eines Kontaktlisten Objektes mit Titel "Alle Kontakte" und Owner-ID.
+		Kontaktliste kl = new Kontaktliste();
+		kl.setTitel("Alle Kontakte");
+		kl.setOwnerId(n.getId());
+		
+		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der 
+		// naechst hoeheren ID angepasst wird.
+		kl.setId(1);
+		
+		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
+		return this.klMapper.insert(kl);
+	}
+	
+	
+	/**
+	 * Erzeugen einer Eigenschaft, welche angelegt und anschliessend in der DB
+	 * gespeichert wird. Der Nutzer kann hiermit eigene Eigenschaften anlegen und mit Auspraegungen
+	 * vervollstaendigen.
+	 * 
+	 * @param String bezeichnung
+	 * @return Eigenschaft
+	 */
+	
+	public Eigenschaft createEigenschaft(String bezeichnung) 
+			throws IllegalArgumentException {
+		
+		init();
+
+		// Das Erstellen eines Eigenschaft Objektes mit Bezeichnung.
+		Eigenschaft e = new Eigenschaft();
+		e.setBezeichnung(bezeichnung);
+
+		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der 
+		// naechst hoeheren ID angepasst wird.
+		e.setId(1);
+
+		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
+		return this.eMapper.insert(e);
+	}
+
+	
+	/**
+	 * Erzeugen einer neuen Auspraegung, welche angelegt und anschliessend in der DB
+	 * gespeichert wird. Der Nutzer kann hiermit seine Kontakte mit Auspraegungen bereichern 
+	 * und erhaelt die Moeglichkeit "Kontaktinformationen" in Form von Auspraegungen zu hinterlegen.
+	 * 
+	 * @param String wert
+	 * @param int eigenschaftId
+	 * @param int kontaktId
+	 * @return Auspraegung
+	 */
+
+	public Auspraegung createAuspraegung(String wert, int eigenschaftId, 
+			int kontaktId) throws IllegalArgumentException {
+
+		init();
+
+		// Das Erstellen eines Auspraegung Objektes mit Wert, EigenschaftId und KontaktId.
+		Auspraegung a = new Auspraegung();
+		a.setWert(wert);
+		a.setEigenschaftId(eigenschaftId);
+		a.setKontaktId(kontaktId);
+
+		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der 
+		// naechst hoeheren ID angepasst wird.
+		a.setId(1);
+
+		// Anpassung des Modifikationsdatums des Kontakt Objektes
+		this.saveModifikationsdatum(a.getKontaktId());
+		
+		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
+		return this.aMapper.insert(a);
+	}
+	
+	
+	/**
+	 * Erzeugen einer neuen Auspraegung fuer eine vom Nutzer definierte Eigenschaft.
+	 * Diese wird angelegt und anschliessend in der DB gespeichert.
+	 * Der Nutzer kann hiermit in einem Zuge Eigenschaften anlegen und mit einem Auspraegungswert befuellen.
+	 * 
+	 * @param String bezeichnung
+	 * @param String wert
+	 * @param Kontakt k
+	 * @return void
+	 */
+	
+	public void createAuspraegungForNewEigenschaft(String bezeichnung, String wert, Kontakt k)
+			throws IllegalArgumentException {
+
+		init();
+		
+		// Erzeugen eines neuen Eigenschaft Objektes durch Aufruf der Methode <createEigenschaft>.
+		Eigenschaft e = this.createEigenschaft(bezeichnung);
+		
+		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
+		this.createAuspraegung(wert, e.getId(), k.getId());
+	}
+
+	
+	/**
+	 * Erstellung einer neuen Berechtigung. Es wird eine neue Berechtigung fuer
+	 * eine neue Teilhaberschaft an einem bestimmten Objekt erteilt.
+	 * 
+	 * @param int ownerId
+	 * @param int receiverId
+	 * @param int objectId
+	 * @param char type
+	 * @return Berechtigung
+	 */
+	
+	public Berechtigung createBerechtigung(int ownerId, int receiverId, int objectId, char type)
+			throws IllegalArgumentException {
+
+		init();
+
+		// Erzeugen eines neuen Berechtigung Objektes mit OwnerId, ReceiverId, ObjectId und Type.
+		Berechtigung b = new Berechtigung();
+		b.setId(1);
+		b.setOwnerId(ownerId);
+		b.setReceiverId(receiverId);
+		b.setObjectId(objectId);
+		b.setType(type);
+
+		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
+		return this.bMapper.insert(b);
+	}
+	
+	/*
+	 * ************************************************************************* 
+	 * ABSCHNITT - Ende: Methoden fuer das Erstellen von Objekten
+	 * *************************************************************************
+	 */
 
 	/**
 	 * Anhand der identifizierenden Emailaddresse wird der Nutzer ï¿½berprï¿½ft, ob 
@@ -227,79 +506,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * *************************************************************************
 	 */
 
-	/**
-	 * Erzeugen eines neuen Kontakts der direkt in die Default Kontaktliste des
-	 * jeweiligen Nutzers gespeichert wird ("Alle Kontakte").
-	 * @param String vorname
-	 * @param String nachname
-	 * @param Nutzer 
-	 * @return void
-	 * 
-	 */
-	public void createKontakt(String vorname, String nachname, Nutzer n) 
-			throws IllegalArgumentException {
-		init();
-		Kontakt kontakt = new Kontakt();
-		kontakt.setVorname(vorname);
-		kontakt.setNachname(nachname);
-		
-		//Setzen des Erstellungsdatums vom Typ Date. 
-		kontakt.setErstellDat(new Timestamp(System.currentTimeMillis()));
-		
-		//Zeitgleiches setzen des Modifikationsdatums vom Typ Date. 
-		kontakt.setModDat(new Timestamp(System.currentTimeMillis()));
-		kontakt.setOwnerId(n.getId());
-		
-		//Kontakt wird mit einem Objektypen vom Datentyp Char gekennzeichnet.
-		kontakt.setIdentifier('k');
-		
-		//Setzen einer vorlaeufigen Id, die in der DB nach Verfï¿½gbarkeit angepasst wird.		 
-		kontakt.setId(1);
 
-		// Kontaktliste und Kontakt werden der Zwischentabelle hinzugefuegt.
-		this.addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Alle Kontakte"), 
-				kMapper.insert(kontakt));
-		}
 
-	/**
-	 * Erzeugen eines neuen Kontakts bei der Systemregistrierung. Gleichzeitig wird eine 
-	 * Default-Kontaktliste angelegt, worin der Kontakt gespeichert wird. 
-	 * @param String vorname 
-	 * @param String nachname
-	 * @param Nutzer n 
-	 * @return Kontakt kontakt
-	 */
-	public Kontakt createKontaktRegistrierung(String vorname, String nachname, Nutzer n)
-			throws IllegalArgumentException {
-		init();
-		Kontakt kontakt = new Kontakt();
-		kontakt.setVorname(vorname);
-		kontakt.setNachname(nachname);
-		
-		//Setzen des Erstellungsdatums vom Typ Date. 
-		kontakt.setErstellDat(new Timestamp(System.currentTimeMillis()));
-		
-		//Zeitgleiches setzen des Modifikationsdatums vom Typ Date. 
-		kontakt.setModDat(new Timestamp(System.currentTimeMillis()));
-		kontakt.setOwnerId(n.getId());
-		
-		//Kontakt wird mit einem Objektypen vom Datentyp Char gekennzeichnet.
-		kontakt.setIdentifier('r');
 
-		kontakt.setId(1);
-		this.kMapper.insert(kontakt);
-
-		//Gespeicherter Kontakt nach Objekttypen <'r'> auslesen.
-		Kontakt k = getOwnKontakt(n);
-
-		//Erzeugung der Default-Kontaktliste <Alle Kontakte>.
-		createKontaktlisteRegistrierung(n);
-
-		// Kontaktliste und Kontakt der Zwischentabelle hinzufuegen.
-		addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Alle Kontakte"), k);
-
-		return k;
-	}
 
 	/**
 	 * Aktualisierung eines modifizierten Kontakts.
@@ -416,39 +625,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * ABSCHNITT - Beginn: Methoden fuer Kontaktlisten
 	 * *************************************************************************
 	 */
-	/**
-	 * Erzeugen einer neuen Kontaktliste.
-	 * @param String titel
-	 * @param Nutzer n 
-	 * @return Kontaktliste
-	 */
-	public Kontaktliste createKontaktliste(String titel, Nutzer n) throws IllegalArgumentException {
-		init();
-		Kontaktliste kontaktliste = new Kontaktliste();
-		kontaktliste.setTitel(titel);
-		kontaktliste.setOwnerId(n.getId());
-		
-		//Setzen einer vorlaeufigen Id, die in der DB nach Verfï¿½gbarkeit angepasst wird.		 
-		kontaktliste.setId(1);
-		return this.klMapper.insert(kontaktliste);
-	}
 
-	/**
-	 * Erzeugen der Default-Kontaktliste, die bei der Registrierung erstellt wird.
-	 * @param Nutzer n 
-	 * @return Kontaktliste
-	 */
-	public Kontaktliste createKontaktlisteRegistrierung(Nutzer n) {
-		init();
-		Kontaktliste kontaktliste = new Kontaktliste();
-		kontaktliste.setTitel("Alle Kontakte");
-		kontaktliste.setOwnerId(n.getId());
-		
-		//Setzen einer vorlaeufigen Id, die in der DB nach Verfï¿½gbarkeit angepasst wird.		 
-		kontaktliste.setId(1);
-		return this.klMapper.insert(kontaktliste);
-
-	}
 
 	/**
 	 * Speichern einer modifizierten Kontaktliste
@@ -548,19 +725,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * ABSCHNITT - Beginn: Methoden fuer Eigenschaft
 	 * *************************************************************************
 	 */
-	/**
-	 * Erzeugen einer Eigenschaft.
-	 */
-	public Eigenschaft createEigenschaft(String bezeichnung) throws IllegalArgumentException {
-		init();
 
-		Eigenschaft e = new Eigenschaft();
-		e.setBezeichnung(bezeichnung);
-
-		e.setId(1);
-
-		return this.eMapper.insert(e);
-	}
 
 	/**
 	 * Speichern einer modifizierten Eigenschaft.
@@ -618,27 +783,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * *************************************************************************
 	 */
 
-	/**
-	 * Erzeugen einer neuen Auspraegung.
-	 * 
-	 */
 
-	public Auspraegung createAuspraegung(String wert, int eigenschaftId, 
-			int kontaktId) throws IllegalArgumentException {
-
-		init();
-
-		Auspraegung a = new Auspraegung();
-		a.setWert(wert);
-		a.setEigenschaftId(eigenschaftId);
-		a.setKontaktId(kontaktId);
-
-		a.setId(1);
-
-		this.saveModifikationsdatum(a.getKontaktId());
-		return this.aMapper.insert(a);
-
-	}
 
 	/**
 	 * Speichern einer modifizierten Auspraegung.
@@ -691,15 +836,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Eine neue Eigenschaft fuer eine neue Auspraegung setzen
 	 *
 	 */
-	public void createAuspraegungForNewEigenschaft(String bezeichnung, String wert, Kontakt k)
-			throws IllegalArgumentException {
 
-		init();
-
-		Eigenschaft e = this.createEigenschaft(bezeichnung);
-		this.createAuspraegung(wert, e.getId(), k.getId());
-		
-	}
 
 	public Eigenschaft getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException {
 		return eMapper.findEigenschaftForAuspraegung(eigenschaftId);
@@ -723,33 +860,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * *************************************************************************
 	 */
 
-	/**
-	 * Erstellung einer neuen Berechtigung. Es wird eine neue Berechtigung fï¿½r
-	 * eine neue Teilhaberschaft an einem bestimmten Objekt erteilt.
-	 * 
-	 * @param ownerId
-	 * @param receiverId
-	 * @param objectId
-	 * @param type
-	 * @return
-	 * @throws IllegalArgumentException
-	 */
-	public Berechtigung createBerechtigung(int ownerId, int receiverId, 
-			int objectId, char type)
-			throws IllegalArgumentException {
 
-		init();
-
-		Berechtigung b = new Berechtigung();
-		b.setId(1);
-		b.setOwnerId(ownerId);
-		b.setReceiverId(receiverId);
-		b.setObjectId(objectId);
-		b.setType(type);
-
-		init();
-		return this.bMapper.insert(b);
-	}
 
 	/**
 	 * Es wird eine Berechtigung fï¿½r ein bestimmtes Objekt erteilt. Das
@@ -1209,6 +1320,21 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * ABSCHNITT Ende - Sonstiges
 	 * *************************************************************************
 	 */
+	
+	/*
+	 * ************************************************************************* **
+	 * Auskommentierte Methoden
+	 * *************************************************************************
+	 */
+	
+	/**
+	 * Nutzer
+	 * 
+	 * @param n
+	 */
+	// public void setNutzer(Nutzer n) throws IllegalArgumentException {
+	// init(); nutzer = n;
+	// }
 
 	
 

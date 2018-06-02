@@ -30,7 +30,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  * Zusätlich muss die Datenbank eingerichtet sein damit alles durchläuft bist zum DB Eintrag.
  * 
  * ACHTUNG:
- * Bitte aktuelle Datenbank aus dem Drive entnehmen (Sontact_V2)
+ * Bitte aktuelle Datenbank aus dem Drive entnehmen (sontact_V5)
  * 
  * 
  * Nutzung von JUnit kurze Erklärung:

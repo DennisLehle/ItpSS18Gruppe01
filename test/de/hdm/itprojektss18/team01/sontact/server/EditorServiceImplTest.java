@@ -30,7 +30,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  * Zusätlich muss die Datenbank eingerichtet sein damit alles durchläuft bist zum DB Eintrag.
  * 
  * ACHTUNG:
- * Bitte aktuelle Datenbank aus dem Drive entnehmen (Sontact_V2)
+ * Bitte aktuelle Datenbank aus dem Drive entnehmen (sontact_V5)
  * 
  * 
  * Nutzung von JUnit kurze Erklärung:
@@ -99,11 +99,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		Nutzer n = new Nutzer();
 		n.setId(3);
-		
-		Kontaktliste kl = new Kontaktliste();
-		
-		Kontakt k = new Kontakt();
-		
+			
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		editor.deleteNutzer(n);
@@ -275,7 +271,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		//Test Melanie
 		
-		editor.createAuspraegung("43", 18, 5, n);
+		editor.createAuspraegung("0715135858", 5, 4);
 		
 	}
 	
@@ -466,9 +462,12 @@ class EditorServiceImplTest extends GWTTestCase {
 		a.setEigenschaftId(e.getId());
 		a.setKontaktId(3);
 		
+		Kontakt k = new Kontakt();
+		k.setId(3);
+		
 		
 		//Anlegen der dazugeh�rigen Auspraegung		
-		editor.createAuspraegungForNewEigenschaft(e, a, n);
+		editor.createAuspraegungForNewEigenschaft(e.getBezeichnung(), a.getWert(), k);
 		}
 	
 		
@@ -652,21 +651,18 @@ class EditorServiceImplTest extends GWTTestCase {
 	 */
 	// CHECK
 	
-	
 	public void createBerechtigung() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		Nutzer n1 = new Nutzer();
-		n1.setId(1);
+		n1.setId(3);
 		
 		Nutzer n2 = new Nutzer();
 		n2.setId(2);
 				
 		Kontaktliste kl = new Kontaktliste();
-		kl.setId(1);
-		kl.setTitel("Geschaeft");
-		kl.setOwnerId(n1.getId());
+		kl.setId(6);
 						
 //		Kontaktliste kl1 = new Kontaktliste();
 //		kl1.setId(2);
@@ -685,8 +681,8 @@ class EditorServiceImplTest extends GWTTestCase {
 //		Kontakt k3 = new Kontakt();
 //		k3.setId(4);
 //		
-//		Kontakt k4 = new Kontakt();
-//		k4.setId(5);
+		Kontakt k4 = new Kontakt();
+		k4.setId(4);
 
 		
 //		Auspraegung a1 = new Auspraegung();
@@ -702,7 +698,7 @@ class EditorServiceImplTest extends GWTTestCase {
 //		editor.createBerechtigung(n1.getId(), n2.getId(), k1.getId(), k.getType());
 //		editor.createBerechtigung(n1.getId(), n2.getId(), k2.getId(), k.getType());
 //		editor.createBerechtigung(n1.getId(), n2.getId(), k3.getId(), k.getType());
-//		editor.createBerechtigung(n2.getId(), n1.getId(), k4.getId(), k4.getType());
+		editor.createBerechtigung(n1.getId(), n2.getId(), k4.getId(), k4.getType());
 		
 //		editor.createBerechtigung(n1.getId(), n2.getId(), a1.getId(), a1.getType());
 //		editor.createBerechtigung(n1.getId(), n2.getId(), a2.getId(), a2.getType());
@@ -732,44 +728,43 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode shareObject();
 	 */
 	// CHECK
-	
-	public void shareObjectListe() {
+
+	public void shareObject() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		Nutzer n1 = new Nutzer();
 		Nutzer n2 = new Nutzer();
-			n1.setId(1);
+			n1.setId(3);
 			n2.setId(2);
 			
-		Kontaktliste kl = new Kontaktliste(); 
-			kl.setId(2);
-			kl.setOwnerId(n1.getId());	
-			
+//		Kontaktliste kl = new Kontaktliste(); 
+//			kl.setId(6);
+//			
 		Kontakt k1 = new Kontakt(); 
-		k1.setId(3);
-			k1.setOwnerId(n1.getId());
-		
-		Kontakt k2 = new Kontakt(); 
-			k2.setId(2);
-			k2.setOwnerId(n1.getId());
-
-		KontaktlisteKontakt klk1 = new KontaktlisteKontakt(); 
-			klk1.setKontaktlisteId(kl.getId());
-			klk1.setKontaktId(k1.getId());
-		
-		KontaktlisteKontakt klk2 = new KontaktlisteKontakt(); 
-			klk2.setKontaktlisteId(kl.getId());
-			klk2.setKontaktId(k2.getId());
-
-		Auspraegung a1 = new Auspraegung(); 
-			a1.setId(7);
-			a1.setKontaktId(k1.getId());
-		Auspraegung a2 = new Auspraegung(); 
-			a2.setId(8);
-			a1.setKontaktId(k1.getId());
+		k1.setId(4);
+	
+//		
+//		Kontakt k2 = new Kontakt(); 
+//			k2.setId(2);
+//			k2.setOwnerId(n1.getId());
+//
+//		KontaktlisteKontakt klk1 = new KontaktlisteKontakt(); 
+//			klk1.setKontaktlisteId(kl.getId());
+//			klk1.setKontaktId(k1.getId());
+//		
+//		KontaktlisteKontakt klk2 = new KontaktlisteKontakt(); 
+//			klk2.setKontaktlisteId(kl.getId());
+//			klk2.setKontaktId(k2.getId());
+//
+//		Auspraegung a1 = new Auspraegung(); 
+//			a1.setId(7);
+//			a1.setKontaktId(k1.getId());
+//		Auspraegung a2 = new Auspraegung(); 
+//			a2.setId(8);
+//			a1.setKontaktId(k1.getId());
 			
-		editor.shareObject(n1.getId(), n2.getId(), kl.getId(), kl.getType());
+		editor.shareObject(n1.getId(), n2.getId(), k1.getId(), k1.getType());
 	}
 
 	/**
@@ -780,44 +775,48 @@ class EditorServiceImplTest extends GWTTestCase {
 	public void deleteBerechtigung() {
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		Nutzer n1 = new Nutzer();
-		Nutzer n2 = new Nutzer();
-			n1.setId(1);
-			n2.setId(2);
-			
-		Kontaktliste kl = new Kontaktliste(); 
-			kl.setId(2);
-			kl.setOwnerId(n1.getId());	
-			
-		Kontakt k1 = new Kontakt(); 
-		k1.setId(3);
-			k1.setOwnerId(n1.getId());
-		
-		Kontakt k2 = new Kontakt(); 
-			k2.setId(2);
-			k2.setOwnerId(n1.getId());
-
-		KontaktlisteKontakt klk1 = new KontaktlisteKontakt(); 
-			klk1.setKontaktlisteId(kl.getId());
-			klk1.setKontaktId(k1.getId());
-		
-		KontaktlisteKontakt klk2 = new KontaktlisteKontakt(); 
-			klk2.setKontaktlisteId(kl.getId());
-			klk2.setKontaktId(k2.getId());
-
-		Auspraegung a1 = new Auspraegung(); 
-			a1.setId(7);
-			a1.setKontaktId(k1.getId());
-		Auspraegung a2 = new Auspraegung(); 
-			a2.setId(8);
-			a1.setKontaktId(k1.getId());
-			
 		Berechtigung b = new Berechtigung();
-		//b.setId(1);
-		b.setOwnerId(n1.getId());
-		b.setReceiverId(n2.getId());
-		b.setObjectId(kl.getId());
-		b.setType('l');
+		b.setId(9);
+	
+		
+//		Nutzer n1 = new Nutzer();
+//		Nutzer n2 = new Nutzer();
+//			n1.setId(1);
+//			n2.setId(2);
+//			
+//		Kontaktliste kl = new Kontaktliste(); 
+//			kl.setId(2);
+//			kl.setOwnerId(n1.getId());	
+//			
+//		Kontakt k1 = new Kontakt(); 
+//		k1.setId(3);
+//			k1.setOwnerId(n1.getId());
+//		
+//		Kontakt k2 = new Kontakt(); 
+//			k2.setId(2);
+//			k2.setOwnerId(n1.getId());
+//
+//		KontaktlisteKontakt klk1 = new KontaktlisteKontakt(); 
+//			klk1.setKontaktlisteId(kl.getId());
+//			klk1.setKontaktId(k1.getId());
+//		
+//		KontaktlisteKontakt klk2 = new KontaktlisteKontakt(); 
+//			klk2.setKontaktlisteId(kl.getId());
+//			klk2.setKontaktId(k2.getId());
+//
+//		Auspraegung a1 = new Auspraegung(); 
+//			a1.setId(7);
+//			a1.setKontaktId(k1.getId());
+//		Auspraegung a2 = new Auspraegung(); 
+//			a2.setId(8);
+//			a1.setKontaktId(k1.getId());
+//			
+//		Berechtigung b = new Berechtigung();
+//		//b.setId(1);
+//		b.setOwnerId(n1.getId());
+//		b.setReceiverId(n2.getId());
+//		b.setObjectId(kl.getId());
+//		b.setType('l');
 		
 		editor.deleteBerechtigung(b);
 	}
@@ -831,7 +830,7 @@ class EditorServiceImplTest extends GWTTestCase {
 
 	public void getAllBerechtigungenByOwner() {
 		Nutzer n = new Nutzer();
-		n.setId(1);
+		n.setId(3);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -862,47 +861,11 @@ class EditorServiceImplTest extends GWTTestCase {
 	 */
 	// CHECK
 	
-	public void getAllSharedKontakteByOwner ()  {
-
-		Nutzer n1 = new Nutzer();
-		Nutzer n2 = new Nutzer();
-			n1.setId(1);
-			n2.setId(2);
-			
-		Berechtigung b = new Berechtigung();
-		b.setOwnerId(1);
-		
-		Vector<Kontakt> kv = new Vector<Kontakt>();
-
-		Kontakt k = new Kontakt();
-		k.setId(1);
-		k.setOwnerId(1);
-		kv.addElement(k);
-		
-		Kontakt k1 = new Kontakt();
-		k1.setId(2);
-		k1.setOwnerId(1);
-		kv.addElement(k1);
-		
-		Kontakt k2 = new Kontakt();
-		k2.setId(3);
-		k2.setOwnerId(1);
-		kv.addElement(k2);
-		
-		Kontakt k3 = new Kontakt();
-		k3.setId(4);
-		k3.setOwnerId(1);
-		kv.addElement(k3);
-		
-		Kontakt k4 = new Kontakt();
-		k4.setId(5);
-		k4.setOwnerId(2);
-		kv.addElement(k4);
-			
+	public void getAllSharedKontakteByOwner ()  {			
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		System.out.println(editor.getAllSharedKontakteByOwner(n2.getId()));
+		System.out.println(editor.getAllSharedKontakteByOwner(3));
 }
 
 	/**
@@ -912,45 +875,10 @@ class EditorServiceImplTest extends GWTTestCase {
 	// CHECK
 	
 	public void getAllSharedKontakteByReceiver ()  {
-
-		Nutzer n1 = new Nutzer();
-		Nutzer n2 = new Nutzer();
-			n1.setId(1);
-			n2.setId(2);
-			
-		Berechtigung b = new Berechtigung();
-		b.setReceiverId(2);
-		
-		Vector<Kontakt> kv = new Vector<Kontakt>();
-
-		Kontakt k = new Kontakt();
-		k.setId(1);
-		k.setOwnerId(1);
-		kv.addElement(k);
-		
-		Kontakt k1 = new Kontakt();
-		k1.setId(2);
-		k1.setOwnerId(1);
-		kv.addElement(k1);
-		
-		Kontakt k2 = new Kontakt();
-		k2.setId(3);
-		k2.setOwnerId(1);
-		kv.addElement(k2);
-		
-		Kontakt k3 = new Kontakt();
-		k3.setId(4);
-		k3.setOwnerId(1);
-		kv.addElement(k3);
-		
-		Kontakt k4 = new Kontakt();
-		k4.setId(5);
-		k4.setOwnerId(2);
-		kv.addElement(k4);
 			
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		System.out.println(editor.getAllSharedKontakteByReceiver(n2.getId()));
+		System.out.println(editor.getAllSharedKontakteByReceiver(2));
 			
 }
 
@@ -962,33 +890,15 @@ class EditorServiceImplTest extends GWTTestCase {
 	 */
 	//CHECK
 	
- 
+	
 	public void getAllSharedKontaktlistenByOwner() {
 		
 		Nutzer n1 = new Nutzer();
-		Nutzer n2 = new Nutzer();
-			n1.setId(1);
-			n2.setId(2);
-		
-		Berechtigung b = new Berechtigung();
-		b.setOwnerId(1);
-		
-		Vector<Kontaktliste> klv = new Vector<Kontaktliste>();
-
-		Kontaktliste kl = new Kontaktliste();
-		kl.setId(1);
-		kl.setOwnerId(1);
-		klv.addElement(kl);
-		
-		Kontaktliste kl1 = new Kontaktliste();
-		kl1.setId(2);
-		kl1.setOwnerId(1);
-		klv.addElement(kl1);
-		
+			n1.setId(3);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		System.out.println(editor.getAllSharedKontaktlistenByOwner(1));
+		System.out.println(editor.getAllSharedKontaktlistenByOwner(n1.getId()));
 		
 		}
 	
@@ -999,21 +909,6 @@ class EditorServiceImplTest extends GWTTestCase {
 	//CHECK
 	
 	public void getAllSharedKontaktlistenByReceiver() {
-		
-		Berechtigung b = new Berechtigung();
-		b.setReceiverId(1);
-		
-		
-		Vector<Kontaktliste> klv = new Vector<Kontaktliste>();
-
-		Kontaktliste kl = new Kontaktliste();
-		kl.setId(1);
-		klv.addElement(kl);
-		
-		Kontaktliste kl1 = new Kontaktliste();
-		kl1.setId(2);
-		klv.addElement(kl1);
-		
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -1029,19 +924,16 @@ class EditorServiceImplTest extends GWTTestCase {
 	
 	
 	public void getAllSharedAuspraegungenByKontaktAndNutzer() {
+		
+		Nutzer n = new Nutzer();
+		n.setId(2);
+		
+		Kontakt k = new Kontakt();
+		k.setId(4);
 
 		EditorServiceImpl editor = new EditorServiceImpl();
-		
-		Nutzer n1 = new Nutzer();
-		Nutzer n2 = new Nutzer();
-			n1.setId(1);
-			n2.setId(2);
 			
-		Kontakt k1 = new Kontakt(); 
-		k1.setId(3);
-			k1.setOwnerId(n1.getId());
-			
-		System.out.println(editor.getAllSharedAuspraegungenByKontaktAndNutzer(k1, n2));
+		System.out.println(editor.getAllSharedAuspraegungenByKontaktAndNutzer(k, n));
 			
 	}
 	

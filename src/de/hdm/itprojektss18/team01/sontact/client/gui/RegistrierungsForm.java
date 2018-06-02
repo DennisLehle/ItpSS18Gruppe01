@@ -65,7 +65,7 @@ public class RegistrierungsForm extends VerticalPanel {
 		gmailTb.setText(nutzer.getEmailAddress());
 		gmailTb.setEnabled(false);
 
-		Button addEigenschaftBtn = new Button();
+		
 
 		// Button f�r den Abbruch der Erstellung.
 		Button quitBtn = new Button("Abbrechen");
@@ -80,7 +80,7 @@ public class RegistrierungsForm extends VerticalPanel {
 		});
 
 		Button weiterBtn = new Button("Weiter");
-		weiterBtn.addClickHandler(new kontaktErstellenClickHandler());
+		weiterBtn.addClickHandler(new KontaktErstellenClickHandler());
 
 		BtnPanel.add(weiterBtn);
 		BtnPanel.add(quitBtn);
@@ -95,9 +95,6 @@ public class RegistrierungsForm extends VerticalPanel {
 		this.add(gmailTb);
 		this.add(vornameTxtBox);
 		this.add(nachnameTxtBox);
-
-		sp.add(kontaktFlex);
-		this.add(sp);
 
 		this.setSpacing(20);
 		BtnPanel.setSpacing(20);
@@ -161,7 +158,7 @@ public class RegistrierungsForm extends VerticalPanel {
 	 * ClickHandler zum Generieren von weiteren Auswahleigenschaften.
 	 */
 
-	private class auswahleigenschaftClickHandler implements ClickHandler {
+	private class AuswahleigenschaftClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
@@ -202,7 +199,7 @@ public class RegistrierungsForm extends VerticalPanel {
 	/**
 	 * ClickHandler zum Erzeugen von neuen Eigenschafts-Angaben
 	 */
-	private class eigenschaftClickHandler implements ClickHandler {
+	private class EigeneeigenschaftClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
@@ -246,7 +243,7 @@ public class RegistrierungsForm extends VerticalPanel {
 				}
 			});
 
-			RootPanel.get("content").add(kontaktFlex);
+			RootPanel.get("content").add(sp);
 
 		}
 
@@ -255,7 +252,7 @@ public class RegistrierungsForm extends VerticalPanel {
 	/**
 	 * ClickHandler zum Erstellen eines neu angelegten Kontakts
 	 */
-	public class kontaktErstellenClickHandler implements ClickHandler {
+	public class KontaktErstellenClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
@@ -279,27 +276,28 @@ public class RegistrierungsForm extends VerticalPanel {
 							public void onSuccess(Kontakt result) {
 								k = result;
 								RootPanel.get("content").clear();
+								
 								HorizontalPanel headerPanel = new HorizontalPanel();
 								headerPanel.add(new HTML("<h2>Kontakteigenschaften angeben</h2>"));
 
 								HorizontalPanel BtnPanel = new HorizontalPanel();
-
 								Button addEigenschaftBtn = new Button("Weitere Auswahleigenschaften");
-								Button createEigenschaftBtn = new Button("Eigenschaft erstellen");
-
-								addEigenschaftBtn.addClickHandler(new auswahleigenschaftClickHandler());
-								createEigenschaftBtn.addClickHandler(new eigenschaftClickHandler());
-
-								BtnPanel.add(addEigenschaftBtn);
-								BtnPanel.add(createEigenschaftBtn);
-
 								Button speichernBtn = new Button("speichern");
-								speichernBtn.addClickHandler(new EigenschaftenSpeichern());
+								Button createEigenschaftBtn = new Button("Eigenschaft erstellen");
+								BtnPanel.add(createEigenschaftBtn);
+								BtnPanel.add(addEigenschaftBtn);
 								BtnPanel.add(speichernBtn);
 
-								ListBox eigenschaftBox = new ListBox();
-								eigenschaftBox.getElement().setPropertyString("placeholder", "Auswahl");
-								TextBox wertBox = new TextBox();
+								addEigenschaftBtn.addClickHandler(new AuswahleigenschaftClickHandler());
+								createEigenschaftBtn.addClickHandler(new EigeneeigenschaftClickHandler());
+								speichernBtn.addClickHandler(new EigenschaftenSpeichern());
+								
+								RootPanel.get("content").add(headerPanel);
+								RootPanel.get("content").add(BtnPanel);
+								
+								sp.add(kontaktFlex);
+								RootPanel.get("content").add(sp);
+			
 
 								ev.getEigenschaftAuswahl(new AsyncCallback<Vector<Eigenschaft>>() {
 
@@ -312,30 +310,32 @@ public class RegistrierungsForm extends VerticalPanel {
 									@Override
 									public void onSuccess(Vector<Eigenschaft> result) {
 										if (result != null) {
+											
+											ListBox eigenschaftBox = new ListBox();
+											eigenschaftBox.getElement().setPropertyString("placeholder", "Auswahl");
+											TextBox wertBox = new TextBox();
 
 											for (int i = 0; i < result.size(); i++) {
 												eigenschaftBox.addItem(result.elementAt(i).getBezeichnung());
 
 											}
+											
+											kontaktFlex.setWidget(0, 0, eigenschaftBox);
+											kontaktFlex.setWidget(0, 1, wertBox);
 
+											kontaktFlex.setWidget(1, 0, eigenschaftBox);
+											kontaktFlex.setWidget(1, 1, wertBox);
+
+											kontaktFlex.setWidget(2, 0, eigenschaftBox);
+											kontaktFlex.setWidget(2, 1, wertBox);
+									
 										}
 
 									}
 								});
-
-								kontaktFlex.setWidget(0, 0, eigenschaftBox);
-								kontaktFlex.setWidget(0, 1, wertBox);
-
-								kontaktFlex.setWidget(1, 0, eigenschaftBox);
-								kontaktFlex.setWidget(1, 1, wertBox);
-
-								kontaktFlex.setWidget(2, 0, eigenschaftBox);
-								kontaktFlex.setWidget(2, 1, wertBox);
-
-								sp.add(kontaktFlex);
-								RootPanel.get("content").add(sp);
-								RootPanel.get("content").add(headerPanel);
-								RootPanel.get("content").add(BtnPanel);
+								
+						
+						
 
 							}
 

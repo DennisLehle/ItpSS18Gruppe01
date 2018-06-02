@@ -114,6 +114,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Eigenschaft
 	 * Auspraegung + Auspraegung fuer neue Eigenschaft
 	 * Berechtigung
+	 * 
 	 * *************************************************************************
 	 */
 	
@@ -147,9 +148,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	
 	/**
-	 * Erzeugen eines neuen Kontakts, dieser wird angelegt und anschliessend in der DB
-	 * gespeichert. Der Kontakt wird automatisch der Default Kontaktliste eines Nutzers "Alle Kontakte"
-	 * zugeordnet und steht dem Nutzer nun zu weiteren Funktionen zur Verfuegung.
+	 * Erzeugen eines neuen Kontakts, dieser wird angelegt und anschliessend 
+	 * in der DB gespeichert. Der Kontakt wird automatisch der Default Kontaktliste 
+	 * eines Nutzers "Alle Kontakte" zugeordnet und steht dem Nutzer nun 
+	 * zu weiteren Funktionen zur Verfuegung.
 	 * 
 	 * @param String vorname
 	 * @param String nachname
@@ -194,7 +196,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Dieser Kontakt stellt eine Art "Visitenkarte" des eingeloggten Nutzers dar, 
 	 * die er mit seinen Kontaktdaten nach belieben befüllen kann.
 	 * Gleichzeitig wird die Default Kontaktliste "Alle Kontakte" angelegt, 
-	 * worin der Kontakt und alle weiteren, die vom Nutzer angelegt werden, gespeichert sind.
+	 * worin der Kontakt des Nutzers und alle weiteren, 
+	 * die vom Nutzer angelegt werden, gespeichert sind.
 	 * 
 	 * @param String vorname 
 	 * @param String nachname

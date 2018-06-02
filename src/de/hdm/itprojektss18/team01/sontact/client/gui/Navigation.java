@@ -2,8 +2,11 @@ package de.hdm.itprojektss18.team01.sontact.client.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -20,12 +23,10 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 public class Navigation extends VerticalPanel {
 	
-	Label kontaktlisteLbl = new Label("Meine Kontaktlisten:");
 	
-	Button neueKontaktlisteBtn = new Button(
-			"<image src='/images/kontaktliste.png' width='20px' height='20px' align='center' /> Kontaktliste");
+	Button neueKontaktlisteBtn = new Button("<image src='/images/kontaktliste.png' width='25px' height='25px' align='center'/>" + "<image src='/images/plus.png' width=22px' height='22px' align='center' />");
 	
-	Button neuerKontaktBtn = new Button("<image src='/images/add-contacts.png' width='20px' height='20px' align='center' />");
+	Button neuerKontaktBtn = new Button("<image src='/images/user.png' width='25px' height='25px' align='center' />"+ "<image src='/images/plus.png' width=22px' height='22px' align='center' />");
 	/**
 	 * Konstruktor der Navigations-Klasse.
 	 */
@@ -57,8 +58,6 @@ public class Navigation extends VerticalPanel {
 
 		});
 		
-
-
 		neuerKontaktBtn.addClickHandler(new ClickHandler() {
 
 			
@@ -70,11 +69,20 @@ public class Navigation extends VerticalPanel {
 				
 			}
 		});
+		
+		//Das TreeViewModel dem ScrollPanel hinzufügen
 		sc.add(navTree);
-
-		this.add(kontaktlisteLbl);
+		
+		//Größe der Buttons setzen
+		neueKontaktlisteBtn.setPixelSize(140, 60); 
 		this.add(neueKontaktlisteBtn);
+		neuerKontaktBtn.setPixelSize(140, 60);
 		this.add(neuerKontaktBtn);
+		
+		//Header für die Kontaktlisten setzen.
+		this.add(new HTML("<center><h5>Meine Kontaktlisten</h5></center>"));
+	
+		//Das ScrollPanel dem VerticalPanel hinzufügen (this = der Klasse selbst)
 		this.add(sc);
 
 	}

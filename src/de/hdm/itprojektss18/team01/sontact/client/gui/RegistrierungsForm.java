@@ -1,11 +1,14 @@
 package de.hdm.itprojektss18.team01.sontact.client.gui;
 
+import java.util.Vector;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
@@ -16,6 +19,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.ProvidesKey;
 
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
@@ -46,6 +50,18 @@ public class RegistrierungsForm extends VerticalPanel {
 	FlexTable kontaktFlex = new FlexTable();
 
 	ScrollPanel sp = new ScrollPanel();
+	
+	public static final ProvidesKey<Eigenschaft> KEY_PROVIDER = new ProvidesKey<Eigenschaft>() {
+		public Object getKey(Eigenschaft item) {
+			return item == null ? null : item.getId();
+		}
+	};
+	
+	public static final ProvidesKey<Auspraegung> KEY_PROVIDER1 = new ProvidesKey<Auspraegung>() {
+		public Object getKey(Auspraegung item) {
+			return item == null ? null : item.getId();
+		}
+	};
 
 	public RegistrierungsForm(Nutzer nutzer) {
 		
@@ -115,7 +131,9 @@ public class RegistrierungsForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			
+			Vector<Eigenschaft> neu = new Vector<>();
+			Vector<Auspraegung> neue = new Vector<>();
+
 			
 			for (int i = 0; i < kontaktFlex.getRowCount(); i++) {
 				
@@ -124,16 +142,27 @@ public class RegistrierungsForm extends VerticalPanel {
 				if(w instanceof TextBox) {
 					if (!((TextBox) w).getValue().isEmpty()) {
 						e.setBezeichnung(((TextBox) w).getValue());
-					}
+					};
 				}
 				
 				Auspraegung a = new Auspraegung();
 				Widget v = kontaktFlex.getWidget(i, 1);
 				if(v instanceof TextBox) {
 					if (!((TextBox)v).getValue().isEmpty()) {
-						a.setWert(((TextBox)v).getValue());
-					}
+						a.setWert(((TextBox)v).getText());
+					};
+						
 				}
+				
+				if(e.getBezeichnung()!=null) {
+					 neu.add(e);
+					 }
+				
+				if(a.getWert()!=null) {
+					 neue.add(a);
+					 }
+				
+				
 					ev.createAuspraegungForNewEigenschaft(e.getBezeichnung(), a.getWert(), k,
 							new AsyncCallback<Void>() {
 
@@ -167,17 +196,46 @@ public class RegistrierungsForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			TextBox txtBoxEigenschaft = new TextBox();
-			txtBoxEigenschaft.getElement().setPropertyString("placeholder", "Eigenschaft bennenen...");
-			TextBox txtBoxWert = new TextBox();
-			txtBoxWert.getElement().setPropertyString("placeholder", "Wert eingeben...");
+			final DialogBox db = new DialogBox();
+			Label bezeichnung = new Label("Bezeichnung:");
+			Label wer = new Label("Wert:");
+			Button ok = new Button("OK");
+			TextBox bez = new TextBox();
+			TextBox wert = new TextBox();
+			FlexTable ft = new FlexTable();
+			ft.setWidget(0, 0, bezeichnung);
+			ft.setWidget(0, 1, wer);
+			ft.setWidget(1, 0, bez);
+			ft.setWidget(1, 1, wert);
+			ft.setWidget(2, 2, ok);
+			db.add(ft);
 
-			int count = kontaktFlex.getRowCount();
-			kontaktFlex.setWidget(count, 0, txtBoxEigenschaft);
-			kontaktFlex.setWidget(count, 1, txtBoxWert);
-			int count2 = kontaktFlex.getRowCount();
-			count = count2 + 1;
-		
+			db.center();
+			db.setAnimationEnabled(true);
+			db.setAutoHideEnabled(true);
+			db.show();
+			
+			ok.addClickHandler(new ClickHandler() {
+
+				@Override
+				public void onClick(ClickEvent event) {
+					if (bez.getValue().isEmpty() || wert.getValue().isEmpty()) {
+						Window.alert("Bitte beide Felder ausfüllen");
+					} else {
+						db.hide();
+						Eigenschaft eig = new Eigenschaft();
+						Auspraegung aus = new Auspraegung();
+						
+						eig.setBezeichnung(bez.getValue());
+						aus.setWert(wert.getValue());
+						
+						kontaktFlex.setWidget(kontaktFlex.getRowCount(), 0, bez);
+						kontaktFlex.setWidget(kontaktFlex.getRowCount() -1, 1, wert);
+						
+				
+					}
+				}
+			});
 			
 			RootPanel.get("content").add(kontaktFlex);
 

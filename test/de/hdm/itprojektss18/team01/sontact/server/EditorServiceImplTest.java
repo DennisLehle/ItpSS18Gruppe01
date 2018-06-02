@@ -30,7 +30,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  * Zusätlich muss die Datenbank eingerichtet sein damit alles durchläuft bist zum DB Eintrag.
  * 
  * ACHTUNG:
- * Bitte aktuelle Datenbank aus dem Drive entnehmen (Sontact_V2)
+ * Bitte aktuelle Datenbank aus dem Drive entnehmen (sontact_V5)
  * 
  * 
  * Nutzung von JUnit kurze Erklärung:
@@ -94,7 +94,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * Test Case für die L�schung eines Nutzers aus unserer Datenbank.
 	 * UNCHECK --> KontaktlisteKontaktMapper nicht ber�cksichtigt 
 	 */
-	@Test
+
 	public void deleteNutzer() {
 		
 		Nutzer n = new Nutzer();
@@ -650,7 +650,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode createBerechtigung();
 	 */
 	// CHECK
-
+	
 	public void createBerechtigung() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
@@ -662,7 +662,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		n2.setId(2);
 				
 		Kontaktliste kl = new Kontaktliste();
-		kl.setId(3);
+		kl.setId(6);
 						
 //		Kontaktliste kl1 = new Kontaktliste();
 //		kl1.setId(2);
@@ -682,7 +682,7 @@ class EditorServiceImplTest extends GWTTestCase {
 //		k3.setId(4);
 //		
 		Kontakt k4 = new Kontakt();
-		k4.setId(5);
+		k4.setId(4);
 
 		
 //		Auspraegung a1 = new Auspraegung();
@@ -728,7 +728,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode shareObject();
 	 */
 	// CHECK
-	
+
 	public void shareObject() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
@@ -738,12 +738,12 @@ class EditorServiceImplTest extends GWTTestCase {
 			n1.setId(3);
 			n2.setId(2);
 			
-		Kontaktliste kl = new Kontaktliste(); 
-			kl.setId(3);
+//		Kontaktliste kl = new Kontaktliste(); 
+//			kl.setId(6);
 //			
-//		Kontakt k1 = new Kontakt(); 
-//		k1.setId(3);
-//			k1.setOwnerId(n1.getId());
+		Kontakt k1 = new Kontakt(); 
+		k1.setId(4);
+	
 //		
 //		Kontakt k2 = new Kontakt(); 
 //			k2.setId(2);
@@ -764,7 +764,7 @@ class EditorServiceImplTest extends GWTTestCase {
 //			a2.setId(8);
 //			a1.setKontaktId(k1.getId());
 			
-		editor.shareObject(n1.getId(), n2.getId(), kl.getId(), kl.getType());
+		editor.shareObject(n1.getId(), n2.getId(), k1.getId(), k1.getType());
 	}
 
 	/**
@@ -776,7 +776,8 @@ class EditorServiceImplTest extends GWTTestCase {
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		Berechtigung b = new Berechtigung();
-		b.setId(10);
+		b.setId(9);
+	
 		
 //		Nutzer n1 = new Nutzer();
 //		Nutzer n2 = new Nutzer();

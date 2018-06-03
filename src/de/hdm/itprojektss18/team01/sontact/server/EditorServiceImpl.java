@@ -1173,7 +1173,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Vector<Kontakt> getKontakteByName(String name, Nutzer n) 
 			throws IllegalArgumentException {
 		init();
-		return this.kMapper.findKontaktByName(name, n);
+		return this.kMapper.findKontakteByName(name, n);
 	}
 	
 	/**
@@ -1186,10 +1186,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @return Vector<Kontakt>
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Kontakt> getKontakteByAuspraegung(String wert) 
+	public Vector<Kontakt> getKontakteByAuspraegung(String wert, Nutzer n) 
 			throws IllegalArgumentException {
 		
-		return this.kMapper.findKontaktByAuspraegung(wert);
+		return this.kMapper.findKontakteByAuspraegung(wert, n);
 	}
 
 	/**
@@ -1202,10 +1202,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @return Vector<Kontakt>
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Kontakt> getKontakteByEigenschaft(String bezeichnung) 
+	public Vector<Kontakt> getKontakteByEigenschaft(String bezeichnung, Nutzer n) 
 			throws IllegalArgumentException {
 		
-		return this.kMapper.findKontaktByEigenschaft(bezeichnung);
+		return this.kMapper.findKontakteByEigenschaft(bezeichnung, n);
 	}
 		
 	/**
@@ -1226,10 +1226,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			return this.getKontakteByName(testBoxWert, n);
 
 		} else if (listBoxWert == "auspraegung") {
-			return this.getKontakteByAuspraegung(testBoxWert);
+			return this.getKontakteByAuspraegung(testBoxWert, n);
 
 		} else if (listBoxWert == "eigenschaft") {
-			return this.kMapper.findKontaktByEigenschaft(testBoxWert);
+			return this.kMapper.findKontakteByEigenschaft(testBoxWert, n);
 			
 		} else
 

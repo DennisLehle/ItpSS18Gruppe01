@@ -210,14 +210,14 @@ class EditorServiceImplTest extends GWTTestCase {
 	}
 	
 
-	public void getKontaktByVorname() {
+	public void getKontaktByName() {
 		
 		Nutzer n = new Nutzer();
 		n.setId(1);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		System.out.println(editor.getKontaktByVorname("petra", n));
+		System.out.println(editor.getKontakteByName("petra", n));
 		
 	}
 	

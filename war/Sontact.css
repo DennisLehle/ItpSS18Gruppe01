@@ -11,7 +11,7 @@ PM> Install-Package bootstrap-Version 4.1.1
 
 
 /*
- * Richtlinien für die Seitenregelung
+ * Richtlinien fï¿½r die Seitenregelung
  */
 
 div {
@@ -273,6 +273,7 @@ h1 a {
 	width: 100px;
 	height: 50px;
 }
+
 
 .gwt-Big-Text {
 	font-size: 150%;

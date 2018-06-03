@@ -7,6 +7,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -23,7 +24,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 public class Navigation extends VerticalPanel {
 	
-	
+	HorizontalPanel hp = new HorizontalPanel();
 	Button neueKontaktlisteBtn = new Button("<image src='/images/kontaktliste.png' width='25px' height='25px' align='center'/>" + "<image src='/images/plus.png' width=22px' height='22px' align='center' />");
 	
 	Button neuerKontaktBtn = new Button("<image src='/images/user.png' width='25px' height='25px' align='center' />"+ "<image src='/images/plus.png' width=22px' height='22px' align='center' />");
@@ -74,10 +75,14 @@ public class Navigation extends VerticalPanel {
 		sc.add(navTree);
 		
 		//Größe der Buttons setzen
-		neueKontaktlisteBtn.setPixelSize(140, 60); 
-		this.add(neueKontaktlisteBtn);
-		neuerKontaktBtn.setPixelSize(140, 60);
-		this.add(neuerKontaktBtn);
+		neueKontaktlisteBtn.setPixelSize(100, 60); 
+		neueKontaktlisteBtn.setStyleName("Button");
+		hp.add(neueKontaktlisteBtn);
+		neuerKontaktBtn.setPixelSize(100, 60);
+		neuerKontaktBtn.setStyleName("Button");
+		hp.add(neuerKontaktBtn);
+		
+		this.add(hp);
 		
 		//Header für die Kontaktlisten setzen.
 		this.add(new HTML("<center><h5>Meine Kontaktlisten</h5></center>"));

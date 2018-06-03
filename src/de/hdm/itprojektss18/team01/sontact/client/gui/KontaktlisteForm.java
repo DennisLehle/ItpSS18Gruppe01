@@ -99,7 +99,7 @@ public class KontaktlisteForm extends VerticalPanel {
 				
 				//ClickHandler zum teilen von Kontaktlisten.
 				Button shareBtn = new Button(
-						"<image src='/images/share.png' width='30px' height='30px' align='center' /> teilen");
+						"<image src='/images/share.png' width='20px' height='20px' align='center' /> teilen");
 
 				shareBtn.addClickHandler(new shareKontaktlisteClickHandler());
 				BtnPanel.add(shareBtn);
@@ -238,6 +238,7 @@ public class KontaktlisteForm extends VerticalPanel {
 									@Override
 									public void onSuccess(Void result) {
 										Window.alert("Die Teilhaberschaft wurde aufgelöst.");
+										
 									}
 								});
 
@@ -259,7 +260,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 					@Override
 					public void onSuccess(Void result) {
-						sontactTree.deleteKontaktliste(selectedKontaktliste);
+						Window.Location.reload();
 					}
 				});
 			}

@@ -37,7 +37,7 @@ public class MessageBox {
         box.setText(header);
         box.setGlassEnabled(true);
         panel.add(new HTML(content));
-        final Button buttonClose = new Button("<image src='/images/ok.png' width='30px' height='30px' align='center' /> teilen");
+        final Button buttonClose = new Button("<image src='/images/ok.png' width='30px' height='30px' align='center' />");
         		
         buttonClose.addClickHandler(new ClickHandler() {
 			

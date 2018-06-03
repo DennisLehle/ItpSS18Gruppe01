@@ -28,6 +28,7 @@ public class Navigation extends VerticalPanel {
 	Button neueKontaktlisteBtn = new Button("<image src='/images/kontaktliste.png' width='25px' height='25px' align='center'/>" + "<image src='/images/plus.png' width=22px' height='22px' align='center' />");
 	
 	Button neuerKontaktBtn = new Button("<image src='/images/user.png' width='25px' height='25px' align='center' />"+ "<image src='/images/plus.png' width=22px' height='22px' align='center' />");
+	
 	/**
 	 * Konstruktor der Navigations-Klasse.
 	 */
@@ -81,7 +82,6 @@ public class Navigation extends VerticalPanel {
 		neuerKontaktBtn.setPixelSize(100, 60);
 		neuerKontaktBtn.setStyleName("Button");
 		hp.add(neuerKontaktBtn);
-		
 		this.add(hp);
 		
 		//Header für die Kontaktlisten setzen.

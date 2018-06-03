@@ -251,6 +251,13 @@ public class KontaktlisteForm extends VerticalPanel {
 
 				// Ist man Owner der Kontaktliste wird die Kontaktliste direkt gelöscht.
 			} else {
+				//Zusätzliche Prüfung ob es sich um eines der default Kontaktlisten handelt.
+				if(selectedKontaktliste.getTitel() == "Alle Kontakte" && selectedKontaktliste.getOwnerId() == n.getId()|| 
+						selectedKontaktliste.getTitel() == "Mit mir geteilte Kontakte" && selectedKontaktliste.getOwnerId() == n.getId()) {
+					
+					Window.alert("Tut uns leid, die Standard Listen können hier nicht gelöscht werden.");
+				}else {
+				//Wenn es nicht nicht um eine Standard Liste handelt kann sie gelöscht werden.
 				ev.deleteKontaktliste(selectedKontaktliste, new AsyncCallback<Void>() {
 
 					@Override
@@ -263,6 +270,7 @@ public class KontaktlisteForm extends VerticalPanel {
 						Window.Location.reload();
 					}
 				});
+				}
 			}
 		}
 	}

@@ -147,7 +147,7 @@ public class ShowKontaktliste extends VerticalPanel {
 		kontaktListenTable2.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
 		kontaktListenTable2.setWidth("80%", true);
 		kontaktListenTable2.setColumnWidth(NameDerKLColumn, "100px");
-		kontaktListenTable2.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Kontaktliste>createCheckboxManager());
+		kontaktListenTable2.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Kontaktliste>createDefaultManager());
 
 		ListDataProvider<Kontaktliste> dataProvider = new ListDataProvider<Kontaktliste>();
 
@@ -157,7 +157,7 @@ public class ShowKontaktliste extends VerticalPanel {
 		
 		this.add(kontaktListenTable2);
 		
-		this.addKontaktToKontaktliste = new Button("Kontaktliste hinzufügen");
+		this.addKontaktToKontaktliste = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' />" + "<image src='/images/kontaktliste.png' width='20px' height='20px' align='center' /> hinzufügen");
 
 		//Größe des ScrollPanels bestimmen plus in das ScrollPanel die CellTable hinzufügen.
 		sp.setSize("900px", "400px");

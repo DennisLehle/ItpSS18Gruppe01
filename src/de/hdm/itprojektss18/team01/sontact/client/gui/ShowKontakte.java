@@ -154,7 +154,7 @@ public class ShowKontakte extends VerticalPanel {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
+				caught.getMessage().toString();
 
 			}
 
@@ -168,7 +168,7 @@ public class ShowKontakte extends VerticalPanel {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
+						caught.getMessage().toString();
 
 					}
 
@@ -238,7 +238,7 @@ public class ShowKontakte extends VerticalPanel {
 		kontaktTable.setWidth("80%", true);
 		kontaktTable.setColumnWidth(vornameCol, "100px");
 		kontaktTable.setColumnWidth(nachnameCol, "200px");
-		kontaktTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Kontakt>createCheckboxManager());
+		kontaktTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Kontakt>createDefaultManager());
 
 		ListDataProvider<Kontakt> dataProvider = new ListDataProvider<Kontakt>();
 
@@ -254,7 +254,7 @@ public class ShowKontakte extends VerticalPanel {
 		 * den Kontakten.
 		 */
 		this.deleteKontakt = new Button(
-				"<image src='/images/trash.png' width='20px' height='20px' align='center' /> löschen");
+				"<image src='/images/user.png' width='20px' height='20px' align='center' /> löschen");
 		this.showKontakt = new Button(
 				"<image src='/images/user.png' width='20px' height='20px' align='center' /> anzeigen");
 		this.addKontaktToKontaktliste = new Button(
@@ -310,6 +310,9 @@ public class ShowKontakte extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				Kontakt k = selectionModel.getSelectedObject();
 				
+				if(k == null) {
+					MessageBox.alertWidget("Hinweis", "Bitte wählen Sie einen Kontakt zum löschen aus.");
+				}
 				Window.alert("Sind Sie sicher die Kontaktliste " + k.getVorname() + " " + k.getNachname() + " löschen zu wollen?");
 
 				Nutzer n = new Nutzer();
@@ -365,8 +368,12 @@ public class ShowKontakte extends VerticalPanel {
 
 					});
 
-					// Ist man Owner der Kontaktliste wird die Kontaktliste direkt gelöscht.
+					// Ist man Owner des Kontaktes kann er gelöscht werden.
 				} else {
+					//Zusätzliche Prüfung ob es sich um den eigenen Kontakt Handelt.
+					if(k.getOwnerId() == n.getId() && k.getIdentifier() == 'r') {
+						Window.alert("Tut uns leid, sie können Ihren Kontakt: "+ k.getVorname() +" "+ k.getNachname() + " nicht löschen.");
+					} else {
 					ev.deleteKontakt(k, new AsyncCallback<Void>() {
 
 						@Override
@@ -379,6 +386,7 @@ public class ShowKontakte extends VerticalPanel {
 							Window.Location.reload();
 						}
 					});
+					}
 				}
 
 			}
@@ -514,7 +522,7 @@ public class ShowKontakte extends VerticalPanel {
 		kontaktListenTable.setColumnWidth(nachnameColumn, "200px");
 
 		kontaktListenTable.setSelectionModel(selectionModel,
-				DefaultSelectionEventManager.<Kontakt>createCheckboxManager());
+				DefaultSelectionEventManager.<Kontakt>createDefaultManager());
 
 		ListDataProvider<Kontakt> dataProvider = new ListDataProvider<Kontakt>();
 
@@ -528,6 +536,7 @@ public class ShowKontakte extends VerticalPanel {
 		// Größse des ScrollPanels bestimmen.
 		sp.setSize("900px", "400px");
 
+	
 		this.add(sp);
 		this.add(hp);
 
@@ -539,6 +548,7 @@ public class ShowKontakte extends VerticalPanel {
 		 * Hier wird unterschieden zwischen Owner und Receiver. Ist man Owner kann man
 		 * den Kontakt permanent löschen wenn man der Receiver ist wird der Kontakt nur
 		 * aus der Kontaktliste entfernt.
+		 * Ausgenommen von der Löschung ist der eigene Kontakt und default Kontaktlisten.
 		 */
 		deleteKontaktFromKontaktliste.addClickHandler(new ClickHandler() {
 
@@ -601,6 +611,12 @@ public class ShowKontakte extends VerticalPanel {
 
 					// Ist man Owner der Kontaktliste wird die Kontaktliste direkt gelöscht.
 				} else {
+					//Zusätzliche Prüfung ob es sich um eines der default Kontaktlisten handelt.
+					if(kl.getTitel() == "Alle Kontakte" && kl.getOwnerId() == n.getId() ||
+							kl.getTitel() == "Mit mir geteilte Kontakte" && kl.getOwnerId() == n.getId() ) {
+						
+						Window.alert("Tut uns leid, die Standard Listen können hier nicht gelöscht werden.");
+					}else {
 					ev.deleteKontaktliste(kl, new AsyncCallback<Void>() {
 
 						@Override
@@ -614,6 +630,7 @@ public class ShowKontakte extends VerticalPanel {
 
 						}
 					});
+					}
 				}
 			}
 		});
@@ -725,7 +742,7 @@ public class ShowKontakte extends VerticalPanel {
 		kontaktTable.setWidth("80%", true);
 		kontaktTable.setColumnWidth(vornameCol, "100px");
 		kontaktTable.setColumnWidth(nachnameCol, "200px");
-		kontaktTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Kontakt>createCheckboxManager());
+		kontaktTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Kontakt>createDefaultManager());
 
 		ListDataProvider<Kontakt> dataProvider = new ListDataProvider<Kontakt>();
 

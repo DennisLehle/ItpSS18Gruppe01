@@ -82,11 +82,11 @@ public class KontaktMapper {
 		PreparedStatement stmt = null;
 		
 		
-		//Query für die Abfrage der hoechsten ID (Primärschlüssel) in der Datenbank
+		//Query fï¿½r die Abfrage der hoechsten ID (Primï¿½rschlï¿½ssel) in der Datenbank
 		String maxIdSQL = "SELECT MAX(id) AS maxid FROM kontakt";
 		
 		
-		//Query für den Insert
+		//Query fï¿½r den Insert
 		String insertSQL = "INSERT INTO kontakt (id, vorname, nachname, erstellungsdatum, modifikationsdatum, ownerid, identifier) VALUES (?,?,?,?,?,?,?)";		
 		
 		
@@ -121,7 +121,7 @@ public class KontaktMapper {
 		    stmt.setString(7, String.valueOf(k.getIdentifier()));
 		   
 		    
-		    //INSERT-Query ausführen
+		    //INSERT-Query ausfï¿½hren
 		    stmt.executeUpdate();
 		    
 		    
@@ -281,13 +281,14 @@ public class KontaktMapper {
 				//Ergebnis-Tupel in Objekt umwandeln
 				Kontakt k = new Kontakt();
 				
-				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				//Setzen der Attribute den Datensï¿½tzen aus der DB entsprechend
 				k.setId(rs.getInt("id"));
 				k.setVorname(rs.getString("vorname"));
 				k.setNachname(rs.getString("nachname"));
 				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
 				k.setModDat(rs.getTimestamp("modifikationsdatum"));
 				k.setOwnerId(rs.getInt("ownerid"));
+				k.setIdentifier(rs.getString("identifier").charAt(0));
 				
 				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
 				result.addElement(k);
@@ -335,7 +336,7 @@ public class KontaktMapper {
 				//Ergebnis-Tupel in Objekt umwandeln
 				Kontakt k = new Kontakt();
 				
-				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				//Setzen der Attribute den Datensï¿½tzen aus der DB entsprechend
 				k.setId(rs.getInt("id"));
 				k.setVorname(rs.getString("vorname"));
 				k.setNachname(rs.getString("nachname"));
@@ -389,7 +390,7 @@ public class KontaktMapper {
 				//Ergebnis-Tupel in Objekt umwandeln
 				Kontakt k = new Kontakt();
 				
-				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				//Setzen der Attribute den Datensï¿½tzen aus der DB entsprechend
 				k.setId(rs.getInt("id"));
 				k.setVorname(rs.getString("vorname"));
 				k.setNachname(rs.getString("nachname"));
@@ -427,7 +428,7 @@ public class KontaktMapper {
 		
 		String selectByKey = "SELECT * FROM kontakt WHERE vorname=? AND ownerid=? ORDER BY vorname";
 		
-		//Vector erzeugen, der die Kontaktdatensätze aufnehmen kann
+		//Vector erzeugen, der die Kontaktdatensï¿½tze aufnehmen kann
 		Vector <Kontakt> result = new Vector<Kontakt>();
 		
 		try {
@@ -440,7 +441,7 @@ public class KontaktMapper {
 			ResultSet rs = stmt.executeQuery();
 			
 			
-			//While Schleife für das Durchlaufen vieler Zeilen
+			//While Schleife fï¿½r das Durchlaufen vieler Zeilen
 			//Schreiben der Objekt-Attribute aus ResultSet
 			while (rs.next()) {
 				
@@ -485,7 +486,7 @@ public class KontaktMapper {
 		
 		String selectByName = "SELECT * FROM kontakt WHERE nachname =? AND ownerid=?  ORDER BY nachname";
 		
-		//Vector erzeugen, der die Kontaktdatensätze aufnehmen kann
+		//Vector erzeugen, der die Kontaktdatensï¿½tze aufnehmen kann
 		Vector <Kontakt> result = new Vector<Kontakt>();
 		
 		try {
@@ -498,7 +499,7 @@ public class KontaktMapper {
 			ResultSet rs = stmt.executeQuery();
 			
 			
-			//While Schleife für das Durchlaufen vieler Zeilen
+			//While Schleife fï¿½r das Durchlaufen vieler Zeilen
 			//Schreiben der Objekt-Attribute aus ResultSet
 			while (rs.next()) {
 				

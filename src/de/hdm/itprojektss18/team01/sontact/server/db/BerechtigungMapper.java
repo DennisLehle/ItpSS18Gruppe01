@@ -4,12 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Vector;
 
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 
 /**
  * Die Klasse <code>BerechtigungMapper</code> bildet auf der Datenbank alle

@@ -952,6 +952,21 @@ class EditorServiceImplTest extends GWTTestCase {
 	
 	
 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 	
 

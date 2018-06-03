@@ -4,14 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Vector;
 
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
@@ -254,71 +250,13 @@ public class KontaktMapper {
 		}
 	}
 
-
-	// ZUORDNUNG IM KLK-MAPPER (!)
-
 	/**
-	 * Zuordnung eines <code>Kontakt</code>-Objekts einer spezifische
-	 * <code>Kontaktliste</code>.
-	 * 
-	 * @param k
-	 *            der <code>Kontakt</code>, kl die <code>Kontaktliste</code>
-	 *
-	 *            public Kontakt addKontaktToKontaktliste(Kontakt k, Kontaktliste
-	 *            kl) { Connection con = DBConnection.connection();
-	 * 
-	 *            try { PreparedStatement prestmt = con.prepareStatement( //"UPDATE
-	 *            `Kontakt` SET`kontaktlisteid` = " + kl.getId() //+" WHERE `id` = "
-	 *            + k.getId()); "INSERT INTO KontaktlisteKontakt (kontaktlisteid,
-	 *            kontaktid) VALUES('" + kl.getId() + "', '" + k.getId() + "')");
-	 * 
-	 *            // Statement ausf�hren prestmt.execute(); } catch (SQLException
-	 *            e2) { e2.printStackTrace(); } return k;
-	 * 
-	 *            }
-	 * 
-	 **/
-	/**
-	 * Entfernen eines <code>Kontakt</code>-Objekts aus einer
-	 * <code>Kontaktliste</code>.
-	 * 
-	 * @param Id
-	 *            des Kontakts, kontaktlisteId der Kontaktliste in welche der
-	 *            Kontakt gespeichert ist.
-	 *
-	 *            public void removeKontaktFromKontaktliste(Kontakt k, Kontaktliste
-	 *            kl) { Connection con = DBConnection.connection();
-	 * 
-	 *            try { PreparedStatement prestmt = con.prepareStatement(
-	 * 
-	 *            //"UPDATE `Kontakt` SET `kontaktlisteid`= NULL WHERE `id`=" // +
-	 *            k.getId() // + " AND `kontaktlisteid`=" // + kl.getId());
-	 * 
-	 *            "DELETE FROM KontaktlisteKontakt WHERE kontaktlisteid= " +
-	 *            kl.getId() + " AND kontaktid= " + k.getId());
-	 * 
-	 *            // Statement ausf�hren prestmt.execute();
-	 * 
-	 *            }
-	 * 
-	 *            catch (SQLException e2){ e2.printStackTrace(); } }
-	 * 
-	 **/
-
-	/**
-	 * Auslesen aller Kontakte eines durch Fremdschl�ssel (ownerId) gegebenen
-	 * Kontakts.
-	 * 
-	 * @see findKontaktByNutzerId
-	 * @param int
-	 *            ownerId f�r zugeh�rige Kontakte
-	 * @return ein Vektor mit Kontakt-Objekten, die durch den gegebenen Nutzer
-	 *         repr�sentiert werden. Bei evtl. Exceptions wird ein partiell
-	 *         gef�llter oder ggf. auch leerer Vektor zur�ckgeliefert.
-	 * 
+	 * Gibt alle Kontakte des Nutzers aus. 
+	 * @param ownerId
+	 * @return
 	 */
 	
-	public Vector<Kontakt> findAllByOwner(int ownerId) {
+	public Vector<Kontakt> findAllByOwner(int nutzerId) {
 		
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -333,7 +271,7 @@ public class KontaktMapper {
 			
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
-			stmt.setInt(1, ownerId);
+			stmt.setInt(1, nutzerId);
 			
 			//Execute SQL Statement
 			ResultSet rs = stmt.executeQuery();
@@ -587,46 +525,87 @@ public class KontaktMapper {
 		return null;
 	}
 	
-	/**
-	 * Auslesen aller Kontakte eines durch Fremdschluessel (kontaktlistenId)
-	 * gegebenen Kontakts.
-	 * 
-	 * @see findKontaktByKontaktliste
-	 * @param int
-	 *            kontaktlistenId f�r zugeh�rige Kontakte
-	 * @return ein Vektor mit Kontakt-Objekten, die durch die gegebene Kontaktliste
-	 *         repr�sentiert werden. Bei evtl. Exceptions wird ein partiell
-	 *         gef�llter oder ggf. auch leerer Vektor zur�ckgeliefert.
-	 * 
-	 *
-	 * 
-	 *         public Vector<Kontakt> findKontaktByKontaktliste (int kontaktlisteId)
-	 *         { Connection con = DBConnection.connection();
-	 * 
-	 *         try { Vector<Kontakt> list = new Vector<Kontakt>();
-	 * 
-	 *         //SQL Statement anlegen PreparedStatement prestmt =
-	 *         con.prepareStatement( "SELECT * FROM kontakt WHERE kontaktlisteid=" +
-	 *         kontaktlisteId); //Statement muss noch angepasst werden, aufgrund der
-	 *         Zwischentabelle // "SELECT * FROM kontaktliste WHERE kontaktlisteid="
-	 *         // + kontaktlisteId);
-	 * 
-	 *         //Statement als Query an die DB schicken ResultSet result =
-	 *         prestmt.executeQuery();
-	 * 
-	 *         //Ergebnistuppel in Objekt umwandeln Kontakt k = new Kontakt(); while
-	 *         (result.next()){ k.setId(result.getInt("id"));
-	 *         k.setVorname(result.getString("vorname"));
-	 *         k.setNachname(result.getString("nachname"));
-	 *         k.setKontaktlisteId(result.getInt("kontaktlisteid"));
-	 *         k.setOwnerId(result.getInt("ownerid")); }
-	 * 
-	 *         return list;
-	 * 
-	 *         } catch (SQLException e2){ e2.printStackTrace(); } return null; }
-	 * 
-	 **/
 
+// Alternative: ##################################################################################################
+
+	/**
+	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach dem Namen und gibt diese zurueck. 
+	 * Hierbei wird Vor- und Nachname des Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
+	 * @param String name, Nutzer n
+	 * @return Vector<Kontakt>
+	 * 
+	 */
+	public Vector<Kontakt> findKontaktByName(String name, Nutzer n) {
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+//		String selectByName = "SELECT * FROM kontakt WHERE ownerid=? AND vorname like '%?%' OR nachname like '%?%' "
+//				+ "UNION "
+//				+ "SELECT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier "
+//				+ "FROM kontakt INNER JOIN berechtigung ON kontakt.id = berechtigung.objectid "
+//				+ "WHERE berechtigung.receiverid=? AND berechtigung.type = 'k' "
+//				+ "AND vorname like '%?%' OR nachname like '%?%'";
+
+		Vector<Kontakt> result = new Vector<Kontakt>();
+
+		try {
+
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(
+					"SELECT * FROM kontakt "
+					+ "WHERE ownerid = " + n.getId()
+					+ " AND vorname like '%" + name + "%' OR nachname like '%" + name + "%' "
+					+ "UNION "
+					+ "SELECT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier "
+					+ "FROM kontakt "
+					+ "INNER JOIN berechtigung "
+					+ "ON kontakt.id = berechtigung.objectid "
+					+ "WHERE berechtigung.receiverid = " + n.getId() + " AND berechtigung.type = 'k' "
+					+ "AND vorname like '%" + name + "%' OR nachname like '%" + name + "%'");
+			
+//			stmt.setInt(1, n.getId());
+//			stmt.setString(2, name);
+//			stmt.setString(3, name);
+//			stmt.setInt(4, n.getId());
+//			stmt.setString(5, name);
+//			stmt.setString(6, name);
+			
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				Kontakt k = new Kontakt();
+				k.setId(rs.getInt("id"));
+				k.setVorname(rs.getString("vorname"));
+				k.setNachname(rs.getString("nachname"));
+				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
+				k.setModDat(rs.getTimestamp("modifikationsdatum"));
+				k.setOwnerId(rs.getInt("ownerid"));
+
+				result.addElement(k);
+			}
+			
+			return result;
+		}
+		
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		
+		return null;
+	}
+
+// Alternative End ##############################################################################################
+
+	
+	
+	/**
+	 * Aktualisierung des Modifikationsdatums. 
+	 * 
+	 * @param id des Kontaktes
+	 * @return
+	 */
+	
 	public int updateModifikationsdatum(int id) {
 
 		Connection con = DBConnection.connection();

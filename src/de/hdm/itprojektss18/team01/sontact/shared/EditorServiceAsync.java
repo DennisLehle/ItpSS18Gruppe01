@@ -191,14 +191,7 @@ public interface EditorServiceAsync {
 	void getKontaktByNachname(String nachname, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
 
-	void getABerechtigungByReceiver(Nutzer n, AsyncCallback<Berechtigung> callback);
-
-
-	void sucheKontakt(String vorname, String nachname, String wert, String bezeichnung, Nutzer n,
-			AsyncCallback<Vector<Kontakt>> callback);
-
-
-	
+	void getKontakteByName(String name, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
 
 

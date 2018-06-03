@@ -31,10 +31,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Ein spezielles Nutzer-Objekt wird referenziert.
-	 */
-	private Nutzer nutzer = null;
+//	/**
+//	 * Ein spezielles Nutzer-Objekt wird referenziert.
+//	 */
+//	private Nutzer nutzer = null;
 
 	/**
 	 * Die Mapperklasse wird referenziert, die das Businessobject <Nutzer> mit der 
@@ -1158,21 +1158,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		return avshare;
 	}
-	
-	
-	
-	
-//	--> ?
-	
-//	/**
-//	 * Suchte für den Nutzer eine einzelne Berechtigung für einen einzelnen Kontakt heraus den
-//	 * er zuvor selektiert hat. Damit man ihn auch einzeln entfernen kann.
-//	 */
-//	public Berechtigung getABerechtigungByReceiver(Nutzer n) throws IllegalArgumentException {
-//		return this.bMapper.findASingleBerechtigung(n.getId());
-//	}
-	
-	
+		
 	
 	/*
 	 * ************************************************************************* 
@@ -1186,6 +1172,37 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * *************************************************************************
 	 */
 
+	/**
+	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach dem Namen und gibt diese zurueck. 
+	 * Hierbei wird Vor- und Nachname des Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
+	 * 
+	 * @param name, vom Nutzer uebergebener String
+	 * @param n Nutzer
+	 * @return Vector<Kontakt>
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Kontakt> getKontakteByName(String name, Nutzer n) throws IllegalArgumentException {
+		init();
+		return this.kMapper.findKontaktByName(name, n);
+	}
+	
+	
+	
+	public Vector<Kontakt> getKontakteByAuspraegung(String name, Nutzer n) throws IllegalArgumentException {
+		
+		// TODO
+		
+		return null;
+	}
+	
+	
+	
+	
+	
+	
+	// ###################################################################################
+	
+	
 	/**
 	 * Auslesen der Kontakte anhand des Vornamens. Bei der Eingabe eines Vornamens 
 	 * wird in der Ausgabe eine Liste an Kontakten zur�ckgegeben, die mit dem 
@@ -1307,19 +1324,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.kMapper.updateModifikationsdatum(id);
 	}
 	
-	@Override
-	public Vector<Kontakt> sucheKontakt(String vorname, String nachname, String wert, String bezeichnung, Nutzer n)
-			throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
-	// --> ?
-	@Override
-	public Berechtigung getABerechtigungByReceiver(Nutzer n) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	/*
 	 * ************************************************************************* **
 	 * ABSCHNITT Ende - Sonstiges

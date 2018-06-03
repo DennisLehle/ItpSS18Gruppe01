@@ -903,6 +903,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			}
 		} else if (type == 'k') {
 			this.createBerechtigung(ownerId, receiverId, objectId, type);
+		
+			Nutzer n = new Nutzer();
+			n.setId(receiverId);
+		
+			Kontakt k = new Kontakt();
+			k.setId(objectId);
+			
+			//Kontakt der Kontaktliste des Receivers hinzufügen die er abruft.
+			this.addKontaktToKontaktliste(this.findKontaktlisteByTitel(n, "Mit mir geteilte Kontakte"), k);
 			// -> Checkboxen?
 			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(objectId);
 			for (int a = 0; a < av.size(); a++) {

@@ -91,8 +91,8 @@ class EditorServiceImplTest extends GWTTestCase {
 	}
 	
 	/**
-	 * Test Case fÃ¼r die Löschung eines Nutzers aus unserer Datenbank.
-	 * UNCHECK --> KontaktlisteKontaktMapper nicht berücksichtigt 
+	 * Test Case fÃ¼r die Lï¿½schung eines Nutzers aus unserer Datenbank.
+	 * UNCHECK --> KontaktlisteKontaktMapper nicht berï¿½cksichtigt 
 	 */
 
 	public void deleteNutzer() {
@@ -105,6 +105,13 @@ class EditorServiceImplTest extends GWTTestCase {
 		editor.deleteNutzer(n);
 		
 	}
+	
+	public void share() {
+		EditorServiceImpl editor = new EditorServiceImpl();
+	
+		editor.shareObject(1, 2, 2, 'k');
+	}
+	
 	
 	/**
 	 * Test Case fÃ¼r das Auslesen eines Nutzers anhand seiner GMail Adresse.
@@ -423,7 +430,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		//Keine Instanziierung von Eigenschaftsobjekten für die Ausgabe notwendig.
+		//Keine Instanziierung von Eigenschaftsobjekten fï¿½r die Ausgabe notwendig.
 //		
 //		Eigenschaft e = new Eigenschaft();
 //		e.setId(3);
@@ -514,7 +521,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	}
 	
 	/**
-	 * Test Case fuer das Löschen einer Kontaktliste
+	 * Test Case fuer das Lï¿½schen einer Kontaktliste
 	 * CHECK MELANIE
 	 */
 	
@@ -728,21 +735,24 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode shareObject();
 	 */
 	// CHECK
-
+@Test
 	public void shareObject() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		Nutzer n1 = new Nutzer();
 		Nutzer n2 = new Nutzer();
-			n1.setId(3);
-			n2.setId(2);
+		//Yakup
+			n1.setId(2);
+			//Miescha
+			n2.setId(1);
 			
 //		Kontaktliste kl = new Kontaktliste(); 
 //			kl.setId(6);
 //			
 		Kontakt k1 = new Kontakt(); 
-		k1.setId(4);
+		k1.setId(5);
+		
 	
 //		
 //		Kontakt k2 = new Kontakt(); 
@@ -822,7 +832,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	}
 	
 	/**
-	 * Die Ausgabe aller Einträge in der Berechtigungstabelle nach der OwnerId
+	 * Die Ausgabe aller Eintrï¿½ge in der Berechtigungstabelle nach der OwnerId
 	 * IMPL-Methode getAllBerechtigungenByOwner();
 	 * CHECK
 	 */
@@ -839,7 +849,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	}
 	
 	/**
-	 * Die Ausgabe aller Einträge in der Berechtigungstabelle nach der ReceiverId
+	 * Die Ausgabe aller Eintrï¿½ge in der Berechtigungstabelle nach der ReceiverId
 	 * IMPL-Methode getAllBerechtigungenByReceiver();
 	 * CHECK
 	 */

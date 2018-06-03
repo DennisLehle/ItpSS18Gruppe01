@@ -18,8 +18,10 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
@@ -48,6 +50,8 @@ public class ShowKontakte extends VerticalPanel {
 	private CellTable<Kontakt> kontaktListenTable;
 	final SingleSelectionModel<Kontakt> selectionModel = new SingleSelectionModel<Kontakt>();
 	final ListDataProvider<Kontakt> dataProvider = new ListDataProvider<Kontakt>();
+	private ListBox search = new ListBox();
+	private TextBox searchEingabe = new TextBox();
 
 	/**
 	 * Buttons der Klasse deklarieren.
@@ -58,7 +62,7 @@ public class ShowKontakte extends VerticalPanel {
 	private Button deleteKontaktFromKontaktliste;
 	private Button showKontaktFromKontaktliste;
 	private Button addKontakt;
-
+	private Button searchBtn;
 
 	/**
 	 * Label für den Titel deklarieren.
@@ -70,6 +74,7 @@ public class ShowKontakte extends VerticalPanel {
 	 */
 	HorizontalPanel hp = new HorizontalPanel();
 	HorizontalPanel head = new HorizontalPanel();
+	HorizontalPanel headSearch = new HorizontalPanel();
 	ScrollPanel sp = new ScrollPanel();
 
 	/**
@@ -124,11 +129,10 @@ public class ShowKontakte extends VerticalPanel {
 	 * 
 	 */
 	public ShowKontakte(final Nutzer n, Kontaktliste kl) {
-		
+
 		// Methode die beim Start dieser Klasse aufgerufen wird.
 		showKontakteOfKontaktliste(n, kl);
 		hp.add(deleteKontaktFromKontaktliste);
-		
 
 	}
 
@@ -142,94 +146,49 @@ public class ShowKontakte extends VerticalPanel {
 
 		kontaktTable = new CellTable<Kontakt>();
 
-		// Alle geteilten Kontakte des Nutzers heraussuchen.
-		ev.getAllSharedKontakteByReceiver(n.getId(), new AsyncCallback<Vector<Kontakt>>() {
+		/**
+		 * Diese aufeinander folgenden Methoden rufen für den Nutzer die eigenen Kontakte
+		 * und die mit IHM geteilten Kontakte auf und führt sie in einer gemeinsamen Liste zusammen.
+		 */
+		ev.getAllKontakteByOwner(n, new AsyncCallback<Vector<Kontakt>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				caught.getMessage().toString();
+				// TODO Auto-generated method stub
 
 			}
 
-			// Ergebnis der Abfrage
+			// Alle Kontakte des Nutzers bei dem er der Owner ist werden der Table
+			// hinzugefügt.
 			@Override
-			public void onSuccess(Vector<Kontakt> sharedKontakte) {
+			public void onSuccess(Vector<Kontakt> ownKontakte) {
 
-				// Default Kontaktliste Abfragen.
-				ev.findKontaktlisteByTitel(n, "Alle Kontakte", new AsyncCallback<Kontaktliste>() {
+				// Holt alle Kontakte die mit dem Nutzer geteilt wurden.
+				ev.getAllSharedKontakteByReceiver(n.getId(), new AsyncCallback<Vector<Kontakt>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						caught.getMessage().toString();
+						// TODO Auto-generated method stub
 
 					}
 
+					// Alle geteilten Kontakte werden der Tabel hinzugefügt.
 					@Override
-					public void onSuccess(Kontaktliste defaultKontaktliste) {
+					public void onSuccess(Vector<Kontakt> sharedKontakte) {
+						// Leerer Vector für Zusammenführung erzeugen.
+						Vector<Kontakt> zsm = new Vector<Kontakt>();
 
-						// Default KL wird übergeben.
-						ev.getKontakteByKontaktliste(defaultKontaktliste.getId(), new AsyncCallback<Vector<Kontakt>>() {
+						// Zusammenführung von geteilten und eigenen Kontakten des Nutzers in einer
+						// Tabelle.
+						zsm.addAll(ownKontakte);
+						zsm.addAll(sharedKontakte);
 
-							@Override
-							public void onFailure(Throwable caught) {
-								// TODO Auto-generated method stub
+						kontaktTable.setRowCount(zsm.size(), true);
+						kontaktTable.setVisibleRange(0, 10);
+						kontaktTable.setRowData(zsm);
 
-							}
+					}
 
-							@Override
-							public void onSuccess(Vector<Kontakt> defaultkl) {
-
-								for (int i = 0; i < sharedKontakte.size(); i++) {
-
-									ev.addKontaktToKontaktliste(defaultKontaktliste, sharedKontakte.elementAt(i),
-											new AsyncCallback<Void>() {
-
-												@Override
-												public void onFailure(Throwable caught) {
-													caught.getMessage().toString();
-
-												}
-
-												@Override
-												public void onSuccess(Void result) {
-													/*
-													 * War das Hinzufügen erfolgreich switcht man autmatisch in die
-													 * getKontakteByKontaktliste AsyncCallback Aufruf.
-													 */
-												}
-
-											});
-
-								}
-
-								ev.getKontakteByKontaktliste(defaultKontaktliste.getId(),
-										new AsyncCallback<Vector<Kontakt>>() {
-											@Override
-											public void onFailure(Throwable caught) {
-												caught.getMessage().toString();
-
-											}
-
-											@Override
-											public void onSuccess(Vector<Kontakt> result) {
-												if (result.size() == 0) {
-													kontaktTable.setVisible(false);
-													hp.setVisible(false);
-
-												} else {
-													kontaktTable.setVisible(true);
-													hp.setVisible(true);
-												}
-
-												kontaktTable.setRowCount(result.size(), true);
-												kontaktTable.setVisibleRange(0, 10);
-												kontaktTable.setRowData(result);
-											}
-										});
-
-							}
-						});
-					};
 				});
 			}
 		});
@@ -287,6 +246,7 @@ public class ShowKontakte extends VerticalPanel {
 		dataProvider.addDataDisplay(kontaktTable);
 		kontaktTable.addColumnSortHandler(sort);
 
+		// Kontakt Tabelle dem Container hinzufügen.
 		this.add(kontaktTable);
 
 		/**
@@ -299,7 +259,7 @@ public class ShowKontakte extends VerticalPanel {
 				"<image src='/images/user.png' width='20px' height='20px' align='center' /> anzeigen");
 		this.addKontaktToKontaktliste = new Button(
 				"<image src='/images/kontaktliste.png' width='20px' height='20px' align='center' /> hinzufügen");
-	
+
 		sp.setSize("900px", "400px");
 		sp.add(kontaktTable);
 		this.add(sp);
@@ -341,9 +301,9 @@ public class ShowKontakte extends VerticalPanel {
 
 		/**
 		 * Button ClickHandler um eine Teilungen zu entfernen und Kontakt zu löschen
-		 * Hier wird unterschieden zwischen Owner und Receiver.
-		 * Ist man Owner kann man den Kontakt permanent löschen wenn man der 
-		 * Receiver ist wird der Kontakt nur aus der Kontaktliste entfernt.
+		 * Hier wird unterschieden zwischen Owner und Receiver. Ist man Owner kann man
+		 * den Kontakt permanent löschen wenn man der Receiver ist wird der Kontakt nur
+		 * aus der Kontaktliste entfernt.
 		 */
 		deleteKontakt.addClickHandler(new ClickHandler() {
 
@@ -605,63 +565,52 @@ public class ShowKontakte extends VerticalPanel {
 
 		this.deleteKontaktFromKontaktliste = new Button(
 				"<image src='/images/user.png' width='20px' height='20px' align='center' /> löschen");
-		
+
 		/**
 		 * Button ClickHandler um eine Teilungen zu entfernen und Kontakt zu löschen
-		 * Hier wird unterschieden zwischen Owner und Receiver.
-		 * Ist man Owner kann man den Kontakt permanent löschen wenn man der 
-		 * Receiver ist wird der Kontakt nur aus der Kontaktliste entfernt.
+		 * Hier wird unterschieden zwischen Owner und Receiver. Ist man Owner kann man
+		 * den Kontakt permanent löschen wenn man der Receiver ist wird der Kontakt nur
+		 * aus der Kontaktliste entfernt.
 		 */
 		deleteKontaktFromKontaktliste.addClickHandler(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
 
-				// Nutzer Cookies setzen und dann per Nutzer holen.
+				Window.alert("Sind Sie sicher die Kontaktliste " + kl.getTitel() + " löschen zu wollen?");
+
 				Nutzer n = new Nutzer();
 				n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 				n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
-				Window.confirm("Kontakt wird aus der Kontaktliste entfernt");
 
-				Kontakt k = selectionModel.getSelectedObject();
+				// Wenn man nicht der Owner ist wird erst die Berechtigung entfernt.
+				if (n.getId() != kl.getOwnerId()) {
+					// Nutzer Cookies setzen und dann per Nutzer holen.
 
-				/*
-				 * Wenn der KontaktOwner ungleich der Nutzer Id ist kann der Nutzer die
-				 * Berechtigung dafür auslesen und entfernen.
-				 */
-				if (k.getOwnerId() != n.getId()) {
-					Window.alert("Teilhaberschaft wird entfernt und Kontakt wird aus ihrer Kontaktliste entfernt..");
-					ev.getABerechtigungByReceiver(n, new AsyncCallback<Berechtigung>() {
+					/*
+					 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und
+					 * wenn es eine Übereinstimmung gibt wird die Berechtigung entfernt.
+					 */
+					ev.getAllBerechtigungenByReceiver(n.getId(), new AsyncCallback<Vector<Berechtigung>>() {
 
 						@Override
 						public void onFailure(Throwable caught) {
-							Window.alert("Hoppala" + caught.toString());
+							caught.getMessage().toString();
 						}
 
 						@Override
-						public void onSuccess(Berechtigung result) {
-							Berechtigung b = result;
+						public void onSuccess(Vector<Berechtigung> result) {
+							Vector<Berechtigung> berecht = result;
 
-							b.setReceiverId(n.getId());
-							b.setType('k');
-							b.setObjectId(k.getId());
+							for (int i = 0; i < berecht.size(); i++) {
 
-							// Berechtigungs-Objekt übergeben.
-							ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
+								if (berecht.elementAt(i).getObjectId() == kl.getId()) {
+									Berechtigung b = new Berechtigung();
+									b.setObjectId(kl.getId());
+									b.setOwnerId(kl.getOwnerId());
+									b.setReceiverId(n.getId());
+									b.setType(kl.getType());
 
-								@Override
-								public void onFailure(Throwable caught) {
-									caught.getMessage().toString();
-								}
-
-								@Override
-								public void onSuccess(Void result) {
-
-									/*
-									 * Kontaktliste anhand der KontaktlisteId des selektierten Kontaktes wird
-									 * herausgesucht.
-									 */
-									ev.findKontaktlisteByTitel(n, "Alle Kontakte", new AsyncCallback<Kontaktliste>() {
-
+									ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
 										@Override
 										public void onFailure(Throwable caught) {
 											caught.getMessage().toString();
@@ -669,44 +618,23 @@ public class ShowKontakte extends VerticalPanel {
 										}
 
 										@Override
-										public void onSuccess(Kontaktliste result) {
-
-											// Kontakt wird aus der Kontaktliste entfernt.
-											ev.removeKontaktFromKontaktliste(result, k, new AsyncCallback<Void>() {
-
-												@Override
-												public void onFailure(Throwable caught) {
-													caught.getMessage().toString();
-
-												}
-
-												@Override
-												public void onSuccess(Void result) {
-													/*
-													 * Ab hier wurde die Berechtigung entfernt und der gewählte Kontakt
-													 * aus der Kontaktliste entfernt.
-													 */
-													Window.Location.reload();
-
-												}
-
-											});
-
+										public void onSuccess(Void result) {
+											Window.alert("Die Teilhaberschaft wurde aufgelöst.");
+											Window.Location.reload();
 										}
-
 									});
 
 								}
+							}
 
-							});
 						}
+
 					});
+
+					// Ist man Owner der Kontaktliste wird die Kontaktliste direkt gelöscht.
 				} else {
-					/*
-					 * Wenn Nutzer Id == OwnerId des Kontaktes entspricht wird der Kontakt
-					 * nur aus der Kontaktliste entfernt, da es keine Berehctigung für ihn gibt.
-					 */
-					ev.removeKontaktFromKontaktliste(kl, k, new AsyncCallback<Void>() {
+					ev.deleteKontaktliste(kl, new AsyncCallback<Void>() {
+
 						@Override
 						public void onFailure(Throwable caught) {
 							caught.getMessage().toString();
@@ -715,11 +643,11 @@ public class ShowKontakte extends VerticalPanel {
 						@Override
 						public void onSuccess(Void result) {
 							Window.Location.reload();
+
 						}
 					});
 				}
 			}
-
 		});
 	}
 
@@ -727,9 +655,9 @@ public class ShowKontakte extends VerticalPanel {
 	 * Methode zum hinzufügen eines Kontaktes zu einer Kontaktliste. Es wird eine
 	 * CellTable erstellt mit allen bis dato vorhandenen Kontaken um einen
 	 * auszuwählen der der Kontaktliste kl hinzuefügt werden soll. Es wird hierbei
-	 * die Kontaktliste "Alle Kontakte" des Nutzers aus der db gelesen.
-	 * In dieser sind auch die Kontakte vorhanden die mit einem geteilt wurden.
-	 * Diese Kontakte werden hier auch angezeigt.
+	 * die Kontaktliste "Alle Kontakte" des Nutzers aus der db gelesen. In dieser
+	 * sind auch die Kontakte vorhanden die mit einem geteilt wurden. Diese Kontakte
+	 * werden hier auch angezeigt.
 	 * 
 	 * @param kl
 	 *            Kontakliste in der ein Kontakt hizugefügt werden soll.
@@ -770,7 +698,7 @@ public class ShowKontakte extends VerticalPanel {
 							hp.setVisible(false);
 
 						} else {
-						
+
 							kontaktTable.setVisible(true);
 							hp.setVisible(true);
 						}
@@ -836,14 +764,14 @@ public class ShowKontakte extends VerticalPanel {
 		ListHandler<Kontakt> sort = new ListHandler<Kontakt>(dataProvider.getList());
 		dataProvider.addDataDisplay(kontaktTable);
 		kontaktTable.addColumnSortHandler(sort);
-
+		this.addKontakt = new Button(
+				"<image src='/images/user.png' width='25px' height='25px' align='center' /> hinzufügen");
 		this.add(kontaktTable);
 
 		/**
 		 * Erstellung von Buttons mit <code>ClickHandlern()</code> für Interaktionen mit
 		 * den Kontakten.
 		 */
-		this.addKontakt = new Button("Kontakt hinzufügen");
 
 		sp.setSize("900px", "400px");
 		sp.add(kontaktTable);

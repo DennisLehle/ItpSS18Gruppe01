@@ -645,16 +645,16 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode createBerechtigung();
 	 */
 	// CHECK
-	
+	@Test
 	public void createBerechtigung() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		Nutzer n1 = new Nutzer();
-		n1.setId(3);
+		n1.setId(1);
 		
 		Nutzer n2 = new Nutzer();
-		n2.setId(2);
+		n2.setId(1);
 				
 		Kontaktliste kl = new Kontaktliste();
 		kl.setId(6);
@@ -677,15 +677,15 @@ class EditorServiceImplTest extends GWTTestCase {
 //		k3.setId(4);
 //		
 		Kontakt k4 = new Kontakt();
-		k4.setId(4);
+		k4.setId(1);
 
 		
-//		Auspraegung a1 = new Auspraegung();
-//		Auspraegung a2 = new Auspraegung();
-//		a1.setId(7);
-//		a2.setId(8);
+		Auspraegung a1 = new Auspraegung();
+		Auspraegung a2 = new Auspraegung();
+		a1.setId(1);
+		a2.setId(2);
 		
-		editor.createBerechtigung(n1.getId(), n2.getId(), kl.getId(), kl.getType());
+		editor.createBerechtigung(n1.getId(), n2.getId(), a1.getId(), a2.getType());
 //		editor.createBerechtigung(n1.getId(), n2.getId(), kl1.getId(), kl1.getType());
 		
 		
@@ -693,7 +693,7 @@ class EditorServiceImplTest extends GWTTestCase {
 //		editor.createBerechtigung(n1.getId(), n2.getId(), k1.getId(), k.getType());
 //		editor.createBerechtigung(n1.getId(), n2.getId(), k2.getId(), k.getType());
 //		editor.createBerechtigung(n1.getId(), n2.getId(), k3.getId(), k.getType());
-		editor.createBerechtigung(n1.getId(), n2.getId(), k4.getId(), k4.getType());
+		//editor.createBerechtigung(n1.getId(), n2.getId(), k4.getId(), k4.getType());
 		
 //		editor.createBerechtigung(n1.getId(), n2.getId(), a1.getId(), a1.getType());
 //		editor.createBerechtigung(n1.getId(), n2.getId(), a2.getId(), a2.getType());
@@ -743,8 +743,15 @@ class EditorServiceImplTest extends GWTTestCase {
 			k1.setOwnerId(n1.getId()); 
 			k2.setId(4);
 			k2.setOwnerId(n2.getId());
+			
+			Auspraegung a = new Auspraegung();
+			Auspraegung a1 = new Auspraegung();
+			a.setId(5);
+			a.setKontaktId(2);
+			a1.setId(4);
+			a1.setKontaktId(2);
 
-		editor.shareObject(n2.getId(), n1.getId(), k2.getId(), k2.getType());
+		editor.shareObject(n2.getId(), n1.getId(), a.getId(), a.getType());
 	}
 
 	/**

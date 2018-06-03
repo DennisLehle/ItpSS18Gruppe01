@@ -294,10 +294,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		Kontaktliste kl = new Kontaktliste();
 		kl.setTitel("Alle Kontakte");
 		kl.setOwnerId(n.getId());
-		
-		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der 
-		// naechst hoeheren ID angepasst wird.
 		kl.setId(1);
+		
+		//Das Erstellen eines Kontaktlisten Objektes mit Titel "Mit mir geteilte Kontakte" und Owner-ID.
+		Kontaktliste kl1 = new Kontaktliste();
+		kl.setTitel("Mit mir geteilte Kontakte");
+		kl.setOwnerId(n.getId());
+		kl1.setId(1);
+		
+		//Liste in die Db einfügen.
+		this.klMapper.insert(kl1);
 		
 		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
 		return this.klMapper.insert(kl);

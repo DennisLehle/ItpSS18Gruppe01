@@ -24,7 +24,8 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.LoginInfo;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * Entry point classes define <code>onModuleLoad()</code>.
+ * Die Klasse EntryPoint beinhaltet die Methode <code>onModuleLoad()</code>
+ * welche beim Starten der Applikation aufgerufen wird.
  * 
  * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
  */
@@ -39,8 +40,9 @@ public class Sontact implements EntryPoint {
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditorVerwaltung();
 	ClientsideSettings clientSettings = new ClientsideSettings();
 	
+	
 	/**
-	 * This is the entry point method.
+	 * Das ist die EntryPoint Methode <code>onModuleLoad()</code>
 	 */
 	public void onModuleLoad() {
 
@@ -70,11 +72,13 @@ public class Sontact implements EntryPoint {
 							if (nutzer != null) {
 								RootPanel.get("content").clear();
 								start(nutzer);
+								
 							} else {
 								RootPanel.get("content").clear();
 								RootPanel.get("navigator").clear();
 								MessageBox.alertWidget("Kontakt",
 										"Sie haben noch kein Kontakt angelegt, bitte legen Sie Ihren eigenen Kontakt an");
+								
 								editorVerwaltung.createNutzer(loginInfo.getEmailAddress(), new AsyncCallback<Nutzer>() {
 
 									@Override
@@ -85,8 +89,8 @@ public class Sontact implements EntryPoint {
 									@Override
 									public void onSuccess(Nutzer result) {
 										Nutzer n = result;
-										editorVerwaltung.getUserByGMail(n.getEmailAddress(),
-												new AsyncCallback<Nutzer>() {
+										
+										editorVerwaltung.getUserByGMail(n.getEmailAddress(), new AsyncCallback<Nutzer>() {
 
 													@Override
 													public void onFailure(Throwable error) {
@@ -116,28 +120,26 @@ public class Sontact implements EntryPoint {
 	}
 
 	/**
-	 * Ist die Initialisierungmethode fuer den Start des Kontaktverwaltungssystems
+	 * Ist die Initialisierungmethode fuer den Start des Kontaktverwaltungssystems.
 	 * 
 	 * @param nutzer
 	 */
 	private void start(final Nutzer nutzer) {
 
 		//Logout wird hier schon gesetzt
-		HTML signOutLink = new HTML("<p><a href='" 
-				+ loginInfo.getLogoutUrl() 
+		HTML signOutLink = new HTML("<p><a href='" + loginInfo.getLogoutUrl() 
 				+ "'><span class='glyphicon glyphicon-log-out'></span></a></p>");
 		RootPanel.get("nutzermenu").add(signOutLink);
 		
 		
-		//Setzen von Cookies für spätere Identifizierung eines Nutzers.
+		//Setzen von Cookies für die spätere Identifizierung eines Nutzers.
 		Cookies.setCookie("nutzerGMail", nutzer.getEmailAddress()); 	
 		
-		//Wenn ein nutzer vorhanden wird die nutzerId noch gesetzt.
+		//Wenn ein Nutzer vorhanden ist wird die nutzerId noch gesetzt.
 		Cookies.setCookie("nutzerID", String.valueOf(nutzer.getId()));
-	
 		RootPanel.get("navigator").add(new Navigation(nutzer));
 		
-		//Identifizierung des Registrierungs Kontakts des Nutzers für Namens Setzung in der Gui.
+		//Identifizierung des Registrierungs Kontakts des Nutzers für die Namens Setzung in der GUI.
 		editorVerwaltung.getOwnKontakt(nutzer, new AsyncCallback <Kontakt>() {
 
 			@Override
@@ -150,25 +152,25 @@ public class Sontact implements EntryPoint {
 			public void onSuccess(Kontakt result) {
 				RootPanel.get("nutzermenu").clear();
 				RootPanel.get("nutzermenu").add(new HTML("<p><span class='glyphicon glyphicon-user'></span> &nbsp; " + result.getVorname() +" "+ result.getNachname()));
+				
 				//Logout wird hier schon gesetzt
-				HTML signOutLink = new HTML("<p><a href='" 
-						+ loginInfo.getLogoutUrl() 
+				HTML signOutLink = new HTML("<p><a href='" + loginInfo.getLogoutUrl() 
 						+ "'><span class='glyphicon glyphicon-log-out'></span></a></p>");
 				RootPanel.get("nutzermenu").add(signOutLink);
 			}
 			
-			
-			
 		});
 		
-
 		RootPanel.get("content").add(new ShowKontakte(nutzer));
+		
+		// Setzen der HTMl´s für den Footer
 		HorizontalPanel footer = new HorizontalPanel();
 		Anchor startseite = new Anchor("Startseite", "Sontact.html");
 		HTML copyrightText1 = new HTML(" | ");
 		HTML copyrightText2 = new HTML(" | © 2018 Sontact, IT-Projekt Gruppe01, Hochschule der\n" + "Medien Stuttgart | ");
 		Anchor reportGeneratorLink = new Anchor (" ReportGenerator", "SontactReport.html");
 	//	Anchor impressumLink = new Anchor("Impressum");
+		
 		footer.add(startseite);
 		footer.add(copyrightText1);
 		footer.add(reportGeneratorLink);
@@ -177,10 +179,9 @@ public class Sontact implements EntryPoint {
 		RootPanel.get("footer").add(footer);
 
 	}
-
+	
 	void loadLogin() {		
 		signInLink.setHref(loginInfo.getLoginUrl());
-	//	loginPanel.add(loginHeader);
 		loginPanel.add(loginLabel);
 		loginPanel.add(signInLink);
 		loginPanel.addStyleName("login");

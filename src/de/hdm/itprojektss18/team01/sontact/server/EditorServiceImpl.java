@@ -516,10 +516,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * *************************************************************************
 	 */
 
-
-
-
-
 	/**
 	 * Aktualisierung eines modifizierten Kontakts.
 	 * @param Kontakt k 
@@ -568,7 +564,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// entfernen des Kontaktes
 		this.kMapper.delete(k);
 	}
-	
 
 	/**
 	 * Auslesen eines Kontaktes anhand seiner Id.
@@ -587,8 +582,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Kontakt getOwnKontakt(Nutzer n) {
 		return this.kMapper.findNutzerKontaktByIdentifier(n.getId());
 	}
-
-	
 
 	/**
 	 * Auslesen aller Kontakte, bei diesen der Nutzer als Eigentuemer hinterlegt ist.
@@ -792,8 +785,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * ABSCHNITT, Beginn: Methoden fuer Auspraegung-Objekte
 	 * *************************************************************************
 	 */
-
-
 
 	/**
 	 * Speichern einer modifizierten Auspraegung.
@@ -1037,8 +1028,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * *************************************************************************
 	 */
 
-	// Check noch offen (...)
-
 	/**
 	 * Gibt alle <code>Kontakt</code>-Objekte aus, welche vom Nutzer geteilt wurden.
 	 * 
@@ -1171,6 +1160,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * ABSCHNITT BEGINN: Suchfunktion
 	 * *************************************************************************
 	 */
+	
+	// Suche Anfang ################################################################################################################
 
 	/**
 	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach dem Namen und gibt diese zurueck. 
@@ -1188,19 +1179,40 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	
 	
-	public Vector<Kontakt> getKontakteByAuspraegung(String name, Nutzer n) throws IllegalArgumentException {
-		
+	public Vector<Kontakt> getKontakteByAuspraegung(String auspraegung, Nutzer n) throws IllegalArgumentException {
+		// TODO		
+		return null;
+	}
+	
+	
+
+	public Vector<Kontakt> getKontakteByEigenschaft(String auspraegung, Nutzer n) throws IllegalArgumentException {
 		// TODO
-		
 		return null;
 	}
 	
 	
 	
+	public Vector<Kontakt> getKontakteBySuche(String listboxWert, String testboxWert, Nutzer n)
+			throws IllegalArgumentException {
+		init();
+
+		if (listboxWert == "name") {
+			return this.getKontakteByName(testboxWert, n);
+
+		} else if (listboxWert == "auspraegung") {
+			return this.getKontakteByAuspraegung(testboxWert, n);
+
+		} else if (listboxWert == "eigenschaft") {
+			return this.kMapper.findKontaktByName(testboxWert, n);
+			
+		} else
+
+			return null;
+	}
+
 	
-	
-	
-	// ###################################################################################
+	// Suche Ende ################################################################################################################
 	
 	
 	/**

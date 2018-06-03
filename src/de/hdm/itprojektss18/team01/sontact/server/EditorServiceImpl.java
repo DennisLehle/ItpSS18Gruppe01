@@ -31,10 +31,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Ein spezielles Nutzer-Objekt wird referenziert.
-	 */
-	private Nutzer nutzer = null;
+//	/**
+//	 * Ein spezielles Nutzer-Objekt wird referenziert.
+//	 */
+//	private Nutzer nutzer = null;
 
 	/**
 	 * Die Mapperklasse wird referenziert, die das Businessobject <Nutzer> mit der 
@@ -516,10 +516,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * *************************************************************************
 	 */
 
-
-
-
-
 	/**
 	 * Aktualisierung eines modifizierten Kontakts.
 	 * @param Kontakt k 
@@ -568,7 +564,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// entfernen des Kontaktes
 		this.kMapper.delete(k);
 	}
-	
 
 	/**
 	 * Auslesen eines Kontaktes anhand seiner Id.
@@ -587,8 +582,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Kontakt getOwnKontakt(Nutzer n) {
 		return this.kMapper.findNutzerKontaktByIdentifier(n.getId());
 	}
-
-	
 
 	/**
 	 * Auslesen aller Kontakte, bei diesen der Nutzer als Eigentuemer hinterlegt ist.
@@ -792,8 +785,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * ABSCHNITT, Beginn: Methoden fuer Auspraegung-Objekte
 	 * *************************************************************************
 	 */
-
-
 
 	/**
 	 * Speichern einer modifizierten Auspraegung.
@@ -1046,8 +1037,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * *************************************************************************
 	 */
 
-	// Check noch offen (...)
-
 	/**
 	 * Gibt alle <code>Kontakt</code>-Objekte aus, welche vom Nutzer geteilt wurden.
 	 * 
@@ -1167,21 +1156,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		return avshare;
 	}
-	
-	
-	
-	
-//	--> ?
-	
-//	/**
-//	 * Suchte für den Nutzer eine einzelne Berechtigung für einen einzelnen Kontakt heraus den
-//	 * er zuvor selektiert hat. Damit man ihn auch einzeln entfernen kann.
-//	 */
-//	public Berechtigung getABerechtigungByReceiver(Nutzer n) throws IllegalArgumentException {
-//		return this.bMapper.findASingleBerechtigung(n.getId());
-//	}
-	
-	
+		
 	
 	/*
 	 * ************************************************************************* 
@@ -1194,7 +1169,61 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * ABSCHNITT BEGINN: Suchfunktion
 	 * *************************************************************************
 	 */
+	
+	// Suche Anfang ################################################################################################################
 
+	/**
+	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach dem Namen und gibt diese zurueck. 
+	 * Hierbei wird Vor- und Nachname des Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
+	 * 
+	 * @param name, vom Nutzer uebergebener String
+	 * @param n Nutzer
+	 * @return Vector<Kontakt>
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Kontakt> getKontakteByName(String name, Nutzer n) throws IllegalArgumentException {
+		init();
+		return this.kMapper.findKontaktByName(name, n);
+	}
+	
+	
+	
+	public Vector<Kontakt> getKontakteByAuspraegung(String auspraegung, Nutzer n) throws IllegalArgumentException {
+		// TODO		
+		return null;
+	}
+	
+	
+
+	public Vector<Kontakt> getKontakteByEigenschaft(String auspraegung, Nutzer n) throws IllegalArgumentException {
+		// TODO
+		return null;
+	}
+	
+	
+	
+	public Vector<Kontakt> getKontakteBySuche(String listboxWert, String testboxWert, Nutzer n)
+			throws IllegalArgumentException {
+		init();
+
+		if (listboxWert == "name") {
+			return this.getKontakteByName(testboxWert, n);
+
+		} else if (listboxWert == "auspraegung") {
+			return this.getKontakteByAuspraegung(testboxWert, n);
+
+		} else if (listboxWert == "eigenschaft") {
+			return this.kMapper.findKontaktByName(testboxWert, n);
+			
+		} else
+
+			return null;
+	}
+
+	
+	// Suche Ende ################################################################################################################
+	
+	
 	/**
 	 * Auslesen der Kontakte anhand des Vornamens. Bei der Eingabe eines Vornamens 
 	 * wird in der Ausgabe eine Liste an Kontakten zur�ckgegeben, die mit dem 
@@ -1316,19 +1345,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.kMapper.updateModifikationsdatum(id);
 	}
 	
-	@Override
-	public Vector<Kontakt> sucheKontakt(String vorname, String nachname, String wert, String bezeichnung, Nutzer n)
-			throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
-	// --> ?
-	@Override
-	public Berechtigung getABerechtigungByReceiver(Nutzer n) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	/*
 	 * ************************************************************************* **
 	 * ABSCHNITT Ende - Sonstiges

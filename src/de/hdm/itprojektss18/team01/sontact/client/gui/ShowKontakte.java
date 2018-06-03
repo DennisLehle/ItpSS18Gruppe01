@@ -308,53 +308,43 @@ public class ShowKontakte extends VerticalPanel {
 		deleteKontakt.addClickHandler(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
+				Kontakt k = selectionModel.getSelectedObject();
+				
+				Window.alert("Sind Sie sicher die Kontaktliste " + k.getVorname() + " " + k.getNachname() + " löschen zu wollen?");
 
-				// Nutzer Cookies setzen und dann per Nutzer holen.
 				Nutzer n = new Nutzer();
 				n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 				n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
-				Window.confirm("Das löschen hier löscht den Kontakt aus allen Kontaktlisten. Sind Sie sicher?");
 
-				Kontakt k = selectionModel.getSelectedObject();
+				// Wenn man nicht der Owner ist wird erst die Berechtigung entfernt.
+				if (n.getId() != k.getOwnerId()) {
+					// Nutzer Cookies setzen und dann per Nutzer holen.
 
-				/*
-				 * Wenn der KontaktOwner ungleich der Nutzer Id ist kann der Nutzer die
-				 * Berechtigung dafür auslesen und entfernen.
-				 */
-				if (k.getOwnerId() != n.getId()) {
-					Window.alert("Teilhaberschaft wird entfernt und Kontakt wird aus ihrer Kontaktliste entfernt..");
-					ev.getABerechtigungByReceiver(n, new AsyncCallback<Berechtigung>() {
+					/*
+					 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und 
+					 * wenn es eine Übereinstimmung gibt wird die Berechtigung entfernt.
+					 */
+					ev.getAllBerechtigungenByReceiver(n.getId(), new AsyncCallback<Vector<Berechtigung>>() {
 
 						@Override
 						public void onFailure(Throwable caught) {
-							Window.alert("Hoppala" + caught.toString());
+							caught.getMessage().toString();
 						}
 
 						@Override
-						public void onSuccess(Berechtigung result) {
-							Berechtigung b = result;
+						public void onSuccess(Vector<Berechtigung> result) {
+							Vector<Berechtigung> berecht = result;
 
-							b.setReceiverId(n.getId());
-							b.setType('k');
-							b.setObjectId(k.getId());
+							for (int i = 0; i < berecht.size(); i++) {
 
-							// Berechtigungs-Objekt übergeben.
-							ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
+								if (berecht.elementAt(i).getObjectId() == k.getId()) {
+									Berechtigung b = new Berechtigung();
+									b.setObjectId(k.getId());
+									b.setOwnerId(k.getOwnerId());
+									b.setReceiverId(n.getId());
+									b.setType(k.getType());
 
-								@Override
-								public void onFailure(Throwable caught) {
-									caught.getMessage().toString();
-								}
-
-								@Override
-								public void onSuccess(Void result) {
-
-									/*
-									 * Kontaktliste anhand der KontaktlisteId des selektierten Kontaktes wird
-									 * herausgesucht.
-									 */
-									ev.findKontaktlisteByTitel(n, "Alle Kontakte", new AsyncCallback<Kontaktliste>() {
-
+									ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
 										@Override
 										public void onFailure(Throwable caught) {
 											caught.getMessage().toString();
@@ -362,45 +352,23 @@ public class ShowKontakte extends VerticalPanel {
 										}
 
 										@Override
-										public void onSuccess(Kontaktliste result) {
-
-											// Kontakt wird aus der Kontaktliste entfernt.
-											ev.removeKontaktFromKontaktliste(result, k, new AsyncCallback<Void>() {
-
-												@Override
-												public void onFailure(Throwable caught) {
-													caught.getMessage().toString();
-
-												}
-
-												@Override
-												public void onSuccess(Void result) {
-													/*
-													 * Ab hier wurde die Berechtigung entfernt und der gewählte Kontakt
-													 * aus der Kontaktliste entfernt.
-													 */
-													Window.Location.reload();
-
-												}
-
-											});
-
+										public void onSuccess(Void result) {
+											Window.alert("Die Teilhaberschaft wurde aufgelöst.");
+											
 										}
-
 									});
 
 								}
+							}
 
-							});
 						}
+
 					});
+
+					// Ist man Owner der Kontaktliste wird die Kontaktliste direkt gelöscht.
 				} else {
-					/*
-					 * Wenn Nutzer Id == OwnerId des Kontaktes entspricht darf man den Kontakt
-					 * permanent entfernen. Und der Kontakt wird auch bei allen Nutzern aus den
-					 * Kontaktlisten entfernt.
-					 */
 					ev.deleteKontakt(k, new AsyncCallback<Void>() {
+
 						@Override
 						public void onFailure(Throwable caught) {
 							caught.getMessage().toString();
@@ -408,11 +376,11 @@ public class ShowKontakte extends VerticalPanel {
 
 						@Override
 						public void onSuccess(Void result) {
-							RootPanel.get("content").clear();
-							onLoad(n);
+							Window.Location.reload();
 						}
 					});
 				}
+
 			}
 
 		});

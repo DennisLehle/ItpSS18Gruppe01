@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 
@@ -220,7 +219,7 @@ public class EigenschaftMapper {
 		Connection con = null; 
 		PreparedStatement stmt = null; 
 		
-		String selectByAuswahl = "SELECT * FROM eigenschaft";
+		String selectByAuswahl = "SELECT * FROM eigenschaft between 1 AND 17";
 		
 		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
 		Vector <Eigenschaft> result = new Vector<Eigenschaft>();

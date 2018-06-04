@@ -1203,6 +1203,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public Vector<Kontakt> getKontakteByAuspraegung(String wert, Nutzer n) 
 			throws IllegalArgumentException {
+		init();
 		
 		return this.kMapper.findKontakteByAuspraegung(wert, n);
 	}
@@ -1219,7 +1220,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public Vector<Kontakt> getKontakteByEigenschaft(String bezeichnung, Nutzer n) 
 			throws IllegalArgumentException {
-		
+		init();
 		return this.kMapper.findKontakteByEigenschaft(bezeichnung, n);
 	}
 		

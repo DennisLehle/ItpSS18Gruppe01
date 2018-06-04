@@ -557,19 +557,15 @@ public class KontaktMapper {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(
 					"SELECT * FROM kontakt "
-					+ "WHERE ownerid = " + n.getId()
-					+ " AND vorname like '%" + name + "%' OR nachname like '%" + name + "%' "
-					+ "UNION "
-					+ "SELECT kontakt.id, kontakt.vorname, kontakt.nachname, "
-					+ "kontakt.erstellungsdatum, kontakt.modifikationsdatum, "
-					+ "kontakt.ownerid, kontakt.identifier "
-					+ "FROM kontakt "
-					+ "INNER JOIN berechtigung "
-					+ "ON kontakt.id = berechtigung.objectid "
-					+ "WHERE berechtigung.receiverid = " + n.getId() 
-					+ "AND berechtigung.type = 'k' "
-					+ "AND vorname like '%" + name + "%' OR nachname like '%" + name + "%'");
-			
+							+ "WHERE ownerid = " + n.getId()
+							+ " AND vorname like '%" + name + "%' OR nachname like '%" + name + "%' "
+							+ "UNION "
+							+ "SELECT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier "
+							+ "FROM kontakt "
+							+ "INNER JOIN berechtigung "
+							+ "ON kontakt.id = berechtigung.objectid "
+							+ "WHERE berechtigung.receiverid = " + n.getId() + " AND berechtigung.type = 'k' "
+							+ "AND vorname like '%" + name + "%' OR nachname like '%" + name + "%'");
 //			stmt.setInt(1, n.getId());
 //			stmt.setString(2, name);
 //			stmt.setString(3, name);
@@ -615,29 +611,23 @@ public class KontaktMapper {
 		PreparedStatement stmt = null;
 		
 		Vector<Kontakt> result = new Vector<Kontakt>();
-
-		try {
-
+			try {			
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(
-					"SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname,"
-					+ "kontakt.erstellungsdatum, kontakt.modifikationsdatum, "
-					+ "kontakt.ownerid, kontakt.identifier "
-					+ "FROM auspraegung "
+					"SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier FROM auspraegung "
 					+ "INNER JOIN kontakt "
 					+ "ON kontakt.id = auspraegung.kontaktid "		
 					+ "WHERE kontakt.ownerid = " + n.getId()
-					+ "AND wert LIKE '%" + wert + "%' "
-					+ "UNION "
-					+ "SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname," 
-					+ "kontakt.erstellungsdatum, kontakt.modifikationsdatum, " 
-					+ "kontakt.ownerid, kontakt.identifier "
+					+ " AND wert like '%" + wert + "%'"
+					+ " UNION "
+					+ "SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier "
 					+ "FROM auspraegung "
-					+ "INNER JOIN kontakt on kontakt.id = auspraegung.kontaktid "
+					+ "INNER JOIN kontakt "
+					+ "ON kontakt.id = auspraegung.kontaktid "
 					+ "INNER JOIN berechtigung "
 					+ "ON berechtigung.objectid = auspraegung.kontaktid "
-					+ "WHERE berechtigung.receiverid = " + n.getId() 
-					+ "AND wert LIKE '%" + wert + "%' " );
+					+ "WHERE berechtigung.receiverid = " + n.getId()
+					+ " AND wert like '%" + wert + "%'" );
 			
 
 			ResultSet rs = stmt.executeQuery();
@@ -679,34 +669,28 @@ public class KontaktMapper {
 		PreparedStatement stmt = null;
 		
 		Vector<Kontakt> result = new Vector<Kontakt>();
-
-		try {
-
+			try {			
 			con = DBConnection.connection();
-			stmt = con.prepareStatement( "SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname, " 
-					+ "kontakt.erstellungsdatum, kontakt.modifikationsdatum, " 
-					+ "kontakt.ownerid, kontakt.identifier "
-					+ "FROM eigenschaft"
-					+ "INNER JOIN auspraegung "
-					+ "ON auspraegung.eigenschaftid = eigenschaft.id "
-					+ "INNER JOIN kontakt ON kontakt.id = auspraegung.kontaktid  " 
-					+ " WHERE kontakt.ownerid= " + n.getId() 
-					+ "AND bezeichnung LIKE '%" + bezeichnung + "%' " 
-					+ " UNION "
-					+ "SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname, " 						
-					+ " kontakt.erstellungsdatum, kontakt.modifikationsdatum, " 
-					+ "kontakt.ownerid, kontakt.identifier "
-					+ "FROM eigenschaft "
-					+ "INNER JOIN auspraegung "
-					+ "ON auspraegung.eigenschaftid = eigenschaftid.id "
-					+ "INNER JOIN berechtigung "
-					+ "ON berechtigung.objectid = auspraegung.kontaktid "
-					+ "INNER JOIN kontakt "
-					+ "ON kontakt.id = auspraegung.kontaktid "
-					+ "WHERE berechtigung.receiverid = " + n.getId() 
-					+ "AND bezeichnung LIKE '%" + bezeichnung + "%' " );
-					
-					
+			stmt = con.prepareStatement(
+					"SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier FROM eigenschaft "
+							+ "INNER JOIN auspraegung "
+							+ "ON auspraegung.eigenschaftid = eigenschaft.id "
+							+ "INNER JOIN kontakt "
+							+ "ON kontakt.id = auspraegung.kontaktid "		
+							+ "WHERE kontakt.ownerid = " + n.getId()
+							+ " AND bezeichnung like '%" + bezeichnung + "%'"
+							+ " UNION "
+							+ "SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier "
+							+ "FROM eigenschaft "
+							+ "INNER JOIN auspraegung "
+							+ "ON auspraegung.eigenschaftid = eigenschaft.id "
+							+ "INNER JOIN kontakt "
+							+ "ON kontakt.id = auspraegung.kontaktid "
+							+ "INNER JOIN berechtigung "
+							+ "ON berechtigung.objectid = auspraegung.kontaktid "
+							+ "WHERE berechtigung.receiverid = " + n.getId()
+							+ " AND bezeichnung like '%" + bezeichnung + "%'" );
+			
 
 			ResultSet rs = stmt.executeQuery();
 
@@ -732,6 +716,7 @@ public class KontaktMapper {
 		
 		return null;
 	}
+	
 	
 // Alternative End ##############################################################################################
 

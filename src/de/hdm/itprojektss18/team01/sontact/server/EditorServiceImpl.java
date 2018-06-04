@@ -151,7 +151,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Erzeugen eines neuen Kontakts, dieser wird angelegt und anschliessend 
 	 * in der DB gespeichert. Der Kontakt wird automatisch der Default Kontaktliste 
-	 * eines Nutzers "Alle Kontakte" zugeordnet und steht dem Nutzer nun 
+	 * eines Nutzers "Meine Kontakte" zugeordnet und steht dem Nutzer nun 
 	 * zu weiteren Funktionen zur Verfuegung.
 	 * 
 	 * @param String vorname
@@ -187,7 +187,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		k.setId(1);
 
 		// Kontaktliste und Kontakt werden der Zwischentabelle hinzugefuegt.
-		this.addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Alle Kontakte"), 
+		this.addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Meine Kontakte"), 
 				kMapper.insert(k));
 	}
 	
@@ -196,7 +196,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Erzeugen eines neuen Kontakts f�r den Nutzers bei der Systemregistrierung. 
 	 * Dieser Kontakt stellt eine Art "Visitenkarte" des eingeloggten Nutzers dar, 
 	 * die er mit seinen Kontaktdaten nach belieben bef�llen kann.
-	 * Gleichzeitig wird die Default Kontaktliste "Alle Kontakte" angelegt, 
+	 * Gleichzeitig wird die Default Kontaktliste "Meine Kontakte" angelegt, 
 	 * worin der Kontakt des Nutzers und alle weiteren, 
 	 * die vom Nutzer angelegt werden, gespeichert sind.
 	 * 
@@ -238,11 +238,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Gespeicherter Kontakt nach Objekttypen <'r'> auslesen.
 		Kontakt k = getOwnKontakt(n);
 
-		// Erzeugung der Default-Kontaktliste <Alle Kontakte>.
+		// Erzeugung der Default-Kontaktliste <Meine Kontakte>.
 		createKontaktlisteRegistrierung(n);
 
 		// Kontaktliste und Kontakt der Zwischentabelle hinzufuegen.
-		addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Alle Kontakte"), k);
+		addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Meine Kontakte"), k);
 
 		return k;
 	}
@@ -277,7 +277,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 
 	/**
-	 * Erzeugen der Default Kontaktliste "Alle Kontakte" des Nutzer. 
+	 * Erzeugen der Default Kontaktliste "Meine Kontakte" des Nutzer. 
 	 * Diese wird angelegt und anschliessend in der DB gespeichert. 
 	 * Die Kontaktliste bildet den Speicherort aller angelegten Kontakte.
 	 * 
@@ -290,9 +290,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		
 		init();
 		
-		// Das Erstellen eines Kontaktlisten Objektes mit Titel "Alle Kontakte" und Owner-ID.
+		// Das Erstellen eines Kontaktlisten Objektes mit Titel "Meine Kontakte" und Owner-ID.
 		Kontaktliste kl = new Kontaktliste();
-		kl.setTitel("Alle Kontakte");
+		kl.setTitel("Meine Kontakte");
 		kl.setOwnerId(n.getId());
 		kl.setId(1);
 		
@@ -485,7 +485,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			}
 		}
 		
-		/* entfernt alle Kontakte, welche mit dem Nutzer in einer Eigentumsbeziehung stehen 
+		/* entfernt Meine Kontakte, welche mit dem Nutzer in einer Eigentumsbeziehung stehen 
 		 * sowie alle Auspraegungen eines jeden Kontaktes, 
 		 * alle Kontaktlisteneintr�ge und alle Berechtigungen auf den Kontakt
 		 */
@@ -502,7 +502,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		 */
 		Vector<Berechtigung> bvr = this.getAllBerechtigungenByReceiver(n.getId());
 		if(bvr != null) {
-			for(Berechtigung b : bvo) {
+			for(Berechtigung b : bvr) {
 				this.bMapper.delete(b);
 			}
 		}
@@ -701,7 +701,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
-	 * Kontaktliste "Alle Kontakte" für den Nutzer in der Db finden
+	 * Kontaktliste "Meine Kontakte" für den Nutzer in der Db finden
 	 * (DefaultKontaktliste).
 	 */
 
@@ -1226,7 +1226,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Die Suche nach Kontaktnamen, Auspraegungen oder Eigenschaften wird in der 
 	 * folgenden Methode zusammengefasst aufgerufen. Je nach Treffer der Sucheingabe, 
-	 * wird das aufgerufene Objekt zur�ckgeben. 
+	 * wird das aufgerufene Objekt zur�ckgeben. 
 	 * 
 	 * @param listBoxWert, testBoxWert
 	 * @param n Nutzer
@@ -1277,6 +1277,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			if (objectId == b.getObjectId()) {
 				return true;
 			}
+			
 		}
 		return false;
 	}

@@ -75,6 +75,10 @@ body>div>div {
 	border-left: 1px solid #666;
 }
 
+.deleteNutzer{
+	float: right;
+}
+
 h1 {
 	font-weight: 400;
 	font-size: 20px;

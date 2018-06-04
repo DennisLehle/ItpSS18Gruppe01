@@ -19,7 +19,6 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  */
 
 public interface EditorServiceAsync {
-
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#init();
 	 */

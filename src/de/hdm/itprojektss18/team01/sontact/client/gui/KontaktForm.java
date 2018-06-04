@@ -2,6 +2,8 @@ package de.hdm.itprojektss18.team01.sontact.client.gui;
 
 import java.util.Vector;
 
+import org.eclipse.jetty.security.jaspi.modules.UserInfo;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -180,13 +182,69 @@ public class KontaktForm extends VerticalPanel {
 					}
 
 				});
+				
+				//Überprüft Status eines Objekts ob es geteilt wurde.
+				ev.getStatusForObject(k.getId(), new AsyncCallback<Boolean>() {
 
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.getMessage().toString();
+						
+					}
+
+					@Override
+					public void onSuccess(Boolean result) {
+						if(result ==true) {
+							HTML shared = new HTML("<image src='/images/share.png' width='15px' height='15px' align='center' />");
+							headerPanel.add(shared);
+						}
+					}
+					
+				});
+				
+				//Überprüfung ob Kontakt den Nutzer repräsentiert für Löschung aus dem System.
+				if(k.getOwnerId() == n.getId() && k.getIdentifier() == 'r') {
+
+					//Button für die Löschung erstellen und ClickHandler zuweisen.
+					Button deleteNutzer = new Button("<image src='/images/trash.png' width='15px' height='15px' align='center' />");
+					deleteNutzer.addClickHandler(new ClickHandler() {
+
+						@Override
+						public void onClick(ClickEvent event) {
+							//Abfrage ob Nutzer sich wirklich löschen will.
+							Window.confirm("Wollen Sie sich wirklich unwiderruflich von uns verabschieden?");
+							
+							ev.deleteNutzer(n, new AsyncCallback<Void>() {
+
+								@Override
+								public void onFailure(Throwable caught) {
+									caught.getMessage().toString();
+									
+								}
+
+								@Override
+								public void onSuccess(Void result) {
+									//Nutzer wurde gelöscht und wird auf die Startseite verwiesen.
+									Window.Location.replace("Sontact.html");
+									
+								}
+								
+							});
+	
+						}
+					});
+					deleteNutzer.setStyleName("deleteNutzer");
+					RootPanel.get("content").add(deleteNutzer);
+					
+				}
+				
 				vp.add(headerPanel);
 				vp.add(ownerLb);
 				vp.add(KontaktProfilFelx);
 				vp.add(BtnPanel);
 				vp.add(datePanel);
 				RootPanel.get("content").add(vp);
+				
 			}
 		});
 	}

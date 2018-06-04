@@ -133,7 +133,7 @@ public class KontaktlisteKontaktMapper {
 	
 	
 	/**
-	 * Gibt alle Kontakte einer Kontaktliste aus 
+	 * Gibt Meine Kontakte einer Kontaktliste aus 
 	 *
 	 * @param Eindeutliger Schluessel der Kontaktliste 
 	 * @return Kontakte einer Kontaktliste

@@ -101,7 +101,7 @@ public class ShowKontakte extends VerticalPanel {
 	}
 
 	/**
-	 * Konstruktor der Klasse um alle Kontakte der Kontaktliste "Alle Kontakte" beim
+	 * Konstruktor der Klasse um Meine Kontakte der Kontaktliste "Meine Kontakte" beim
 	 * start des Programms anzuzeigen.
 	 */
 	public ShowKontakte(final Nutzer n) {
@@ -158,12 +158,12 @@ public class ShowKontakte extends VerticalPanel {
 
 			}
 
-			// Alle Kontakte des Nutzers bei dem er der Owner ist werden der Table
+			// Meine Kontakte des Nutzers bei dem er der Owner ist werden der Table
 			// hinzugefügt.
 			@Override
 			public void onSuccess(Vector<Kontakt> ownKontakte) {
 
-				// Holt alle Kontakte die mit dem Nutzer geteilt wurden.
+				// Holt Meine Kontakte die mit dem Nutzer geteilt wurden.
 				ev.getAllSharedKontakteByReceiver(n.getId(), new AsyncCallback<Vector<Kontakt>>() {
 
 					@Override
@@ -612,7 +612,7 @@ public class ShowKontakte extends VerticalPanel {
 					// Ist man Owner der Kontaktliste wird die Kontaktliste direkt gelöscht.
 				} else {
 					//Zusätzliche Prüfung ob es sich um eines der default Kontaktlisten handelt.
-					if(kl.getTitel() == "Alle Kontakte" && kl.getOwnerId() == n.getId() ||
+					if(kl.getTitel() == "Meine Kontakte" && kl.getOwnerId() == n.getId() ||
 							kl.getTitel() == "Mit mir geteilte Kontakte" && kl.getOwnerId() == n.getId() ) {
 						
 						Window.alert("Tut uns leid, die Standard Listen können hier nicht gelöscht werden.");
@@ -640,7 +640,7 @@ public class ShowKontakte extends VerticalPanel {
 	 * Methode zum hinzufügen eines Kontaktes zu einer Kontaktliste. Es wird eine
 	 * CellTable erstellt mit allen bis dato vorhandenen Kontaken um einen
 	 * auszuwählen der der Kontaktliste kl hinzuefügt werden soll. Es wird hierbei
-	 * die Kontaktliste "Alle Kontakte" des Nutzers aus der db gelesen. In dieser
+	 * die Kontaktliste "Meine Kontakte" des Nutzers aus der db gelesen. In dieser
 	 * sind auch die Kontakte vorhanden die mit einem geteilt wurden. Diese Kontakte
 	 * werden hier auch angezeigt.
 	 * 
@@ -655,8 +655,8 @@ public class ShowKontakte extends VerticalPanel {
 
 		kontaktTable = new CellTable<Kontakt>();
 
-		// Alle Kontakte des Nutzers herauslesen.
-		ev.findKontaktlisteByTitel(n, "Alle Kontakte", new AsyncCallback<Kontaktliste>() {
+		// Meine Kontakte des Nutzers herauslesen.
+		ev.findKontaktlisteByTitel(n, "Meine Kontakte", new AsyncCallback<Kontaktliste>() {
 
 			@Override
 			public void onFailure(Throwable err) {
@@ -676,7 +676,7 @@ public class ShowKontakte extends VerticalPanel {
 
 					}
 
-					// Aufruf der der Default Kontaktliste des Nutzers. ("Alle Kontakte")
+					// Aufruf der der Default Kontaktliste des Nutzers. ("Meine Kontakte")
 					public void onSuccess(Vector<Kontakt> result) {
 						if (result.size() == 0) {
 							kontaktTable.setVisible(false);

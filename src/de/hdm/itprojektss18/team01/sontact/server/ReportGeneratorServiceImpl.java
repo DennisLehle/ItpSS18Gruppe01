@@ -65,7 +65,7 @@ public class ReportGeneratorServiceImpl extends RemoteServiceServlet{
 		AllKontakteByNutzerReport report = new AllKontakteByNutzerReport();
 		
 		//Ueberschrift des Reports, sowie Erstellungsdatum der Ausgabe
-		report.setTitle("Alle Kontakte");
+		report.setTitle("Meine Kontakte");
 		report.setCreated(new Date());
 		
 		//Hinzufuegen der Kopfzeile
@@ -79,7 +79,7 @@ public class ReportGeneratorServiceImpl extends RemoteServiceServlet{
 		head.addColumn(new Column("Auspraegung"));
 	//	head.addColumn(new Column("Status"));
 
-		//Kopfzeilendaten der Ausgabe hinzufügen 
+		//Kopfzeilendaten der Ausgabe hinzufï¿½gen 
 		report.addRow(head);
 		
 		//Notwendige Daten abrufen und dem Report hinzufuegen

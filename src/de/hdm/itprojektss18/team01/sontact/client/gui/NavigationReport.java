@@ -30,7 +30,7 @@ public class NavigationReport extends VerticalPanel{
 	 * Buttons der Navigation. 
 	 * final, damit Callbacks sie verändern können.
 	 */
-	final Button showAllKontakteReport = new Button("Alle Kontakte Anzeigen");
+	final Button showAllKontakteReport = new Button("Meine Kontakte Anzeigen");
 	final Button showAllKontakteNachBestimmtenAusp = new Button("Kontakte nach Ausprägungen");
 	final Button showReportNotVisitedButton = new Button("Alle geteilten Kontakte anzeigen");
 	

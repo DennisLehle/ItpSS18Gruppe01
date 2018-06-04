@@ -252,7 +252,7 @@ public class KontaktMapper {
 	}
 
 	/**
-	 * Gibt alle Kontakte des Nutzers aus. 
+	 * Gibt Meine Kontakte des Nutzers aus. 
 	 * @param ownerId
 	 * @return
 	 */
@@ -700,7 +700,7 @@ public class KontaktMapper {
 		    Eigenschaft e = new Eigenschaft();
 		    e.setBezeichnung("bezeichnung");
 			
-			//While Schleife für das Durchlaufen vieler Zeilen
+			//While Schleife fï¿½r das Durchlaufen vieler Zeilen
 			//Schreiben der Objekt-Attribute aus ResultSet
 			while (rs.next()) {
 				

@@ -598,9 +598,10 @@ public class KontaktMapper {
 	}
 	
 	/**
-	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach dem Namen und gibt diese zurueck. 
-	 * Hierbei wird Vor- und Nachname des Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
-	 * @param String name, Nutzer n
+	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach deren Auspraegung
+	 * und gibt diese zurueck. Hierbei wird die Auspraegung des Kontaktes mit dem vom Nutzer 
+	 * uebergebenem String abgeglichen.
+	 * @param String wert, Nutzer n
 	 * @return Vector<Kontakt>
 	 * 
 	 */
@@ -615,29 +616,26 @@ public class KontaktMapper {
 
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(
-					"SELECT auspraegung.id, auspraegung.wert, auspraegung.eigenschaftid, "
-					+ "auspraegung.kontaktid "
+					"SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname,"
+					+ "kontakt.erstellungsdatum, kontakt.modifikationsdatum, "
+					+ "kontakt.ownerid, kontakt.identifier "
 					+ "FROM auspraegung "
 					+ "INNER JOIN kontakt "
-					+ "ON kontakt.ownerid " + n.getId()		
+					+ "ON kontakt.id = auspraegung.kontaktid "		
 					+ "WHERE kontakt.ownerid = " + n.getId()
 					+ "AND wert LIKE '%" + wert + "%' "
 					+ "UNION "
-					+ "SELECT auspraegung.id, auspraegung.wert, "
-					+ "auspraegung.eigenschaftid, auspraegung.kontaktid "
+					+ "SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname," 
+					+ "kontakt.erstellungsdatum, kontakt.modifikationsdatum, " 
+					+ "kontakt.ownerid, kontakt.identifier "
 					+ "FROM auspraegung "
+					+ "INNER JOIN kontakt on kontakt.id = auspraegung.kontaktid "
 					+ "INNER JOIN berechtigung "
-					+ "ON auspraegung.id = berechtigung.objectid "
-					+ "WHERE berechtigung.receiverid = " + n.getId() + " AND berechtigung.type = 'a' "
-					+ "AND wert LIKE '%" + wert + "%' ");
+					+ "ON berechtigung.objectid = auspraegung.kontaktid "
+					+ "WHERE berechtigung.receiverid = " + n.getId() 
+					+ "AND wert LIKE '%" + wert + "%' " );
 			
-//			stmt.setInt(1, n.getId());
-//			stmt.setString(2, name);
-//			stmt.setString(3, name);
-//			stmt.setInt(4, n.getId());
-//			stmt.setString(5, name);
-//			stmt.setString(6, name);
-			
+
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {

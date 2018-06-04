@@ -50,72 +50,72 @@ public class ReportGeneratorServiceImpl extends RemoteServiceServlet{
 	protected EditorService getEditorService() {
 		return this.service;
 	}
-	/*
-	 * ************************************************************************* 
-	 * ABSCHNITT - Ende: Initialisierung
-	 * *************************************************************************
-	 */
-	/**
-	 * Statischer Aufruf aller Kontakte, eines Nutzers  
-	 */
-	public AllKontakteByNutzerReport createAllKontakteByReport(Nutzer n) 
-			throws IllegalArgumentException { 
-	
-		//Erzeugung einer leeren Instanz des Reports 
-		AllKontakteByNutzerReport report = new AllKontakteByNutzerReport();
-		
-		//Ueberschrift des Reports, sowie Erstellungsdatum der Ausgabe
-		report.setTitle("Meine Kontakte");
-		report.setCreated(new Date());
-		
-		//Hinzufuegen der Kopfzeile
-		report.setHeaderData(createHeaderData(n, report));
-		Row head = new Row();
-		
-		//Zuweisung der Kopfzeilendaten die im Report, jeder Spalte zugeordnet werden.
-		head.addColumn(new Column("Vorname"));
-		head.addColumn(new Column("Nachname"));
-		head.addColumn(new Column("Eigenschaft"));
-		head.addColumn(new Column("Auspraegung"));
-	//	head.addColumn(new Column("Status"));
-
-		//Kopfzeilendaten der Ausgabe hinzuf�gen 
-		report.addRow(head);
-		
-		//Notwendige Daten abrufen und dem Report hinzufuegen
-		Vector<Kontakt> kontakt = service.getAllKontakteByOwner(n);
-	//	report.(kontakt.size());
-		
-		for (Kontakt k : kontakt) {
-			Vector<Auspraegung> a = service.getAllAuspraegungenByKontakt(k.getId());
-			Row row = new Row();
-			row.addColumn(new Column(k.getVorname()));
-			row.addColumn(new Column(k.getNachname()));
-			
-			for (Auspraegung auspraegung : a) {
-				Eigenschaft e = service.getEigenschaftForAuspraegung(auspraegung.getEigenschaftId());
-			
-			row.addColumn(new Column(auspraegung.getWert()));
-			row.addColumn(new Column(e.getBezeichnung()));
-			}
-		}
-		
-	return report;   	
-}
-	
-	/**
-	 * Statischer Aufruf aller Kontakte  
-	 */
-	public AllKontakteReport createAllKontakteReport(Kontakt k) 
-			throws IllegalArgumentException {
-		
-	return null;
-	}
-	
-	private Paragraph createHeaderData(Nutzer n, AllKontakteByNutzerReport report) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	/*
+//	 * ************************************************************************* 
+//	 * ABSCHNITT - Ende: Initialisierung
+//	 * *************************************************************************
+//	 */
+//	/**
+//	 * Statischer Aufruf aller Kontakte, eines Nutzers  
+//	 */
+//	public AllKontakteByNutzerReport createAllKontakteByReport(Nutzer n) 
+//			throws IllegalArgumentException { 
+//	
+//		//Erzeugung einer leeren Instanz des Reports 
+//		AllKontakteByNutzerReport report = new AllKontakteByNutzerReport();
+//		
+//		//Ueberschrift des Reports, sowie Erstellungsdatum der Ausgabe
+//		report.setTitle("Meine Kontakte");
+//		report.setCreated(new Date());
+//		
+//		//Hinzufuegen der Kopfzeile
+//		report.setHeaderData(createHeaderData(n, report));
+//		Row head = new Row();
+//		
+//		//Zuweisung der Kopfzeilendaten die im Report, jeder Spalte zugeordnet werden.
+//		head.addColumn(new Column("Vorname"));
+//		head.addColumn(new Column("Nachname"));
+//		head.addColumn(new Column("Eigenschaft"));
+//		head.addColumn(new Column("Auspraegung"));
+//	//	head.addColumn(new Column("Status"));
+//
+//		//Kopfzeilendaten der Ausgabe hinzuf�gen 
+//		report.addRow(head);
+//		
+//		//Notwendige Daten abrufen und dem Report hinzufuegen
+//		Vector<Kontakt> kontakt = service.getAllKontakteByOwner(n);
+//	//	report.(kontakt.size());
+//		
+//		for (Kontakt k : kontakt) {
+//			Vector<Auspraegung> a = service.getAllAuspraegungenByKontakt(k.getId());
+//			Row row = new Row();
+//			row.addColumn(new Column(k.getVorname()));
+//			row.addColumn(new Column(k.getNachname()));
+//			
+//			for (Auspraegung auspraegung : a) {
+//				Eigenschaft e = service.getEigenschaftForAuspraegung(auspraegung.getEigenschaftId());
+//			
+//			row.addColumn(new Column(auspraegung.getWert()));
+//			row.addColumn(new Column(e.getBezeichnung()));
+//			}
+//		}
+//		
+//	return report;   	
+//}
+//	
+//	/**
+//	 * Statischer Aufruf aller Kontakte  
+//	 */
+//	public AllKontakteReport createAllKontakteReport(Kontakt k) 
+//			throws IllegalArgumentException {
+//		
+//	return null;
+//	}
+//	
+//	private Paragraph createHeaderData(Nutzer n, AllKontakteByNutzerReport report) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 
 

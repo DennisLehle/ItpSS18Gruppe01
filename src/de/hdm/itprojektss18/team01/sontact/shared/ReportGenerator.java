@@ -15,10 +15,10 @@ public interface ReportGenerator extends RemoteService{
 	
 	void init();
 	
-	public AllKontakteByNutzerReport createAllKontakteByReport(Nutzer n) 
+	public AllKontakteByNutzerReport createAllKontakteByReport() 
 			throws IllegalArgumentException;
 	
-	public AllKontakteReport createAllKontakteReport(Kontakt k) 
+	public AllKontakteReport createAllKontakteReport() 
 			throws IllegalArgumentException;
 	
 }

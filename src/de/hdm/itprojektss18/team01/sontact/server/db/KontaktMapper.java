@@ -531,8 +531,9 @@ public class KontaktMapper {
 // Alternative: ##################################################################################################
 
 	/**
-	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach dem Namen und gibt diese zurueck. 
-	 * Hierbei wird Vor- und Nachname des Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
+	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach 
+	 * dem Namen und gibt diese zurueck. Hierbei wird Vor- und Nachname des 
+	 * Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
 	 * @param String name, Nutzer n
 	 * @return Vector<Kontakt>
 	 * 
@@ -559,11 +560,14 @@ public class KontaktMapper {
 					+ "WHERE ownerid = " + n.getId()
 					+ " AND vorname like '%" + name + "%' OR nachname like '%" + name + "%' "
 					+ "UNION "
-					+ "SELECT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier "
+					+ "SELECT kontakt.id, kontakt.vorname, kontakt.nachname, "
+					+ "kontakt.erstellungsdatum, kontakt.modifikationsdatum, "
+					+ "kontakt.ownerid, kontakt.identifier "
 					+ "FROM kontakt "
 					+ "INNER JOIN berechtigung "
 					+ "ON kontakt.id = berechtigung.objectid "
-					+ "WHERE berechtigung.receiverid = " + n.getId() + " AND berechtigung.type = 'k' "
+					+ "WHERE berechtigung.receiverid = " + n.getId() 
+					+ "AND berechtigung.type = 'k' "
 					+ "AND vorname like '%" + name + "%' OR nachname like '%" + name + "%'");
 			
 //			stmt.setInt(1, n.getId());
@@ -662,57 +666,61 @@ public class KontaktMapper {
 	}
 
 	/**
-	 * Auslesen aller Eigenschaften mit einer speziellen Bezeichnung
-	 * 
-	 * @see findEigenschaftByBezeichnung
-	 * @param String bezeichnung fuer zugehoerige Eigenschaften
-	 * @return ein Vektor mit Eigenschaften-Objekten, die durch die gegebene Bezeichnung
-	 *         repraesentiert werden. Bei evtl. Exceptions wird ein partiell
-	 *         gefuellter oder ggf. auch leerer Vektor zurueckgeliefert.
+	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte 
+	 * nach deren Eigenschaften und gibt diese zurueck. Hierbei wird die 
+	 * Auspraegung des Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
+	 * @param String wert, Nutzer n
+	 * @return Vector<Kontakt>
 	 * 
 	 */
-	//ToDo
-	public Vector<Kontakt> findKontakteByEigenschaft(String bezeichnung, Nutzer n){
-		
-		Connection con = null; 
-		PreparedStatement stmt = null; 
-		
-		String selectByKey = "SELECT * FROM eigenschaft"
-				+ "JOIN auspraegung ON eigenschaft.id = auspraegung.eigenschaftid "
-				+ "JOIN kontakt ON auspraegung.kontaktid = kontakt.id" 
-				+ "WHERE bezeichnung=? " ;
-		
-		//Vector erzeugen, der die Eigenschaftsdatensaetze aufnehmen kann
-		Vector<Kontakt> result = new Vector<Kontakt>();
-		
-		try {
-			
-			con = DBConnection.connection();
-			stmt = con.prepareStatement(selectByKey);
-			stmt.setString(1, bezeichnung);		
+	public Vector<Kontakt> findKontakteByEigenschaft(String bezeichnung, Nutzer n) {
 
-			
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		Vector<Kontakt> result = new Vector<Kontakt>();
+
+		try {
+
+			con = DBConnection.connection();
+			stmt = con.prepareStatement( "SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname, " 
+					+ "kontakt.erstellungsdatum, kontakt.modifikationsdatum, " 
+					+ "kontakt.ownerid, kontakt.identifier "
+					+ "FROM eigenschaft"
+					+ "INNER JOIN auspraegung "
+					+ "ON auspraegung.eigenschaftid = eigenschaft.id "
+					+ "INNER JOIN kontakt ON kontakt.id = auspraegung.kontaktid  " 
+					+ " WHERE kontakt.ownerid= " + n.getId() 
+					+ "AND bezeichnung LIKE '%" + bezeichnung + "%' " 
+					+ " UNION "
+					+ "SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname, " 						
+					+ " kontakt.erstellungsdatum, kontakt.modifikationsdatum, " 
+					+ "kontakt.ownerid, kontakt.identifier "
+					+ "FROM eigenschaft "
+					+ "INNER JOIN auspraegung "
+					+ "ON auspraegung.eigenschaftid = eigenschaftid.id "
+					+ "INNER JOIN berechtigung "
+					+ "ON berechtigung.objectid = auspraegung.kontaktid "
+					+ "INNER JOIN kontakt "
+					+ "ON kontakt.id = auspraegung.kontaktid "
+					+ "WHERE berechtigung.receiverid = " + n.getId() 
+					+ "AND bezeichnung LIKE '%" + bezeichnung + "%' " );
+					
+					
+
 			ResultSet rs = stmt.executeQuery();
-			
-			//Fuer jeden Eintrag im Suchergebnis wird nun ein Objekt erstellt
-		    Eigenschaft e = new Eigenschaft();
-		    e.setBezeichnung("bezeichnung");
-			
-			//While Schleife f�r das Durchlaufen vieler Zeilen
-			//Schreiben der Objekt-Attribute aus ResultSet
+
 			while (rs.next()) {
 				
-				Kontakt k = new Kontakt();
+			Kontakt k = new Kontakt();
 				k.setId(rs.getInt("id"));
-			    k.setVorname(rs.getString("vorname"));
-			    k.setNachname(rs.getString("nachname"));
-			    k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
-			    k.setModDat(rs.getTimestamp("modifikationsdatum"));
-			    k.setOwnerId(rs.getInt("ownerid"));
-				
-				//Statt return wird hier der Vektor erweitert
+				k.setVorname(rs.getString("vorname"));
+				k.setNachname(rs.getString("nachname"));
+				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
+				k.setModDat(rs.getTimestamp("modifikationsdatum"));
+				k.setOwnerId(rs.getInt("ownerid"));
+
 				result.addElement(k);
-				
 			}
 			
 			return result;
@@ -724,7 +732,7 @@ public class KontaktMapper {
 		
 		return null;
 	}
-
+	
 // Alternative End ##############################################################################################
 
 	

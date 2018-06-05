@@ -11,32 +11,21 @@ PM> Install-Package bootstrap-Version 4.1.1
 
 
 /*
- * Richtlinien f�r die Seitenregelung
+ * Allgemeine Richtlinien für die Seitenregelung
  */
 
-div {
-	height: 90vh;
-	width: 90vw;
-}
-
-body {
-	font-family: "Lato", sans-serif;
+*{
+	margin: 0;
+	padding: 0;
 }
 
 html, body {
 	height: 100%;
 }
 
-body>div {
-	width: 90%;
-	height: 100%;
-}
-
-body>div>div {
-	width: 100%;
-}
-
-/** Beginn des Headers */
+/*
+ * Beginn des Headers
+ */
 #top {
 	cursor: default;
 	display: flex;
@@ -45,11 +34,12 @@ body>div>div {
 	justify-content: space-between;
 	padding-right: 30px;
 	box-sizing: border-box;
-	background: #999 url('/images/3.png') no-repeat left 50%;
+	background: #999 url('https://i.pinimg.com/originals/df/c3/09/dfc309dd3b5d8971c5425ea1f8a28f3d.jpg') no-repeat left 50%;
 	background-size: cover;
 	color: white;
 }
 
+/** Das Nutzermenu setzt den Namen des Users und den Logout Link auf die obere Rechte Seite des Headers */
 #nutzermenu {
 	display: flex;
 	width: 30%;
@@ -61,7 +51,7 @@ body>div>div {
 }
 
 #nutzermenu p {
-	width: 100%;
+	
 	font-size: 16px;
 	text-align: right;
 	cursor: pointer;
@@ -71,13 +61,14 @@ body>div>div {
 	margin-left: 10px;
 	padding-left: 10px;
 	text-decoration: none;
-	color: #666;
+	color: #ffffff;
 	border-left: 1px solid #666;
 }
 
+/** Hier wird das Logo und der Text: Sontact auf die linke Seite des Headers gesetzt */
 h1 {
 	font-weight: 400;
-	font-size: 20px;
+	font-size: 21px;
 	width: 33%;
 	background: url(/images/sontact2.png) no-repeat left 80%;
 	background-size: contain;
@@ -101,6 +92,10 @@ h1 a {
 	padding: 20px 0px 20px 30px;
 }
 
+/*
+ * Ende des Headers
+ */
+ 
 .sendButton {
 	display: block;
 	font-size: 16pt;
@@ -124,15 +119,6 @@ h1 a {
 	margin: 15px 6px 6px;
 }
 
-#header {
-	color: white;
-	letter-spacing: 10px;
-	text-align: left;
-	float: left;
-	padding-top: 10px;
-	padding-bottom: 20px;
-}
-
 .box {
 	float: left;
 	width: 30%;
@@ -142,7 +128,9 @@ h1 a {
 	box-sizing: border-box;
 }
 
-/** Beginn des Contents */
+/*
+ * Beginn des Contents
+ */
 #content {
 	width: 77%;
 	min-height: 550px;
@@ -151,6 +139,7 @@ h1 a {
 	padding-top: 20px;
 }
 
+/** Der contentHeader ist für die Überschriften innerhalb des Contents zuständig */
 #contentHeader {
 	font: 'Gotham';
 	font-weight: lighter !important;
@@ -162,15 +151,31 @@ h1 a {
 	padding-bottom: 30px;
 }
 
-/** Beginn des Navigators */
+/*
+ * Beginn des Navigators
+ */
 #navigator {
 	float: left;
-	background: #999 url('/images/3.png') no-repeat;
+	background: #eeeeee;
 	background-size: cover;
-	color: white;
+	color: black;
 }
 
-/** Beginn des Footers */
+#navigator label {
+	color: blue;
+}
+#navigator button {
+	
+	text-align: center;
+	font-size: 100%;
+	postion: absolute;
+	align: center;
+	padding-left: 10px;
+}
+
+/* 
+ * Beginn des Footers
+ */
 #footer {
 	padding: 10px 0px;
 	text-align: center;
@@ -179,9 +184,7 @@ h1 a {
 	width: 100%;
 	display: flex;
 	justify-content: center;
-	background: #999
-		url('http://mindchamps-medical.com/wp-content/uploads/2015/04/Abstract-Background-White.jpg')
-		no-repeat left 50%;
+	background: #999 url('http://mindchamps-medical.com/wp-content/uploads/2015/04/Abstract-Background-White.jpg') no-repeat left 50%;
 }
 
 #footer .gwt-HTML {

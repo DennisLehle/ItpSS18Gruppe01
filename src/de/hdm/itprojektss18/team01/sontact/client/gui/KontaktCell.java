@@ -14,6 +14,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
  * @author dennislehle
  */
 public class KontaktCell extends AbstractCell<Kontakt> {
+	
 
 
 	@Override
@@ -29,6 +30,9 @@ public class KontaktCell extends AbstractCell<Kontakt> {
       sb.appendHtmlConstant(", ");
       sb.appendEscaped(k.getNachname());
       sb.appendHtmlConstant("</div>");
+      
+      
+      
 
 	}
 }

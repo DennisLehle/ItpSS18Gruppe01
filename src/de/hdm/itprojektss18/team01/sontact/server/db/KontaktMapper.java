@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Vector;
 
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
@@ -82,11 +83,11 @@ public class KontaktMapper {
 		PreparedStatement stmt = null;
 		
 		
-		//Query für die Abfrage der hoechsten ID (Primärschlüssel) in der Datenbank
+		//Query fï¿½r die Abfrage der hoechsten ID (Primï¿½rschlï¿½ssel) in der Datenbank
 		String maxIdSQL = "SELECT MAX(id) AS maxid FROM kontakt";
 		
 		
-		//Query für den Insert
+		//Query fï¿½r den Insert
 		String insertSQL = "INSERT INTO kontakt (id, vorname, nachname, erstellungsdatum, modifikationsdatum, ownerid, identifier) VALUES (?,?,?,?,?,?,?)";		
 		
 		
@@ -121,7 +122,7 @@ public class KontaktMapper {
 		    stmt.setString(7, String.valueOf(k.getIdentifier()));
 		   
 		    
-		    //INSERT-Query ausführen
+		    //INSERT-Query ausfï¿½hren
 		    stmt.executeUpdate();
 		    
 		    
@@ -251,7 +252,7 @@ public class KontaktMapper {
 	}
 
 	/**
-	 * Gibt alle Kontakte des Nutzers aus. 
+	 * Gibt Meine Kontakte des Nutzers aus. 
 	 * @param ownerId
 	 * @return
 	 */
@@ -281,13 +282,14 @@ public class KontaktMapper {
 				//Ergebnis-Tupel in Objekt umwandeln
 				Kontakt k = new Kontakt();
 				
-				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				//Setzen der Attribute den Datensï¿½tzen aus der DB entsprechend
 				k.setId(rs.getInt("id"));
 				k.setVorname(rs.getString("vorname"));
 				k.setNachname(rs.getString("nachname"));
 				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
 				k.setModDat(rs.getTimestamp("modifikationsdatum"));
 				k.setOwnerId(rs.getInt("ownerid"));
+				k.setIdentifier(rs.getString("identifier").charAt(0));
 				
 				// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
 				result.addElement(k);
@@ -335,7 +337,7 @@ public class KontaktMapper {
 				//Ergebnis-Tupel in Objekt umwandeln
 				Kontakt k = new Kontakt();
 				
-				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				//Setzen der Attribute den Datensï¿½tzen aus der DB entsprechend
 				k.setId(rs.getInt("id"));
 				k.setVorname(rs.getString("vorname"));
 				k.setNachname(rs.getString("nachname"));
@@ -389,7 +391,7 @@ public class KontaktMapper {
 				//Ergebnis-Tupel in Objekt umwandeln
 				Kontakt k = new Kontakt();
 				
-				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				//Setzen der Attribute den Datensï¿½tzen aus der DB entsprechend
 				k.setId(rs.getInt("id"));
 				k.setVorname(rs.getString("vorname"));
 				k.setNachname(rs.getString("nachname"));
@@ -427,7 +429,7 @@ public class KontaktMapper {
 		
 		String selectByKey = "SELECT * FROM kontakt WHERE vorname=? AND ownerid=? ORDER BY vorname";
 		
-		//Vector erzeugen, der die Kontaktdatensätze aufnehmen kann
+		//Vector erzeugen, der die Kontaktdatensï¿½tze aufnehmen kann
 		Vector <Kontakt> result = new Vector<Kontakt>();
 		
 		try {
@@ -440,7 +442,7 @@ public class KontaktMapper {
 			ResultSet rs = stmt.executeQuery();
 			
 			
-			//While Schleife für das Durchlaufen vieler Zeilen
+			//While Schleife fï¿½r das Durchlaufen vieler Zeilen
 			//Schreiben der Objekt-Attribute aus ResultSet
 			while (rs.next()) {
 				
@@ -485,7 +487,7 @@ public class KontaktMapper {
 		
 		String selectByName = "SELECT * FROM kontakt WHERE nachname =? AND ownerid=?  ORDER BY nachname";
 		
-		//Vector erzeugen, der die Kontaktdatensätze aufnehmen kann
+		//Vector erzeugen, der die Kontaktdatensï¿½tze aufnehmen kann
 		Vector <Kontakt> result = new Vector<Kontakt>();
 		
 		try {
@@ -498,7 +500,7 @@ public class KontaktMapper {
 			ResultSet rs = stmt.executeQuery();
 			
 			
-			//While Schleife für das Durchlaufen vieler Zeilen
+			//While Schleife fï¿½r das Durchlaufen vieler Zeilen
 			//Schreiben der Objekt-Attribute aus ResultSet
 			while (rs.next()) {
 				
@@ -529,13 +531,14 @@ public class KontaktMapper {
 // Alternative: ##################################################################################################
 
 	/**
-	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach dem Namen und gibt diese zurueck. 
-	 * Hierbei wird Vor- und Nachname des Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
+	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach 
+	 * dem Namen und gibt diese zurueck. Hierbei wird Vor- und Nachname des 
+	 * Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
 	 * @param String name, Nutzer n
 	 * @return Vector<Kontakt>
 	 * 
 	 */
-	public Vector<Kontakt> findKontaktByName(String name, Nutzer n) {
+	public Vector<Kontakt> findKontakteByName(String name, Nutzer n) {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -554,16 +557,15 @@ public class KontaktMapper {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(
 					"SELECT * FROM kontakt "
-					+ "WHERE ownerid = " + n.getId()
-					+ " AND vorname like '%" + name + "%' OR nachname like '%" + name + "%' "
-					+ "UNION "
-					+ "SELECT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier "
-					+ "FROM kontakt "
-					+ "INNER JOIN berechtigung "
-					+ "ON kontakt.id = berechtigung.objectid "
-					+ "WHERE berechtigung.receiverid = " + n.getId() + " AND berechtigung.type = 'k' "
-					+ "AND vorname like '%" + name + "%' OR nachname like '%" + name + "%'");
-			
+							+ "WHERE ownerid = " + n.getId()
+							+ " AND vorname like '%" + name + "%' OR nachname like '%" + name + "%' "
+							+ "UNION "
+							+ "SELECT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier "
+							+ "FROM kontakt "
+							+ "INNER JOIN berechtigung "
+							+ "ON kontakt.id = berechtigung.objectid "
+							+ "WHERE berechtigung.receiverid = " + n.getId() + " AND berechtigung.type = 'k' "
+							+ "AND vorname like '%" + name + "%' OR nachname like '%" + name + "%'");
 //			stmt.setInt(1, n.getId());
 //			stmt.setString(2, name);
 //			stmt.setString(3, name);
@@ -594,7 +596,128 @@ public class KontaktMapper {
 		
 		return null;
 	}
+	
+	/**
+	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach deren Auspraegung
+	 * und gibt diese zurueck. Hierbei wird die Auspraegung des Kontaktes mit dem vom Nutzer 
+	 * uebergebenem String abgeglichen.
+	 * @param String wert, Nutzer n
+	 * @return Vector<Kontakt>
+	 * 
+	 */
+	public Vector<Kontakt> findKontakteByAuspraegung(String wert, Nutzer n ) {
 
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		Vector<Kontakt> result = new Vector<Kontakt>();
+			try {			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(
+					"SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier FROM auspraegung "
+					+ "INNER JOIN kontakt "
+					+ "ON kontakt.id = auspraegung.kontaktid "		
+					+ "WHERE kontakt.ownerid = " + n.getId()
+					+ " AND wert like '%" + wert + "%'"
+					+ " UNION "
+					+ "SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier "
+					+ "FROM auspraegung "
+					+ "INNER JOIN kontakt "
+					+ "ON kontakt.id = auspraegung.kontaktid "
+					+ "INNER JOIN berechtigung "
+					+ "ON berechtigung.objectid = auspraegung.kontaktid "
+					+ "WHERE berechtigung.receiverid = " + n.getId()
+					+ " AND wert like '%" + wert + "%'" );
+			
+
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				
+			Kontakt k = new Kontakt();
+				k.setId(rs.getInt("id"));
+				k.setVorname(rs.getString("vorname"));
+				k.setNachname(rs.getString("nachname"));
+				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
+				k.setModDat(rs.getTimestamp("modifikationsdatum"));
+				k.setOwnerId(rs.getInt("ownerid"));
+
+				result.addElement(k);
+			}
+			
+			return result;
+		}
+		
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		
+		return null;
+	}
+
+	/**
+	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte 
+	 * nach deren Eigenschaften und gibt diese zurueck. Hierbei wird die 
+	 * Auspraegung des Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
+	 * @param String wert, Nutzer n
+	 * @return Vector<Kontakt>
+	 * 
+	 */
+	public Vector<Kontakt> findKontakteByEigenschaft(String bezeichnung, Nutzer n) {
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		Vector<Kontakt> result = new Vector<Kontakt>();
+			try {			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(
+					"SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier FROM eigenschaft "
+							+ "INNER JOIN auspraegung "
+							+ "ON auspraegung.eigenschaftid = eigenschaft.id "
+							+ "INNER JOIN kontakt "
+							+ "ON kontakt.id = auspraegung.kontaktid "		
+							+ "WHERE kontakt.ownerid = " + n.getId()
+							+ " AND bezeichnung like '%" + bezeichnung + "%'"
+							+ " UNION "
+							+ "SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier "
+							+ "FROM eigenschaft "
+							+ "INNER JOIN auspraegung "
+							+ "ON auspraegung.eigenschaftid = eigenschaft.id "
+							+ "INNER JOIN kontakt "
+							+ "ON kontakt.id = auspraegung.kontaktid "
+							+ "INNER JOIN berechtigung "
+							+ "ON berechtigung.objectid = auspraegung.kontaktid "
+							+ "WHERE berechtigung.receiverid = " + n.getId()
+							+ " AND bezeichnung like '%" + bezeichnung + "%'" );
+			
+
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				
+			Kontakt k = new Kontakt();
+				k.setId(rs.getInt("id"));
+				k.setVorname(rs.getString("vorname"));
+				k.setNachname(rs.getString("nachname"));
+				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
+				k.setModDat(rs.getTimestamp("modifikationsdatum"));
+				k.setOwnerId(rs.getInt("ownerid"));
+
+				result.addElement(k);
+			}
+			
+			return result;
+		}
+		
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	
 // Alternative End ##############################################################################################
 
 	
@@ -626,4 +749,6 @@ public class KontaktMapper {
 		return id;
 	}
 
+	
+	
 }

@@ -2,16 +2,20 @@ package de.hdm.itprojektss18.team01.sontact.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import de.hdm.itprojektss18.team01.sontact.client.gui.KontaktForm;
 import de.hdm.itprojektss18.team01.sontact.client.gui.MessageBox;
 import de.hdm.itprojektss18.team01.sontact.client.gui.Navigation;
 import de.hdm.itprojektss18.team01.sontact.client.gui.RegistrierungsForm;
@@ -32,6 +36,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 public class Sontact implements EntryPoint {
 
 	private LoginInfo loginInfo = null;
+	private Kontakt ownProfil = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
 	private Label loginLabel = new Label("Nur ein Schritt trennt Sie noch von der Kontaktverwaltung. Melden Sie sich jetzt mit einem Google-Konto an, um Sontact nutzen zu können.");
 	private Anchor signInLink = new Anchor("Mit Google anmelden");
@@ -125,6 +130,8 @@ public class Sontact implements EntryPoint {
 	 * @param nutzer
 	 */
 	private void start(final Nutzer nutzer) {
+		//Profil Label wird erstellt.
+		Label profilLb = new Label();
 
 		//Logout wird hier schon gesetzt
 		HTML signOutLink = new HTML("<p><a href='" + loginInfo.getLogoutUrl() 
@@ -150,15 +157,30 @@ public class Sontact implements EntryPoint {
 
 			@Override
 			public void onSuccess(Kontakt result) {
-				RootPanel.get("nutzermenu").clear();
-				RootPanel.get("nutzermenu").add(new HTML("<p><span class='glyphicon glyphicon-user'></span> &nbsp; " + result.getVorname() +" "+ result.getNachname()));
+				//Eigenes Profil wird gesetzt um außerhalb Zugriff zu erhalten.
+				ownProfil = result;
+				//Label wird mit dem Vor-, und Nachnamen des Nutzers befült der sich Eingeloggt hat.
+				profilLb.setText(result.getVorname() +" "+ result.getNachname());
+				//Label wird mit ClickHandler versehen um aufs eigene Profil zu gelangen.
+				profilLb.addClickHandler(new ownProfilClickHandler());
+				profilLb.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);
 				
+				
+				//Erstmal den Container leeren.
+				RootPanel.get("nutzermenu").clear();
+
 				//Logout wird hier schon gesetzt
 				HTML signOutLink = new HTML("<p><a href='" + loginInfo.getLogoutUrl() 
 						+ "'><span class='glyphicon glyphicon-log-out'></span></a></p>");
+				
+				//Label und Logout werden dem NutzerMenu <div> Container hinzugefügt.
+				RootPanel.get("nutzermenu").add(profilLb);
+				RootPanel.get("nutzermenu").add(new HTML("<p><span class='glyphicon glyphicon-user'></span> &nbsp;"));
 				RootPanel.get("nutzermenu").add(signOutLink);
+				
+				
 			}
-			
+		
 		});
 		
 		RootPanel.get("content").add(new ShowKontakte(nutzer));
@@ -190,4 +212,20 @@ public class Sontact implements EntryPoint {
 
 	}
 
+	/**
+	 * ClickHandler fürs Label um auf das eigene Profil zugelangen.
+	 * 
+	 * @author Dennis Lehle
+	 *
+	 */
+	class ownProfilClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			RootPanel.get("content").clear();
+			new KontaktForm(ownProfil);
+			
+		}
+		
+	}
 }

@@ -1,5 +1,6 @@
 package de.hdm.itprojektss18.team01.sontact.client.gui;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Cookies;
@@ -9,6 +10,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -35,7 +37,7 @@ public class MessageBox {
         box.setText(header);
         box.setGlassEnabled(true);
         panel.add(new HTML(content));
-        final Button buttonClose = new Button("OK");
+        final Button buttonClose = new Button("<image src='/images/ok.png' width='30px' height='30px' align='center' />");
         		
         buttonClose.addClickHandler(new ClickHandler() {
 			
@@ -71,11 +73,12 @@ public class MessageBox {
         final DialogBox box = new DialogBox();
         TextBox tb = new TextBox();
         final VerticalPanel panel = new VerticalPanel();
+        final HorizontalPanel hp = new HorizontalPanel();
         box.setText(header);
         box.setGlassEnabled(true);
         panel.add(new HTML(content));
-        final Button buttonClose = new Button("Abbrechen");
-        final Button buttonShare = new Button("Share");
+        final Button buttonClose = new Button("<image src='/images/abbrechen.png' width='30px' height='30px' align='center' /> abbrechen");
+        final Button buttonShare = new Button("<image src='/images/share.png' width='30px' height='30px' align='center' /> teilen");
         
         buttonClose.addClickHandler(new ClickHandler() {
 			
@@ -148,11 +151,15 @@ public class MessageBox {
         panel.add(emptyLabel);
         panel.add(tb);
         buttonClose.setWidth("80px");
+        buttonClose.setHeight("60px");
         buttonShare.setWidth("80px");
-        panel.add(buttonClose);
-        panel.add(buttonShare);
-        panel.setCellHorizontalAlignment(buttonClose, HasAlignment.ALIGN_RIGHT);
-        panel.setCellHorizontalAlignment(buttonShare, HasAlignment.ALIGN_LEFT);
+        buttonShare.setHeight("60px");
+        buttonShare.setStyleName("Button");
+        
+        hp.add(buttonShare);
+        hp.add(buttonClose);
+
+        panel.add(hp);
         box.add(panel);
         box.center();
         box.show();
@@ -172,11 +179,12 @@ public class MessageBox {
         final DialogBox box = new DialogBox();
         TextBox tb = new TextBox();
         final VerticalPanel panel = new VerticalPanel();
+        final HorizontalPanel hp = new HorizontalPanel();
         box.setText(header);
         box.setGlassEnabled(true);
         panel.add(new HTML(content));
-        final Button buttonClose = new Button("Abbrechen");
-        final Button buttonShare = new Button("Share");
+        final Button buttonClose = new Button("<image src='/images/abbrechen.png' width='30px' height='30px' align='center' /> abbrechen");
+        final Button buttonShare = new Button("<image src='/images/share.png' width='30px' height='30px' align='center' /> teilen");
         
         buttonClose.addClickHandler(new ClickHandler() {
 			
@@ -249,12 +257,19 @@ public class MessageBox {
         panel.add(emptyLabel);
         panel.add(tb);
         buttonClose.setWidth("80px");
+        buttonClose.setHeight("60px");
         buttonShare.setWidth("80px");
-        panel.add(buttonClose);
-        panel.add(buttonShare);
-        panel.setCellHorizontalAlignment(buttonClose, HasAlignment.ALIGN_RIGHT);
-        panel.setCellHorizontalAlignment(buttonShare, HasAlignment.ALIGN_LEFT);
+        buttonShare.setHeight("60px");
+        buttonShare.setStyleName("Button");
+        
+        hp.add(buttonShare);
+        hp.add(buttonClose);
+   
+//        panel.setCellHorizontalAlignment(buttonClose, HasAlignment.ALIGN_RIGHT);
+//        panel.setCellHorizontalAlignment(buttonShare, HasAlignment.ALIGN_LEFT);
+       panel.add(hp);
         box.add(panel);
+      
         box.center();
         box.show();
         return box;

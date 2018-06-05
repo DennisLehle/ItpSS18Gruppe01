@@ -151,7 +151,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Erzeugen eines neuen Kontakts, dieser wird angelegt und anschliessend 
 	 * in der DB gespeichert. Der Kontakt wird automatisch der Default Kontaktliste 
-	 * eines Nutzers "Alle Kontakte" zugeordnet und steht dem Nutzer nun 
+	 * eines Nutzers "Meine Kontakte" zugeordnet und steht dem Nutzer nun 
 	 * zu weiteren Funktionen zur Verfuegung.
 	 * 
 	 * @param String vorname
@@ -187,7 +187,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		k.setId(1);
 
 		// Kontaktliste und Kontakt werden der Zwischentabelle hinzugefuegt.
-		this.addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Alle Kontakte"), 
+		this.addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Meine Kontakte"), 
 				kMapper.insert(k));
 	}
 	
@@ -196,7 +196,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Erzeugen eines neuen Kontakts f�r den Nutzers bei der Systemregistrierung. 
 	 * Dieser Kontakt stellt eine Art "Visitenkarte" des eingeloggten Nutzers dar, 
 	 * die er mit seinen Kontaktdaten nach belieben bef�llen kann.
-	 * Gleichzeitig wird die Default Kontaktliste "Alle Kontakte" angelegt, 
+	 * Gleichzeitig wird die Default Kontaktliste "Meine Kontakte" angelegt, 
 	 * worin der Kontakt des Nutzers und alle weiteren, 
 	 * die vom Nutzer angelegt werden, gespeichert sind.
 	 * 
@@ -238,11 +238,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Gespeicherter Kontakt nach Objekttypen <'r'> auslesen.
 		Kontakt k = getOwnKontakt(n);
 
-		// Erzeugung der Default-Kontaktliste <Alle Kontakte>.
+		// Erzeugung der Default-Kontaktliste <Meine Kontakte>.
 		createKontaktlisteRegistrierung(n);
 
 		// Kontaktliste und Kontakt der Zwischentabelle hinzufuegen.
-		addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Alle Kontakte"), k);
+		addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Meine Kontakte"), k);
 
 		return k;
 	}
@@ -277,7 +277,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 
 	/**
-	 * Erzeugen der Default Kontaktliste "Alle Kontakte" des Nutzer. 
+	 * Erzeugen der Default Kontaktliste "Meine Kontakte" des Nutzer. 
 	 * Diese wird angelegt und anschliessend in der DB gespeichert. 
 	 * Die Kontaktliste bildet den Speicherort aller angelegten Kontakte.
 	 * 
@@ -290,14 +290,20 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		
 		init();
 		
-		// Das Erstellen eines Kontaktlisten Objektes mit Titel "Alle Kontakte" und Owner-ID.
+		// Das Erstellen eines Kontaktlisten Objektes mit Titel "Meine Kontakte" und Owner-ID.
 		Kontaktliste kl = new Kontaktliste();
-		kl.setTitel("Alle Kontakte");
+		kl.setTitel("Meine Kontakte");
 		kl.setOwnerId(n.getId());
-		
-		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der 
-		// naechst hoeheren ID angepasst wird.
 		kl.setId(1);
+		
+		//Das Erstellen eines Kontaktlisten Objektes mit Titel "Mit mir geteilte Kontakte" und Owner-ID.
+		Kontaktliste kl1 = new Kontaktliste();
+		kl.setTitel("Mit mir geteilte Kontakte");
+		kl.setOwnerId(n.getId());
+		kl1.setId(1);
+		
+		//Liste in die Db einfügen.
+		this.klMapper.insert(kl1);
 		
 		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
 		return this.klMapper.insert(kl);
@@ -479,7 +485,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			}
 		}
 		
-		/* entfernt alle Kontakte, welche mit dem Nutzer in einer Eigentumsbeziehung stehen 
+		/* entfernt Meine Kontakte, welche mit dem Nutzer in einer Eigentumsbeziehung stehen 
 		 * sowie alle Auspraegungen eines jeden Kontaktes, 
 		 * alle Kontaktlisteneintr�ge und alle Berechtigungen auf den Kontakt
 		 */
@@ -496,7 +502,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		 */
 		Vector<Berechtigung> bvr = this.getAllBerechtigungenByReceiver(n.getId());
 		if(bvr != null) {
-			for(Berechtigung b : bvo) {
+			for(Berechtigung b : bvr) {
 				this.bMapper.delete(b);
 			}
 		}
@@ -695,7 +701,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
-	 * Kontaktliste "Alle Kontakte" für den Nutzer in der Db finden
+	 * Kontaktliste "Meine Kontakte" für den Nutzer in der Db finden
 	 * (DefaultKontaktliste).
 	 */
 
@@ -894,6 +900,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			}
 		} else if (type == 'k') {
 			this.createBerechtigung(ownerId, receiverId, objectId, type);
+		
+			Nutzer n = new Nutzer();
+			n.setId(receiverId);
+		
+			Kontakt k = new Kontakt();
+			k.setId(objectId);
+			
+			//Kontakt der Kontaktliste des Receivers hinzufügen die er abruft.
+			this.addKontaktToKontaktliste(this.findKontaktlisteByTitel(n, "Mit mir geteilte Kontakte"), k);
 			// -> Checkboxen?
 			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(objectId);
 			for (int a = 0; a < av.size(); a++) {
@@ -1160,144 +1175,83 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * ABSCHNITT BEGINN: Suchfunktion
 	 * *************************************************************************
 	 */
-	
-	// Suche Anfang ################################################################################################################
-
 	/**
-	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach dem Namen und gibt diese zurueck. 
-	 * Hierbei wird Vor- und Nachname des Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
+	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach dem 
+	 * Namen und gibt diese zurueck. Hierbei wird Vor- und Nachname des Kontaktes mit 
+	 * dem vom Nutzer uebergebenem String abgeglichen.
 	 * 
 	 * @param name, vom Nutzer uebergebener String
 	 * @param n Nutzer
 	 * @return Vector<Kontakt>
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Kontakt> getKontakteByName(String name, Nutzer n) throws IllegalArgumentException {
-		init();
-		return this.kMapper.findKontaktByName(name, n);
-	}
-	
-	
-	
-	public Vector<Kontakt> getKontakteByAuspraegung(String auspraegung, Nutzer n) throws IllegalArgumentException {
-		// TODO		
-		return null;
-	}
-	
-	
-
-	public Vector<Kontakt> getKontakteByEigenschaft(String auspraegung, Nutzer n) throws IllegalArgumentException {
-		// TODO
-		return null;
-	}
-	
-	
-	
-	public Vector<Kontakt> getKontakteBySuche(String listboxWert, String testboxWert, Nutzer n)
+	public Vector<Kontakt> getKontakteByName(String name, Nutzer n) 
 			throws IllegalArgumentException {
 		init();
+		return this.kMapper.findKontakteByName(name, n);
+	}
+	
+	/**
+	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Auspraegungen nach 
+	 * dem Wert und gibt diesen zurueck. Hierbei wird die Auspraegung eines Kontaktes 
+	 * mit dem vom Nutzer uebergebenem String abgeglichen.
+	 * 
+	 * @param wert, vom Nutzer uebergebener String
+	 * @param n Nutzer
+	 * @return Vector<Kontakt>
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Kontakt> getKontakteByAuspraegung(String wert, Nutzer n) 
+			throws IllegalArgumentException {
+		init();
+		
+		return this.kMapper.findKontakteByAuspraegung(wert, n);
+	}
 
-		if (listboxWert == "name") {
-			return this.getKontakteByName(testboxWert, n);
+	/**
+	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte EIgenschaften nach 
+	 * der Bezeichnung und gibt diesen zurueck. Hierbei wird die Eigenschaft eines 
+	 * Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
+	 * 
+	 * @param wert, vom Nutzer uebergebener String
+	 * @param n Nutzer
+	 * @return Vector<Kontakt>
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Kontakt> getKontakteByEigenschaft(String bezeichnung, Nutzer n) 
+			throws IllegalArgumentException {
+		init();
+		return this.kMapper.findKontakteByEigenschaft(bezeichnung, n);
+	}
+		
+	/**
+	 * Die Suche nach Kontaktnamen, Auspraegungen oder Eigenschaften wird in der 
+	 * folgenden Methode zusammengefasst aufgerufen. Je nach Treffer der Sucheingabe, 
+	 * wird das aufgerufene Objekt zur�ckgeben. 
+	 * 
+	 * @param listBoxWert, testBoxWert
+	 * @param n Nutzer
+	 * @return Vector<Kontakt>
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Kontakt> getKontakteBySuche(String listBoxWert, String testBoxWert,
+			Nutzer n) throws IllegalArgumentException {
+		init();
 
-		} else if (listboxWert == "auspraegung") {
-			return this.getKontakteByAuspraegung(testboxWert, n);
+		if (listBoxWert == "name") {
+			return this.getKontakteByName(testBoxWert, n);
 
-		} else if (listboxWert == "eigenschaft") {
-			return this.kMapper.findKontaktByName(testboxWert, n);
+		} else if (listBoxWert == "auspraegung") {
+			return this.getKontakteByAuspraegung(testBoxWert, n);
+
+		} else if (listBoxWert == "eigenschaft") {
+			return this.kMapper.findKontakteByEigenschaft(testBoxWert, n);
 			
 		} else
 
 			return null;
 	}
 
-	
-	// Suche Ende ################################################################################################################
-	
-	
-	/**
-	 * Auslesen der Kontakte anhand des Vornamens. Bei der Eingabe eines Vornamens 
-	 * wird in der Ausgabe eine Liste an Kontakten zur�ckgegeben, die mit dem 
-	 * Vornamen zu identifizieren sind. 
-	 *@param String vorname 
-	 *@param Nutzer n
-	 *@return Vector <Kontakt>
-	 */
-	public Vector<Kontakt> getKontaktByVorname(String vorname, Nutzer n) 
-			throws IllegalArgumentException {
-		init();
-		return this.kMapper.findKontaktByVorname(vorname, n);
-	}
-	
-	/**
-	 * Auslesen der Kontakte anhand des Nachnamens. Bei der Eingabe eines Nachnamens
-	 * wird in der Ausgabe eine Liste an Kontakten zur�ckgegeben, die mit dem
-	 * Nachnamen zu identifizieren sind. *@param String nachname
-	 * 
-	 * @param Nutzer n
-	 * @return Vector <Kontakt>
-	 */
-	public Vector<Kontakt> getKontaktByNachname(String nachname, Nutzer n) 
-			throws IllegalArgumentException {
-		init();
-		return this.kMapper.findKontaktByNachname(nachname, n);
-	}
-	
-	/**
-	 * Auslesen der Auspraegung anhand der definierten Bezeichnung.
-	 */
-	public Vector<Kontakt> getAuspraegungByWert(String wert) 
-			throws IllegalArgumentException {
-		
-		init();
-		return this.aMapper.findAuspraegungByWert(wert);
-	}
-	
-	/**
-	 * Auslesen der Eigenschaft anhand der Bezeichnung.
-	 */
-	public Vector<Kontakt> getEigenschaftByBezeichnung(String bezeichnung) 
-			throws IllegalArgumentException {
-		
-		init();
-		return this.eMapper.findEigenschaftByBezeichnung(bezeichnung);
-	}
-
-	/**
-	 * Es werden alle Kontakte mit dem zugehoerigen Inhalt aufgerufen. Der Inhalt 
-	 * der Kontakte zeichnet sich durch die Eigenschaften des jeweiligen Kontakts, 
-	 * sowie der dazugehoerigen Auspraegungen aus. 
-	 * @param Nutzer n 
-	 * @param Auspraegung a
-	 * @param Eigenschaft e
-	 * @return kv
-	 */
-	public Vector<Kontakt> getAllKontakteByInhalt(Nutzer n, Auspraegung a, Eigenschaft e)
-			throws IllegalArgumentException {
-	
-		Vector<Kontakt> kv = new Vector<Kontakt>();
-
-		//Pruefung ob der Kontakt existiert.
-		for (int i = 0; i < kv.size(); i++) {
-			if (kv != null) {
-				Kontakt k = new Kontakt();
-				
-				//Der Kontakt wird ausgelesen und identifziert.
-				k.setId(kv.elementAt(i).getId());
-				k.setVorname(k.getVorname());
-				k.setNachname(k.getNachname());
-				k.setOwnerId(k.getOwnerId());
-				
-				//Der Liste wird der Kontakt zurueckgegeben.
-				kv.addElement(k);
-			}
-			//die Inhalte werden zugehoerig abgerufen.
-			this.aMapper.findAuspraegungByKontakt(a.getKontaktId());
-			this.eMapper.findEigenschaftById(e.getId());
-		}
-		return kv;
-	}	
-	
 	/*
 	 * ************************************************************************* 
 	 * ABSCHNITT Ende - Suchfunktion 
@@ -1311,7 +1265,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	/**
-	 * Pr�ft �ber einen boolean, ob sich ein Objekt (Kontakt k, Kontaktliste l oder
+	 * Prueft ueber einen boolean, ob sich ein Objekt (Kontakt k, Kontaktliste l oder
 	 * Auspraegung a) sich in einem geteilten Status befindet.
 	 */
 	public boolean getStatusForObject(int objectId) throws IllegalArgumentException {
@@ -1324,6 +1278,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			if (objectId == b.getObjectId()) {
 				return true;
 			}
+			
 		}
 		return false;
 	}

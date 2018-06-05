@@ -43,11 +43,11 @@ public class BerechtigungMapper {
 		PreparedStatement stmt = null;
 		
 		
-		//Query für die Abfrage der hoechsten ID (Primärschlüssel) in der Datenbank
+		//Query fï¿½r die Abfrage der hoechsten ID (Primï¿½rschlï¿½ssel) in der Datenbank
 		String maxIdSQL = "SELECT MAX(id) AS maxid FROM berechtigung";
 		
 		
-		//Query für den Insert
+		//Query fï¿½r den Insert
 		String insertSQL = "INSERT INTO berechtigung (id, ownerid, receiverid, objectid, type) VALUES (?,?,?,?,?)";		
 		
 		
@@ -80,7 +80,7 @@ public class BerechtigungMapper {
 		    stmt.setString(5, String.valueOf(b.getType()));
 		    
 		    
-		    //INSERT-Query ausführen
+		    //INSERT-Query ausfï¿½hren
 		    stmt.executeUpdate();
 		    
 		    
@@ -93,32 +93,31 @@ public class BerechtigungMapper {
 
 	
 	/**
-	 * Lï¿½schen eines Berechtigung-Objekts aus der Datenbank.
+	 * LÃ¯Â¿Â½schen eines Berechtigung-Objekts aus der Datenbank.
 	 * 
 	 * @param berechtigung
-	 * @return void
+	 *@return void
 	 */
-
 	public void delete (Berechtigung b) {
-		
-		Connection con = null; 
-		PreparedStatement stmt = null;
-		
-		String deleteSQL = "DELETE FROM berechtigung WHERE id=?";
-		
+
+		// DBConnection herstellen
+		Connection con = DBConnection.connection();
+
 		try {
+			// SQL Statement wird der lokalen Variable Ã¯Â¿Â½bergeben
+			PreparedStatement prestmt = con.prepareStatement(
+					" DELETE FROM Berechtigung WHERE"
+						+ " ownerid = " + b.getOwnerId()
+						+ " AND receiverid = " + b.getReceiverId() 
+						+ " AND objectid = " + b.getObjectId() 		
+						+ " AND type = '" + b.getType() + "'");
 			
-			con = DBConnection.connection();
 			
-			stmt = con.prepareStatement(deleteSQL);
-			stmt.setInt(1, b.getId());
+			// DELETE-Statement ausfÃ¯Â¿Â½hren
+			prestmt.execute();
 			
-			stmt.executeUpdate();
-		}
-		
-		catch (SQLException e2) {
+		} catch (SQLException e2) {
 			e2.printStackTrace();
-			
 		}
 	}
 
@@ -152,7 +151,7 @@ public class BerechtigungMapper {
 				Berechtigung b = new Berechtigung();
 				
 				
-				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				//Setzen der Attribute den Datensï¿½tzen aus der DB entsprechend
 				b.setId(rs.getInt("id"));
 				b.setOwnerId(rs.getInt("ownerid"));
 				b.setReceiverId(rs.getInt("receiverid"));
@@ -187,7 +186,7 @@ public class BerechtigungMapper {
 		
 		String selectAll = "SELECT * FROM berechtigung";
 		
-		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
+		//Vector erzeugen, der die Eigenschaftsdatensï¿½tze mit ID 1-17 aufnehmen kann
 		Vector <Berechtigung> result = new Vector<Berechtigung>();
 		
 		
@@ -199,7 +198,7 @@ public class BerechtigungMapper {
 			ResultSet rs = stmt.executeQuery();
 			
 			
-			//While Schleife für das Durchlaufen vieler Zeilen
+			//While Schleife fï¿½r das Durchlaufen vieler Zeilen
 			//Schreiben der Objekt-Attribute aus ResultSet
 			while (rs.next()) {
 				
@@ -257,7 +256,7 @@ public class BerechtigungMapper {
 				//Ergebnis-Tupel in Objekt umwandeln
 				Berechtigung b = new Berechtigung();
 				
-				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				//Setzen der Attribute den Datensï¿½tzen aus der DB entsprechend
 				b.setId(rs.getInt("id"));
 				b.setOwnerId(rs.getInt("ownerid"));
 				b.setReceiverId(rs.getInt("receiverid"));
@@ -311,7 +310,7 @@ public class BerechtigungMapper {
 				//Ergebnis-Tupel in Objekt umwandeln
 				Berechtigung b = new Berechtigung();
 				
-				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				//Setzen der Attribute den Datensï¿½tzen aus der DB entsprechend
 				b.setId(rs.getInt("id"));
 				b.setOwnerId(rs.getInt("ownerid"));
 				b.setReceiverId(rs.getInt("receiverid"));

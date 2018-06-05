@@ -11,8 +11,8 @@ public interface ReportGeneratorAsync {
 
 	void init(AsyncCallback<Void> callback);
 
-	void createAllKontakteByReport(Nutzer n, AsyncCallback<AllKontakteByNutzerReport> callback);
+	void createAllKontakteByReport(AsyncCallback<AllKontakteByNutzerReport> callback);
 
-	void createAllKontakteReport(Kontakt k, AsyncCallback<AllKontakteReport> callback);
+	void createAllKontakteReport(AsyncCallback<AllKontakteReport> callback);
 
 }

@@ -243,7 +243,7 @@ public class KontaktlistenMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String selectByKey = "SELECT * FROM kontaktliste WHERE ownerid=? AND titel = 'Alle Kontakte'";
+		String selectByKey = "SELECT * FROM kontaktliste WHERE ownerid=? AND titel = 'Meine Kontakte'";
 
 		try {
 
@@ -389,7 +389,7 @@ public class KontaktlistenMapper {
 
 	/**
 	 * Diese Methode gibt eine Kontaktliste anahnd des Titels für den Nutzer heraus.
-	 * Der Titel lautet hier "Alle Kontakte" da diese für jeden einzelnen Kontakt
+	 * Der Titel lautet hier "Meine Kontakte" da diese für jeden einzelnen Kontakt
 	 * angelegt wird. Kontakte werden immer bei Add dieser Default Kontaktliste
 	 * hinzugefügt.
 	 * 
@@ -446,7 +446,7 @@ public class KontaktlistenMapper {
 	// // SQL-Statement anlegen
 	// PreparedStatement prestmt = con.prepareStatement(
 	// "SELECT * FROM `kontaktliste` WHERE `ownerid` ="+n.getId() + " AND `titel` =
-	// \"Alle Kontakte\" ");
+	// \"Meine Kontakte\" ");
 	//
 	//
 	// // SQL Statement wird als Query an die DB geschickt und

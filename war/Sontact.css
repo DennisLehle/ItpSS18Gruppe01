@@ -11,7 +11,11 @@ PM> Install-Package bootstrap-Version 4.1.1
 
 
 /*
+<<<<<<< HEAD
  * Allgemeine Richtlinien für die Seitenregelung
+=======
+ * Richtlinien f�r die Seitenregelung
+>>>>>>> refs/remotes/origin/master
  */
 
 *{
@@ -65,7 +69,14 @@ html, body {
 	border-left: 1px solid #666;
 }
 
+<<<<<<< HEAD
 /** Hier wird das Logo und der Text: Sontact auf die linke Seite des Headers gesetzt */
+=======
+.deleteNutzer{
+	float: right;
+}
+
+>>>>>>> refs/remotes/origin/master
 h1 {
 	font-weight: 400;
 	font-size: 21px;
@@ -276,6 +287,7 @@ h1 a {
 	width: 100px;
 	height: 50px;
 }
+
 
 .gwt-Big-Text {
 	font-size: 150%;

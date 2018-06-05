@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
@@ -12,7 +13,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 
 /**
  * <code>EigenschaftMapper</code>, welcher <code>Eigenschaft</code>-Objekte
- * auf der Datenbank abbildet. Für weitere Informationen: 
+ * auf der Datenbank abbildet. FÃ¼r weitere Informationen: 
  * 
  * @see NuterMapper 
  * @author Yakup
@@ -34,61 +35,48 @@ public class EigenschaftMapper {
 	}
 	
 	/**
-	 * Hinzufügen einer neuen Eigenschaft in die Datenbank. Der Nutzer erhaelt die Funktion um selbst Eigenschaften definieren zu koennen.
+	 * HinzufÃ¼gen einer neuen Eigenschaft in die Datenbank. Der Nutzer erhaelt die Funktion um selbst Eigenschaften definieren zu koennen.
 	 * @param e
 	 * @return e
 	 */
-	
-	public Eigenschaft insert(Eigenschaft e){
-		
-		Connection con = null;
-		PreparedStatement stmt = null;
-		
-		
-		//Query für die Abfrage der hoechsten ID (Primärschlüssel) in der Datenbank
-		String maxIdSQL = "SELECT MAX(id) AS maxid FROM eigenschaft";
-		
-		
-		//Query für den Insert
-		String insertSQL = "INSERT INTO eigenschaft (id, bezeichnung) VALUES (?,?)";		
-		
-		
-		
+	public Eigenschaft insertEigenschaft(Eigenschaft eig) {
+		/**
+		 * Aufbau der DB Connection
+		 */
+		Connection con = DBConnection.connection();
+		/**
+		 * Try und Catch gehÃ¶ren zum Exception Handling Try = Versuch erst dies
+		 * Catch = Wenn Try nicht geht versuch es so ..
+		 */
 		try {
-			
-			con = DBConnection.connection(); 
-			stmt = con.prepareStatement(maxIdSQL);
-			
+			Statement stmt = con.createStatement();
+			/**
+			 * Was ist der momentan hÃ¶chste PrimÃ¤rschlÃ¼ssel
+			 */
+			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM `eigenschaft` ");
 
-			//MAX ID Query ausfuehren
-			ResultSet rs = stmt.executeQuery();
-			
-			
-			//...um diese dann um 1 inkrementiert der ID des BO zuzuweisen
-		    if(rs.next()){
-		    	e.setId(rs.getInt("maxId")+1);
-		    }	   
-		    
-		    	
-			//Jetzt erfolgt der Insert
-		    stmt = con.prepareStatement(insertSQL);
-		    
-		    
-		    //Setzen der ? Platzhalter als Values
-		    stmt.setInt(1, e.getId());
-		    stmt.setString(2, e.getBezeichnung());
-		    
-		    
-		    //INSERT-Query ausführen
-		    stmt.executeUpdate();
-		    
-		    
+		if (rs.next()) {
+				/**
+				 * Varaible merk erhÃ¤lt den hÃ¶chsten PrimÃ¤rschlÃ¼ssel
+				 * inkrementiert um 1
+				 */
+				eig.setId(rs.getInt("maxid") + 1);
+				/**
+				 * DurchfÃ¼hren der EinfÃ¼ge Operation via Prepared Statement
+				 */
+				PreparedStatement stmt1 = con.prepareStatement("INSERT INTO `eigenschaft` (id, bezeichnung) " + "VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+				stmt1.setInt(1, eig.getId());
+				stmt1.setString(2, eig.getBezeichnung());
+
+				stmt1.executeUpdate();
+			}
+		
 		} catch (SQLException e2) {
 			e2.printStackTrace();
-			}			
-		
-		return e;
-	}	
+		}
+		return eig;
+
+	}
 	
 
 	
@@ -130,7 +118,7 @@ public class EigenschaftMapper {
 
 	
 	/**
-	 * Löschen eines Eigenschaft-Objekts aus der Datenbank.
+	 * LÃ¶schen eines Eigenschaft-Objekts aus der Datenbank.
 	 * @param e
 	 */
 	
@@ -188,7 +176,7 @@ public class EigenschaftMapper {
 				//Ergebnis-Tupel in Objekt umwandeln
 				Eigenschaft e = new Eigenschaft();
 				
-				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				//Setzen der Attribute den DatensÃ¤tzen aus der DB entsprechend
 				e.setId(rs.getInt("id"));
 				e.setBezeichnung(rs.getString("bezeichnung"));
 				
@@ -209,7 +197,7 @@ public class EigenschaftMapper {
 	
 	/**
 	 * Auslesen aller Eigenschaften welche beim Anlegen einer neuen Auspraegung 
-	 * eines Kontakt-Objekts zur Verfügung stehen. 
+	 * eines Kontakt-Objekts zur VerfÃ¼gung stehen. 
 	 * 
 	 * @return Eigenschaften
 	 * @throws SQLException
@@ -222,7 +210,7 @@ public class EigenschaftMapper {
 		
 		String selectByAuswahl = "SELECT * FROM eigenschaft";
 		
-		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
+		//Vector erzeugen, der die EigenschaftsdatensÃ¤tze mit ID 1-17 aufnehmen kann
 		Vector <Eigenschaft> result = new Vector<Eigenschaft>();
 		
 		try {
@@ -233,7 +221,7 @@ public class EigenschaftMapper {
 			ResultSet rs = stmt.executeQuery();
 			
 			
-			//While Schleife für das Durchlaufen vieler Zeilen
+			//While Schleife fÃ¼r das Durchlaufen vieler Zeilen
 			//Schreiben der Objekt-Attribute aus ResultSet
 			while (rs.next()) {
 				
@@ -258,7 +246,7 @@ public class EigenschaftMapper {
 	// findEigenschaftForAuspraegung() evlt. in AuspraegungMapper uebernehmen.
 	
 	/**
-	 * Gibt die Eigenschaft zur einer Auspraegung eines Kontaktes zurück.
+	 * Gibt die Eigenschaft zur einer Auspraegung eines Kontaktes zurÃ¼ck.
 	 * 
 	 * @param id
 	 * @return Eigenschaft
@@ -334,7 +322,7 @@ public class EigenschaftMapper {
 		    Eigenschaft e = new Eigenschaft();
 		    e.setBezeichnung("bezeichnung");
 			
-			//While Schleife für das Durchlaufen vieler Zeilen
+			//While Schleife fÃ¼r das Durchlaufen vieler Zeilen
 			//Schreiben der Objekt-Attribute aus ResultSet
 			while (rs.next()) {
 				
@@ -359,6 +347,44 @@ public class EigenschaftMapper {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Eine Eigenschaft anhand der Bezeichnung auslesen
+	 * @param Bezeichnung der Eigenschaft
+	 * @return
+	 */
+	public Eigenschaft findEigenschaft (String bezeichnung) {
+		
+		Connection con = null;
+		PreparedStatement stmt = null; 
+		
+		String selectByAuswahl = "SELECT * FROM eigenschaft WHERE bezeichnung=?";
+		
+		try {
+			
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByAuswahl);
+			stmt.setString(1, bezeichnung);
+		
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			if (rs.next()) {
+		        Eigenschaft e = new Eigenschaft();
+		        e.setId(rs.getInt("id"));
+		        e.setBezeichnung(rs.getString("bezeichnung"));
+		        return e;
+			}
+		}
+		
+		catch (SQLException e2) {
+			
+			e2.printStackTrace();
+			return null;
+		}
+		
+		return null; 
 	}
 
 }

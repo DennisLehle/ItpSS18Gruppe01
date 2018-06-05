@@ -557,9 +557,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		Eigenschaft e = new Eigenschaft();
 		e.setBezeichnung(bezeichnung);
 
-		e.setId(1);
+	
 
-		return this.eMapper.insert(e);
+		return this.eMapper.insertEigenschaft(e);
 	}
 
 	/**
@@ -633,7 +633,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		a.setEigenschaftId(eigenschaftId);
 		a.setKontaktId(kontaktId);
 
-		a.setId(1);
+		
 
 		this.saveModifikationsdatum(a.getKontaktId());
 		return this.aMapper.insert(a);
@@ -1116,6 +1116,18 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		
 		init();
 		return this.eMapper.findEigenschaftByBezeichnung(bezeichnung);
+	}
+	
+	
+
+	/**
+	 * Auslesen einer Eigenschaft anhand der übergebenen Bezeichnung.
+	 */
+	public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung) 
+			throws IllegalArgumentException {
+		
+	
+		return this.eMapper.findEigenschaft(bezeichnung);
 	}
 
 	/**

@@ -23,7 +23,7 @@ public abstract class ReportWriter {
    * 
    * @param r der zu übersetzende Report
    */
-  public abstract void process(AllKontakteByNutzerReport r);
+  public abstract void process(AlleKontakteNachEigenschaftenReport r);
 
   /**
    * Übersetzen eines <code>AllAccountsOfAllCustomersReport</code> in das
@@ -31,6 +31,6 @@ public abstract class ReportWriter {
    * 
    * @param r der zu übersetzende Report
    */
-  public abstract void process(AllKontakteReport r);
+  public abstract void process(AlleKontakteReport r);
 
 }

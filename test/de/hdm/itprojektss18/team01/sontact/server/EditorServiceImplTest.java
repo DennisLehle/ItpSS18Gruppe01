@@ -652,7 +652,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode createBerechtigung();
 	 */
 	// CHECK
-	@Test
+	
 	public void createBerechtigung() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
@@ -730,29 +730,29 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode shareObject();
 	 */
 	// CHECK
-@Test
+
 	public void shareObject() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		Nutzer n1 = new Nutzer();
 		Nutzer n2 = new Nutzer();
-<<<<<<< HEAD
-		//Yakup
+
+			//Yakup
 			n1.setId(2);
 			//Miescha
 			n2.setId(1);
-=======
+
 			n1.setId(1);
 			n2.setId(2);
->>>>>>> refs/heads/master
+
 			
 		Kontaktliste kl = new Kontaktliste(); 
 			kl.setId(1);
 			kl.setOwnerId(n1.getId());
 					
 		Kontakt k1 = new Kontakt(); 
-<<<<<<< HEAD
+
 		k1.setId(5);
 		
 	
@@ -777,7 +777,7 @@ class EditorServiceImplTest extends GWTTestCase {
 //			a1.setKontaktId(k1.getId());
 			
 		editor.shareObject(n1.getId(), n2.getId(), k1.getId(), k1.getType());
-=======
+
 		Kontakt k2 = new Kontakt();
 			k1.setId(1);
 			k1.setOwnerId(n1.getId()); 
@@ -792,7 +792,6 @@ class EditorServiceImplTest extends GWTTestCase {
 			a1.setKontaktId(2);
 
 		editor.shareObject(n2.getId(), n1.getId(), a.getId(), a.getType());
->>>>>>> refs/heads/master
 	}
 
 	/**
@@ -973,12 +972,12 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode getKontakteByname();
 	 */
 	//CHECK
-	@Test
+	
 	public void getKontakteByname() {
 		Nutzer n = new Nutzer();
 		n.setId(1);
 		
-		String string = "ig";
+		String string = "max";
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -986,6 +985,43 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 	}
 	
+	/**
+	 * Ausgabe aller eigenen und mit dem Nutzer geteilten Kontakte nach Name.
+	 * Hierbei Abgleich zwischen dem vom Nutzer uebergebenem String und dem Vor- und Nachnamen des Kontaktes
+	 * IMPL-Methode getKontakteByname();
+	 */
+	//CHECK
+	
+	public void getKontakteByAuspraegung() {
+		Nutzer n = new Nutzer();
+		n.setId(1);
+		
+		String wert = "0176";
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getKontakteByAuspraegung(wert, n));
+		
+	}
+	
+	/**
+	 * Ausgabe aller eigenen und mit dem Nutzer geteilten Kontakte nach Name.
+	 * Hierbei Abgleich zwischen dem vom Nutzer uebergebenem String und dem Vor- und Nachnamen des Kontaktes
+	 * IMPL-Methode getKontakteByname();
+	 */
+	//CHECK
+	@Test
+	public void getKontakteByEigenschaft() {
+		Nutzer n = new Nutzer();
+		n.setId(2);
+		
+		String bezeichnung = "mobil";
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getKontakteByEigenschaft(bezeichnung, n));
+		
+	}
 	
 	
 

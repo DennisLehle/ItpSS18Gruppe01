@@ -233,10 +233,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		kontakt.setId(1);
 		
 		// Speichern und Eintragen des erstellten Kontakts in der DB.
-		this.kMapper.insert(kontakt);
+		Kontakt k =  this.kMapper.insert(kontakt);
 
 		// Gespeicherter Kontakt nach Objekttypen <'r'> auslesen.
-		Kontakt k = getOwnKontakt(n);
+		//Kontakt k = getOwnKontakt(n);
 
 		// Erzeugung der Default-Kontaktliste <Meine Kontakte>.
 		createKontaktlisteRegistrierung(n);
@@ -296,17 +296,13 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		kl.setOwnerId(n.getId());
 		kl.setId(1);
 		
-		//Das Erstellen eines Kontaktlisten Objektes mit Titel "Mit mir geteilte Kontakte" und Owner-ID.
-		Kontaktliste kl1 = new Kontaktliste();
-		kl.setTitel("Mit mir geteilte Kontakte");
-		kl.setOwnerId(n.getId());
-		kl1.setId(1);
 		
-		//Liste in die Db einfÃ¼gen.
-		this.klMapper.insert(kl1);
+		//Erstellen der eigenen Kontaktliste bei dem die geteilten Kontakte hineingespeichert werden.
+		createKontaktliste("Mit mir geteilte Kontakte", n);
 		
-		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
 		return this.klMapper.insert(kl);
+	
+	
 	}
 	
 	
@@ -330,7 +326,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der 
 		// naechst hoeheren ID angepasst wird.
-		e.setId(1);
+		//e.setId(1);
 
 		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
 		return this.eMapper.insertEigenschaft(e);
@@ -351,7 +347,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Auspraegung createAuspraegung(String wert, int eigenschaftId, 
 			int kontaktId) throws IllegalArgumentException {
 
-		init();
+		
 
 		// Das Erstellen eines Auspraegung Objektes mit Wert, EigenschaftId und KontaktId.
 		Auspraegung a = new Auspraegung();
@@ -361,10 +357,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der 
 		// naechst hoeheren ID angepasst wird.
-		a.setId(1);
+	//	a.setId(1);
 
 		// Anpassung des Modifikationsdatums des Kontakt Objektes
-		this.saveModifikationsdatum(a.getKontaktId());
+		//saveModifikationsdatum(a.getKontaktId());
 		
 		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
 		return this.aMapper.insert(a);
@@ -1235,7 +1231,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 
 	/**
-	 * Auslesen einer Eigenschaft anhand der übergebenen Bezeichnung.
+	 * Auslesen einer Eigenschaft anhand der ï¿½bergebenen Bezeichnung.
 	 */
 	public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung) 
 			throws IllegalArgumentException {

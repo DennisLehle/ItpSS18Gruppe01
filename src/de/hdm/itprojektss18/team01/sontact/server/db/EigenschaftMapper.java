@@ -52,14 +52,14 @@ public class EigenschaftMapper {
 			/**
 			 * Was ist der momentan höchste Primärschlüssel
 			 */
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM `eigenschaft` ");
+			//ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM `eigenschaft` ");
 
-		if (rs.next()) {
+		//if (rs.next()) {
 				/**
 				 * Varaible merk erhält den höchsten Primärschlüssel
 				 * inkrementiert um 1
 				 */
-				eig.setId(rs.getInt("maxid") + 1);
+			//	eig.setId(rs.getInt("maxid") + 1);
 				/**
 				 * Durchführen der Einfüge Operation via Prepared Statement
 				 */
@@ -68,7 +68,7 @@ public class EigenschaftMapper {
 				stmt1.setString(2, eig.getBezeichnung());
 
 				stmt1.executeUpdate();
-			}
+		//	}
 		
 		} catch (SQLException e2) {
 			e2.printStackTrace();
@@ -207,7 +207,7 @@ public class EigenschaftMapper {
 		Connection con = null; 
 		PreparedStatement stmt = null; 
 		
-		String selectByAuswahl = "SELECT * FROM eigenschaft between 1 AND 17";
+		String selectByAuswahl = "SELECT * FROM eigenschaft ";
 		
 		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
 		Vector <Eigenschaft> result = new Vector<Eigenschaft>();

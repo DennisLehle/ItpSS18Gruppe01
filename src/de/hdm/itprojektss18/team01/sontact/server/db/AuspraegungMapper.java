@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
@@ -53,75 +54,46 @@ public class AuspraegungMapper {
 	 * jedoch mit ggf. korrigierter <code>id</code>.
 	 */	
 	
-	public Auspraegung insert(Auspraegung a){
-		
-		Connection con = null;
-		PreparedStatement stmt = null;
-		
-		
-		//Query für die Abfrage der hoechsten ID (Primärschlüssel) in der Datenbank
-		String maxIdSQL = "SELECT MAX(id) AS maxid FROM auspraegung";
-		
-		
-		//Query für den Insert
-		String insertSQL = "INSERT INTO auspraegung (id, wert, eigenschaftid, kontaktid) VALUES (?,?,?,?)";		
-		
-		
-	    //Query für die Aktualisierung des Modifikationsdatums von dem dazugehörigen Kontakt
-//		String sqlDat = "UPDATE kontakt SET modifikationsdatum=? WHERE id=?";
-		
-		
+	public Auspraegung insert(Auspraegung aus) {
+		/**
+		 * Aufbau der DB Connection
+		 */
+		Connection con = DBConnection.connection();
+		/**
+		 * Try und Catch gehÃ¶ren zum Exception Handling Try = Versuch erst dies
+		 * Catch = Wenn Try nicht geht versuch es so ..
+		 */
 		try {
-			
-			con = DBConnection.connection(); 
-			stmt = con.prepareStatement(maxIdSQL);
-			
+		//	Statement stmt = con.createStatement();
+			/**
+			 * Was ist der momentan hÃ¶chste PrimÃ¤rschlÃ¼ssel
+			 */
+		//	ResultSet rs = stmt.executeQuery(null);
 
-			//MAX ID Query ausfuehren
-			ResultSet rs = stmt.executeQuery();
-			
-			
-			//...um diese dann um 1 inkrementiert der ID des BO zuzuweisen
-		    if(rs.next()){
-		    	a.setId(rs.getInt("maxId")+1);
-		    }	   
-		    
-		    	
-			//Jetzt erfolgt der Insert
-		    stmt = con.prepareStatement(insertSQL);
-		    
-		    
-		    //Setzen der ? Platzhalter als Values
-		    stmt.setInt(1, a.getId());
-		    stmt.setString(2, a.getWert());
-		    stmt.setInt(3, a.getEigenschaftId());
-		    stmt.setInt(4, a.getKontaktId());
-		    
-		    
-		    //INSERT-Query ausführen
-		    stmt.executeUpdate();
-		    
-		    
-		    //UPDATE-Statement des Modifikationsdatums setzen
-//			stmt = con.prepareStatement(sqlDat);
-			
+	//	if (rs.next()) {
+				/**
+				 * Varaible merk erhÃ¤lt den hÃ¶chsten PrimÃ¤rschlÃ¼ssel
+				 * inkrementiert um 1
+				 */
+			//	aus.setId(rs.getInt("maxid") + 1);
+				/**
+				 * DurchfÃ¼hren der EinfÃ¼ge Operation via Prepared Statement
+				 */
+				PreparedStatement stmt1 = con.prepareStatement("INSERT INTO `auspraegung` (id, wert, eigenschaftid, kontaktid) " + "VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+				stmt1.setInt(1, aus.getId());
+				stmt1.setString(2, aus.getWert());
+				stmt1.setInt(3, aus.getEigenschaftId());
+				stmt1.setInt(4, aus.getKontaktId());
 
-		    //Setzen der ? Platzhalter als VALUES
-//			stmt.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
-//	    	stmt.setInt(2, a.getKontaktId());
-	    	
-		    
-		    //UPDATE-Query ausfuehren
-//	    	stmt.executeUpdate();
-		    
-		    
+				stmt1.executeUpdate();
+		//	}
+		
 		} catch (SQLException e2) {
 			e2.printStackTrace();
-			}			
-		
-		return a;
-	}	
+		}
+		return aus;
 
+	}
 	
 	/**
 	 * Aktualisierung eines Auspraegung-Objekts in der Datenbank.
@@ -138,7 +110,7 @@ public class AuspraegungMapper {
 		String updateSQL = "UPDATE auspraegung SET wert=?, eigenschaftid=?, kontaktid=? WHERE id=?";
 		
 		
-	    //Query für die Aktualisierung des Modifikationsdatums von dem dazugehörigen Kontakt
+	    //Query fï¿½r die Aktualisierung des Modifikationsdatums von dem dazugehï¿½rigen Kontakt
 //		String sqlDat = "UPDATE kontakt SET modifikationsdatum=? WHERE id=?";		
 		
 		try {
@@ -193,7 +165,7 @@ public class AuspraegungMapper {
 		String deleteSQL = "DELETE FROM auspraegung WHERE id=?";
 		
 		
-	    //Query für die Aktualisierung des Modifikationsdatums von dem dazugehörigen Kontakt
+	    //Query fï¿½r die Aktualisierung des Modifikationsdatums von dem dazugehï¿½rigen Kontakt
 //		String sqlDat = "UPDATE kontakt SET modifikationsdatum=? WHERE id=?";
 		
 		try {
@@ -253,7 +225,7 @@ public class AuspraegungMapper {
 				//Ergebnis-Tupel in Objekt umwandeln
 				Auspraegung a = new Auspraegung();
 				
-				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				//Setzen der Attribute den Datensï¿½tzen aus der DB entsprechend
 				a.setId(rs.getInt("id"));
 				a.setWert(rs.getString("wert"));
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
@@ -307,7 +279,7 @@ public class AuspraegungMapper {
 					//Ergebnis-Tupel in Objekt umwandeln
 					Auspraegung a = new Auspraegung();
 					
-					//Setzen der Attribute den Datensätzen aus der DB entsprechend
+					//Setzen der Attribute den Datensï¿½tzen aus der DB entsprechend
 					a.setId(rs.getInt("id"));
 					a.setWert(rs.getString("wert"));
 					a.setEigenschaftId(rs.getInt("eigenschaftid"));
@@ -354,7 +326,7 @@ public class AuspraegungMapper {
 				//Ergebnis-Tupel in Objekt umwandeln
 				Auspraegung a = new Auspraegung();
 				
-				//Setzen der Attribute den Datensätzen aus der DB entsprechend
+				//Setzen der Attribute den Datensï¿½tzen aus der DB entsprechend
 				a.setId(rs.getInt("id"));
 				a.setWert(rs.getString("wert"));
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));

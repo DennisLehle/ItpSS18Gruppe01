@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
+import de.hdm.itprojektss18.team01.sontact.client.Sontact;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
@@ -39,7 +40,10 @@ public class RegistrierungsForm extends VerticalPanel {
 
 	Kontakt k = new Kontakt();
 	Eigenschaft e = new Eigenschaft();
+	Eigenschaft e2 = new Eigenschaft();
 	Auspraegung a = new Auspraegung();
+	Auspraegung a2 = new Auspraegung();
+	Auspraegung aus = new Auspraegung();
 	Nutzer n = new Nutzer();
 
 	Vector<Eigenschaft> eigenschaften = new Vector<>();
@@ -88,13 +92,14 @@ public class RegistrierungsForm extends VerticalPanel {
 	 * 
 	 */
 	public RegistrierungsForm(Nutzer nutzer) {
+		n = nutzer;
 
 		// RootPanel leeren damit neuer Content geladen werden kann.
 		RootPanel.get("content").clear();
 		// Ueberschrift anzeigen
-		RootPanel.get("contentHeader").add(new HTML("<h2>Kontakt erstellen</h2>"));
+		RootPanel.get("content").add(new HTML("<h2>Kontakt erstellen</h2>"));
 
-		// Hauptpanel mit dem ButtonPanel verknüpfen (Kontakterstellungs-Ansicht)
+		// Hauptpanel mit dem ButtonPanel verknï¿½pfen (Kontakterstellungs-Ansicht)
 		hauptPanel.setSpacing(40);
 		hauptPanel.add(BtnPanel);
 
@@ -140,7 +145,7 @@ public class RegistrierungsForm extends VerticalPanel {
 		// fuer den erstellen Kontakt dann angegeben
 		BtnPanel.add(weiterBtn);
 		// ClickHandler der die "Weiterleitung" zur Kontakteigenschaftsansicht
-		// durchführt
+		// durchfï¿½hrt
 		// Der Kontakt wird mit Vornamen und Nachnamen erstellt
 		weiterBtn.addClickHandler(new KontaktErstellenClickHandler());
 
@@ -169,44 +174,83 @@ public class RegistrierungsForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
+			Vector<Eigenschaft> eigeneE = new Vector<Eigenschaft>();
+
+			for (int x = 0; x < eigeneEigenschaftenTable.getRowCount(); x++) {
+				Widget wtb = eigeneEigenschaftenTable.getWidget(x, 0);
+
+				if (wtb instanceof TextBox) {
+					String bez2 = ((TextBox) wtb).getText();
+
+					Widget v = eigeneEigenschaftenTable.getWidget(x, 1);
+					if (v instanceof TextBox) {
+						if (!((TextBox) v).getValue().isEmpty()) {
+							a2.setWert(((TextBox) v).getValue());
+
+						
+//							
+//							ev.createEigenschaft(bez2, new AsyncCallback<Eigenschaft>() {
+//
+//								@Override
+//								public void onFailure(Throwable caught) {
+//									// TODO Auto-generated method stub
+//
+//								}
+//
+//								@Override
+//								public void onSuccess(Eigenschaft result) {
+//									eigeneE.add(result);
+//									Window.alert("dd");
+//
+//								}
+//							});
+
+						}
+
+					}
+					ev.createAuspraegungForNewEigenschaft(bez2, a2.getWert(), k, new AsyncCallback<Void>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							// TODO Auto-generated method stub
+							
+						}
+
+						@Override
+						public void onSuccess(Void result) {
+							Window.alert("TestTest");
+							
+						}
+						
+					});
+				}
+				
+			
+
+			}
 
 			/**
 			 * Erst speichern wir die Auswahleigenschaften die der Nutzer beliebig oft
-			 * genereien bwz. auswählen und befüllen kann
+			 * genereien bwz. auswï¿½hlen und befï¿½llen kann
 			 */
 
-			for (int i = 0; i < auswahlEigenschaftenTable.getRowCount(); i++) {
+			for (int i = 0; i <= auswahlEigenschaftenTable.getRowCount(); i++) {
 
 				Widget w = auswahlEigenschaftenTable.getWidget(i, 0);
 				if (w instanceof ListBox) {
 					if (!((ListBox) w).getSelectedItemText().isEmpty()) {
 						String bez = ((ListBox) w).getSelectedItemText();
 
-						for (int j = 0; j < eigenschaften.size(); j++) {
-							if (eigenschaften.elementAt(j).getBezeichnung() == bez) {
-								e = eigenschaften.elementAt(j);
+						Widget v = auswahlEigenschaftenTable.getWidget(i, 1);
+						if (v instanceof TextBox) {
+							if (!((TextBox) v).getValue().isEmpty()) {
+								a.setWert(((TextBox) v).getValue());
 
-								Widget v = auswahlEigenschaftenTable.getWidget(i, 1);
-								if (v instanceof TextBox) {
-									if (!((TextBox) v).getValue().isEmpty()) {
-										a.setWert(((TextBox) v).getValue());
-										ev.createAuspraegung(a.getWert(), e.getId(), k.getId(),
-												new AsyncCallback<Auspraegung>() {
+								for (int j = 0; j < eigenschaften.size(); j++) {
+									if (eigenschaften.elementAt(j).getBezeichnung() == bez) {
+										e = eigenschaften.elementAt(j);
 
-													@Override
-													public void onFailure(Throwable caught) {
-														Window.alert(caught.getMessage());
-
-													}
-
-													@Override
-													public void onSuccess(Auspraegung result) {
-														Window.alert("Joooooooooo");
-
-													}
-												});
 									}
-									;
 
 								}
 
@@ -214,55 +258,28 @@ public class RegistrierungsForm extends VerticalPanel {
 
 						}
 
-						// ev.findEigenschaftByBezeichnung(bez, new AsyncCallback<Eigenschaft>() {
-						//
-						// @Override
-						// public void onFailure(Throwable caught) {
-						// Window.alert(caught.getMessage());
-						//
-						// }
-						//
-						// @Override
-						// public void onSuccess(Eigenschaft result) {
-						// e = result;
-						//
-						// }
-						//
-						// });
-
 					}
 
 				}
 
+				ev.createAuspraegung(a.getWert(), e.getId(), k.getId(), new AsyncCallback<Auspraegung>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert(caught.getMessage());
+
+					}
+
+					@Override
+					public void onSuccess(Auspraegung result) {
+
+
+					}
+				});
+				Window.Location.reload();
 			}
-
-			/**
-			 * Nun speichern wir die frei erstellen Eigenschaften des Nutzers.
-			 */
-			for (int i = 0; i < eigeneEigenschaftenTable.getRowCount(); i++) {
-				Widget w = eigeneEigenschaftenTable.getWidget(i, 0);
-
-				if (w instanceof TextBox) {
-					String bez = ((TextBox) w).getText();
-
-					ev.createEigenschaft(bez, new AsyncCallback<Eigenschaft>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-							// TODO Auto-generated method stub
-
-						}
-
-						@Override
-						public void onSuccess(Eigenschaft result) {
-							
-
-						}
-					});
-
-				}
-
-			}
+			
+			
 
 		}
 	}
@@ -302,8 +319,9 @@ public class RegistrierungsForm extends VerticalPanel {
 			});
 
 			int count = auswahlEigenschaftenTable.getRowCount();
-			auswahlEigenschaftenTable.setWidget(count + 1, 0, eigenschaftBox);
-			auswahlEigenschaftenTable.setWidget(count + 1, 1, wertBox);
+			auswahlEigenschaftenTable.setWidget(count, 0, eigenschaftBox);
+			auswahlEigenschaftenTable.setWidget(count, 1, wertBox);
+			count++;
 
 		}
 
@@ -325,7 +343,7 @@ public class RegistrierungsForm extends VerticalPanel {
 			int count = eigeneEigenschaftenTable.getRowCount();
 			eigeneEigenschaftenTable.setWidget(count, 0, bezTb);
 			eigeneEigenschaftenTable.setWidget(count, 1, wertTb);
-			count--;
+			count++;
 
 		}
 
@@ -338,9 +356,6 @@ public class RegistrierungsForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			// Cookies des Nutzers holen.
-			n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
-			n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
 			if (vornameTxtBox.getText().isEmpty() || nachnameTxtBox.getText().isEmpty()) {
 				MessageBox.alertWidget("Benachrichtigung", "Bitte mindestens Vor- und Nachname angeben");
@@ -358,8 +373,8 @@ public class RegistrierungsForm extends VerticalPanel {
 							public void onSuccess(Kontakt result) {
 								k = result;
 								RootPanel.get("content").clear();
-								RootPanel.get("contentHeader").clear();
-								RootPanel.get("contentHeader").add(new HTML("<h2>Kontakteigenschaften</h2>"));
+
+								RootPanel.get("content").add(new HTML("<h2>Kontakteigenschaften</h2>"));
 
 								HorizontalPanel BtnPanel = new HorizontalPanel();
 								Button addEigenschaftBtn = new Button("Weitere Auswahleigenschaften");

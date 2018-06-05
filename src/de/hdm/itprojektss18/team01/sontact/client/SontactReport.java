@@ -6,27 +6,21 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.hdm.itprojektss18.team01.sontact.client.gui.MessageBox;
-import de.hdm.itprojektss18.team01.sontact.client.gui.Navigation;
 import de.hdm.itprojektss18.team01.sontact.client.gui.NavigationReport;
-import de.hdm.itprojektss18.team01.sontact.client.gui.ShowKontakte;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
-import de.hdm.itprojektss18.team01.sontact.shared.LoginService;
 import de.hdm.itprojektss18.team01.sontact.shared.LoginServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorAsync;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.LoginInfo;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * Entry point classes define <code>onModuleLoad()</code>. Diese Klasse ist der
+ * Die Klasse EntryPoint defniert die Methode <code>onModuleLoad()</code>. Diese Klasse ist der
  * Anfang des ReportGenerators. Der ReportGenerator soll nur statische HTML
  * ausgaben tätigen.
  * 
@@ -37,8 +31,7 @@ public class SontactReport implements EntryPoint {
 
 	LoginInfo loginInfo = new LoginInfo();
 	private VerticalPanel loginPanel = new VerticalPanel();
-	private Label loginLabel = new Label(
-			"Bitte Melden Sie sich mit Ihren Google Account, um einen Zugriff auf den ReportGenerator zu bekommen.");
+	private Label loginLabel = new Label("Bitte Melden Sie sich mit Ihren Google Account, um einen Zugriff auf den ReportGenerator zu bekommen.");
 	private Anchor signInLink = new Anchor("Login");
 	public Anchor signOutLink = new Anchor("Logout");
 	ClientsideSettings clientSettings = new ClientsideSettings();
@@ -54,7 +47,7 @@ public class SontactReport implements EntryPoint {
 	EditorServiceAsync editorService = null;
 
 	/**
-	 * This is the entry point method.
+	 * Das ist die EntryPoint Methode <code>onModuleLoad()</code>	 
 	 */
 	public void onModuleLoad() {
 
@@ -76,6 +69,7 @@ public class SontactReport implements EntryPoint {
 
 					// Laden der ReportSeite.
 					loadReport(n);
+					
 				} else {
 					loadLogin();
 				}
@@ -92,7 +86,6 @@ public class SontactReport implements EntryPoint {
 	}
 
 	private void loadReport(final Nutzer n) {
-
 		RootPanel.get("navigatorR").add(new NavigationReport(n));
 
 		HorizontalPanel footer = new HorizontalPanel();
@@ -100,7 +93,8 @@ public class SontactReport implements EntryPoint {
 		HTML copyrightText1 = new HTML(" | ");
 		Anchor editorLink = new Anchor("Back 2 Sontact", "Sontact.html");
 		HTML copyrightText2 = new HTML(" | 2018 Sontact | ");
-		Anchor impressumLink = new Anchor("Impressum");
+		//Anchor impressumLink = new Anchor("Impressum");
+		
 		footer.add(startseite);
 		footer.add(copyrightText1);
 		footer.add(editorLink);

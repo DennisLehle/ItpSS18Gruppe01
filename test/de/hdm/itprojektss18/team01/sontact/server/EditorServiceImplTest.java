@@ -1,12 +1,8 @@
 package de.hdm.itprojektss18.team01.sontact.server;
 
 
-import java.sql.Timestamp;
-import java.util.Vector;
-
 import org.junit.jupiter.api.Test;
 
-import com.google.gwt.editor.client.Editor;
 import com.google.gwt.junit.client.GWTTestCase;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
@@ -14,7 +10,6 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.KontaktlisteKontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 
@@ -30,7 +25,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  * ZusÃ¤tlich muss die Datenbank eingerichtet sein damit alles durchlÃ¤uft bist zum DB Eintrag.
  * 
  * ACHTUNG:
- * Bitte aktuelle Datenbank aus dem Drive entnehmen (Sontact_V2)
+ * Bitte aktuelle Datenbank aus dem Drive entnehmen (sontact_V5)
  * 
  * 
  * Nutzung von JUnit kurze ErklÃ¤rung:
@@ -91,10 +86,10 @@ class EditorServiceImplTest extends GWTTestCase {
 	}
 	
 	/**
-	 * Test Case fÃ¼r die Löschung eines Nutzers aus unserer Datenbank.
-	 * UNCHECK --> KontaktlisteKontaktMapper nicht berücksichtigt 
+	 * Test Case fÃ¼r die Lï¿½schung eines Nutzers aus unserer Datenbank.
+	 * UNCHECK --> KontaktlisteKontaktMapper nicht berï¿½cksichtigt 
 	 */
-	@Test
+
 	public void deleteNutzer() {
 		
 		Nutzer n = new Nutzer();
@@ -105,6 +100,13 @@ class EditorServiceImplTest extends GWTTestCase {
 		editor.deleteNutzer(n);
 		
 	}
+	
+	public void share() {
+		EditorServiceImpl editor = new EditorServiceImpl();
+	
+		editor.shareObject(1, 2, 2, 'k');
+	}
+	
 	
 	/**
 	 * Test Case fÃ¼r das Auslesen eines Nutzers anhand seiner GMail Adresse.
@@ -215,14 +217,14 @@ class EditorServiceImplTest extends GWTTestCase {
 	}
 	
 
-	public void getKontaktByVorname() {
+	public void getKontaktByName() {
 		
 		Nutzer n = new Nutzer();
 		n.setId(1);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		System.out.println(editor.getKontaktByVorname("petra", n));
+		System.out.println(editor.getKontakteByName("petra", n));
 		
 	}
 	
@@ -423,7 +425,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
-		//Keine Instanziierung von Eigenschaftsobjekten für die Ausgabe notwendig.
+		//Keine Instanziierung von Eigenschaftsobjekten fï¿½r die Ausgabe notwendig.
 //		
 //		Eigenschaft e = new Eigenschaft();
 //		e.setId(3);
@@ -514,7 +516,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	}
 	
 	/**
-	 * Test Case fuer das Löschen einer Kontaktliste
+	 * Test Case fuer das Lï¿½schen einer Kontaktliste
 	 * CHECK MELANIE
 	 */
 	
@@ -547,7 +549,7 @@ class EditorServiceImplTest extends GWTTestCase {
 		kl.setId(1);
 		
 		Kontakt k = new Kontakt();
-		k.setId(2);
+		k.setId(1);
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
@@ -650,19 +652,19 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode createBerechtigung();
 	 */
 	// CHECK
-
+	
 	public void createBerechtigung() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		Nutzer n1 = new Nutzer();
-		n1.setId(3);
+		n1.setId(1);
 		
 		Nutzer n2 = new Nutzer();
-		n2.setId(2);
+		n2.setId(1);
 				
 		Kontaktliste kl = new Kontaktliste();
-		kl.setId(3);
+		kl.setId(6);
 						
 //		Kontaktliste kl1 = new Kontaktliste();
 //		kl1.setId(2);
@@ -682,15 +684,15 @@ class EditorServiceImplTest extends GWTTestCase {
 //		k3.setId(4);
 //		
 		Kontakt k4 = new Kontakt();
-		k4.setId(5);
+		k4.setId(1);
 
 		
-//		Auspraegung a1 = new Auspraegung();
-//		Auspraegung a2 = new Auspraegung();
-//		a1.setId(7);
-//		a2.setId(8);
+		Auspraegung a1 = new Auspraegung();
+		Auspraegung a2 = new Auspraegung();
+		a1.setId(1);
+		a2.setId(2);
 		
-		editor.createBerechtigung(n1.getId(), n2.getId(), kl.getId(), kl.getType());
+		editor.createBerechtigung(n1.getId(), n2.getId(), a1.getId(), a2.getType());
 //		editor.createBerechtigung(n1.getId(), n2.getId(), kl1.getId(), kl1.getType());
 		
 		
@@ -698,7 +700,7 @@ class EditorServiceImplTest extends GWTTestCase {
 //		editor.createBerechtigung(n1.getId(), n2.getId(), k1.getId(), k.getType());
 //		editor.createBerechtigung(n1.getId(), n2.getId(), k2.getId(), k.getType());
 //		editor.createBerechtigung(n1.getId(), n2.getId(), k3.getId(), k.getType());
-		editor.createBerechtigung(n1.getId(), n2.getId(), k4.getId(), k4.getType());
+		//editor.createBerechtigung(n1.getId(), n2.getId(), k4.getId(), k4.getType());
 		
 //		editor.createBerechtigung(n1.getId(), n2.getId(), a1.getId(), a1.getType());
 //		editor.createBerechtigung(n1.getId(), n2.getId(), a2.getId(), a2.getType());
@@ -728,22 +730,32 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode shareObject();
 	 */
 	// CHECK
-	
+
 	public void shareObject() {
 		
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		Nutzer n1 = new Nutzer();
 		Nutzer n2 = new Nutzer();
-			n1.setId(3);
+
+			//Yakup
+			n1.setId(2);
+			//Miescha
+			n2.setId(1);
+
+			n1.setId(1);
 			n2.setId(2);
+
 			
 		Kontaktliste kl = new Kontaktliste(); 
-			kl.setId(3);
-//			
-//		Kontakt k1 = new Kontakt(); 
-//		k1.setId(3);
-//			k1.setOwnerId(n1.getId());
+			kl.setId(1);
+			kl.setOwnerId(n1.getId());
+					
+		Kontakt k1 = new Kontakt(); 
+
+		k1.setId(5);
+		
+	
 //		
 //		Kontakt k2 = new Kontakt(); 
 //			k2.setId(2);
@@ -764,7 +776,22 @@ class EditorServiceImplTest extends GWTTestCase {
 //			a2.setId(8);
 //			a1.setKontaktId(k1.getId());
 			
-		editor.shareObject(n1.getId(), n2.getId(), kl.getId(), kl.getType());
+		editor.shareObject(n1.getId(), n2.getId(), k1.getId(), k1.getType());
+
+		Kontakt k2 = new Kontakt();
+			k1.setId(1);
+			k1.setOwnerId(n1.getId()); 
+			k2.setId(4);
+			k2.setOwnerId(n2.getId());
+			
+			Auspraegung a = new Auspraegung();
+			Auspraegung a1 = new Auspraegung();
+			a.setId(5);
+			a.setKontaktId(2);
+			a1.setId(4);
+			a1.setKontaktId(2);
+
+		editor.shareObject(n2.getId(), n1.getId(), a.getId(), a.getType());
 	}
 
 	/**
@@ -776,7 +803,8 @@ class EditorServiceImplTest extends GWTTestCase {
 		EditorServiceImpl editor = new EditorServiceImpl();
 		
 		Berechtigung b = new Berechtigung();
-		b.setId(10);
+		b.setId(9);
+	
 		
 //		Nutzer n1 = new Nutzer();
 //		Nutzer n2 = new Nutzer();
@@ -821,7 +849,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	}
 	
 	/**
-	 * Die Ausgabe aller Einträge in der Berechtigungstabelle nach der OwnerId
+	 * Die Ausgabe aller Eintrï¿½ge in der Berechtigungstabelle nach der OwnerId
 	 * IMPL-Methode getAllBerechtigungenByOwner();
 	 * CHECK
 	 */
@@ -838,7 +866,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	}
 	
 	/**
-	 * Die Ausgabe aller Einträge in der Berechtigungstabelle nach der ReceiverId
+	 * Die Ausgabe aller Eintrï¿½ge in der Berechtigungstabelle nach der ReceiverId
 	 * IMPL-Methode getAllBerechtigungenByReceiver();
 	 * CHECK
 	 */
@@ -936,6 +964,64 @@ class EditorServiceImplTest extends GWTTestCase {
 			
 	}
 	
+// Suche: ###############################################################################################################################
+	
+	/**
+	 * Ausgabe aller eigenen und mit dem Nutzer geteilten Kontakte nach Name.
+	 * Hierbei Abgleich zwischen dem vom Nutzer uebergebenem String und dem Vor- und Nachnamen des Kontaktes
+	 * IMPL-Methode getKontakteByname();
+	 */
+	//CHECK
+	
+	public void getKontakteByname() {
+		Nutzer n = new Nutzer();
+		n.setId(1);
+		
+		String string = "max";
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getKontakteByName(string, n));
+		
+	}
+	
+	/**
+	 * Ausgabe aller eigenen und mit dem Nutzer geteilten Kontakte nach Name.
+	 * Hierbei Abgleich zwischen dem vom Nutzer uebergebenem String und dem Vor- und Nachnamen des Kontaktes
+	 * IMPL-Methode getKontakteByname();
+	 */
+	//CHECK
+	
+	public void getKontakteByAuspraegung() {
+		Nutzer n = new Nutzer();
+		n.setId(1);
+		
+		String wert = "0176";
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getKontakteByAuspraegung(wert, n));
+		
+	}
+	
+	/**
+	 * Ausgabe aller eigenen und mit dem Nutzer geteilten Kontakte nach Name.
+	 * Hierbei Abgleich zwischen dem vom Nutzer uebergebenem String und dem Vor- und Nachnamen des Kontaktes
+	 * IMPL-Methode getKontakteByname();
+	 */
+	//CHECK
+	@Test
+	public void getKontakteByEigenschaft() {
+		Nutzer n = new Nutzer();
+		n.setId(2);
+		
+		String bezeichnung = "mobil";
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getKontakteByEigenschaft(bezeichnung, n));
+		
+	}
 	
 	
 
@@ -950,6 +1036,21 @@ class EditorServiceImplTest extends GWTTestCase {
 	
 	
 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 	
 

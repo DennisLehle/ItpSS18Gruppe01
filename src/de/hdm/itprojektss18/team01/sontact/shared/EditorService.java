@@ -33,6 +33,8 @@ public interface EditorService extends RemoteService{
 	
 	// Abschnitt Nutzer:
 	
+	public Nutzer findNutzerById(int nutzerId) throws IllegalArgumentException;
+	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createNutzer(String emailAddress);
 	 */
@@ -227,20 +229,16 @@ public interface EditorService extends RemoteService{
 	public Vector<Kontaktliste> getAllSharedKontaktlistenByReceiver(int receiverId) throws IllegalArgumentException;
 		
 	public boolean getStatusForObject(int objectId) throws IllegalArgumentException;
-	
-	public Vector<Kontakt> getKontaktByVorname(String vorname, Nutzer n) throws IllegalArgumentException;
-	
-	public Vector<Kontakt> getKontaktByNachname(String nachname, Nutzer n) throws IllegalArgumentException;
+		
+	public Vector<Kontakt> getKontakteByName(String name, Nutzer n) throws IllegalArgumentException;
 
-	public Vector<Kontakt> getAuspraegungByWert(String wert) 
+	public Vector<Kontakt> getKontakteByAuspraegung(String wert, Nutzer n) 
 			throws IllegalArgumentException;
 	
-	public Vector<Kontakt> getEigenschaftByBezeichnung(String bezeichnung) 
+	public Vector<Kontakt> getKontakteByEigenschaft(String bezeichnung, Nutzer n) 
 			throws IllegalArgumentException;
-			
-	public Vector<Kontakt> sucheKontakt (String vorname, String nachname, 
-			String wert, String bezeichnung, Nutzer n) throws IllegalArgumentException;
 	
-	public Berechtigung getABerechtigungByReceiver(Nutzer n) throws IllegalArgumentException;
-	
+	public Vector<Kontakt> getKontakteBySuche(String listBoxWert, String testBoxWert,
+			Nutzer n) throws IllegalArgumentException;
+		
 }

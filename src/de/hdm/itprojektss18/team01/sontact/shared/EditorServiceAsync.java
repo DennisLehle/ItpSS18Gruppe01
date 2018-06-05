@@ -19,7 +19,6 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  */
 
 public interface EditorServiceAsync {
-
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#init();
 	 */
@@ -27,6 +26,8 @@ public interface EditorServiceAsync {
 
 	
 	// Abschnitt Nutzer:
+	
+	void findNutzerById(int nutzerId, AsyncCallback<Nutzer> callback);
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createNutzer(String emailAddress);
@@ -176,24 +177,17 @@ public interface EditorServiceAsync {
 
 	void getEigenschaftForAuspraegung(int eigenschaftId, AsyncCallback<Eigenschaft> callback);
 
-	
-	void getAuspraegungByWert(String wert, AsyncCallback<Vector<Kontakt>> callback);
+
+	void getKontakteByName(String name, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
 
-	void getEigenschaftByBezeichnung(String bezeichnung, AsyncCallback<Vector<Kontakt>> callback);
+	void getKontakteByAuspraegung(String wert, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
 
-	void getKontaktByVorname(String vorname, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
+	void getKontakteByEigenschaft(String bezeichnung, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
 
-	void getKontaktByNachname(String nachname, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
-
-
-	void getABerechtigungByReceiver(Nutzer n, AsyncCallback<Berechtigung> callback);
-
-
-	void sucheKontakt(String vorname, String nachname, String wert, String bezeichnung, Nutzer n,
-			AsyncCallback<Vector<Kontakt>> callback);
+	void getKontakteBySuche(String listBoxWert, String testBoxWert, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
 	// Abschnitt Eigenschaft:
 	void findEigenschaftByBezeichnung(String bezeichnung, AsyncCallback<Eigenschaft> callback);

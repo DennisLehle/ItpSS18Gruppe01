@@ -1,4 +1,4 @@
-package de.hdm.itprojektss18.team01.sontact.client.gui;
+ package de.hdm.itprojektss18.team01.sontact.client.gui;
 
 import java.util.Vector;
 
@@ -41,6 +41,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 	TextBox txtBox = new TextBox();
 
+
 	/**
 	 * Konstruktor der zum Einsatz kommt, wenn eine Kontaktliste bereits vorhanden
 	 * ist.
@@ -61,6 +62,8 @@ public class KontaktlisteForm extends VerticalPanel {
 
 			@Override
 			public void onSuccess(Kontaktliste result) {
+				
+				
 
 				Nutzer n = new Nutzer();
 				n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
@@ -70,7 +73,8 @@ public class KontaktlisteForm extends VerticalPanel {
 				HorizontalPanel headerPanel = new HorizontalPanel();
 				HorizontalPanel BtnPanel = new HorizontalPanel();
 				VerticalPanel vp = new VerticalPanel();
-
+				Label ownerLb = new Label();
+				
 				headerPanel.add(new HTML("<h2>Kontaktliste: <em>" + selectedKontaktliste.getTitel() + "</em></h2>"));
 
 				// Update-Button intanziieren und dem Panel zuweisen
@@ -95,8 +99,55 @@ public class KontaktlisteForm extends VerticalPanel {
 
 				addKontaktBtn.addClickHandler(new addKontaktClickHandler());
 				BtnPanel.add(addKontaktBtn);
+				
+				//ClickHandler zum teilen von Kontaktlisten.
+				Button shareBtn = new Button(
+						"<image src='/images/share.png' width='20px' height='20px' align='center' /> teilen");
 
+				shareBtn.addClickHandler(new shareKontaktlisteClickHandler());
+				BtnPanel.add(shareBtn);
+				
+				//Abfrage wer der Owner der Liste ist.
+				if(kl.getOwner() != n.getId()) {
+				ev.findNutzerById(kl.getOwnerId(), new AsyncCallback<Nutzer>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.getMessage().toString();
+						
+					}
+
+					@Override
+					public void onSuccess(Nutzer result) {
+						ownerLb.setText("Eigentümer: "+result.getEmailAddress());
+						
+					}
+					
+				});
+				}
+				
+				//Überprüft Status eines Objekts ob es geteilt wurde.
+				ev.getStatusForObject(kl.getId(), new AsyncCallback<Boolean>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.getMessage().toString();
+						
+					}
+
+					@Override
+					public void onSuccess(Boolean result) {
+						if(result ==true) {
+							HTML shared = new HTML("<image src='/images/share.png' width='15px' height='15px' align='center' />");
+							headerPanel.add(shared);
+						}
+					}
+					
+				});
 				vp.add(headerPanel);
+		
+				
+				vp.add(ownerLb);
 				vp.add(BtnPanel);
 				RootPanel.get("content").add(vp);
 				RootPanel.get("content").add(new ShowKontakte(n, result));
@@ -160,7 +211,6 @@ public class KontaktlisteForm extends VerticalPanel {
 	 * @author Batista
 	 *
 	 */
-
 	private class deleteClickHandler implements ClickHandler {
 
 		@Override
@@ -210,6 +260,7 @@ public class KontaktlisteForm extends VerticalPanel {
 									@Override
 									public void onSuccess(Void result) {
 										Window.alert("Die Teilhaberschaft wurde aufgelöst.");
+										
 									}
 								});
 
@@ -222,6 +273,13 @@ public class KontaktlisteForm extends VerticalPanel {
 
 				// Ist man Owner der Kontaktliste wird die Kontaktliste direkt gelöscht.
 			} else {
+				//Zusätzliche Prüfung ob es sich um eines der default Kontaktlisten handelt.
+				if(selectedKontaktliste.getTitel() == "Meine Kontakte" && selectedKontaktliste.getOwnerId() == n.getId()|| 
+						selectedKontaktliste.getTitel() == "Mit mir geteilte Kontakte" && selectedKontaktliste.getOwnerId() == n.getId()) {
+					
+					Window.alert("Tut uns leid, die Standard Listen können hier nicht gelöscht werden.");
+				}else {
+				//Wenn es nicht nicht um eine Standard Liste handelt kann sie gelöscht werden.
 				ev.deleteKontaktliste(selectedKontaktliste, new AsyncCallback<Void>() {
 
 					@Override
@@ -231,9 +289,10 @@ public class KontaktlisteForm extends VerticalPanel {
 
 					@Override
 					public void onSuccess(Void result) {
-						sontactTree.deleteKontaktliste(selectedKontaktliste);
+						Window.Location.reload();
 					}
 				});
+				}
 			}
 		}
 	}
@@ -269,6 +328,17 @@ public class KontaktlisteForm extends VerticalPanel {
 
 				}
 			});
+
+		}
+
+	}
+	
+	private class shareKontaktlisteClickHandler implements ClickHandler {
+		public void onClick(ClickEvent event) {
+
+			Kontaktliste kl = selectedKontaktliste;
+			
+			MessageBox.shareAlert("Geben Sie die Email des Empfängers an", "Email: ", kl);
 
 		}
 

@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 
@@ -208,7 +207,7 @@ public class EigenschaftMapper {
 		Connection con = null; 
 		PreparedStatement stmt = null; 
 		
-		String selectByAuswahl = "SELECT * FROM eigenschaft";
+		String selectByAuswahl = "SELECT * FROM eigenschaft between 1 AND 17";
 		
 		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
 		Vector <Eigenschaft> result = new Vector<Eigenschaft>();
@@ -285,17 +284,8 @@ public class EigenschaftMapper {
 		return null; 
 	}
 	
-	/**
-	 * Auslesen aller Eigenschaften mit einer speziellen Bezeichnung
-	 * 
-	 * @see findEigenschaftByBezeichnung
-	 * @param String bezeichnung fuer zugehoerige Eigenschaften
-	 * @return ein Vektor mit Eigenschaften-Objekten, die durch die gegebene Bezeichnung
-	 *         repraesentiert werden. Bei evtl. Exceptions wird ein partiell
-	 *         gefuellter oder ggf. auch leerer Vektor zurueckgeliefert.
-	 * 
-	 */
 	
+
 	public Vector<Kontakt> findEigenschaftByBezeichnung(String bezeichnung){
 		
 		Connection con = null; 
@@ -386,5 +376,6 @@ public class EigenschaftMapper {
 		
 		return null; 
 	}
+
 
 }

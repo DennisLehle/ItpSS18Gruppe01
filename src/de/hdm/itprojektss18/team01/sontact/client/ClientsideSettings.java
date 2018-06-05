@@ -15,20 +15,25 @@ import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
+ * Die Klasse ClientsideSettings beinhaltet Eigenschaften und Dienste,
+ * die für alle Client-seitigen Klassen relevant sind.
  * 
+ * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
  */
 
 public class ClientsideSettings extends CommonSettings {
+	
 	/**
 	 * Anlegen eines leeren Nutzers zur Speicherung des aktuellen Nutzers.
 	 */
 	public Nutzer nutzer = null;
+	
 	/**
 	 * Remote Service Proxy zur Verbindungsaufnahme mit dem Server-seitgen
 	 * Dienst namens <code>EditorService</code>.
 	 */
 	private static EditorServiceAsync editorVerwaltung = null;
+	
 	/**
 	 * Remote Service Proxy zur Verbindungsaufnahme mit dem Server-seitgen
 	 * Dienst namens <code>LoginService</code>.
@@ -220,6 +225,7 @@ public class ClientsideSettings extends CommonSettings {
 	public final void setCurrentNutzer(Nutzer n) {
 		this.nutzer = n;
 	}
+	
 	/**
 	 * Auslesen eines Nutzers für die Bearbeitung in der Sontact Verwaltung
 	 */

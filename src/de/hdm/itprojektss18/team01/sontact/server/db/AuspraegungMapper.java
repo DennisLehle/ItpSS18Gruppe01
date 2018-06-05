@@ -9,8 +9,6 @@ import java.util.Vector;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 
 /**
@@ -398,66 +396,5 @@ public class AuspraegungMapper {
 //		}
 //	}
 	
-	/**
-	 * Auslesen aller Auspraegungen mit einem speziellen Wert
-	 * 
-	 * @see findAuspraegungByWert
-	 * @param String wert fuer zugehoerige Auspraegung
-	 * @return ein Vektor mit Auspraegungs-Objekten, die durch den gegebenen Wert
-	 *         repraesentiert werden. Bei evtl. Exceptions wird ein partiell
-	 *         gefuellter oder ggf. auch leerer Vektor zurueckgeliefert.
-	 * 
-	 */
-	public Vector<Kontakt> findAuspraegungByWert(String wert){
-		
-		Connection con = null; 
-		PreparedStatement stmt = null; 
-		
-		String selectByKey = "SELECT * FROM auspraegung "
-				+ "JOIN kontakt ON auspraegung.kontaktid = kontakt.id" 
-				+ "WHERE wert=? ";
-		
-		//Vector erzeugen, der die Auspraegungsdatensaetze aufnehmen kann
-		Vector <Kontakt> result = new Vector<Kontakt>();
-
-		try {
-			
-			con = DBConnection.connection();
-			stmt = con.prepareStatement(selectByKey);
-			stmt.setString(1, wert);		
-
-			
-			ResultSet rs = stmt.executeQuery();
-			
-			//Fuer jeden Eintrag im Suchergebnis wird nun ein Objekt erstellt
-		    Auspraegung a = new Auspraegung();
-		    a.setWert("wert");
-		    
-			//While Schleife für das Durchlaufen vieler Zeilen
-			//Schreiben der Objekt-Attribute aus ResultSet
-			while (rs.next()) {
-				
-				Kontakt k = new Kontakt();
-				k.setId(rs.getInt("id"));
-			    k.setVorname(rs.getString("vorname"));
-			    k.setNachname(rs.getString("nachname"));
-			    k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
-			    k.setModDat(rs.getTimestamp("modifikationsdatum"));
-			    k.setOwnerId(rs.getInt("ownerid"));
-			  
-				//Statt return wird hier der Vektor erweitert
-				result.addElement(k);
-				
-			}
-			
-			return result;
-		}
-		
-		catch (SQLException e2) {
-			e2.printStackTrace();
-		}
-		
-		return null;
-	}
 	
 }

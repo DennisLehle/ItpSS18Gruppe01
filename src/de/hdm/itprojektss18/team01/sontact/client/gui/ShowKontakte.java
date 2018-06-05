@@ -50,8 +50,8 @@ public class ShowKontakte extends VerticalPanel {
 	private CellTable<Kontakt> kontaktListenTable;
 	final SingleSelectionModel<Kontakt> selectionModel = new SingleSelectionModel<Kontakt>();
 	final ListDataProvider<Kontakt> dataProvider = new ListDataProvider<Kontakt>();
-	private ListBox search = new ListBox();
-	private TextBox searchEingabe = new TextBox();
+	ListBox auswahl = new ListBox();
+	TextBox eingabe = new TextBox();
 
 	/**
 	 * Buttons der Klasse deklarieren.
@@ -62,7 +62,7 @@ public class ShowKontakte extends VerticalPanel {
 	private Button deleteKontaktFromKontaktliste;
 	private Button showKontaktFromKontaktliste;
 	private Button addKontakt;
-	private Button searchBtn;
+	private Button search;
 
 	/**
 	 * Label für den Titel deklarieren.
@@ -75,6 +75,7 @@ public class ShowKontakte extends VerticalPanel {
 	HorizontalPanel hp = new HorizontalPanel();
 	HorizontalPanel head = new HorizontalPanel();
 	HorizontalPanel headSearch = new HorizontalPanel();
+	HorizontalPanel searchbar = new HorizontalPanel();
 	ScrollPanel sp = new ScrollPanel();
 
 	/**
@@ -101,12 +102,12 @@ public class ShowKontakte extends VerticalPanel {
 	}
 
 	/**
-	 * Konstruktor der Klasse um Meine Kontakte der Kontaktliste "Meine Kontakte" beim
-	 * start des Programms anzuzeigen.
+	 * Konstruktor der Klasse um Meine Kontakte der Kontaktliste "Meine Kontakte"
+	 * beim start des Programms anzuzeigen.
 	 */
 	public ShowKontakte(final Nutzer n) {
 
-		head.add(new HTML("<h2>Übersicht Ihrer Kontakte</h2>"));
+		head.add(new HTML("<h2>Übersicht aller Kontakte</h2>"));
 		RootPanel.get("content").add(head);
 
 		// Methode die beim Start dieser Klasse aufgerufen wird.
@@ -116,6 +117,7 @@ public class ShowKontakte extends VerticalPanel {
 		hp.add(showKontakt);
 		hp.add(deleteKontakt);
 		hp.add(addKontaktToKontaktliste);
+
 	}
 
 	/**
@@ -144,11 +146,36 @@ public class ShowKontakte extends VerticalPanel {
 	 */
 	protected void onLoad(final Nutzer n) {
 
+
+		this.search = new Button(
+				"<image src='/images/search.png' width='15px' height='15px' align='center' />  Start");
+
+		// Sichtbar setzen
+		auswahl.isVisible();
+		eingabe.isVisible();
+		
+		auswahl.setPixelSize(130, 35);
+		eingabe.setPixelSize(125, 25);
+		search.setPixelSize(125, 25);
+		
+		// ListBox mit Auswahlen befüllen.
+		auswahl.addItem("");
+		auswahl.addItem("name");
+		auswahl.addItem("Auspraegung");
+		eingabe.getElement().setPropertyString("placeholder", "Name/Ausprägung");
+
+
+		// Der SearchBar den Button, die ListBox und die TextBox hinzufügen.
+		searchbar.add(search);
+		searchbar.add(auswahl);
+		searchbar.add(eingabe);
+
 		kontaktTable = new CellTable<Kontakt>();
 
 		/**
-		 * Diese aufeinander folgenden Methoden rufen für den Nutzer die eigenen Kontakte
-		 * und die mit IHM geteilten Kontakte auf und führt sie in einer gemeinsamen Liste zusammen.
+		 * Diese aufeinander folgenden Methoden rufen für den Nutzer die eigenen
+		 * Kontakte und die mit IHM geteilten Kontakte auf und führt sie in einer
+		 * gemeinsamen Liste zusammen.
 		 */
 		ev.getAllKontakteByOwner(n, new AsyncCallback<Vector<Kontakt>>() {
 
@@ -246,6 +273,7 @@ public class ShowKontakte extends VerticalPanel {
 		dataProvider.addDataDisplay(kontaktTable);
 		kontaktTable.addColumnSortHandler(sort);
 
+		this.add(searchbar);
 		// Kontakt Tabelle dem Container hinzufügen.
 		this.add(kontaktTable);
 
@@ -309,11 +337,12 @@ public class ShowKontakte extends VerticalPanel {
 
 			public void onClick(ClickEvent event) {
 				Kontakt k = selectionModel.getSelectedObject();
-				
-				if(k == null) {
+
+				if (k == null) {
 					MessageBox.alertWidget("Hinweis", "Bitte wählen Sie einen Kontakt zum löschen aus.");
 				}
-				Window.alert("Sind Sie sicher die Kontaktliste " + k.getVorname() + " " + k.getNachname() + " löschen zu wollen?");
+				Window.alert("Sind Sie sicher die Kontaktliste " + k.getVorname() + " " + k.getNachname()
+						+ " löschen zu wollen?");
 
 				Nutzer n = new Nutzer();
 				n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
@@ -324,7 +353,7 @@ public class ShowKontakte extends VerticalPanel {
 					// Nutzer Cookies setzen und dann per Nutzer holen.
 
 					/*
-					 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und 
+					 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und
 					 * wenn es eine Übereinstimmung gibt wird die Berechtigung entfernt.
 					 */
 					ev.getAllBerechtigungenByReceiver(n.getId(), new AsyncCallback<Vector<Berechtigung>>() {
@@ -357,7 +386,7 @@ public class ShowKontakte extends VerticalPanel {
 										@Override
 										public void onSuccess(Void result) {
 											Window.alert("Die Teilhaberschaft wurde aufgelöst.");
-											
+
 										}
 									});
 
@@ -370,22 +399,23 @@ public class ShowKontakte extends VerticalPanel {
 
 					// Ist man Owner des Kontaktes kann er gelöscht werden.
 				} else {
-					//Zusätzliche Prüfung ob es sich um den eigenen Kontakt Handelt.
-					if(k.getOwnerId() == n.getId() && k.getIdentifier() == 'r') {
-						Window.alert("Tut uns leid, sie können Ihren Kontakt: "+ k.getVorname() +" "+ k.getNachname() + " nicht löschen.");
+					// Zusätzliche Prüfung ob es sich um den eigenen Kontakt Handelt.
+					if (k.getOwnerId() == n.getId() && k.getIdentifier() == 'r') {
+						Window.alert("Tut uns leid, sie können Ihren Kontakt: " + k.getVorname() + " " + k.getNachname()
+								+ " nicht löschen.");
 					} else {
-					ev.deleteKontakt(k, new AsyncCallback<Void>() {
+						ev.deleteKontakt(k, new AsyncCallback<Void>() {
 
-						@Override
-						public void onFailure(Throwable caught) {
-							caught.getMessage().toString();
-						}
+							@Override
+							public void onFailure(Throwable caught) {
+								caught.getMessage().toString();
+							}
 
-						@Override
-						public void onSuccess(Void result) {
-							Window.Location.reload();
-						}
-					});
+							@Override
+							public void onSuccess(Void result) {
+								Window.Location.reload();
+							}
+						});
 					}
 				}
 
@@ -423,6 +453,40 @@ public class ShowKontakte extends VerticalPanel {
 						}
 					});
 				}
+			}
+		});
+
+		//ClickHandler für die persönliche suche von anderen Kontakten.
+		search.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+
+				ev.getKontakteBySuche(auswahl.getSelectedValue(), eingabe.getValue(), n,
+						new AsyncCallback<Vector<Kontakt>>() {
+
+							@Override
+							public void onFailure(Throwable caught) {
+								caught.getMessage().toString();
+
+							}
+
+							@Override
+							public void onSuccess(Vector<Kontakt> result) {
+								// Abfrage ob das Ergebnis vom Server etwas enthält.
+								if (result != null) {
+									
+									kontaktTable.setRowCount(result.size(), true);
+									kontaktTable.setVisibleRange(0, 10);
+									kontaktTable.setRowData(result);
+								} else {
+									Window.alert("Es wurde kein passender Kontakt gefunden");
+								}
+
+							}
+
+						});
+
 			}
 		});
 
@@ -536,7 +600,6 @@ public class ShowKontakte extends VerticalPanel {
 		// Größse des ScrollPanels bestimmen.
 		sp.setSize("900px", "400px");
 
-	
 		this.add(sp);
 		this.add(hp);
 
@@ -547,8 +610,8 @@ public class ShowKontakte extends VerticalPanel {
 		 * Button ClickHandler um eine Teilungen zu entfernen und Kontakt zu löschen
 		 * Hier wird unterschieden zwischen Owner und Receiver. Ist man Owner kann man
 		 * den Kontakt permanent löschen wenn man der Receiver ist wird der Kontakt nur
-		 * aus der Kontaktliste entfernt.
-		 * Ausgenommen von der Löschung ist der eigene Kontakt und default Kontaktlisten.
+		 * aus der Kontaktliste entfernt. Ausgenommen von der Löschung ist der eigene
+		 * Kontakt und default Kontaktlisten.
 		 */
 		deleteKontaktFromKontaktliste.addClickHandler(new ClickHandler() {
 
@@ -611,25 +674,25 @@ public class ShowKontakte extends VerticalPanel {
 
 					// Ist man Owner der Kontaktliste wird die Kontaktliste direkt gelöscht.
 				} else {
-					//Zusätzliche Prüfung ob es sich um eines der default Kontaktlisten handelt.
-					if(kl.getTitel() == "Meine Kontakte" && kl.getOwnerId() == n.getId() ||
-							kl.getTitel() == "Mit mir geteilte Kontakte" && kl.getOwnerId() == n.getId() ) {
-						
+					// Zusätzliche Prüfung ob es sich um eines der default Kontaktlisten handelt.
+					if (kl.getTitel() == "Meine Kontakte" && kl.getOwnerId() == n.getId()
+							|| kl.getTitel() == "Mit mir geteilte Kontakte" && kl.getOwnerId() == n.getId()) {
+
 						Window.alert("Tut uns leid, die Standard Listen können hier nicht gelöscht werden.");
-					}else {
-					ev.deleteKontaktliste(kl, new AsyncCallback<Void>() {
+					} else {
+						ev.deleteKontaktliste(kl, new AsyncCallback<Void>() {
 
-						@Override
-						public void onFailure(Throwable caught) {
-							caught.getMessage().toString();
-						}
+							@Override
+							public void onFailure(Throwable caught) {
+								caught.getMessage().toString();
+							}
 
-						@Override
-						public void onSuccess(Void result) {
-							Window.Location.reload();
+							@Override
+							public void onSuccess(Void result) {
+								Window.Location.reload();
 
-						}
-					});
+							}
+						});
 					}
 				}
 			}

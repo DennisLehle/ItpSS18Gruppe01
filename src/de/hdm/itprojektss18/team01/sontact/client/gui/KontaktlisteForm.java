@@ -72,6 +72,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 				HorizontalPanel headerPanel = new HorizontalPanel();
 				HorizontalPanel BtnPanel = new HorizontalPanel();
+				HorizontalPanel deltePanel = new HorizontalPanel();
 				VerticalPanel vp = new VerticalPanel();
 				Label ownerLb = new Label();
 				
@@ -106,6 +107,15 @@ public class KontaktlisteForm extends VerticalPanel {
 
 				shareBtn.addClickHandler(new shareKontaktlisteClickHandler());
 				BtnPanel.add(shareBtn);
+				
+				
+				//ClickHandler zum teilen von Kontaktlisten.
+				Button teilhaberschaftDeletion = new Button("<image src='/images/share.png' width='10px' height='10px' align='center' />" +
+						"<image src='/images/share.png' width='10px' height='10px' align='center' />");
+
+				teilhaberschaftDeletion.addClickHandler(new deletionTeilhaberschaftClickHandler());
+				BtnPanel.add(teilhaberschaftDeletion);
+				
 				
 				//Abfrage wer der Owner der Liste ist.
 				if(kl.getOwner() != n.getId()) {
@@ -354,6 +364,18 @@ public class KontaktlisteForm extends VerticalPanel {
 		}
 
 	}
+	
+	private class deletionTeilhaberschaftClickHandler implements ClickHandler {
+		public void onClick(ClickEvent event) {
+
+			Kontaktliste kl = selectedKontaktliste;
+
+//			MessageBox.shareDeletionKl("Geteile Kontaktlisten", "", kl);
+
+		}
+
+	}
+
 
 	/**
 	 * ClickHandler f�r das Updaten einer Kontaktliste

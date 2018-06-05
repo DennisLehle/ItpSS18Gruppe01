@@ -333,7 +333,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		e.setId(1);
 
 		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
-		return this.eMapper.insert(e);
+		return this.eMapper.insertEigenschaft(e);
 	}
 
 	
@@ -793,6 +793,30 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	/**
+	 * Erzeugen einer neuen Auspraegung.
+	 * 
+	 */
+
+//	public Auspraegung createAuspraegung(String wert, int eigenschaftId, 
+//			int kontaktId) throws IllegalArgumentException {
+//
+//		init();
+//
+//		Auspraegung a = new Auspraegung();
+//		a.setWert(wert);
+//		a.setEigenschaftId(eigenschaftId);
+//		a.setKontaktId(kontaktId);
+//
+//		
+//
+//		this.saveModifikationsdatum(a.getKontaktId());
+//		return this.aMapper.insert(a);
+//
+//	}
+
+	/**
+
+>>>>>>> refs/remotes/origin/master
 	 * Speichern einer modifizierten Auspraegung.
 	 * 
 	 */
@@ -1206,6 +1230,18 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		init();
 		
 		return this.kMapper.findKontakteByAuspraegung(wert, n);
+	}
+	
+	
+
+	/**
+	 * Auslesen einer Eigenschaft anhand der übergebenen Bezeichnung.
+	 */
+	public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung) 
+			throws IllegalArgumentException {
+		
+	
+		return this.eMapper.findEigenschaft(bezeichnung);
 	}
 
 	/**

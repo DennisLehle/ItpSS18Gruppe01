@@ -6,9 +6,13 @@ package de.hdm.itprojektss18.team01.sontact.shared.report;
  * @author Miescha
  */
 
-public class AllKontakteByNutzerReport 
+public class AlleKontakteReport 
 	extends SimpleReport {
 
   private static final long serialVersionUID = 1L;
 
 }
+
+
+	
+

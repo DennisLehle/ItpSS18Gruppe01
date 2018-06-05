@@ -189,6 +189,9 @@ public interface EditorServiceAsync {
 
 	void getKontakteBySuche(String listBoxWert, String testBoxWert, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
+	// Abschnitt Eigenschaft:
+	void findEigenschaftByBezeichnung(String bezeichnung, AsyncCallback<Eigenschaft> callback);
+
 
 
 	

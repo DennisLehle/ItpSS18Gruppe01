@@ -168,6 +168,9 @@ public interface EditorService extends RemoteService{
 	
 	public Eigenschaft getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException;
 	
+	public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung) throws IllegalArgumentException;
+			
+	
 	
 	// Abschnitt Auspr�gung:
 	

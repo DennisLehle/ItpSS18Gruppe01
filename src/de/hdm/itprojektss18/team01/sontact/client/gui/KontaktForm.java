@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import org.eclipse.jetty.security.jaspi.modules.UserInfo;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -83,7 +84,11 @@ public class KontaktForm extends VerticalPanel {
 				selectedKontakt = result;
 
 				HorizontalPanel headerPanel = new HorizontalPanel();
+				headerPanel.setBorderWidth(10);
+				headerPanel.setWidth("70%");
 				HorizontalPanel BtnPanel = new HorizontalPanel();
+				BtnPanel.setBorderWidth(10);
+				BtnPanel.getElement().getStyle().setDisplay(Display.BLOCK);
 				VerticalPanel vp = new VerticalPanel();
 				Label ownerLb = new Label();
 
@@ -96,6 +101,7 @@ public class KontaktForm extends VerticalPanel {
 
 				// ClickHandler f�r das Updaten eines Kontakts
 				editKontaktBtn.addClickHandler(new updateKontaktClickHandler());
+			//	editKontaktBtn.
 				BtnPanel.add(editKontaktBtn);
 				
 				//ClickHandler zum teilen von Kontakten

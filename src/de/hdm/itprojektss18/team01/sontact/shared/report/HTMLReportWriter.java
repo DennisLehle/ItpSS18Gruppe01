@@ -94,7 +94,7 @@ public class HTMLReportWriter extends ReportWriter {
    * @param r der zu prozessierende Report
    */
   @Override
-public void process(AlleKontakteReport r) {
+  public void process(AlleKontakteReport r) {
     // Zunächst löschen wir das Ergebnis vorhergehender Prozessierungen.
     this.resetReportText();
 
@@ -151,80 +151,79 @@ public void process(AlleKontakteReport r) {
     this.reportText = result.toString();
   }
 
-//  /**
-//   * Prozessieren des übergebenen Reports und Ablage im Zielformat. Ein Auslesen
-//   * des Ergebnisses kann später mittels <code>getReportText()</code> erfolgen.
-//   * 
-//   * @param r der zu prozessierende Report
-//   */
-//  @Override
-//public void process(AlleKontakteNachAuspraegungReport r) {
-//    // Zunächst löschen wir das Ergebnis vorhergehender Prozessierungen.
-//    this.resetReportText();
-//
-//    /*
-//     * In diesen Buffer schreiben wir während der Prozessierung sukzessive
-//     * unsere Ergebnisse.
-//     */
-//    StringBuffer result = new StringBuffer();
-//
-//    /*
-//     * Nun werden Schritt für Schritt die einzelnen Bestandteile des Reports
-//     * ausgelesen und in HTML-Form übersetzt.
-//     */
-//    result.append("<H1>" + r.getTitle() + "</H1>");
-//    result.append("<table><tr>");
-//
-//    if (r.getHeaderData() != null) {
-//      result.append("<td>" + paragraph2HTML(r.getHeaderData()) + "</td>");
-//    }
-//
-//    result.append("<td>" + paragraph2HTML(r.getImprint()) + "</td>");
-//    result.append("</tr><tr><td></td><td>" + r.getCreated().toString()
-//        + "</td></tr></table>");
-//
-//    /*
-//     * Da AllAccountsOfAllCustomersReport ein CompositeReport ist, enthält r
-//     * eine Menge von Teil-Reports des Typs AllAccountsOfCustomerReport. Für
-//     * jeden dieser Teil-Reports rufen wir processAllAccountsOfCustomerReport
-//     * auf. Das Ergebnis des jew. Aufrufs fügen wir dem Buffer hinzu.
-//     */
-//    for (int i = 0; i < r.getNumSubReports(); i++) {
-//      /*
-//       * AllAccountsOfCustomerReport wird als Typ der SubReports vorausgesetzt.
-//       * Sollte dies in einer erweiterten Form des Projekts nicht mehr gelten,
-//       * so müsste hier eine detailliertere Implementierung erfolgen.
-//       */
-//    	AlleKontakteReport subReport = (AlleKontakteReport) r
-//          .getSubReportAt(i);
-//
-//      this.process(subReport);
-//
-//      result.append(this.reportText + "\n");
-//
-//      /*
-//       * Nach jeder Übersetzung eines Teilreports und anschließendem Auslesen
-//       * sollte die Ergebnisvariable zurückgesetzt werden.
-//       */
-//      this.resetReportText();
-//    }
-//
-//    /*
-//     * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
-//     * reportText-Variable zugewiesen. Dadurch wird es möglich, anschließend das
-//     * Ergebnis mittels getReportText() auszulesen.
-//     */
-//    this.reportText = result.toString();
-//  }
-//
-//  /**
-//   * Auslesen des Ergebnisses der zuletzt aufgerufenen Prozessierungsmethode.
-//   * 
-//   * @return ein String im HTML-Format
-//   */
-//  public String getReportText() {
-//    return this.getHeader() + this.reportText + this.getTrailer();
-//  }
+  /**
+   * Prozessieren des übergebenen Reports und Ablage im Zielformat. Ein Auslesen
+   * des Ergebnisses kann später mittels <code>getReportText()</code> erfolgen.
+   * 
+   * @param r der zu prozessierende Report
+   */
+  @Override
+  public void process(AlleKontakteNachEigenschaftenReport r) {
+    // Zunächst löschen wir das Ergebnis vorhergehender Prozessierungen.
+    this.resetReportText();
+
+    /*
+     * In diesen Buffer schreiben wir während der Prozessierung sukzessive
+     * unsere Ergebnisse.
+     */
+    StringBuffer result = new StringBuffer();
+
+    /*
+     * Nun werden Schritt für Schritt die einzelnen Bestandteile des Reports
+     * ausgelesen und in HTML-Form übersetzt.
+     */
+    result.append("<H1>" + r.getTitle() + "</H1>");
+    result.append("<table><tr>");
+
+    if (r.getHeaderData() != null) {
+      result.append("<td>" + paragraph2HTML(r.getHeaderData()) + "</td>");
+    }
+
+    result.append("<td>" + paragraph2HTML(r.getImprint()) + "</td>");
+    result.append("</tr><tr><td></td><td>" + r.getCreated().toString()
+        + "</td></tr></table>");
+
+    /*
+     * Da AllAccountsOfAllCustomersReport ein CompositeReport ist, enthält r
+     * eine Menge von Teil-Reports des Typs AllAccountsOfCustomerReport. Für
+     * jeden dieser Teil-Reports rufen wir processAllAccountsOfCustomerReport
+     * auf. Das Ergebnis des jew. Aufrufs fügen wir dem Buffer hinzu.
+     */
+    for (int i = 0; i < r.getNumSubReports(); i++) {
+      /*
+       * AllAccountsOfCustomerReport wird als Typ der SubReports vorausgesetzt.
+       * Sollte dies in einer erweiterten Form des Projekts nicht mehr gelten,
+       * so müsste hier eine detailliertere Implementierung erfolgen.
+       */
+    	AlleKontakteReport subReport = (AlleKontakteReport) r.getSubReportsAt(i);
+
+      this.process(subReport);
+
+      result.append(this.reportText + "\n");
+
+      /*
+       * Nach jeder Übersetzung eines Teilreports und anschließendem Auslesen
+       * sollte die Ergebnisvariable zurückgesetzt werden.
+       */
+      this.resetReportText();
+    }
+
+    /*
+     * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
+     * reportText-Variable zugewiesen. Dadurch wird es möglich, anschließend das
+     * Ergebnis mittels getReportText() auszulesen.
+     */
+    this.reportText = result.toString();
+  }
+
+  /**
+   * Auslesen des Ergebnisses der zuletzt aufgerufenen Prozessierungsmethode.
+   * 
+   * @return ein String im HTML-Format
+   */
+  public String getReportText() {
+    return this.getHeader() + this.reportText + this.getTrailer();
+  }
 
 
 //public void process(AlleKontakteNachAuspraegungReport r) {
@@ -237,14 +236,13 @@ public void process(AlleKontakteReport r) {
 //	// TODO Auto-generated method stub
 //	
 //}
-
-public void process(AlleGeteiltenKontakteReport r) {
-
-}
-
-@Override
-public void process(AlleKontakteNachEigenschaftenReport r) {
-	// TODO Auto-generated method stub
-	
-}
+//public void process(AlleGeteiltenKontakteReport r) {
+//
+//}
+//
+//@Override
+//public void process(AlleKontakteNachEigenschaftenReport r) {
+//	// TODO Auto-generated method stub
+//	
+//}
 }

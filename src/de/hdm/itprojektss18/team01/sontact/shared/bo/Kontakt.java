@@ -108,5 +108,7 @@ public class Kontakt extends BusinessObject implements Participation {
 	public void setIdentifier(char identifier) {
 		this.identifier = identifier;
 	}
+	
+	
 
 }

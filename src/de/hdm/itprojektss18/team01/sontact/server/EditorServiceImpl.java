@@ -329,7 +329,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		//e.setId(1);
 
 		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
-		return this.eMapper.insertEigenschaft(e);
+		return this.eMapper.insert(e);
 	}
 
 	
@@ -384,10 +384,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		init();
 		
 		// Erzeugen eines neuen Eigenschaft Objektes durch Aufruf der Methode <createEigenschaft>.
-		Eigenschaft e = this.createEigenschaft(bezeichnung);
+		//Eigenschaft e = this.createEigenschaft(bezeichnung);
 		
 		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
-		this.createAuspraegung(wert, e.getId(), k.getId());
+		createAuspraegung(wert, createEigenschaft(bezeichnung).getId(), k.getId());
 	}
 
 	

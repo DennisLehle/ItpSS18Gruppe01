@@ -174,7 +174,7 @@ public class RegistrierungsForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			Vector<Eigenschaft> eigeneE = new Vector<Eigenschaft>();
+			
 
 			for (int x = 0; x < eigeneEigenschaftenTable.getRowCount(); x++) {
 				Widget wtb = eigeneEigenschaftenTable.getWidget(x, 0);
@@ -187,45 +187,26 @@ public class RegistrierungsForm extends VerticalPanel {
 						if (!((TextBox) v).getValue().isEmpty()) {
 							a2.setWert(((TextBox) v).getValue());
 
-						
-//							
-//							ev.createEigenschaft(bez2, new AsyncCallback<Eigenschaft>() {
-//
-//								@Override
-//								public void onFailure(Throwable caught) {
-//									// TODO Auto-generated method stub
-//
-//								}
-//
-//								@Override
-//								public void onSuccess(Eigenschaft result) {
-//									eigeneE.add(result);
-//									Window.alert("dd");
-//
-//								}
-//							});
+							ev.createAuspraegungForNewEigenschaft(bez2, a2.getWert(), k, new AsyncCallback<Void>() {
+
+								@Override
+								public void onFailure(Throwable caught) {
+									// TODO Auto-generated method stub
+
+								}
+
+								@Override
+								public void onSuccess(Void result) {
+									Window.alert("TestTest");
+
+								}
+
+							});
 
 						}
 
 					}
-					ev.createAuspraegungForNewEigenschaft(bez2, a2.getWert(), k, new AsyncCallback<Void>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-							// TODO Auto-generated method stub
-							
-						}
-
-						@Override
-						public void onSuccess(Void result) {
-							Window.alert("TestTest");
-							
-						}
-						
-					});
 				}
-				
-			
 
 			}
 
@@ -273,13 +254,10 @@ public class RegistrierungsForm extends VerticalPanel {
 					@Override
 					public void onSuccess(Auspraegung result) {
 
-
 					}
 				});
 				Window.Location.reload();
 			}
-			
-			
 
 		}
 	}

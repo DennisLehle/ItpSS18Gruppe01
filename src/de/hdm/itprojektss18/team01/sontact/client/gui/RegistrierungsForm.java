@@ -4,7 +4,6 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -20,7 +19,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
-import de.hdm.itprojektss18.team01.sontact.client.Sontact;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
@@ -28,7 +26,8 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * Wird aufgerufen wenn Nutzer noch kein eigenes Profil im System besitzt.
+ * Wird aufgerufen wenn Nutzer noch kein eigenen Kontakt (Kontakt des Nutzers)
+ * im System angelegt hat.
  * 
  * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
  *
@@ -40,12 +39,16 @@ public class RegistrierungsForm extends VerticalPanel {
 
 	Kontakt k = new Kontakt();
 	Eigenschaft e = new Eigenschaft();
-	Eigenschaft e2 = new Eigenschaft();
+
 	Auspraegung a = new Auspraegung();
 	Auspraegung a2 = new Auspraegung();
-	Auspraegung aus = new Auspraegung();
+
 	Nutzer n = new Nutzer();
 
+	/*
+	 * Datenstruktur welche die Auswahleigenschaften beinhaltet Um diese nicht
+	 * erneut über einen zusätzlichen RPC Aufruf bereitzustellen
+	 */
 	Vector<Eigenschaft> eigenschaften = new Vector<>();
 
 	// TextBoxen
@@ -97,10 +100,10 @@ public class RegistrierungsForm extends VerticalPanel {
 		// RootPanel leeren damit neuer Content geladen werden kann.
 		RootPanel.get("content").clear();
 		// Ueberschrift anzeigen
-		RootPanel.get("content").add(new HTML("<h2>Kontakt erstellen</h2>"));
+		RootPanel.get("contentheader").add(new HTML("Kontakt erstellen"));
 
 		// Hauptpanel mit dem ButtonPanel verknï¿½pfen (Kontakterstellungs-Ansicht)
-		hauptPanel.setSpacing(40);
+		hauptPanel.setSpacing(20);
 		hauptPanel.add(BtnPanel);
 
 		// Je FlexTable wird ihrem eigenen VerticalPanel zugeordnet
@@ -109,14 +112,14 @@ public class RegistrierungsForm extends VerticalPanel {
 		// Beide VerticalPanels werden einem HorizontalPanel zugeordnet
 		FlexTablePanel.add(FlexPanelAusw);
 		FlexTablePanel.add(FlexPanelEigene);
-		FlexTablePanel.setSpacing(45);
+		FlexTablePanel.setSpacing(30);
 		// Dieses VerticalPanel wird dem ScrollPanel zugeordnet
 		sp.add(FlexTablePanel);
 
 		// Groesse des ScrollPanels anpassen
 		sp.setSize("900px", "400px");
 
-		BtnPanel.setSpacing(45);
+		BtnPanel.setSpacing(20);
 
 		// TextBoxen fuer die Anzeige der Gmail Adresse welche beim Login angegeben
 		// wurde
@@ -174,30 +177,33 @@ public class RegistrierungsForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			
 
-			for (int x = 0; x < eigeneEigenschaftenTable.getRowCount(); x++) {
-				Widget wtb = eigeneEigenschaftenTable.getWidget(x, 0);
+			/**
+			 * Speichern der selbst definierten Eigenschafte und Auspraegungen
+			 */
+			for (int i = 0; i < eigeneEigenschaftenTable.getRowCount(); i++) {
 
-				if (wtb instanceof TextBox) {
-					String bez2 = ((TextBox) wtb).getText();
+				Widget w = eigeneEigenschaftenTable.getWidget(i, 0);
 
-					Widget v = eigeneEigenschaftenTable.getWidget(x, 1);
+				if (w instanceof TextBox) {
+					String bez = ((TextBox) w).getText();
+
+					Widget v = eigeneEigenschaftenTable.getWidget(i, 1);
 					if (v instanceof TextBox) {
 						if (!((TextBox) v).getValue().isEmpty()) {
 							a2.setWert(((TextBox) v).getValue());
 
-							ev.createAuspraegungForNewEigenschaft(bez2, a2.getWert(), k, new AsyncCallback<Void>() {
+							ev.createAuspraegungForNewEigenschaft(bez, a2.getWert(), k, new AsyncCallback<Void>() {
 
 								@Override
 								public void onFailure(Throwable caught) {
-									// TODO Auto-generated method stub
+									// Nothing to do here..
 
 								}
 
 								@Override
 								public void onSuccess(Void result) {
-									Window.alert("TestTest");
+									Window.alert("Succeed");
 
 								}
 
@@ -211,8 +217,8 @@ public class RegistrierungsForm extends VerticalPanel {
 			}
 
 			/**
-			 * Erst speichern wir die Auswahleigenschaften die der Nutzer beliebig oft
-			 * genereien bwz. auswï¿½hlen und befï¿½llen kann
+			 * Speichern der Auswahleigenschaften die der Nutzer beliebig oft genereien bwz.
+			 * auswï¿½hlen und befï¿½llen kann
 			 */
 
 			for (int i = 0; i <= auswahlEigenschaftenTable.getRowCount(); i++) {
@@ -253,6 +259,7 @@ public class RegistrierungsForm extends VerticalPanel {
 
 					@Override
 					public void onSuccess(Auspraegung result) {
+						// Nothing to do here...
 
 					}
 				});
@@ -351,17 +358,20 @@ public class RegistrierungsForm extends VerticalPanel {
 							public void onSuccess(Kontakt result) {
 								k = result;
 								RootPanel.get("content").clear();
-
-								RootPanel.get("content").add(new HTML("<h2>Kontakteigenschaften</h2>"));
+								
+								RootPanel.get("contentHeader").clear();
+								RootPanel.get("contentHeader").add(new HTML("Kontakteigenschaften angeben"));
 
 								HorizontalPanel BtnPanel = new HorizontalPanel();
 								Button addEigenschaftBtn = new Button("Weitere Auswahleigenschaften");
+
 								Button speichernBtn = new Button("speichern");
 								Button createEigenschaftBtn = new Button("Eigenschaft erstellen");
+								createEigenschaftBtn.setTitle("Eigene Eigenschaft definieren");
 								BtnPanel.add(addEigenschaftBtn);
 								BtnPanel.add(createEigenschaftBtn);
 								BtnPanel.add(speichernBtn);
-
+								addEigenschaftBtn.setTitle("Weitere Auswahl hinzufügen");
 								addEigenschaftBtn.addClickHandler(new AuswahleigenschaftClickHandler());
 								createEigenschaftBtn.addClickHandler(new EigeneEigenschaftClickHandler());
 								speichernBtn.addClickHandler(new EigenschaftenSpeichern());

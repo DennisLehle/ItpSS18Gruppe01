@@ -1,6 +1,7 @@
 package de.hdm.itprojektss18.team01.sontact.shared.report;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -45,7 +46,7 @@ public abstract class Report implements Serializable {
   /**
    * Datum der Erstellung des Berichts.
    */
-  private Date created = new Date();
+  private Timestamp created = new Timestamp(System.currentTimeMillis());
 
   /**
    * Auslesen des Impressums.
@@ -106,7 +107,7 @@ public abstract class Report implements Serializable {
    * 
    * @return Datum der Erstellung des Berichts
    */
-  public Date getCreated() {
+  public Timestamp getCreated() {
     return this.created;
   }
 
@@ -117,7 +118,7 @@ public abstract class Report implements Serializable {
    * 
    * @param created Zeitpunkt der Erstellung
    */
-  public void setCreated(Date created) {
+  public void setCreated(Timestamp created) {
     this.created = created;
   }
 

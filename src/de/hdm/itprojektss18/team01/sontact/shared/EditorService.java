@@ -240,5 +240,7 @@ public interface EditorService extends RemoteService{
 	
 	public Vector<Kontakt> getKontakteBySuche(String listBoxWert, String testBoxWert,
 			Nutzer n) throws IllegalArgumentException;
-		
+	
+	public Vector<Kontakt> getAllKontakteByNutzer(Nutzer n) throws IllegalArgumentException;
+	
 }

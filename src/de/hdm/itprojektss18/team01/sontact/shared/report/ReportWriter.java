@@ -17,20 +17,32 @@ package de.hdm.itprojektss18.team01.sontact.shared.report;
  */
 public abstract class ReportWriter {
 
-  /**
-   * Übersetzen eines <code>AllAccountsOfCustomerReport</code> in das
-   * Zielformat.
-   * 
-   * @param r der zu übersetzende Report
-   */
+	/**
+	 * Uebersetzen eines <code>AlleKontakteNachEigenschaftReport</code> in das
+	 * Zielformat.
+	 * 
+	 * @param r der zu uebersetzende Report
+	 */
   public abstract void process(AlleKontakteNachEigenschaftenReport r);
 
-  /**
-   * Übersetzen eines <code>AllAccountsOfAllCustomersReport</code> in das
-   * Zielformat.
-   * 
-   * @param r der zu übersetzende Report
-   */
+  
+  
+  	/**
+  	 * Uebersetzen eines <code>AlleKontakteReport</code> in das
+  	 * Zielformat.
+  	 * 
+  	 * @param r der zu uebersetzende Report
+  	 */
   public abstract void process(AlleKontakteReport r);
+  
+  
+  
+  	/**
+  	 * Uebersetzen eines <code>AlleGeteiltenKontakteReport</code> in das
+  	 * Zielformat.
+  	 * 
+  	 * @param r der zu uebersetzende Report
+  	 */
+  public abstract void process(AlleGeteiltenKontakteReport r);
 
 }

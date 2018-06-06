@@ -19,7 +19,7 @@
 
  <servlet>
     <servlet-name>reportServlet</servlet-name>
-    <servlet-class>de.hdm.itprojektss18.team01.sontact.server.ReportGeneratorServiceImpl</servlet-class>
+    <servlet-class>de.hdm.itprojektss18.team01.sontact.server.ReportGeneratorImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>

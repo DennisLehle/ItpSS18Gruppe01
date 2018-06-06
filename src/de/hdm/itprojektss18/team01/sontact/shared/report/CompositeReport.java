@@ -7,9 +7,7 @@ import java.util.Vector;
  * Ein zusammengesetzter Report. Dieser Report kann aus einer Menge von 
  * Teil-Reports (vgl. Attribut <code>subReports</code>) bestehen.
  */
-public abstract class CompositeReport 
-	extends Report 
-	implements Serializable {
+public abstract class CompositeReport extends Report implements Serializable {
 
 	/**
    * 

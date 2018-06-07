@@ -12,7 +12,7 @@ public interface ReportGeneratorAsync {
 
 	void init(AsyncCallback<Void> callback);
 
-	void createAlleKontakteReport(AsyncCallback<AlleKontakteReport> callback);
+	void createAlleKontakteReport(Nutzer n, AsyncCallback<AlleKontakteReport> callback);
 
 	void createAuspraegungReport(AsyncCallback<AlleKontakteNachEigenschaftenReport> callback);
 

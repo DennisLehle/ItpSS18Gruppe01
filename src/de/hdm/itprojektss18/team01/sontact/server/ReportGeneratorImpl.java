@@ -62,7 +62,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * Report der alle Kontakte eines Nutzers ausgibt.
 	 */
 	@Override
-	public AlleKontakteReport createAlleKontakteReport() throws IllegalArgumentException {
+	public AlleKontakteReport createAlleKontakteReport(Nutzer n) 
+			throws IllegalArgumentException {
+		
 		if (this.getEditorService() == null) {
 			return null;
 		}
@@ -75,7 +77,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		report.setCreated(new Timestamp(System.currentTimeMillis()));
 
 		// Erzeugung der Kopfdaten
-		report.setHeaderData(createHeaderData(n, report));
+		report.setHeaderData(createHeaderData(n));
 
 		// Kopfzeile mit den Ueberschriften mit den einzelnen Spalten im Report
 		// erstellen
@@ -84,6 +86,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		head.addColumn(new Column("Nachname"));
 		head.addColumn(new Column("Erstellungsdatum"));
 		head.addColumn(new Column("Modifikationsdatum"));
+		
+		//Kontakt der Geteilt oder nicht Geteilt wurde
 		head.addColumn(new Column("Status"));
 
 		// Kopfzeile dem Report hinzufuegen
@@ -92,6 +96,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		// Relevante Kontaktdaten in den Vektor laden und Zeile fuer Zeile dem Report
 		// hinzufuegen
 		Vector<Kontakt> kontakt = this.getEditorService().getAllKontakteByNutzer(n);
+		
 
 		for (Kontakt k : kontakt) {
 			Row kon = new Row();
@@ -100,7 +105,6 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			kon.addColumn(new Column(k.getErstellDat().toString()));
 			kon.addColumn(new Column(k.getModDat().toString()));
 			
-			Berechtigung b = new Berechtigung();
 
 					// @TODO Status!!!
 
@@ -110,24 +114,30 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 		return null;
 	}
-
+	
 	/**
-	 * Report der alle geteilten Kontakte eines Nutzers ausgibt.
+	 * Report der alle Kontakte nach Eigenschaften mit ihrer Auspraegung ausgibt. 
+	 * Die bestimmten Eigenschaften können aus der Suchleiste ausgelesen 
+	 * werden und werden mit der entsprechenden Auspraegung zurückgegeben.  
 	 */
 	@Override
-	public AlleGeteiltenKontakteReport createAlleGeteilteReport() throws IllegalArgumentException {
+	public AlleKontakteNachEigenschaftenReport createAuspraegungReport() 
+			throws IllegalArgumentException {
 
 		return null;
 	}
 
 	/**
-	 * Report der alle Kontakte nach Eigenschaften mit ihrer Auspraegung ausgibt.
+	 * Report der alle geteilten Kontakte eines Nutzers anzeigt, die als 
+	 * Teilhaberschaften fuer andere Nutzer freigegeben wurden.
 	 */
 	@Override
-	public AlleKontakteNachEigenschaftenReport createAuspraegungReport() throws IllegalArgumentException {
+	public AlleGeteiltenKontakteReport createAlleGeteilteReport() 
+			throws IllegalArgumentException {
 
 		return null;
 	}
+
 
 	/*
 	 * *************************************************************************
@@ -135,40 +145,46 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * *************************************************************************
 	 */
 
-	private String getTimeForReport(Report report) {
-		// TODO Auto-generated method stub
-		return null;
+
+	/**
+	 * Den Nutzer anhand der Registrierungsmail auslesen und die identifzierende
+	 * Mail als Zeichkette anzeigen lassen. 
+	 * @param n
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
+	private String getNutzerByGMail (Nutzer n) throws IllegalArgumentException {
+	String name = "";
+	
+	if (n instanceof Nutzer) {
+		Nutzer nutzer = editorService.getUserByGMail(n.getEmailAddress());
+		name = nutzer.getEmailAddress();
+	}else {
+		name = "Oops...Der Nutzer wurde nicht gefunden.Versuchen Sie es nochmal.";
+	}
+	return name;
 	}
 
-	private String getDateForReport(Report report) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private String getNameForNutzer(Nutzer n) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private CompositeParagraph createHeaderData(Nutzer n, Report report) {
-
+	/**
+	 * Zur korrekten Ausgabe der Kopfdaten, wird diese Hilfsmethode einheitlich
+	 * für alle Berichtsausgaben verwendet. 
+	 * @param n
+	 * @param report
+	 * @return
+	 */
+	private CompositeParagraph createHeaderData(Nutzer n){
 		// Generierung der Kopfdaten des Reports
 		CompositeParagraph headerData = new CompositeParagraph();
-
 		try {
+			headerData.addSubParagraph(new SimpleParagraph("Nutzer: " + this.getNutzerByGMail(n)));
 
-			headerData.addSubParagraph(new SimpleParagraph("Nutzer: " + getNameForNutzer(n)));
-		}
-
-		catch (NullPointerException e) {
-			headerData.addSubParagraph(new SimpleParagraph("Nutzer: Unbekannter Nutzer"));
+		} catch (NullPointerException e) {
+			headerData.addSubParagraph(new SimpleParagraph("Nutzer: " + "Unbekannter Nutzer"));
 			e.printStackTrace();
 		}
-
-		headerData.addSubParagraph(new SimpleParagraph("Datum: " + getDateForReport(report)));
-		headerData.addSubParagraph(new SimpleParagraph("Uhrzeit: " + getTimeForReport(report)));
+		headerData
+				.addSubParagraph(new SimpleParagraph("Erstellungsdatum: " + new Timestamp(System.currentTimeMillis())));
 
 		return headerData;
 	}
-
 }

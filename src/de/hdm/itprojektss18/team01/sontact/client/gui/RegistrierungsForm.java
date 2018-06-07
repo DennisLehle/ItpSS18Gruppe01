@@ -100,11 +100,7 @@ public class RegistrierungsForm extends VerticalPanel {
 		// RootPanel leeren damit neuer Content geladen werden kann.
 		RootPanel.get("content").clear();
 		// Ueberschrift anzeigen
-		RootPanel.get("contentheader").add(new HTML("Kontakt erstellen"));
-
-		// Hauptpanel mit dem ButtonPanel verkn�pfen (Kontakterstellungs-Ansicht)
-		hauptPanel.setSpacing(20);
-		hauptPanel.add(BtnPanel);
+		RootPanel.get("contentHeader").add(new HTML("Kontakt erstellen"));
 
 		// Je FlexTable wird ihrem eigenen VerticalPanel zugeordnet
 		FlexPanelAusw.add(auswahlEigenschaftenTable);
@@ -112,6 +108,7 @@ public class RegistrierungsForm extends VerticalPanel {
 		// Beide VerticalPanels werden einem HorizontalPanel zugeordnet
 		FlexTablePanel.add(FlexPanelAusw);
 		FlexTablePanel.add(FlexPanelEigene);
+		
 		FlexTablePanel.setSpacing(30);
 		// Dieses VerticalPanel wird dem ScrollPanel zugeordnet
 		sp.add(FlexTablePanel);
@@ -121,8 +118,7 @@ public class RegistrierungsForm extends VerticalPanel {
 
 		BtnPanel.setSpacing(20);
 
-		// TextBoxen fuer die Anzeige der Gmail Adresse welche beim Login angegeben
-		// wurde
+		// TextBoxen fuer die Anzeige der Gmail Adresse welche beim Login angegeben wurde
 		gmailTb.setText(nutzer.getEmailAddress());
 		gmailTb.setEnabled(false);
 
@@ -144,15 +140,11 @@ public class RegistrierungsForm extends VerticalPanel {
 
 		// Weiter-Button wird der Kontakterstellungs-Ansicht hinzugefuegt
 		// Dient zur Weiterleitung in die Kontakteigenschafts-Ansicht, hier werden die
-		// Eigenschaften
-		// fuer den erstellen Kontakt dann angegeben
+		// Eigenschaften fuer den erstellen Kontakt dann angegeben
 		BtnPanel.add(weiterBtn);
-		// ClickHandler der die "Weiterleitung" zur Kontakteigenschaftsansicht
-		// durchf�hrt
-		// Der Kontakt wird mit Vornamen und Nachnamen erstellt
+		// ClickHandler der die "Weiterleitung" zur Kontakteigenschaftsansicht durchf�hrt
 		weiterBtn.addClickHandler(new KontaktErstellenClickHandler());
 
-		KontaktinfoTable.setCellPadding(35);
 		auswahlEigenschaftenTable.setCellPadding(35);
 		eigeneEigenschaftenTable.setCellPadding(35);
 
@@ -162,9 +154,12 @@ public class RegistrierungsForm extends VerticalPanel {
 		KontaktinfoTable.setWidget(1, 1, vornameTxtBox);
 		KontaktinfoTable.setWidget(2, 0, nachname);
 		KontaktinfoTable.setWidget(2, 1, nachnameTxtBox);
+		KontaktinfoTable.setCellPadding(35);
 
+		// Hauptpanel mit dem ButtonPanel verkn�pfen (Kontakterstellungs-Ansicht)
+		hauptPanel.add(BtnPanel);
 		hauptPanel.add(KontaktinfoTable);
-
+		hauptPanel.setSpacing(20);
 		this.add(hauptPanel);
 
 	}
@@ -380,7 +375,7 @@ public class RegistrierungsForm extends VerticalPanel {
 								hauptPanel2.add(BtnPanel);
 								hauptPanel2.add(sp);
 								hauptPanel2.setSpacing(35);
-
+								
 								RootPanel.get("content").add(hauptPanel2);
 
 								ev.getEigenschaftAuswahl(new AsyncCallback<Vector<Eigenschaft>>() {

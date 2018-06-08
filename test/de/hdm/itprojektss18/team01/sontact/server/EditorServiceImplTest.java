@@ -100,12 +100,12 @@ class EditorServiceImplTest extends GWTTestCase {
 		editor.deleteNutzer(n);
 		
 	}
-	
-	public void share() {
-		EditorServiceImpl editor = new EditorServiceImpl();
-	
-		editor.shareObject(1, 2, 2, 'k');
-	}
+//	
+//	public void share() {
+//		EditorServiceImpl editor = new EditorServiceImpl();
+//	
+//		editor.shareObject(1, 2, 2, 'k');
+//	}
 	
 	
 	/**
@@ -731,29 +731,29 @@ class EditorServiceImplTest extends GWTTestCase {
 	 */
 	// CHECK
 
-	public void shareObject() {
-		
-		EditorServiceImpl editor = new EditorServiceImpl();
-		
-		Nutzer n1 = new Nutzer();
-		Nutzer n2 = new Nutzer();
-
-			//Yakup
-			n1.setId(2);
-			//Miescha
-			n2.setId(1);
-
-			n1.setId(1);
-			n2.setId(2);
-
-			
-		Kontaktliste kl = new Kontaktliste(); 
-			kl.setId(1);
-			kl.setOwnerId(n1.getId());
-					
-		Kontakt k1 = new Kontakt(); 
-
-		k1.setId(5);
+//	public void shareObject() {
+//		
+//		EditorServiceImpl editor = new EditorServiceImpl();
+//		
+//		Nutzer n1 = new Nutzer();
+//		Nutzer n2 = new Nutzer();
+//
+//			//Yakup
+//			n1.setId(2);
+//			//Miescha
+//			n2.setId(1);
+//
+//			n1.setId(1);
+//			n2.setId(2);
+//
+//			
+//		Kontaktliste kl = new Kontaktliste(); 
+//			kl.setId(1);
+//			kl.setOwnerId(n1.getId());
+//					
+//		Kontakt k1 = new Kontakt(); 
+//
+//		k1.setId(5);
 		
 	
 //		
@@ -776,23 +776,23 @@ class EditorServiceImplTest extends GWTTestCase {
 //			a2.setId(8);
 //			a1.setKontaktId(k1.getId());
 			
-		editor.shareObject(n1.getId(), n2.getId(), k1.getId(), k1.getType());
-
-		Kontakt k2 = new Kontakt();
-			k1.setId(1);
-			k1.setOwnerId(n1.getId()); 
-			k2.setId(4);
-			k2.setOwnerId(n2.getId());
-			
-			Auspraegung a = new Auspraegung();
-			Auspraegung a1 = new Auspraegung();
-			a.setId(5);
-			a.setKontaktId(2);
-			a1.setId(4);
-			a1.setKontaktId(2);
-
-		editor.shareObject(n2.getId(), n1.getId(), a.getId(), a.getType());
-	}
+//		editor.shareObject(n1.getId(), n2.getId(), k1.getId(), k1.getType());
+//
+//		Kontakt k2 = new Kontakt();
+//			k1.setId(1);
+//			k1.setOwnerId(n1.getId()); 
+//			k2.setId(4);
+//			k2.setOwnerId(n2.getId());
+//			
+//			Auspraegung a = new Auspraegung();
+//			Auspraegung a1 = new Auspraegung();
+//			a.setId(5);
+//			a.setKontaktId(2);
+//			a1.setId(4);
+//			a1.setKontaktId(2);
+//
+//		editor.shareObject(n2.getId(), n1.getId(), a.getId(), a.getType());
+//	}
 
 	/**
 	 * Test DeleteBerechtigung:
@@ -1010,7 +1010,7 @@ class EditorServiceImplTest extends GWTTestCase {
 	 * IMPL-Methode getKontakteByname();
 	 */
 	//CHECK
-	@Test
+	
 	public void getKontakteByEigenschaft() {
 		Nutzer n = new Nutzer();
 		n.setId(2);
@@ -1021,6 +1021,15 @@ class EditorServiceImplTest extends GWTTestCase {
 		
 		System.out.println(editor.getKontakteByEigenschaft(bezeichnung, n));
 		
+	}
+	
+	
+	public void getStatusForObject() {
+	
+		
+		EditorServiceImpl editor = new EditorServiceImpl();
+		
+		System.out.println(editor.getStatusForObject(4, 'k'));
 	}
 	
 	

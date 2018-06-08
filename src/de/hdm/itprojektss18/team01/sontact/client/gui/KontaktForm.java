@@ -147,7 +147,7 @@ public class KontaktForm extends VerticalPanel {
 				
 		
 				//Überprüft Status eines Objekts ob es geteilt wurde.
-				ev.getStatusForObject(k.getId(), new AsyncCallback<Boolean>() {
+				ev.getStatusForObject(k.getId(),k.getType(), new AsyncCallback<Boolean>() {
 
 					@Override
 					public void onFailure(Throwable caught) {

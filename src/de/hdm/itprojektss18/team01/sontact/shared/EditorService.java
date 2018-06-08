@@ -33,7 +33,7 @@ public interface EditorService extends RemoteService{
 	
 	// Abschnitt Nutzer:
 	
-	public Nutzer findNutzerById(int nutzerId) throws IllegalArgumentException;
+	public Nutzer getNutzerById(int nutzerId) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createNutzer(String emailAddress);

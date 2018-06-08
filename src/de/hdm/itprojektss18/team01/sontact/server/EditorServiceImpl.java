@@ -452,7 +452,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Diese Methode identifiziert einen Nutzer anhand seiner Id.
 	 */
-	public Nutzer findNutzerById(int nutzerId) throws IllegalArgumentException {
+	public Nutzer getNutzerById(int nutzerId) throws IllegalArgumentException {
 		return this.nMapper.findNutzerById(nutzerId);
 	}
 
@@ -956,7 +956,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		init();
 		// Pruefung des Objekt-Typs
 		if (type == 'l') {
-			// Eintrag der Berechtigung fï¿½r das Kontaktlisten-Objekt (ObjectId)
+			// Eintrag der Berechtigung fuer das Kontaktlisten-Objekt (ObjectId)
 			this.createBerechtigung(ownerId, receiverId, objectId, type);
 
 			// Vektor mit allen Kontakten, welcher der Kontaktliste l angehoeren (ObjectId)
@@ -965,7 +965,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			// Schleife welche alle Kontaktobjekte des Vektors durchgeht
 			for (int k = 0; k < kv.size(); k++) {
 				if (kv != null) {
-					// Eintrag der Berechtigung fï¿½r das Kontakt-Objekt (ObjectId)
+					// Eintrag der Berechtigung fuer das Kontakt-Objekt (ObjectId)
 					this.createBerechtigung(ownerId, receiverId, kv.elementAt(k).getId(), kv.elementAt(k).getType());
 
 					// Vektor welcher alle Auspraegungsobjekte des Kontaktes k enthaelt
@@ -974,7 +974,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 					// Schleife welche alle Auspraegungsobjekte des Kontaktes k durchgeht
 					for (int a = 0; a < av.size(); a++) {
 						if (av != null) {
-							// Eintrag der Berechtigung fï¿½r das Auspraegungsobjekt (ObjectId)
+							// Eintrag der Berechtigung fuer das Auspraegungsobjekt (ObjectId)
 							this.createBerechtigung(ownerId, receiverId, av.elementAt(a).getId(),
 									av.elementAt(a).getType());
 						}
@@ -982,15 +982,13 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 				}
 			}
 		} else if (type == 'k') {
-			// Eintrag der Berechtigung fï¿½r das Kontakt-Objekt (ObjectId)
+			// Eintrag der Berechtigung fuer das Kontakt-Objekt (ObjectId)
 			this.createBerechtigung(ownerId, receiverId, objectId, type);
-
-			Nutzer n = new Nutzer();
-			Kontakt k = new Kontakt();
-			n.setId(receiverId);
-			k.setId(objectId);
-
-			// Geteilten Kontakt der Kontaktliste des Receivers hinzufuegen
+			
+			/*Erstellung des Nutzer- und Kontakt- Objekts sowie das
+			 * hinzufuegen des geteilten Kontakts der Kontaktliste des Receivers */
+			Nutzer n = this.getNutzerById(receiverId);
+			Kontakt k = this.getKontaktById(objectId);
 			this.addKontaktToKontaktliste(this.findKontaktlisteByTitel(n, "Mit mir geteilte Kontakte"), k);
 
 			// Vektor welcher alle Auspraegungsobjekte des Kontaktes k enthaelt
@@ -1011,7 +1009,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 				}
 			}
 		} else if (type == 'a') {
-			// Eintrag der Berechtigung fï¿½r ein einzelnes zu teilendes Auspraegungsobjekt(profilaktisch)
+			// Eintrag der Berechtigung fuer ein einzelnes zu teilendes Auspraegungsobjekt(profilaktisch)
 			this.createBerechtigung(ownerId, receiverId, objectId, type);
 		}
 	}
@@ -1030,66 +1028,73 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public void deleteBerechtigung(Berechtigung b) throws IllegalArgumentException {
 		init();
 
+		// Pruefung des Objekttypes
 		if (b.getType() == 'l') {
 
-			// Erstellen des Kontaktvektors, um alle Berechtigungen der Kontakte einer Kontaktliste zu erhalten
+			// Vektor welcher alle Kontakte der Kontaktliste enthaelt
 			Vector<Kontakt> kv = this.getKontakteByKontaktliste(b.getObjectId());
-
+			// Schleife welche alle Kontakte der Kontaktliste durchlaeuft
 			for (int k = 0; k < kv.size(); k++) {
 				if (kv != null) {
 
-					// Erstellen des Auspraegungsvektors, um alle Berechtigungen der Auspraegung
-					// eines Kontakts zu erhalten
+					// Vektor welcher alle Auspraegungen des Kontaktes enthaelt
 					Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(kv.elementAt(k).getId());
-
+					// Schleife welche alle Auspraegungen des Kontaktes durchlaeuft
 					for (int a = 0; a < av.size(); a++) {
 						if (av != null) {
 
-							// Abruf der Berechtigung auf die einzelnen Auspraegungs-Objekte
-							// innerhalb des Vektors
+							// Berechtigungsobjekt fuer die Auspraegung
 							Berechtigung b2 = new Berechtigung();
 							b2.setOwnerId(b.getOwnerId());
 							b2.setReceiverId(b.getReceiverId());
 							b2.setObjectId(av.elementAt(a).getId());
 							b2.setType(av.elementAt(a).getType());
 
-							// Lï¿½schen der Vektoreintrï¿½ge und den Berechtigungen
+							// Loeschen der Berechtigung fuer die Auspraegung
 							this.bMapper.delete(b2);
 						}
 					}
 
-					// Abruf der Berechtigung auf die einzelnen Kontakts-Objekte innerhalb des
-					// Vektors
+					// Berechtigungsobjekt für den Kontakt 
 					Berechtigung b1 = new Berechtigung();
 					b1.setOwnerId(b.getOwnerId());
 					b1.setReceiverId(b.getReceiverId());
 					b1.setObjectId(kv.elementAt(k).getId());
 					b1.setType(kv.elementAt(k).getType());
 
-					// Lï¿½schen der Vektoreintrï¿½ge und den Berechtigungen
+					// Loeschen der Berechtigung fuer den Kontakt
 					this.bMapper.delete(b1);
 				}
 			}
-
-			// Lï¿½schen der Kontaktlisten-Berechtigung
+			// Loeschen des Berechtigung fuer die Kontaktliste 
 			this.bMapper.delete(b);
-
+			
 		} else if (b.getType() == 'k') {
+			
+			// Vektor welcher alle Auspraegungen des Kontaktes enthaelt 
 			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(b.getObjectId());
+			// Schleife welche alle Auspraegungen des Kontaktes durchlaeuft
 			for (int a = 0; a < av.size(); a++) {
 				if (av != null) {
+					
+					// Berechtigungsobjekt fuer die Auspraegung
 					Berechtigung b2 = new Berechtigung();
 					b2.setOwnerId(b.getOwnerId());
 					b2.setReceiverId(b.getReceiverId());
 					b2.setObjectId(av.elementAt(a).getId());
 					b2.setType(av.elementAt(a).getType());
+					
+					// Loeschen der Berechtigung fuer die Auspraegung
 					this.bMapper.delete(b2);
 				}
 			}
-
+			
+			// Loeschen der Berechtigung für den Kontakt
 			this.bMapper.delete(b);
 
 		} else if (b.getType() == 'a') {
+			
+			// Loeschen der Berechtigung fuer eine einzelne Auspraegung
 			this.bMapper.delete(b);
 		}
 	}
@@ -1109,26 +1114,24 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Vektor mit allen Berechtigungen welche Nutzerseitig gesetzt wurden
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(n.getId());
 		
-		// Leerer Vektor fï¿½r Nutzerobjekten mit welchen das Objekt geteilt wurde
+		// Leerer Vektor fuer Nutzerobjekten mit welchen die übergebene objectId geteilt wurde
 		Vector<Nutzer> nv = new Vector<Nutzer>();
 		
 		// Schleife welche alle Berechtigungen, die Nutzerseitig gesetzt wurden, durchgeht
 		for (Berechtigung b : bv) {
 		
-			// Abgleich der objektId und des types um die Eindeutigkeit zu gewaehrleisten
-			if (bv != null && b.getObjectId() == objectId && b.getType() == type) {
-			
-				// Erstellen eines Nutzerobjekts
-				Nutzer receiver = new Nutzer();
-				// receiverId = nutzerId
-				n.setId(b.getReceiverId());
+			// Abgleich der objektId und des types sowie den Owner der Teilhaberschaft um die Eindeutigkeit zu gewaehrleisten
+			if (bv != null && b.getObjectId() == objectId && b.getType() == type && b.getOwnerId() == n.getId()) {
 				
-				// Nutzerobjekt/ receiver dem Vektor hinzufuegen
+				// Erstellen des Nutzerobjekts
+				Nutzer receiver = this.getNutzerById(b.getReceiverId());
+				
+				// Receiver dem Vektor welcher die Nutzerobjekte enthaelt hinzufuegen
 				nv.add(receiver);
 			}
 		}
 		
-		// Rï¿½ckgabe des Vektors mit den Nutzerobjekten
+		// Rueckgabe des Vektors mit den Nutzerobjekten mit welchen die uebergebene objectId geteilt wurde
 		return nv;
 	}
 
@@ -1179,17 +1182,28 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public Vector<Kontakt> getAllSharedKontakteByOwner(int nutzerId) throws IllegalArgumentException {
 		init();
-
+		
+		// Vektor welcher alle nutzerseitig gesetzten Berechtigungen enthaelt
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(nutzerId);
+		
+		// Leerer Vektor für alle nutzerseitig geteilten Kontakte 
 		Vector<Kontakt> kv = new Vector<Kontakt>();
 
+		// Schleife welche alle nutzerseitig gesetzten Berechtigungen durchlaeuft 
 		for (int b = 0; b < bv.size(); b++) {
+			
+			// Abgleich des Nutzers als Owner sowie des Objekttypes um die Eindeutigkeit zu gewaehrleisten
 			if (bv != null && nutzerId == bv.elementAt(b).getOwnerId() && bv.elementAt(b).getType() == 'k') {
+			
+				// Erstellen des Kontaktobjekts
 				Kontakt k = this.getKontaktById(bv.elementAt(b).getObjectId());
+				
+				// Kontakt dem Vektor hinzufuegen
 				kv.addElement(k);
 			}
 		}
-
+	
+		// Rueckgabe des Vektors welcher die vom Nutzer geteilten Kontakte enthaelt
 		return kv;
 	}
 
@@ -1202,17 +1216,28 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public Vector<Kontakt> getAllSharedKontakteByReceiver(int nutzerId) throws IllegalArgumentException {
 		init();
-
+		
+		// Vektor welcher alle fuer den Nutzer gesetzten Berechtigungen enthaelt
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(nutzerId);
+		
+		// Leerer Vektor für alle mit dem Nutzer geteilten Kontakte 
 		Vector<Kontakt> kv = new Vector<Kontakt>();
 
+		// Schleife welche alle für den Nutzer gesetzten Berechtigungen durchlaeuft
 		for (int b = 0; b < bv.size(); b++) {
+			
+			// Abgleich des Nutzers als Receiver sowie des Objekttypes um die Eindeutigkeit zu gewaehrleisten
 			if (bv != null && nutzerId == bv.elementAt(b).getReceiverId() && bv.elementAt(b).getType() == 'k') {
+			
+				// Erstellen des Kontaktobjekts
 				Kontakt k = this.getKontaktById(bv.elementAt(b).getObjectId());
+				
+				// Kontakt dem Vektor hinzufuegen
 				kv.addElement(k);
 			}
 		}
-
+		
+		// Rueckgabe des Vektors welcher die mit dem Nutzer geteilten Kontakte enthaelt
 		return kv;
 	}
 
@@ -1225,17 +1250,28 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public Vector<Kontaktliste> getAllSharedKontaktlistenByOwner(int nutzerId) throws IllegalArgumentException {
 		init();
-
+		
+		// Vektor welcher alle nutzerseitig gesetzten Berechtigungen enthaelt
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(nutzerId);
+		
+		// Leerer Vektor fuer alle nutzerseitig geteilten Kontaktlisten
 		Vector<Kontaktliste> klv = new Vector<Kontaktliste>();
 
+		// Schleife welche alle nutzerseitig gesetzten Berechtigungen durchlaeuft 
 		for (int b = 0; b < bv.size(); b++) {
+			
+			// Abgleich des Nutzers als Owner sowie des Objekttypes um die Eindeutigkeit zu gewaehrleisten
 			if (bv != null && nutzerId == bv.elementAt(b).getOwnerId() && bv.elementAt(b).getType() == 'l') {
+			
+				// Erstellen des Kontaktlistenobjekts
 				Kontaktliste kl = this.getKontaktlisteById(bv.elementAt(b).getObjectId());
+				
+				// Kontaktliste dem Vektor hinzufuegen 
 				klv.addElement(kl);
 			}
 		}
-
+		
+		// Rueckgabe des Vektors welcher die vom Nutzer geteilten Kontaktlisten enthaelt
 		return klv;
 	}
 
@@ -1248,17 +1284,28 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public Vector<Kontaktliste> getAllSharedKontaktlistenByReceiver(int nutzerId) throws IllegalArgumentException {
 		init();
-
+		
+		// Vektor welcher alle fuer den Nutzer gesetzten Berechtigungen enthaelt
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(nutzerId);
+		
+		// Leerer Vektor für alle mit dem Nutzer geteilten Kontaktlisten
 		Vector<Kontaktliste> klv = new Vector<Kontaktliste>();
 
+		// Schleife welche alle für den Nutzer gesetzten Berechtigungen durchlaeuft
 		for (int b = 0; b < bv.size(); b++) {
+		
+			// Abgleich des Nutzers als Receiver sowie des Objekttypes um die Eindeutigkeit zu gewaehrleisten
 			if (bv != null && nutzerId == bv.elementAt(b).getReceiverId() && bv.elementAt(b).getType() == 'l') {
+			
+				// Erstellen des Kontaktlistenobjekts
 				Kontaktliste kl = this.getKontaktlisteById(bv.elementAt(b).getObjectId());
+				
+				// Kontaktliste dem Vektor hinzufuegen
 				klv.addElement(kl);
 			}
 		}
-
+		
+		// Rueckgabe des Vektors welcher die mit dem Nutzer geteilten Kontaktlisten enthaelt
 		return klv;
 	}
 
@@ -1266,30 +1313,41 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Gibt alle geteilten Auspraegungen zu einem geteilten Kontakt k mit einem
 	 * Nutzer n aus.
 	 * 
-	 * @param Kontakt
-	 *            k, Nutzer n
+	 * @param Kontakt k, Nutzer n
 	 * @return Vector<Auspraegung>
 	 */
 	public Vector<Auspraegung> getAllSharedAuspraegungenByKontaktAndNutzer(Kontakt k, Nutzer n) {
 		init();
 
+		// Vektor welcher alle gesetzten Berechtigungen enthaelt
 		Vector<Berechtigung> bv = this.bMapper.findAll();
+		
+		// Vektor welche alle Auspraegungen eines Kontaktes enthaelt
 		Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(k.getId());
 
+		// Leerer Vektor für alle geteilten Auspraegungen des Kontaktes k
 		Vector<Auspraegung> avshare = new Vector<Auspraegung>();
 
+		// Schleife welche alle Auspraegungen des Kontaktes k durchlaeuft
 		for (Auspraegung a : av) {
 
+			// Schleife welche alle gesetzten Berechtigungen durchlaeuft
 			for (Berechtigung b : bv) {
 
-				if (a.getId() == b.getObjectId() && b.getReceiverId() == n.getId()) {
+				/* Abgleich der Id der Auspraegung a mit der objectId der gesetzten Berechtigungen b
+				 * sowie Objekttyp und Nutzer um die Eindeutigkeit zugewaehrleisten */
+				if (a.getId() == b.getObjectId() && b.getReceiverId() == n.getId() && b.getType() == a.getType()) {
 
+					// Abruf der Auspraegung
 					this.getAuspraegungById(a.getId());
+					
+					// Auspraegung dem Vektor hinzufuegen 
 					avshare.addElement(a);
 				}
 			}
 		}
-
+		
+		// Rueckgabe Vektor welcher alle geteilten Auspraegungen des Kontaktes k enthaelt
 		return avshare;
 	}
 

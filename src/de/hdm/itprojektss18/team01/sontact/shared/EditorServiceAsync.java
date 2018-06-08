@@ -24,7 +24,7 @@ public interface EditorServiceAsync {
 	void init(AsyncCallback<Void> callback);
 
 	
-	void findNutzerById(int nutzerId, AsyncCallback<Nutzer> callback);
+	void getNutzerById(int nutzerId, AsyncCallback<Nutzer> callback);
 	
 	
 	void createNutzer(String emailAddress, AsyncCallback<Nutzer> callback);

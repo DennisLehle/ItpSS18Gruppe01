@@ -1,6 +1,6 @@
 package de.hdm.itprojektss18.team01.sontact.shared.bo;
 
-public class Eigenschaft extends BusinessObject {
+public class Eigenschaft extends BusinessObject implements Relatable  {
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,6 +30,13 @@ public class Eigenschaft extends BusinessObject {
 	
 	public void setAuspraegung(Auspraegung a) {
 		this.a = a;
+	}
+
+	//Wert der Eigenschaft
+	@Override
+	public String getWert() {
+		
+		return null;
 	}
 
 }

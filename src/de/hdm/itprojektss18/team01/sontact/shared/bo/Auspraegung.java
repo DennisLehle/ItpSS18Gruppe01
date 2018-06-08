@@ -4,7 +4,7 @@ package de.hdm.itprojektss18.team01.sontact.shared.bo;
  * Realisierung einer exemplarischen Auspraegungsklasse.
  */
 
-public class Auspraegung extends BusinessObject implements Participation {
+public class Auspraegung extends BusinessObject implements Participation, Relatable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -15,7 +15,7 @@ public class Auspraegung extends BusinessObject implements Participation {
 	private int eigenschaftId;
 	private int kontaktId;
 	private Berechtigung berechtigung;
-	
+	private Eigenschaft eigenschaft = new Eigenschaft();
 	/**
 	 * Getter- und Setter-Methoden zum Setzen und Auslesen der Werte
 	 */
@@ -61,6 +61,15 @@ public class Auspraegung extends BusinessObject implements Participation {
 	@Override
 	public char getType() {
 		return 'a';
+	}
+	//Setzen der Eigenschaftsbezeichung.
+	public void setBezeichnung(String bez) {
+		this.eigenschaft.setBezeichnung(bez);
+	}
+	//Bezeichnung der Eigenschaft
+	@Override
+	public String getBezeichnung() {
+		return this.eigenschaft.getBezeichnung();
 	}
 	
 }

@@ -11,75 +11,49 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
 /**
  * Asynchrones Gegenst�ck des Interfaces <code>EditorService</code>
- * @author Yakup Kanal
  *
  */
 
 public interface EditorServiceAsync {
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#init();
-	 */
+
+	
 	void init(AsyncCallback<Void> callback);
 
 	
-	// Abschnitt Nutzer:
-	
 	void findNutzerById(int nutzerId, AsyncCallback<Nutzer> callback);
 	
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createNutzer(String emailAddress);
-	 */
+	
 	void createNutzer(String emailAddress, AsyncCallback<Nutzer> callback);
 
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#setNutzer(Nutzer n);
-	 */
 	
-	//void setNutzer(Nutzer n, AsyncCallback<Void> callback);
-	
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#deleteNutzer(Nutzer n);
-	 */
 	void deleteNutzer(Nutzer n, AsyncCallback<Void> callback);
 	
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#findNutzerByEmail(String email);
-	 */
+
 	void getUserByGMail(String email, AsyncCallback<Nutzer> callback);
 
 	
-	// Abschnitt Kontakt:
-	
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#createKontakt(String vorname, String nachname);
-	 */
 	void createKontakt(String vorname, String nachname, Nutzer n, AsyncCallback<Void> callback);
 
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#saveKontakt(Kontakt k);
-	 */
+
 	void saveKontakt(Kontakt k, AsyncCallback<Kontakt> callback);
 
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#removeKontakt(Kontakt k);
-	 */
+	
 	void deleteKontakt(Kontakt k, AsyncCallback<Void> callback);
 
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getKontaktById(int id);
-	 */
+	
 	void getKontaktById(int id, AsyncCallback<Kontakt> callback);
 
+	
 	void getAllKontakteByOwner(Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
+	
 	
 	void addKontaktToKontaktliste(Kontaktliste kl, Kontakt k, AsyncCallback<Void> callback);
 
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#removeKontaktFromKontaktliste(Kontakt k);
-	 */
+	
 	void removeKontaktFromKontaktliste(Kontaktliste kl, Kontakt k, AsyncCallback<Void> callback);
 
 
@@ -97,8 +71,8 @@ public interface EditorServiceAsync {
 
 	void getKontakteByKontaktliste(int kontaktlisteId, AsyncCallback<Vector<Kontakt>> callback);
 
+	
 	void findKontaktlisteByTitel(Nutzer n, String titel, AsyncCallback<Kontaktliste> callback);
-
 
 
 	void createEigenschaft(String bezeichnung, AsyncCallback<Eigenschaft> callback);
@@ -108,6 +82,7 @@ public interface EditorServiceAsync {
 
 
 	void deleteEigenschaft(Eigenschaft e, AsyncCallback<Void> callback);
+	
 	
 	void createAuspraegungForNewEigenschaft(String bezeichnung, String wert, Kontakt k, AsyncCallback<Void> callback);
 
@@ -129,15 +104,18 @@ public interface EditorServiceAsync {
 
 	void getAllAuspraegungenByKontakt(int kontaktId, AsyncCallback<Vector<Auspraegung>> callback);
 
+	void getAllAuspraegungenByKontaktRelatable(int kontaktId, AsyncCallback<Vector<Relatable>> callback);
+
 
 	void saveModifikationsdatum(int id, AsyncCallback<Void> callback);
 
 
 	void getOwnKontakt(Nutzer n, AsyncCallback<Kontakt> callback);
 
-	void shareObject(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Void> callback);
-
-
+	
+	void shareObject(int ownerId, int receiverId, int objectId, char type, Vector<Relatable> avhsare,
+			AsyncCallback<Void> callback);	
+	
 	void createBerechtigung(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Berechtigung> callback);
 
 
@@ -146,13 +124,12 @@ public interface EditorServiceAsync {
 
 	void getKontaktlisteById(int id, AsyncCallback<Kontaktliste> callback);
 
+	
 	void createKontaktlisteRegistrierung(Nutzer n, AsyncCallback<Kontaktliste> callback);
-
+	
 
 	void createKontaktRegistrierung(String vorname, String nachname, Nutzer n, AsyncCallback<Kontakt> callback);
 
-	
-	// Abschnitt Kontaktliste:
 
 	void getAllBerechtigungenByOwner(int ownerId, AsyncCallback<Vector<Berechtigung>> callback);
 
@@ -189,13 +166,14 @@ public interface EditorServiceAsync {
 
 	void getKontakteBySuche(String listBoxWert, String testBoxWert, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
-	// Abschnitt Eigenschaft:
+
 	void findEigenschaftByBezeichnung(String bezeichnung, AsyncCallback<Eigenschaft> callback);
 
-
+	
 	void getAllKontakteByNutzer(Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
-
+	
+	void sharedWith(int objectId, char type, Nutzer n, AsyncCallback<Vector<Nutzer>> callback);
 
 	
 	

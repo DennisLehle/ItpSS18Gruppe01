@@ -19,7 +19,7 @@ public interface ReportGenerator extends RemoteService{
 	public AlleKontakteNachEigenschaftenReport createAuspraegungReport() 
 			throws IllegalArgumentException;
 	
-	public AlleKontakteReport createAlleKontakteReport() 
+	public AlleKontakteReport createAlleKontakteReport(Nutzer n) 
 			throws IllegalArgumentException;
 	
 	public AlleGeteiltenKontakteReport createAlleGeteilteReport() 

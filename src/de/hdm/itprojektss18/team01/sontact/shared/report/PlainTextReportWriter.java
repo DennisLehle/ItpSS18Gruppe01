@@ -1,6 +1,7 @@
 package de.hdm.itprojektss18.team01.sontact.shared.report;
 
 import java.util.Vector;
+import de.hdm.itprojektss18.team01.sontact.shared.report.CompositeReport;
 
 /**
  * Ein <code>ReportWriter</code>, der Reports mittels Plain Text formatiert. Das
@@ -54,22 +55,21 @@ public class PlainTextReportWriter extends ReportWriter {
   @Override
 public void process(AlleKontakteReport r) {
 
-    // Zunächst löschen wir das Ergebnis vorhergehender Prozessierungen.
+    // Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
     this.resetReportText();
 
     /*
-     * In diesen Buffer schreiben wir während der Prozessierung sukzessive
+     * In diesen Buffer schreiben wir waehrend der Prozessierung sukzessiv
      * unsere Ergebnisse.
      */
     StringBuffer result = new StringBuffer();
 
     /*
-     * Nun werden Schritt für Schritt die einzelnen Bestandteile des Reports
-     * ausgelesen und in Text-Form übersetzt.
+     * Nun werden Schritt fuer Schritt die einzelnen Bestandteile des Reports
+     * ausgelesen und in Text-Form ueersetzt.
      */
-    result.append("*** " + r.getTitle() + " ***\n\n");
-    result.append(r.getHeaderData() + "\n");
-    result.append("Erstellt am: " + r.getCreated().toString() + "\n\n");
+    result.append("Titel " + r.getTitle() + "\n");
+    
     Vector<Row> rows = r.getRows();
 
     for (Row row : rows) {
@@ -78,17 +78,14 @@ public void process(AlleKontakteReport r) {
       }
 
       result.append("\n");
-    }
-
-    result.append("\n");
-    result.append(r.getImprint() + "\n");
-
+ 
     /*
      * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
-     * reportText-Variable zugewiesen. Dadurch wird es möglich, anschließend das
+     * reportText-Variable zugewiesen. Dadurch wird es moeglich, anschließend das
      * Ergebnis mittels getReportText() auszulesen.
      */
     this.reportText = result.toString();
+    }
   }
 
   /**
@@ -99,59 +96,73 @@ public void process(AlleKontakteReport r) {
    */
   @Override
 public void process(AlleKontakteNachEigenschaftenReport r) {
+	  // Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
+	    this.resetReportText();
 
-    // Zunächst löschen wir das Ergebnis vorhergehender Prozessierungen.
+	    /*
+	     * In diesen Buffer schreiben wir waehrend der Prozessierung sukzessiv
+	     * unsere Ergebnisse.
+	     */
+	    StringBuffer result = new StringBuffer();
+
+	    /*
+	     * Nun werden Schritt fuer Schritt die einzelnen Bestandteile des Reports
+	     * ausgelesen und in Text-Form ueersetzt.
+	     */
+	    result.append("Titel " + r.getTitle() + "\n");
+	    
+	    Vector<Row> rows = r.getRows();
+
+	    for (Row row : rows) {
+	      for (int k = 0; k < row.getNumColumns(); k++) {
+	        result.append(row.getColumnAt(k) + "\t ; \t");
+	      }
+
+	      result.append("\n");
+	 
+	    /*
+	     * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
+	     * reportText-Variable zugewiesen. Dadurch wird es moeglich, anschließend das
+	     * Ergebnis mittels getReportText() auszulesen.
+	     */
+	    this.reportText = result.toString();
+	    }
+	  }
+			
+
+public void process (AlleGeteiltenKontakteReport r) {
+	
+	  // Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
     this.resetReportText();
 
     /*
-     * In diesen Buffer schreiben wir während der Prozessierung sukzessive
+     * In diesen Buffer schreiben wir waehrend der Prozessierung sukzessiv
      * unsere Ergebnisse.
      */
     StringBuffer result = new StringBuffer();
 
     /*
-     * Nun werden Schritt für Schritt die einzelnen Bestandteile des Reports
-     * ausgelesen und in Text-Form übersetzt.
+     * Nun werden Schritt fuer Schritt die einzelnen Bestandteile des Reports
+     * ausgelesen und in Text-Form ueersetzt.
      */
-    result.append("*** " + r.getTitle() + " ***\n\n");
+    result.append("Untertitel " + r.getTitle() + "\n");
+    
+    Vector<Row> rows = r.getRows();
 
-    if (r.getHeaderData() != null)
-      result.append(r.getHeaderData() + "\n");
+    for (Row row : rows) {
+      for (int k = 0; k < row.getNumColumns(); k++) {
+        result.append(row.getColumnAt(k) + "\t ; \t");
+      }
 
-    result.append("Erstellt am: " + r.getCreated().toString() + "\n\n");
-
-    /*
-     * Da AllAccountsOfAllCustomersReport ein CompositeReport ist, enthält r
-     * eine Menge von Teil-Reports des Typs AllAccountsOfCustomerReport. Für
-     * jeden dieser Teil-Reports rufen wir processAllAccountsOfCustomerReport
-     * auf. Das Ergebnis des jew. Aufrufs fügen wir dem Buffer hinzu.
-     */
-    for (int i = 0; i < r.getNumSubReports(); i++) {
-      /*
-       * AllAccountsOfCustomerReport wird als Typ der SubReports vorausgesetzt.
-       * Sollte dies in einer erweiterten Form des Projekts nicht mehr gelten,
-       * so müsste hier eine detailliertere Implementierung erfolgen.
-       */
-    	AlleKontakteReport subReport = (AlleKontakteReport) r.getSubReportAt(i);
-
-      this.process(subReport);
-
-      // Ein Form Feed wäre hier statt der 5 Leerzeilen auch denkbar...
-      result.append(this.reportText + "\n\n\n\n\n");
-
-      /*
-       * Nach jeder Übersetzung eines Teilreports und anschließendem Auslesen
-       * sollte die Ergebnisvariable zurückgesetzt werden.
-       */
-      this.resetReportText();
-    }
-
+      result.append("\n");
+ 
     /*
      * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
-     * reportText-Variable zugewiesen. Dadurch wird es möglich, anschließend das
+     * reportText-Variable zugewiesen. Dadurch wird es moeglich, anschließend das
      * Ergebnis mittels getReportText() auszulesen.
      */
     this.reportText = result.toString();
+    }
   }
 
   /**
@@ -162,16 +173,5 @@ public void process(AlleKontakteNachEigenschaftenReport r) {
   public String getReportText() {
     return this.getHeader() + this.reportText + this.getTrailer();
   }
-//
-//@Override
-//public void process(AlleKontakteNachEigenschaftenReport r) {
-//	// TODO Auto-generated method stub
-//	
-//}
-//
-//@Override
-//public void process(AlleKontakteReport r) {
-//	// TODO Auto-generated method stub
-//	
-//}
+
 }

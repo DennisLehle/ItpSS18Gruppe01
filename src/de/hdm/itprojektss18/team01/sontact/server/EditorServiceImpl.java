@@ -19,6 +19,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
 public class EditorServiceImpl extends RemoteServiceServlet implements EditorService {
 
@@ -903,6 +904,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		init();
 		return this.aMapper.findAuspraegungByKontakt(kontaktId);
 	}
+	
+	/**
+	 * Ruft eine Liste aller Auspraegungen des zugehoerigen Kontakts auf.
+	 * 
+	 */
+	public Vector<Relatable> getAllAuspraegungenByKontaktRelatable(int kontaktId) throws IllegalArgumentException {
+
+		init();
+		return this.aMapper.findAuspraegungByKontaktRelatable(kontaktId);
+	}
 
 	public Eigenschaft getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException {
 		return eMapper.findEigenschaftForAuspraegung(eigenschaftId);
@@ -939,19 +950,31 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @throws IllegalArgumentException
 	 */
 	// CHECK
-	public void shareObject(int ownerId, int receiverId, int objectId, char type) throws IllegalArgumentException {
+	public void shareObject(int ownerId, int receiverId, int objectId, char type, Vector<Relatable> avshare)
+			throws IllegalArgumentException {
 
 		init();
+		// Pruefung des Objekt-Typs
 		if (type == 'l') {
+			// Eintrag der Berechtigung f�r das Kontaktlisten-Objekt (ObjectId)
 			this.createBerechtigung(ownerId, receiverId, objectId, type);
+
+			// Vektor mit allen Kontakten, welcher der Kontaktliste l angehoeren (ObjectId)
 			Vector<Kontakt> kv = this.getKontakteByKontaktliste(objectId);
+
+			// Schleife welche alle Kontaktobjekte des Vektors durchgeht
 			for (int k = 0; k < kv.size(); k++) {
 				if (kv != null) {
+					// Eintrag der Berechtigung f�r das Kontakt-Objekt (ObjectId)
 					this.createBerechtigung(ownerId, receiverId, kv.elementAt(k).getId(), kv.elementAt(k).getType());
 
+					// Vektor welcher alle Auspraegungsobjekte des Kontaktes k enthaelt
 					Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(kv.elementAt(k).getId());
+
+					// Schleife welche alle Auspraegungsobjekte des Kontaktes k durchgeht
 					for (int a = 0; a < av.size(); a++) {
 						if (av != null) {
+							// Eintrag der Berechtigung f�r das Auspraegungsobjekt (ObjectId)
 							this.createBerechtigung(ownerId, receiverId, av.elementAt(a).getId(),
 									av.elementAt(a).getType());
 						}
@@ -959,24 +982,36 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 				}
 			}
 		} else if (type == 'k') {
+			// Eintrag der Berechtigung f�r das Kontakt-Objekt (ObjectId)
 			this.createBerechtigung(ownerId, receiverId, objectId, type);
 
 			Nutzer n = new Nutzer();
-			n.setId(receiverId);
-
 			Kontakt k = new Kontakt();
+			n.setId(receiverId);
 			k.setId(objectId);
 
-			// Kontakt der Kontaktliste des Receivers hinzufügen die er abruft.
+			// Geteilten Kontakt der Kontaktliste des Receivers hinzufuegen
 			this.addKontaktToKontaktliste(this.findKontaktlisteByTitel(n, "Mit mir geteilte Kontakte"), k);
-			// -> Checkboxen?
+
+			// Vektor welcher alle Auspraegungsobjekte des Kontaktes k enthaelt
 			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(objectId);
+
+			// Schleife welche alle Aauspraegungsobjekte des Kontaktes k durchgeht
 			for (int a = 0; a < av.size(); a++) {
-				if (av != null) {
-					this.createBerechtigung(ownerId, receiverId, av.elementAt(a).getId(), av.elementAt(a).getType());
+
+				// Schleife welche alle selektierten/ zu teilenden Aauspraegungsobjekte des Kontaktes k durchgeht
+				for (int as = 0; as < avshare.size(); as++) {
+					
+					// Abgleich der zwei Vektoren mit ihren Auspraegungsobjekten bzw. ihren ids
+					if (avshare != null && av.elementAt(a).getId() == avshare.elementAt(as).getId()) {
+						// Eintrag der Berechtigung f�r das zu teilende Auspraegungsobjekt
+						this.createBerechtigung(ownerId, receiverId, av.elementAt(a).getId(),
+								av.elementAt(a).getType());
+					}
 				}
 			}
 		} else if (type == 'a') {
+			// Eintrag der Berechtigung f�r ein einzelnes zu teilendes Auspraegungsobjekt(profilaktisch)
 			this.createBerechtigung(ownerId, receiverId, objectId, type);
 		}
 	}
@@ -997,8 +1032,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		if (b.getType() == 'l') {
 
-			// Erstellen des Kontaktvektors, um alle Berechtigungen der Kontakte einer
-			// Kontaktliste zu erhalten
+			// Erstellen des Kontaktvektors, um alle Berechtigungen der Kontakte einer Kontaktliste zu erhalten
 			Vector<Kontakt> kv = this.getKontakteByKontaktliste(b.getObjectId());
 
 			for (int k = 0; k < kv.size(); k++) {
@@ -1058,6 +1092,44 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		} else if (b.getType() == 'a') {
 			this.bMapper.delete(b);
 		}
+	}
+	
+	/**
+	 * Gibt alle Nutzer zurueck, mit welchem ein bestimmtes Objekt (Konakt,
+	 * Kontaktliste oder Auspraegung) geteilt wurde. (Relevant f�r die Aufhebaung/
+	 * Loeschung einer Teilhaberschaft als Owner).
+	 * 
+	 * @param objectId
+	 * @param type
+	 * @param n
+	 * @return Vector<Nutzer>
+	 */
+	public Vector<Nutzer> sharedWith(int objectId, char type, Nutzer n) throws IllegalArgumentException {
+		
+		// Vektor mit allen Berechtigungen welche Nutzerseitig gesetzt wurden
+		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(n.getId());
+		
+		// Leerer Vektor f�r Nutzerobjekten mit welchen das Objekt geteilt wurde
+		Vector<Nutzer> nv = new Vector<Nutzer>();
+		
+		// Schleife welche alle Berechtigungen, die Nutzerseitig gesetzt wurden, durchgeht
+		for (Berechtigung b : bv) {
+		
+			// Abgleich der objektId und des types um die Eindeutigkeit zu gewaehrleisten
+			if (bv != null && b.getObjectId() == objectId && b.getType() == type) {
+			
+				// Erstellen eines Nutzerobjekts
+				Nutzer receiver = new Nutzer();
+				// receiverId = nutzerId
+				n.setId(b.getReceiverId());
+				
+				// Nutzerobjekt/ receiver dem Vektor hinzufuegen
+				nv.add(receiver);
+			}
+		}
+		
+		// R�ckgabe des Vektors mit den Nutzerobjekten
+		return nv;
 	}
 
 	/**
@@ -1360,6 +1432,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.kMapper.updateModifikationsdatum(id);
 	}
 
+	
 	/*
 	 * ************************************************************************* **
 	 * ABSCHNITT Ende - Sonstiges

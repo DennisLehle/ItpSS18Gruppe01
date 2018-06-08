@@ -4,14 +4,18 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
+import de.hdm.itprojektss18.team01.sontact.shared.report.AlleKontakteReport;
+import de.hdm.itprojektss18.team01.sontact.shared.report.HTMLReportWriter;
 
 
 /**
@@ -33,6 +37,8 @@ public class NavigationReport extends VerticalPanel{
 	final Button showAllKontakteReport = new Button("Meine Kontakte Anzeigen");
 	final Button showAllKontakteNachBestimmtenAusp = new Button("Kontakte nach Ausprägungen");
 	final Button showReportNotVisitedButton = new Button("Alle geteilten Kontakte anzeigen");
+	
+	final VerticalPanel reportPanel = new VerticalPanel();
 	
 	
 
@@ -75,7 +81,40 @@ public class NavigationReport extends VerticalPanel{
 
 				RootPanel.get("contentR").clear();
 				
+				
+				reportverwaltung.createAlleKontakteReport(n, new AsyncCallback<AlleKontakteReport>(){
 
+					@Override
+					public void onFailure(Throwable error) {
+						error.getMessage().toString();
+						
+					}
+
+					@Override
+					public void onSuccess(AlleKontakteReport report) {
+						if (report != null) {
+							/*
+							 * Um den Report in HTML-Text zu überführen benötigen wir einen HTMLReportWriter
+							 */
+							HTMLReportWriter writer = new HTMLReportWriter();
+							writer.process(report);
+							/*
+							 * Wir leeren das subPanel, damit etwaige vorherige Reports nicht mehr angezeigt werden
+							 */
+							RootPanel.get("contentR").add(reportPanel);
+							/*
+							 * Wir befüllen das subPanel mit dem HTML-Text den wir vom ReporWriter erhalten
+							 */
+							reportPanel.add(new HTML(writer.getReportText()));
+							/*
+							 * Wir aktivieren den Button zur Anforderung eines Reports wieder, da der angeforderte Report ausgegeben ist
+							 */
+							showAllKontakteReport.setEnabled(true);
+						}
+						
+					}
+					
+				});
 
 			}
 		});

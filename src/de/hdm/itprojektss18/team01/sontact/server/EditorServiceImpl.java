@@ -627,6 +627,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		if (ks != null) {
 			return this.getAllSharedKontakteByReceiver(n.getId());
 			}
+		
 		Vector<Kontakt> kvs = new Vector<Kontakt>();
 			kvs.addAll(kv);
 			kvs.addAll(ks);
@@ -1409,14 +1410,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Prueft ueber einen boolean, ob sich ein Objekt (Kontakt k, Kontaktliste l
 	 * oder Auspraegung a) sich in einem geteilten Status befindet.
 	 */
-	public boolean getStatusForObject(int objectId) throws IllegalArgumentException {
+	public boolean getStatusForObject(int objectId, char type) throws IllegalArgumentException {
+		
+		init();
 
 		// Auslesen alle Berechtigungen
 		Vector<Berechtigung> bv = this.bMapper.findAll();
 
 		// Abgleich der ObjectId mit den geteilten Objekte
 		for (Berechtigung b : bv) {
-			if (objectId == b.getObjectId()) {
+			if (objectId == b.getObjectId() && type == b.getType()) {
 				return true;
 			}
 

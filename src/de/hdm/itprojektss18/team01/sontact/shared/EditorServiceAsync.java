@@ -149,7 +149,7 @@ public interface EditorServiceAsync {
 	void getAllSharedKontaktlistenByReceiver(int receiverId, AsyncCallback<Vector<Kontaktliste>> callback);
 
 
-	void getStatusForObject(int objectId, AsyncCallback<Boolean> callback);
+	void getStatusForObject(int objectId, char type, AsyncCallback<Boolean> callback);
 
 
 	void getEigenschaftForAuspraegung(int eigenschaftId, AsyncCallback<Eigenschaft> callback);

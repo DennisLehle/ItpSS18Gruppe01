@@ -232,7 +232,7 @@ public interface EditorService extends RemoteService{
 	
 	public Vector<Kontaktliste> getAllSharedKontaktlistenByReceiver(int receiverId) throws IllegalArgumentException;
 		
-	public boolean getStatusForObject(int objectId) throws IllegalArgumentException;
+	public boolean getStatusForObject(int objectId, char type) throws IllegalArgumentException;
 		
 	public Vector<Kontakt> getKontakteByName(String name, Nutzer n) throws IllegalArgumentException;
 

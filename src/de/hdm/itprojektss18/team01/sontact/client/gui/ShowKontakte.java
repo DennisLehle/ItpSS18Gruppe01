@@ -52,6 +52,7 @@ public class ShowKontakte extends VerticalPanel {
 	final ListDataProvider<Kontakt> dataProvider = new ListDataProvider<Kontakt>();
 	ListBox auswahl = new ListBox();
 	TextBox eingabe = new TextBox();
+	//TextBox auswahl = new TextBox();
 
 	/**
 	 * Buttons der Klasse deklarieren.
@@ -117,6 +118,7 @@ public class ShowKontakte extends VerticalPanel {
 		hp.add(showKontakt);
 		hp.add(deleteKontakt);
 		hp.add(addKontaktToKontaktliste);
+	
 
 	}
 
@@ -135,6 +137,7 @@ public class ShowKontakte extends VerticalPanel {
 		// Methode die beim Start dieser Klasse aufgerufen wird.
 		showKontakteOfKontaktliste(n, kl);
 		hp.add(deleteKontaktFromKontaktliste);
+	
 
 	}
 
@@ -145,23 +148,20 @@ public class ShowKontakte extends VerticalPanel {
 	 *            Nutzer der übergeben wird.
 	 */
 	protected void onLoad(final Nutzer n) {
-
+		kontaktTable = new CellTable<Kontakt>();
 
 		this.search = new Button(
 				"<image src='/images/search.png' width='15px' height='15px' align='center' />  Start");
 
-		// Sichtbar setzen
-		auswahl.isVisible();
-		eingabe.isVisible();
 		
 		auswahl.setPixelSize(130, 35);
 		eingabe.setPixelSize(125, 25);
 		search.setPixelSize(125, 25);
 		
 		// ListBox mit Auswahlen befüllen.
-		auswahl.addItem("");
-		auswahl.addItem("name");
+		auswahl.addItem("Name");
 		auswahl.addItem("Auspraegung");
+		auswahl.addItem("Eigenschaft");
 		eingabe.getElement().setPropertyString("placeholder", "Name/Ausprägung");
 
 
@@ -169,8 +169,8 @@ public class ShowKontakte extends VerticalPanel {
 		searchbar.add(search);
 		searchbar.add(auswahl);
 		searchbar.add(eingabe);
-
-		kontaktTable = new CellTable<Kontakt>();
+		this.add(searchbar);
+		
 
 		/**
 		 * Diese aufeinander folgenden Methoden rufen für den Nutzer die eigenen
@@ -202,6 +202,7 @@ public class ShowKontakte extends VerticalPanel {
 					// Alle geteilten Kontakte werden der Tabel hinzugefügt.
 					@Override
 					public void onSuccess(Vector<Kontakt> sharedKontakte) {
+						
 						// Leerer Vector für Zusammenführung erzeugen.
 						Vector<Kontakt> zsm = new Vector<Kontakt>();
 
@@ -273,7 +274,7 @@ public class ShowKontakte extends VerticalPanel {
 		dataProvider.addDataDisplay(kontaktTable);
 		kontaktTable.addColumnSortHandler(sort);
 
-		this.add(searchbar);
+		
 		// Kontakt Tabelle dem Container hinzufügen.
 		this.add(kontaktTable);
 
@@ -459,34 +460,17 @@ public class ShowKontakte extends VerticalPanel {
 		//ClickHandler für die persönliche suche von anderen Kontakten.
 		search.addClickHandler(new ClickHandler() {
 
+			
 			@Override
 			public void onClick(ClickEvent event) {
+				
 
-				ev.getKontakteBySuche(auswahl.getSelectedValue(), eingabe.getValue(), n,
-						new AsyncCallback<Vector<Kontakt>>() {
+				Nutzer nutzer = new Nutzer();
+				nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+				nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
+				
 
-							@Override
-							public void onFailure(Throwable caught) {
-								caught.getMessage().toString();
-
-							}
-
-							@Override
-							public void onSuccess(Vector<Kontakt> result) {
-								// Abfrage ob das Ergebnis vom Server etwas enthält.
-								if (result != null) {
-									
-									kontaktTable.setRowCount(result.size(), true);
-									kontaktTable.setVisibleRange(0, 10);
-									kontaktTable.setRowData(result);
-								} else {
-									Window.alert("Es wurde kein passender Kontakt gefunden");
-								}
-
-							}
-
-						});
-
+			RootPanel.get("content").add(new Kontaktsuche(n, auswahl.getSelectedItemText(), eingabe.getText()));
 			}
 		});
 
@@ -520,7 +504,7 @@ public class ShowKontakte extends VerticalPanel {
 					kontaktListenTable.setVisible(false);
 					deleteKontaktFromKontaktliste.setVisible(false);
 					showKontaktFromKontaktliste.setVisible(false);
-					Window.alert("Leider existieren noch keine Kontakte, füge doch gleich welche hinzu :)");
+					
 
 				} else {
 					kontaktListenTable.setVisible(true);

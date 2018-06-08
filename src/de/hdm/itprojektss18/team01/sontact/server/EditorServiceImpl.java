@@ -904,6 +904,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		init();
 		return this.aMapper.findAuspraegungByKontakt(kontaktId);
 	}
+	
+	/**
+	 * Ruft eine Liste aller Auspraegungen des zugehoerigen Kontakts auf.
+	 * 
+	 */
+	public Vector<Relatable> getAllAuspraegungenByKontaktRelatable(int kontaktId) throws IllegalArgumentException {
+
+		init();
+		return this.aMapper.findAuspraegungByKontaktRelatable(kontaktId);
+	}
 
 	public Eigenschaft getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException {
 		return eMapper.findEigenschaftForAuspraegung(eigenschaftId);

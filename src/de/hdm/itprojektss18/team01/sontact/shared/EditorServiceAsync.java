@@ -175,6 +175,9 @@ public interface EditorServiceAsync {
 	
 	void sharedWith(int objectId, char type, Nutzer n, AsyncCallback<Vector<Nutzer>> callback);
 
+
+	void getAllSharedAuspraegungenByKontaktAndNutzer(Kontakt k, Nutzer n, AsyncCallback<Vector<Relatable>> callback);
+
 	
 	
 	

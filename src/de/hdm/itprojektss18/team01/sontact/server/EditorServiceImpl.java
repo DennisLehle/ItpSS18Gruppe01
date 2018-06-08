@@ -1270,15 +1270,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 *            k, Nutzer n
 	 * @return Vector<Auspraegung>
 	 */
-	public Vector<Auspraegung> getAllSharedAuspraegungenByKontaktAndNutzer(Kontakt k, Nutzer n) {
+	public Vector<Relatable> getAllSharedAuspraegungenByKontaktAndNutzer(Kontakt k, Nutzer n) {
 		init();
 
 		Vector<Berechtigung> bv = this.bMapper.findAll();
-		Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(k.getId());
+		Vector<Relatable> av = this.getAllAuspraegungenByKontaktRelatable(k.getId());
 
-		Vector<Auspraegung> avshare = new Vector<Auspraegung>();
+		Vector<Relatable> avshare = new Vector<Relatable>();
 
-		for (Auspraegung a : av) {
+		for (Relatable a : av) {
 
 			for (Berechtigung b : bv) {
 

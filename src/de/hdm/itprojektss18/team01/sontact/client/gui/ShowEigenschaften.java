@@ -28,6 +28,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
@@ -87,6 +88,7 @@ public class ShowEigenschaften  extends VerticalPanel{
 		
 	
 		//Auslesen aller Ausprägungen eines Kontakts.
+		if(k.getId() == k.getOwnerId()) {
 		ev.getAllAuspraegungenByKontaktRelatable(k.getId(), new AsyncCallback <Vector<Relatable>>() {
 		
 			
@@ -120,6 +122,41 @@ public class ShowEigenschaften  extends VerticalPanel{
 
 			}
 		});
+		} else {
+		
+			//Wenn der Nutzer nicht der Eigentümer des Kontaktes ist werden die geteilten Ausprägungen abgefragt.
+			ev.getAllSharedAuspraegungenByKontaktAndNutzer(k ,n , new AsyncCallback<Vector<Relatable>>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					caught.getMessage().toString();
+					
+				}
+
+				@Override
+				public void onSuccess(Vector<Relatable> result) {
+					if (result.size() == 0) {
+						
+						eigenschaftAuspraegungTable.setVisible(false);
+						
+						hp3.add(new HTML("<img src= images/sad.png />"));
+						
+						
+					} else {
+						eigenschaftAuspraegungTable.setVisible(true);
+						sp.setVisible(true);
+						hp3.setVisible(true);
+
+					}
+					eigenschaftAuspraegungTable.setRowCount(result.size(), true);
+					eigenschaftAuspraegungTable.setVisibleRange(0, 10);
+					eigenschaftAuspraegungTable.setRowData(result);
+
+					
+				}
+				
+			});
+		}
 	
 		
 
@@ -196,23 +233,26 @@ public class ShowEigenschaften  extends VerticalPanel{
 		this.add(sp);
 		this.add(hp3);
 		
+	//	gewählteAuspraegung.addAll(selectionModel.getSelectedSet());
+		
 		//ClickHandler für die persönliche suche von anderen Kontakten.
 		shareKontakt.addClickHandler(new ClickHandler() {
 
 			
 			@Override
 			public void onClick(ClickEvent event) {
+				//Vector alle selektierten Eigenschaften/Ausprägungen mitgeben aber davor erst leeren.
+				gewählteAuspraegung.removeAll(gewählteAuspraegung);
+				gewählteAuspraegung.addAll(selectionModel.getSelectedSet());
 				
-
+				
+					MessageBox.shareAlertKontakt("Geben Sie die Email des Empfängers an", "Email: ", k, gewählteAuspraegung);
+			
 				Nutzer nutzer = new Nutzer();
 				nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 				nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 				
-				//Vector alle selektierten Eigenschaften/Ausprägungen mitgeben.
-				gewählteAuspraegung.addAll(selectionModel.getSelectedSet());
 				
-				MessageBox.shareAlertKontakt("Geben Sie die Email des Empfängers an", "Email: ", k, gewählteAuspraegung);
-
 
 			
 			}

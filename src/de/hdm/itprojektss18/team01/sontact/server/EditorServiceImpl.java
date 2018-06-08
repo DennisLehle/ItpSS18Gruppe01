@@ -19,6 +19,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
 public class EditorServiceImpl extends RemoteServiceServlet implements EditorService {
 
@@ -902,6 +903,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		init();
 		return this.aMapper.findAuspraegungByKontakt(kontaktId);
+	}
+	
+	/**
+	 * Ruft eine Liste aller Auspraegungen des zugehoerigen Kontakts auf.
+	 * 
+	 */
+	public Vector<Relatable> getAllAuspraegungenByKontaktRelatable(int kontaktId) throws IllegalArgumentException {
+
+		init();
+		return this.aMapper.findAuspraegungByKontaktRelatable(kontaktId);
 	}
 
 	public Eigenschaft getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException {

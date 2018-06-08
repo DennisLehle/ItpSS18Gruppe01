@@ -12,6 +12,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
 
 /**
@@ -200,6 +201,11 @@ public interface EditorService extends RemoteService{
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getAllAuspraegungenByKontakt (Kontakt k);
 	 */
 	public Vector<Auspraegung> getAllAuspraegungenByKontakt(int kontaktId) throws IllegalArgumentException;
+		
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getAllAuspraegungenByKontakt (Kontakt k);
+	 */
+	public Vector<Relatable> getAllAuspraegungenByKontaktRelatable(int kontaktId) throws IllegalArgumentException;
 		
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getAllAuspraegungenByKontakt (Kontakt k);

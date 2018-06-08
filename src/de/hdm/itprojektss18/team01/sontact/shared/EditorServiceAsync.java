@@ -11,6 +11,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
 /**
  * Asynchrones Gegenst�ck des Interfaces <code>EditorService</code>
@@ -128,6 +129,8 @@ public interface EditorServiceAsync {
 
 
 	void getAllAuspraegungenByKontakt(int kontaktId, AsyncCallback<Vector<Auspraegung>> callback);
+
+	void getAllAuspraegungenByKontaktRelatable(int kontaktId, AsyncCallback<Vector<Relatable>> callback);
 
 
 	void saveModifikationsdatum(int id, AsyncCallback<Void> callback);

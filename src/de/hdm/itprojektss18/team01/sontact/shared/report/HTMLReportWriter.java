@@ -1,6 +1,8 @@
 package de.hdm.itprojektss18.team01.sontact.shared.report;
 
 import java.util.Vector;
+import de.hdm.itprojektss18.team01.sontact.shared.report.CompositeReport;
+
 
 /**
  * Ein <code>ReportWriter</code>, der Reports mittels HTML formatiert. Das im
@@ -88,25 +90,25 @@ public class HTMLReportWriter extends ReportWriter {
   }
 
   /**
-   * Prozessieren des übergebenen Reports und Ablage im Zielformat. Ein Auslesen
+   * Prozessieren des uebergebenen Reports und Ablage im Zielformat. Ein Auslesen
    * des Ergebnisses kann später mittels <code>getReportText()</code> erfolgen.
    * 
    * @param r der zu prozessierende Report
    */
   @Override
   public void process(AlleKontakteReport r) {
-    // Zunächst löschen wir das Ergebnis vorhergehender Prozessierungen.
+    // Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
     this.resetReportText();
 
     /*
-     * In diesen Buffer schreiben wir während der Prozessierung sukzessive
+     * In diesen Buffer schreiben wir waehrend der Prozessierung sukzessiv
      * unsere Ergebnisse.
      */
     StringBuffer result = new StringBuffer();
 
     /*
-     * Nun werden Schritt für Schritt die einzelnen Bestandteile des Reports
-     * ausgelesen und in HTML-Form übersetzt.
+     * Nun werden Schritt fuer Schritt die einzelnen Bestandteile des Reports
+     * ausgelesen und in HTML-Form uebersetzt.
      */
     result.append("<H1>" + r.getTitle() + "</H1>");
     result.append("<table style=\"width:400px;border:1px solid silver\"><tr>");
@@ -159,61 +161,60 @@ public class HTMLReportWriter extends ReportWriter {
    */
   @Override
   public void process(AlleKontakteNachEigenschaftenReport r) {
-    // Zunächst löschen wir das Ergebnis vorhergehender Prozessierungen.
-    this.resetReportText();
+	  // Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
+	    this.resetReportText();
 
-    /*
-     * In diesen Buffer schreiben wir während der Prozessierung sukzessive
-     * unsere Ergebnisse.
-     */
-    StringBuffer result = new StringBuffer();
+	    /*
+	     * In diesen Buffer schreiben wir waehrend der Prozessierung sukzessiv
+	     * unsere Ergebnisse.
+	     */
+	    StringBuffer result = new StringBuffer();
 
-    /*
-     * Nun werden Schritt für Schritt die einzelnen Bestandteile des Reports
-     * ausgelesen und in HTML-Form übersetzt.
-     */
-    result.append("<H1>" + r.getTitle() + "</H1>");
-    result.append("<table><tr>");
+	    /*
+	     * Nun werden Schritt fuer Schritt die einzelnen Bestandteile des Reports
+	     * ausgelesen und in HTML-Form uebersetzt.
+	     */
+	    result.append("<H1>" + r.getTitle() + "</H1>");
+	    result.append("<table style=\"width:400px;border:1px solid silver\"><tr>");
+	    result.append("<td valign=\"top\"><b>" + paragraph2HTML(r.getHeaderData())
+	        + "</b></td>");
+	    result.append("<td valign=\"top\">" + paragraph2HTML(r.getImprint())
+	        + "</td>");
+	    result.append("</tr><tr><td></td><td>" + r.getCreated().toString()
+	        + "</td></tr></table>");
 
-    if (r.getHeaderData() != null) {
-      result.append("<td>" + paragraph2HTML(r.getHeaderData()) + "</td>");
-    }
+	    Vector<Row> rows = r.getRows();
+	    result.append("<table style=\"width:400px\">");
 
-    result.append("<td>" + paragraph2HTML(r.getImprint()) + "</td>");
-    result.append("</tr><tr><td></td><td>" + r.getCreated().toString()
-        + "</td></tr></table>");
+	    for (int i = 0; i < rows.size(); i++) {
+	      Row row = rows.elementAt(i);
+	      result.append("<tr>");
+	      for (int k = 0; k < row.getNumColumns(); k++) {
+	        if (i == 0) {
+	          result.append("<td style=\"background:silver;font-weight:bold\">" + row.getColumnAt(k)
+	              + "</td>");
+	        }
+	        else {
+	          if (i > 1) {
+	            result.append("<td style=\"border-top:1px solid silver\">"
+	                + row.getColumnAt(k) + "</td>");
+	          }
+	          else {
+	            result.append("<td valign=\"top\">" + row.getColumnAt(k) + "</td>");
+	          }
+	        }
+	      }
+	      result.append("</tr>");
+	    }
 
-    /*
-     * Da AllAccountsOfAllCustomersReport ein CompositeReport ist, enthält r
-     * eine Menge von Teil-Reports des Typs AllAccountsOfCustomerReport. Für
-     * jeden dieser Teil-Reports rufen wir processAllAccountsOfCustomerReport
-     * auf. Das Ergebnis des jew. Aufrufs fügen wir dem Buffer hinzu.
-     */
-    for (int i = 0; i < r.getNumSubReports(); i++) {
-      /*
-       * AllAccountsOfCustomerReport wird als Typ der SubReports vorausgesetzt.
-       * Sollte dies in einer erweiterten Form des Projekts nicht mehr gelten,
-       * so müsste hier eine detailliertere Implementierung erfolgen.
-       */
-    	AlleKontakteReport subReport = (AlleKontakteReport) r.getSubReportsAt(i);
-
-      this.process(subReport);
-
-      result.append(this.reportText + "\n");
-
-      /*
-       * Nach jeder Übersetzung eines Teilreports und anschließendem Auslesen
-       * sollte die Ergebnisvariable zurückgesetzt werden.
-       */
-      this.resetReportText();
-    }
-
-    /*
-     * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
-     * reportText-Variable zugewiesen. Dadurch wird es möglich, anschließend das
-     * Ergebnis mittels getReportText() auszulesen.
-     */
-    this.reportText = result.toString();
+	    result.append("</table>");
+	
+  /*
+   * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
+   * reportText-Variable zugewiesen. Dadurch wird es möglich, anschließend das
+   * Ergebnis mittels getReportText() auszulesen.
+   */
+  this.reportText = result.toString();
   }
 
   /**
@@ -225,24 +226,11 @@ public class HTMLReportWriter extends ReportWriter {
     return this.getHeader() + this.reportText + this.getTrailer();
   }
 
+@Override
+public void process(AlleGeteiltenKontakteReport r) {
+	// TODO Auto-generated method stub
+	
+}
 
-//public void process(AlleKontakteNachAuspraegungReport r) {
-//	// TODO Auto-generated method stub
-//	
-//}
-//
-//@Override
-//public void process(AlleKontakteReport r) {
-//	// TODO Auto-generated method stub
-//	
-//}
-//public void process(AlleGeteiltenKontakteReport r) {
-//
-//}
-//
-//@Override
-//public void process(AlleKontakteNachEigenschaftenReport r) {
-//	// TODO Auto-generated method stub
-//	
-//}
+
 }

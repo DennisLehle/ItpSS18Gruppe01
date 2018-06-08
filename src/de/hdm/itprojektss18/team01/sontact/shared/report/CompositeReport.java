@@ -1,13 +1,17 @@
 package de.hdm.itprojektss18.team01.sontact.shared.report;
 
 import java.io.Serializable;
+
 import java.util.Vector;
+import java.util.*;
 
 /**
  * Ein zusammengesetzter Report. Dieser Report kann aus einer Menge von 
  * Teil-Reports (vgl. Attribut <code>subReports</code>) bestehen.
  */
-public abstract class CompositeReport extends Report implements Serializable {
+public abstract class CompositeReport 
+	extends Report 
+	implements Serializable {
 
 	/**
    * 
@@ -20,8 +24,8 @@ public abstract class CompositeReport extends Report implements Serializable {
 	private Vector<Report> subReports = new Vector<Report>();
 
 	/**
-	 * HinzufÃ¼gen eines Teil-Reports.
-	 * @param r der hinzuzufÃ¼gende Teil-Report.
+	 * Hinzufügen eines Teil-Reports.
+	 * @param r der hinzuzufügende Teil-Report.
 	 */
 	public void addSubReport(Report r) {
 		this.subReports.addElement(r);
@@ -45,7 +49,7 @@ public abstract class CompositeReport extends Report implements Serializable {
 
 	/**
 	 * Auslesen eines einzelnen Teil-Reports.
-	 * @param i Position des Teilreports. Bei n Elementen lÃ¤uft der Index i von 0
+	 * @param i Position des Teilreports. Bei n Elementen läuft der Index i von 0
 	 * bis n-1.
 	 * 
 	 * @return Position des Teil-Reports.

@@ -24,6 +24,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
 public class MessageBox {
 	
@@ -179,11 +180,15 @@ public class MessageBox {
 	 * @param k der Kontakt der geteilt wird.
 	 * @return
 	 */
-	public static DialogBox shareAlertKontakt(final String header, final String content, Kontakt k) {
+	public static DialogBox shareAlertKontakt(final String header, final String content, Kontakt k, Vector<Relatable> avshare) {
         final DialogBox box = new DialogBox();
         TextBox tb = new TextBox();
+        Nutzer n = new Nutzer();
         final VerticalPanel panel = new VerticalPanel();
         final HorizontalPanel hp = new HorizontalPanel();
+       
+        
+      
         box.setText(header);
         box.setGlassEnabled(true);
         panel.add(new HTML(content));
@@ -200,11 +205,11 @@ public class MessageBox {
 		});
         
         buttonShare.addClickHandler(new ClickHandler() {
+        	
 			
 			@Override
 			public void onClick(ClickEvent event) {
 				
-				Nutzer n = new Nutzer();
 				n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 				n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 		
@@ -224,10 +229,10 @@ public class MessageBox {
 						// Wenn es die eingegebene EMail vorhanden ist
 						if (result != null) {
 							/*
-							 * Es wird vom Nutzer(Owner), vom gefundenen Nutzer(Receiver), die Kontaktlisten
-							 * id der Kontatkliste und der Typ('l') übergeben.
+							 * Es werden für das Teilen des Kontaktes der Kontakt und seine ausgewählten
+							 * Ausprägungen übergeben.
 							 */
-							ev.shareObject(n.getId(), result.getId(), k.getId(), k.getType(),
+							ev.shareObject(n.getId(), result.getId(), k.getId(), k.getType(), avshare,
 									new AsyncCallback<Void>() {
 
 										@Override
@@ -259,7 +264,8 @@ public class MessageBox {
         emptyLabel.setSize("auto","25px");
         panel.add(emptyLabel);
         panel.add(emptyLabel);
-        panel.add(tb);
+        panel.add(tb);  
+   
         buttonClose.setWidth("80px");
         buttonClose.setHeight("60px");
         buttonShare.setWidth("80px");

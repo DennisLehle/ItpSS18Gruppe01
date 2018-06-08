@@ -11,6 +11,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
 /**
  * Asynchrones Gegenst�ck des Interfaces <code>EditorService</code>
@@ -103,6 +104,8 @@ public interface EditorServiceAsync {
 
 	void getAllAuspraegungenByKontakt(int kontaktId, AsyncCallback<Vector<Auspraegung>> callback);
 
+	void getAllAuspraegungenByKontaktRelatable(int kontaktId, AsyncCallback<Vector<Relatable>> callback);
+
 
 	void saveModifikationsdatum(int id, AsyncCallback<Void> callback);
 
@@ -110,8 +113,8 @@ public interface EditorServiceAsync {
 	void getOwnKontakt(Nutzer n, AsyncCallback<Kontakt> callback);
 
 	
-	void shareObject(int ownerId, int receiverId, int objectId, char type, Vector<Relatable> avhsare AsyncCallback<Void> callback);
-
+	void shareObject(int ownerId, int receiverId, int objectId, char type, Vector<Relatable> avhsare,
+			AsyncCallback<Void> callback);	
 	
 	void createBerechtigung(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Berechtigung> callback);
 
@@ -170,7 +173,7 @@ public interface EditorServiceAsync {
 	void getAllKontakteByNutzer(Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
 	
-	void sharedWith(int objectId, char type, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
+	void sharedWith(int objectId, char type, Nutzer n, AsyncCallback<Vector<Nutzer>> callback);
 
 	
 	

@@ -119,7 +119,7 @@ public class KontaktlisteForm extends VerticalPanel {
 				
 				//Abfrage wer der Owner der Liste ist.
 				if(kl.getOwner() != n.getId()) {
-				ev.findNutzerById(kl.getOwnerId(), new AsyncCallback<Nutzer>() {
+				ev.getNutzerById(kl.getOwnerId(), new AsyncCallback<Nutzer>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -137,7 +137,7 @@ public class KontaktlisteForm extends VerticalPanel {
 				}
 				
 				//Überprüft Status eines Objekts ob es geteilt wurde.
-				ev.getStatusForObject(kl.getId(), new AsyncCallback<Boolean>() {
+				ev.getStatusForObject(kl.getId(),kl.getType(), new AsyncCallback<Boolean>() {
 
 					@Override
 					public void onFailure(Throwable caught) {

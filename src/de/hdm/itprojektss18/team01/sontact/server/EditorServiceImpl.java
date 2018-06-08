@@ -627,6 +627,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		if (ks != null) {
 			return this.getAllSharedKontakteByReceiver(n.getId());
 			}
+		
 		Vector<Kontakt> kvs = new Vector<Kontakt>();
 			kvs.addAll(kv);
 			kvs.addAll(ks);
@@ -1316,27 +1317,27 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param Kontakt k, Nutzer n
 	 * @return Vector<Auspraegung>
 	 */
-	public Vector<Auspraegung> getAllSharedAuspraegungenByKontaktAndNutzer(Kontakt k, Nutzer n) {
+	public Vector<Relatable> getAllSharedAuspraegungenByKontaktAndNutzer(Kontakt k, Nutzer n) {
 		init();
 
 		// Vektor welcher alle gesetzten Berechtigungen enthaelt
 		Vector<Berechtigung> bv = this.bMapper.findAll();
+
+		//Vektor welche alle Auspraegungen eines Kontaktes enthaelt
+		Vector<Relatable> av = this.getAllAuspraegungenByKontaktRelatable(k.getId());
+
+		//Leerer Vektor für alle geteilten Auspraegungen des Kontaktes k
+		Vector<Relatable> avshare = new Vector<Relatable>();
 		
-		// Vektor welche alle Auspraegungen eines Kontaktes enthaelt
-		Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(k.getId());
-
-		// Leerer Vektor für alle geteilten Auspraegungen des Kontaktes k
-		Vector<Auspraegung> avshare = new Vector<Auspraegung>();
-
 		// Schleife welche alle Auspraegungen des Kontaktes k durchlaeuft
-		for (Auspraegung a : av) {
+		for (Relatable a : av) {
 
 			// Schleife welche alle gesetzten Berechtigungen durchlaeuft
 			for (Berechtigung b : bv) {
 
 				/* Abgleich der Id der Auspraegung a mit der objectId der gesetzten Berechtigungen b
 				 * sowie Objekttyp und Nutzer um die Eindeutigkeit zugewaehrleisten */
-				if (a.getId() == b.getObjectId() && b.getReceiverId() == n.getId() && b.getType() == a.getType()) {
+				if (a.getId() == b.getObjectId() && b.getReceiverId() == n.getId()) {
 
 					// Abruf der Auspraegung
 					this.getAuspraegungById(a.getId());
@@ -1467,14 +1468,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Prueft ueber einen boolean, ob sich ein Objekt (Kontakt k, Kontaktliste l
 	 * oder Auspraegung a) sich in einem geteilten Status befindet.
 	 */
-	public boolean getStatusForObject(int objectId) throws IllegalArgumentException {
+	public boolean getStatusForObject(int objectId, char type) throws IllegalArgumentException {
+		
+		init();
 
 		// Auslesen alle Berechtigungen
 		Vector<Berechtigung> bv = this.bMapper.findAll();
 
 		// Abgleich der ObjectId mit den geteilten Objekte
 		for (Berechtigung b : bv) {
-			if (objectId == b.getObjectId()) {
+			if (objectId == b.getObjectId() && type == b.getType()) {
 				return true;
 			}
 

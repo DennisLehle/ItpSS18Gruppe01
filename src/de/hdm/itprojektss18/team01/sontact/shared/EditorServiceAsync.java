@@ -149,7 +149,7 @@ public interface EditorServiceAsync {
 	void getAllSharedKontaktlistenByReceiver(int receiverId, AsyncCallback<Vector<Kontaktliste>> callback);
 
 
-	void getStatusForObject(int objectId, AsyncCallback<Boolean> callback);
+	void getStatusForObject(int objectId, char type, AsyncCallback<Boolean> callback);
 
 
 	void getEigenschaftForAuspraegung(int eigenschaftId, AsyncCallback<Eigenschaft> callback);
@@ -174,6 +174,9 @@ public interface EditorServiceAsync {
 
 	
 	void sharedWith(int objectId, char type, Nutzer n, AsyncCallback<Vector<Nutzer>> callback);
+
+
+	void getAllSharedAuspraegungenByKontaktAndNutzer(Kontakt k, Nutzer n, AsyncCallback<Vector<Relatable>> callback);
 
 	
 	

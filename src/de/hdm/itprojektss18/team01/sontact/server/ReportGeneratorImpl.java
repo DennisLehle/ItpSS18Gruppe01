@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss18.team01.sontact.shared.EditorService;
@@ -62,9 +63,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * Report der alle Kontakte eines Nutzers ausgibt.
 	 */
 	@Override
-	public AlleKontakteReport createAlleKontakteReport(Nutzer n) 
-			throws IllegalArgumentException {
-		
+	public AlleKontakteReport createAlleKontakteReport(Nutzer n) throws IllegalArgumentException {
+
 		if (this.getEditorService() == null) {
 			return null;
 		}
@@ -86,8 +86,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		head.addColumn(new Column("Nachname"));
 		head.addColumn(new Column("Erstellungsdatum"));
 		head.addColumn(new Column("Modifikationsdatum"));
-		
-		//Kontakt der Geteilt oder nicht Geteilt wurde
+
+		// Kontakt der Geteilt oder nicht Geteilt wurde
 		head.addColumn(new Column("Status"));
 
 		// Kopfzeile dem Report hinzufuegen
@@ -96,7 +96,6 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		// Relevante Kontaktdaten in den Vektor laden und Zeile fuer Zeile dem Report
 		// hinzufuegen
 		Vector<Kontakt> kontakt = this.getEditorService().getAllKontakteByNutzer(n);
-		
 
 		for (Kontakt k : kontakt) {
 			Row kon = new Row();
@@ -104,15 +103,29 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			kon.addColumn(new Column(k.getNachname()));
 			kon.addColumn(new Column(k.getErstellDat().toString()));
 			kon.addColumn(new Column(k.getModDat().toString()));
-			
 
-					// @TODO Status!!!
+			// Prüfen des Status für das Kontakt-Objekt
+			for (int i = 0; i < kontakt.size(); i++) {
 
-			// Noch nicht vollständig!!!!
+				if (kontakt != null) {
+					boolean teilung = this.getEditorService().getStatusForObject(kontakt.elementAt(i).getId(), 'k');
+					int id = kontakt.elementAt(i).getOwnerId();
+
+					if (teilung == true) {
+						kon.addColumn(new Column("Geteilt von: " + getEditorService().getNutzerById(id)));
+					} else {
+						kon.addColumn(new Column("Nicht geteilt"));
+					}
+				}
+
+				report.addRow(kon);
+
+			}
 
 		}
 
-		return null;
+		Window.alert("SUPIIIII KLAPPT");
+		return report;
 	}
 	
 	/**
@@ -153,16 +166,13 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	private String getNutzerByGMail (Nutzer n) throws IllegalArgumentException {
-	String name = "";
-	
-	if (n instanceof Nutzer) {
+	private String getNutzerByGMail(Nutzer n) throws IllegalArgumentException {
+		
+		String name = "";
 		Nutzer nutzer = editorService.getUserByGMail(n.getEmailAddress());
 		name = nutzer.getEmailAddress();
-	}else {
-		name = "Oops...Der Nutzer wurde nicht gefunden.Versuchen Sie es nochmal.";
-	}
-	return name;
+
+		return name;
 	}
 
 	/**

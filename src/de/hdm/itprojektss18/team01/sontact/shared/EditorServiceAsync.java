@@ -113,8 +113,8 @@ public interface EditorServiceAsync {
 	void getOwnKontakt(Nutzer n, AsyncCallback<Kontakt> callback);
 
 	
-	void shareObject(int ownerId, int receiverId, int objectId, char type, Vector<Relatable> avhsare AsyncCallback<Void> callback);
-
+	void shareObject(int ownerId, int receiverId, int objectId, char type, Vector<Relatable> avhsare,
+			AsyncCallback<Void> callback);	
 	
 	void createBerechtigung(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Berechtigung> callback);
 
@@ -173,7 +173,7 @@ public interface EditorServiceAsync {
 	void getAllKontakteByNutzer(Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
 	
-	void sharedWith(int objectId, char type, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
+	void sharedWith(int objectId, char type, Nutzer n, AsyncCallback<Vector<Nutzer>> callback);
 
 	
 	

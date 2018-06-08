@@ -6,7 +6,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-import de.hdm.itprojektss18.team01.sontact.server.Relatable;
+
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
@@ -247,6 +247,9 @@ public interface EditorService extends RemoteService{
 	
 	public Vector<Kontakt> getAllKontakteByNutzer(Nutzer n) throws IllegalArgumentException;
 	
-	public Vector<Nutzer> sharedWith(int objectId, char type, Nutzer n) throws IllegalArgumentException;
+	Vector<Nutzer> sharedWith(int objectId, char type, Nutzer n);
+
+
+
 	
 }

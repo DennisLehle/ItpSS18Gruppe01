@@ -65,7 +65,7 @@ public class KontaktForm extends VerticalPanel {
 
 	FlexTable KontaktProfilFelx = new FlexTable();
 
-	// Flextables welche für das Anlegen eines neuen Kontakts benötigt werden
+	// Flextables welche fï¿½r das Anlegen eines neuen Kontakts benï¿½tigt werden
 	FlexTable kontaktInfoTable = new FlexTable();
 	FlexTable eigeneEigenschaftenTable = new FlexTable();
 
@@ -145,7 +145,7 @@ public class KontaktForm extends VerticalPanel {
 
 				// Abfrage wer der Owner des Kontaktes ist.
 				if (k.getOwnerId() != n.getId()) {
-					ev.findNutzerById(k.getOwnerId(), new AsyncCallback<Nutzer>() {
+					ev.getNutzerById(k.getOwnerId(), new AsyncCallback<Nutzer>() {
 
 						@Override
 						public void onFailure(Throwable caught) {
@@ -271,7 +271,7 @@ public class KontaktForm extends VerticalPanel {
 		sp.setSize("900px", "400px");
 		
 
-		// Wir holen über einen Server-Request die Eigenschaften aus der DB um diese
+		// Wir holen ï¿½ber einen Server-Request die Eigenschaften aus der DB um diese
 		// bereit zu halten
 		ev.getEigenschaftAuswahl(new AsyncCallback<Vector<Eigenschaft>>() {
 
@@ -430,6 +430,10 @@ public class KontaktForm extends VerticalPanel {
 			n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 			n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 			
+			if (vornameTxtBox.getText().isEmpty() || nachnameTxtBox.getText().isEmpty()) {
+				MessageBox.alertWidget("Benachrichtigung", "Bitte mindestens Vor- und Nachname angeben");
+			}
+			else {
 			// Anlegen des Kontakts mit den Mindestangaben Vor- und Nachname
 			ev.createKontakt(vornameTxtBox.getText(), nachnameTxtBox.getText(), n, new AsyncCallback<Kontakt>() {
 
@@ -482,17 +486,20 @@ public class KontaktForm extends VerticalPanel {
 
 							@Override
 							public void onSuccess(Auspraegung result) {
-					
+								RootPanel.get("content").clear();
+								RootPanel.get("content").add(new ShowKontakte(n));
+								Window.Location.reload();
+
 
 							}
 						});
-
+					
 					}
 
 				}
 			});
 
-
+			}
 			
 			/**
 			 * Speichern der selbst definierten Eigenschafte und Auspraegungen
@@ -602,14 +609,11 @@ public class KontaktForm extends VerticalPanel {
 
 						@Override
 						public void onSuccess(Kontakt result) {
-
-							// RootPanel.get("content").add(new KontaktForm(selectedKontakt));
-							// Window.Location.reload();
+							 RootPanel.get("content").add(new KontaktForm(selectedKontakt));
+							 Window.Location.reload();
 
 						}
-
 					});
-
 				}
 			});
 
@@ -658,10 +662,10 @@ public class KontaktForm extends VerticalPanel {
 									@Override
 									public void onSuccess(Eigenschaft result) {
 
-										TextBox eigenschafttb = new TextBox();
-										eigenschafttb.setText(result.getBezeichnung());
+										Label eigenschaftLabel = new Label();
+										eigenschaftLabel.setText(result.getBezeichnung());
 										int count = KontaktProfilFelx.getRowCount();
-										KontaktProfilFelx.setWidget(count, 0, eigenschafttb);
+										KontaktProfilFelx.setWidget(count, 0, eigenschaftLabel);
 										KontaktProfilFelx.setWidget(count, 1, auspraegung);
 										int count2 = KontaktProfilFelx.getRowCount();
 										count = count2 + 1;

@@ -158,7 +158,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @return void
 	 */
 
-	public void createKontakt(String vorname, String nachname, Nutzer n) throws IllegalArgumentException {
+	public Kontakt createKontakt(String vorname, String nachname, Nutzer n) throws IllegalArgumentException {
 
 		init();
 
@@ -182,9 +182,14 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der
 		// naechst hoeheren ID angepasst wird.
 		k.setId(1);
+		
+		Kontakt k1 = new Kontakt();
+		k1 = kMapper.insert(k);
 
 		// Kontaktliste und Kontakt werden der Zwischentabelle hinzugefuegt.
-		this.addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Meine Kontakte"), kMapper.insert(k));
+		this.addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Meine Kontakte"), k1);
+		return k1;
+		
 	}
 
 	/**

@@ -46,7 +46,7 @@ public abstract class Report implements Serializable {
   /**
    * Datum der Erstellung des Berichts.
    */
-  private Timestamp created = new Timestamp(System.currentTimeMillis());
+  private Date created = new Date();
 
   /**
    * Auslesen des Impressums.
@@ -107,7 +107,7 @@ public abstract class Report implements Serializable {
    * 
    * @return Datum der Erstellung des Berichts
    */
-  public Timestamp getCreated() {
+  public Date created() {
     return this.created;
   }
 
@@ -118,7 +118,7 @@ public abstract class Report implements Serializable {
    * 
    * @param created Zeitpunkt der Erstellung
    */
-  public void setCreated(Timestamp created) {
+  public void setCreated(Date created) {
     this.created = created;
   }
 

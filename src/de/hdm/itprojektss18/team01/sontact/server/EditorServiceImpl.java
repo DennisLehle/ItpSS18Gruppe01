@@ -884,6 +884,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Aufruf der DB-Methode zum entfernen des Wertes einer Auspraegung.
 		this.aMapper.delete(a);
 	}
+	/**
+	 * Löscht eine Ausprägung anhand der übergebenen id.
+	 * @param a
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteAuspraegungById(int auspraegungId) throws IllegalArgumentException {
+		
+		this.aMapper.deleteById(auspraegungId);
+	}
 
 	/**
 	 * Auslesen einer bestimmten Auspraegung anhand der zugeh�rigen Objektid.
@@ -1089,6 +1098,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			}
 
 			this.bMapper.delete(b);
+			
+			Nutzer n = new Nutzer();
+			n.setId(b.getReceiverId());
+			
+			Kontakt k = new Kontakt();
+			k.setId(b.getObjectId());
+			
+		
+			this.removeKontaktFromKontaktliste(findKontaktlisteByTitel(n, "Mit mir geteilte Kontakte"), k);
 
 		} else if (b.getType() == 'a') {
 			this.bMapper.delete(b);
@@ -1118,14 +1136,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		
 			// Abgleich der objektId und des types um die Eindeutigkeit zu gewaehrleisten
 			if (bv != null && b.getObjectId() == objectId && b.getType() == type) {
-			
-				// Erstellen eines Nutzerobjekts
-				Nutzer receiver = new Nutzer();
-				// receiverId = nutzerId
-				n.setId(b.getReceiverId());
 				
 				// Nutzerobjekt/ receiver dem Vektor hinzufuegen
-				nv.add(receiver);
+				nv.add(this.findNutzerById(b.getReceiverId()));
 			}
 		}
 		

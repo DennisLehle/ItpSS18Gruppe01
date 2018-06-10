@@ -16,7 +16,7 @@ public class DBConnection{
 
 	private static Connection con = null;
 	private static String googleUrl = "jdbc:google:mysql://NameDeployAppEngine:europe-west:LinkDeploy?user=root&password=1234";
-	private static String localUrl = "jdbc:mysql://localhost:3306/Sontact?user=root&password=";
+	private static String localUrl = "jdbc:mysql://localhost:3306/Sontact?user=UgurBayrak&password=Meldanur2005";
 
 
 	/**

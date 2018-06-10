@@ -191,6 +191,8 @@ public interface EditorService extends RemoteService{
 	 */
 	public void deleteAuspraegung (Auspraegung a) throws IllegalArgumentException;
 	
+	public void deleteAuspraegungById(int auspraegungId) throws IllegalArgumentException;
+	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl#getAuspraegungById (Auspraegung a);
 	 */

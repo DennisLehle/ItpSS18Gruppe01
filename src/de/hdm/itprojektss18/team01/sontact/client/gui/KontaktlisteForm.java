@@ -110,11 +110,10 @@ public class KontaktlisteForm extends VerticalPanel {
 				
 				
 				//ClickHandler zum teilen von Kontaktlisten.
-				Button teilhaberschaftDeletion = new Button("<image src='/images/share.png' width='10px' height='10px' align='center' />" +
-						"<image src='/images/share.png' width='10px' height='10px' align='center' />");
+				Button deleteTeilhaber = new Button("<image src='/images/share.png' width='20px' height='20px' align='center' /> löschen");
 
-				teilhaberschaftDeletion.addClickHandler(new deletionTeilhaberschaftClickHandler());
-				BtnPanel.add(teilhaberschaftDeletion);
+				deleteTeilhaber.addClickHandler(new deleteTeilhaberClickHandler());
+				BtnPanel.add(deleteTeilhaber);
 				
 				
 				//Abfrage wer der Owner der Liste ist.
@@ -345,10 +344,8 @@ public class KontaktlisteForm extends VerticalPanel {
 	
 	private class shareKontaktlisteClickHandler implements ClickHandler {
 		public void onClick(ClickEvent event) {
-
-			Kontaktliste kl = selectedKontaktliste;
 			
-			MessageBox.shareAlert("Geben Sie die Email des Empfängers an", "Email: ", kl);
+			MessageBox.shareAlert("Geben Sie die Email des Empfängers an", "Email: ", selectedKontaktliste);
 
 		}
 
@@ -357,20 +354,16 @@ public class KontaktlisteForm extends VerticalPanel {
 	private class addKontaktClickHandler implements ClickHandler {
 		public void onClick(ClickEvent event) {
 
-			Kontaktliste kl = selectedKontaktliste;
-
-			RootPanel.get("content").add(new ShowKontakte(kl));
+			RootPanel.get("content").add(new ShowKontakte(selectedKontaktliste));
 
 		}
 
 	}
 	
-	private class deletionTeilhaberschaftClickHandler implements ClickHandler {
+	private class deleteTeilhaberClickHandler implements ClickHandler {
 		public void onClick(ClickEvent event) {
 
-			Kontaktliste kl = selectedKontaktliste;
-
-//			MessageBox.shareDeletionKl("Geteile Kontaktlisten", "", kl);
+			MessageBox.deleteTeilhaber("Teilhaberschaft entfernen", "Wählen sie für die Löschung einer Teilhaberschaft eine EMail Adresse aus.", selectedKontaktliste, null);
 
 		}
 

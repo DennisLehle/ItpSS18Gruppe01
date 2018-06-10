@@ -195,6 +195,35 @@ public class AuspraegungMapper {
 	}
 
 	/**
+	 * Löscht eine Ausprägung anhand der übergebenen Id des selectionModels.
+	 * @param a
+	 */
+	public void deleteById(int auspraegungId) {
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		String deleteSQL = "DELETE FROM auspraegung WHERE id=?";
+
+		try {
+
+			con = DBConnection.connection();
+
+			stmt = con.prepareStatement(deleteSQL);
+			stmt.setInt(1, auspraegungId);
+
+			stmt.executeUpdate();
+
+		}
+
+		catch (SQLException e2) {
+			e2.printStackTrace();
+
+		}
+	}
+
+	
+	/**
 	 * Auspraegung anhand der eindeutig bestimmtbaren ID finden
 	 */
 

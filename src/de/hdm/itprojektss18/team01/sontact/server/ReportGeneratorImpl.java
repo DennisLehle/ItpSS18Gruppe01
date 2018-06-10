@@ -73,11 +73,12 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		AlleKontakteReport report = new AlleKontakteReport();
 
 		// Setzen des Report Titels und dem Generierungsdatums
+//		Row header = new Row();
 		report.setTitle("Alle Kontakte");
-		report.setCreated(new Timestamp(System.currentTimeMillis()));
+		report.setCreated(new Date());
 
 		// Erzeugung der Kopfdaten
-		report.setHeaderData(createHeaderData(n));
+		//report.setHeaderData(createHeaderData(n));
 
 		// Kopfzeile mit den Ueberschriften mit den einzelnen Spalten im Report
 		// erstellen
@@ -91,47 +92,55 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		head.addColumn(new Column("Status"));
 
 		// Kopfzeile dem Report hinzufuegen
+		//report.addRow();
 		report.addRow(head);
+
 
 		// Relevante Kontaktdaten in den Vektor laden und Zeile fuer Zeile dem Report
 		// hinzufuegen
-		Vector<Kontakt> kontakt = this.getEditorService().getAllKontakteByNutzer(n);
-
-		for (Kontakt k : kontakt) {
+		Vector<Kontakt> kontakt = new Vector<Kontakt>();
+		
+		kontakt.addAll(this.getEditorService().getAllKontakteByNutzer(n));
+		
+		for (int i = 0; i < kontakt.size(); i++) {
+			
+		
 			Row kon = new Row();
-			kon.addColumn(new Column(k.getVorname()));
-			kon.addColumn(new Column(k.getNachname()));
-			kon.addColumn(new Column(k.getErstellDat().toString()));
-			kon.addColumn(new Column(k.getModDat().toString()));
-
-			// Prüfen des Status für das Kontakt-Objekt
-			for (int i = 0; i < kontakt.size(); i++) {
+			kon.addColumn(new Column(kontakt.elementAt(i).getVorname()));
+			kon.addColumn(new Column(kontakt.elementAt(i).getNachname()));
+			kon.addColumn(new Column(kontakt.elementAt(i).getErstellDat().toString()));
+			kon.addColumn(new Column(kontakt.elementAt(i).getModDat().toString()));
+			
 
 				if (kontakt != null) {
 					boolean teilung = this.getEditorService().getStatusForObject(kontakt.elementAt(i).getId(), 'k');
 					int id = kontakt.elementAt(i).getOwnerId();
 
 					if (teilung == true) {
-						kon.addColumn(new Column("Geteilt von: " + getEditorService().getNutzerById(id)));
+
+						kon.addColumn(new Column("Geteilt von: " + getEditorService().getNutzerById(id).getEmailAddress()));
+
 					} else {
 						kon.addColumn(new Column("Nicht geteilt"));
 					}
 				}
 
 				report.addRow(kon);
+			
 
-			}
 
 		}
-
-		Window.alert("SUPIIIII KLAPPT");
 		return report;
 	}
+
+		
+		
+	
 	
 	/**
 	 * Report der alle Kontakte nach Eigenschaften mit ihrer Auspraegung ausgibt. 
-	 * Die bestimmten Eigenschaften können aus der Suchleiste ausgelesen 
-	 * werden und werden mit der entsprechenden Auspraegung zurückgegeben.  
+	 * Die bestimmten Eigenschaften kï¿½nnen aus der Suchleiste ausgelesen 
+	 * werden und werden mit der entsprechenden Auspraegung zurï¿½ckgegeben.  
 	 */
 	@Override
 	public AlleKontakteNachEigenschaftenReport createAuspraegungReport() 
@@ -177,7 +186,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 	/**
 	 * Zur korrekten Ausgabe der Kopfdaten, wird diese Hilfsmethode einheitlich
-	 * für alle Berichtsausgaben verwendet. 
+	 * fï¿½r alle Berichtsausgaben verwendet. 
 	 * @param n
 	 * @param report
 	 * @return

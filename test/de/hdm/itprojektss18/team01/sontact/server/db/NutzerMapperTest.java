@@ -7,8 +7,10 @@ import org.junit.jupiter.api.Test;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.Window;
 
+import de.hdm.itprojektss18.team01.sontact.client.gui.MessageBox;
 import de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
@@ -50,9 +52,9 @@ public class NutzerMapperTest extends GWTTestCase {
 		EditorServiceImpl editor = new EditorServiceImpl();
 	Nutzer n = new Nutzer();
 	n.setId(1);
-n.setEmailAddress("kan.kup@gmail.com");
-		System.out.println(editor.getKontakteBySuche("name", "petra", n));
-		
+	n.setEmailAddress("kan.kup@gmail.com");
+	Kontaktliste kl = new Kontaktliste();
+	kl.setId(6);
 		
 	}
 	

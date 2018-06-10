@@ -45,4 +45,5 @@ public abstract class ReportWriter {
   	 */
   public abstract void process(AlleGeteiltenKontakteReport r);
 
+
 }

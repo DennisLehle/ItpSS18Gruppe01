@@ -116,7 +116,7 @@ public class ShowKontakte extends VerticalPanel {
 
 		// Buttons die inizialisiert werden bei Start dieser Klasse
 		hp.add(showKontakt);
-		hp.add(deleteKontakt);
+	//	hp.add(deleteKontakt);
 		hp.add(addKontaktToKontaktliste);
 	
 
@@ -171,56 +171,57 @@ public class ShowKontakte extends VerticalPanel {
 		searchbar.add(eingabe);
 		this.add(searchbar);
 		
+		allKontakte();
+//		/**
+//		 * Diese aufeinander folgenden Methoden rufen für den Nutzer die eigenen
+//		 * Kontakte und die mit IHM geteilten Kontakte auf und führt sie in einer
+//		 * gemeinsamen Liste zusammen.
+//		 */
+//		ev.getAllKontakteByOwner(n, new AsyncCallback<Vector<Kontakt>>() {
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				caught.getMessage().toString();
+//
+//			}
+//
+//			// Meine Kontakte des Nutzers bei dem er der Owner ist werden der Table
+//			// hinzugefügt.
+//			@Override
+//			public void onSuccess(Vector<Kontakt> ownKontakte) {
+//
+//				// Holt Meine Kontakte die mit dem Nutzer geteilt wurden.
+//				ev.getAllSharedKontakteByReceiver(n.getId(), new AsyncCallback<Vector<Kontakt>>() {
+//
+//					@Override
+//					public void onFailure(Throwable caught) {
+//						caught.getMessage().toString();
+//
+//					}
+//
+//					// Alle geteilten Kontakte werden der Tabel hinzugefügt.
+//					@Override
+//					public void onSuccess(Vector<Kontakt> sharedKontakte) {
+//						
+//						// Leerer Vector für Zusammenführung erzeugen.
+//						Vector<Kontakt> zsm = new Vector<Kontakt>();
+//
+//						// Zusammenführung von geteilten und eigenen Kontakten des Nutzers in einer
+//						// Tabelle.
+//						zsm.addAll(ownKontakte);
+//						zsm.addAll(sharedKontakte);
+//
+//						kontaktTable.setRowCount(zsm.size(), true);
+//						kontaktTable.setVisibleRange(0, 10);
+//						kontaktTable.setRowData(zsm);
+//
+//					}
+//
+//				});
+//			}
+//		});
 
-		/**
-		 * Diese aufeinander folgenden Methoden rufen für den Nutzer die eigenen
-		 * Kontakte und die mit IHM geteilten Kontakte auf und führt sie in einer
-		 * gemeinsamen Liste zusammen.
-		 */
-		ev.getAllKontakteByOwner(n, new AsyncCallback<Vector<Kontakt>>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				caught.getMessage().toString();
-
-			}
-
-			// Meine Kontakte des Nutzers bei dem er der Owner ist werden der Table
-			// hinzugefügt.
-			@Override
-			public void onSuccess(Vector<Kontakt> ownKontakte) {
-
-				// Holt Meine Kontakte die mit dem Nutzer geteilt wurden.
-				ev.getAllSharedKontakteByReceiver(n.getId(), new AsyncCallback<Vector<Kontakt>>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						caught.getMessage().toString();
-
-					}
-
-					// Alle geteilten Kontakte werden der Tabel hinzugefügt.
-					@Override
-					public void onSuccess(Vector<Kontakt> sharedKontakte) {
-						
-						// Leerer Vector für Zusammenführung erzeugen.
-						Vector<Kontakt> zsm = new Vector<Kontakt>();
-
-						// Zusammenführung von geteilten und eigenen Kontakten des Nutzers in einer
-						// Tabelle.
-						zsm.addAll(ownKontakte);
-						zsm.addAll(sharedKontakte);
-
-						kontaktTable.setRowCount(zsm.size(), true);
-						kontaktTable.setVisibleRange(0, 10);
-						kontaktTable.setRowData(zsm);
-
-					}
-
-				});
-			}
-		});
-
+		
 		/**
 		 * Tabelle Befüllen mit den aus der DB abgerufenen Kontakt Informationen.
 		 */
@@ -469,9 +470,12 @@ public class ShowKontakte extends VerticalPanel {
 				nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 				nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 				
-
-			RootPanel.get("content").add(new Kontaktsuche(n, auswahl.getSelectedItemText(), eingabe.getText()));
-			}
+				if(eingabe.getText() == "") {
+					Window.alert("Upps, es wurde keine Eingabe registriert.");
+				} else {
+					RootPanel.get("content").add(new Kontaktsuche(n, auswahl.getSelectedItemText(), eingabe.getText()));
+				}
+				}
 		});
 
 	}
@@ -479,6 +483,9 @@ public class ShowKontakte extends VerticalPanel {
 	// Wird aufgerufen wenn man Kontakte einer speziellen Kontaktliste anzeigen
 	// lassen will.
 	protected void showKontakteOfKontaktliste(final Nutzer n, Kontaktliste kl) {
+		
+		//Selektierten Kontakt holen.
+		Kontakt k = selectionModel.getSelectedObject();
 
 		/**
 		 * Initialisierung des Labels und eines CellTabels für die Kontakte
@@ -600,15 +607,25 @@ public class ShowKontakte extends VerticalPanel {
 		deleteKontaktFromKontaktliste.addClickHandler(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
-
-				Window.alert("Sind Sie sicher die Kontaktliste " + kl.getTitel() + " löschen zu wollen?");
-
+				Kontakt k = selectionModel.getSelectedObject();
+				
+				
+				if(k != null) {
+				
 				Nutzer n = new Nutzer();
 				n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 				n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
-				// Wenn man nicht der Owner ist wird erst die Berechtigung entfernt.
-				if (n.getId() != kl.getOwnerId()) {
+				/*
+				 * Prüfung ob man der Owner der Kontaktliste ist und ob es sich um die 
+				 * Kontaktliste "Mit mir geteilte Kontakte" handelt um die Berechtigung zu löschen.
+				 * Berechtigung kann nur aus der mit mir geteilte Kontakteliste entfernt werden, 
+				 * handelt es sich nicht um diese Liste wird nur der Kontakt aus der Kontaktliste entfernt.
+				 * 
+				 * Dies dient dazu, weil man Kontakte auch nur aus einer Kontaktliste entfernen will 
+				 * ohne die Intension die Berechtigung zu entfernen.
+				 */
+				if (n.getId() != k.getOwnerId() && kl.getTitel() == "Mit mir geteilte Kontakte") {
 					// Nutzer Cookies setzen und dann per Nutzer holen.
 
 					/*
@@ -628,12 +645,12 @@ public class ShowKontakte extends VerticalPanel {
 
 							for (int i = 0; i < berecht.size(); i++) {
 
-								if (berecht.elementAt(i).getObjectId() == kl.getId()) {
+								if (berecht.elementAt(i).getObjectId() == k.getId()) {
 									Berechtigung b = new Berechtigung();
-									b.setObjectId(kl.getId());
-									b.setOwnerId(kl.getOwnerId());
+									b.setObjectId(k.getId());
+									b.setOwnerId(k.getOwnerId());
 									b.setReceiverId(n.getId());
-									b.setType(kl.getType());
+									b.setType(k.getType());
 
 									ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
 										@Override
@@ -656,29 +673,80 @@ public class ShowKontakte extends VerticalPanel {
 
 					});
 
-					// Ist man Owner der Kontaktliste wird die Kontaktliste direkt gelöscht.
-				} else {
-					// Zusätzliche Prüfung ob es sich um eines der default Kontaktlisten handelt.
-					if (kl.getTitel() == "Meine Kontakte" && kl.getOwnerId() == n.getId()
-							|| kl.getTitel() == "Mit mir geteilte Kontakte" && kl.getOwnerId() == n.getId()) {
+					/*
+					 *  Ist man Owner des Kontakts und befindet sich der Kontakt 
+					 *  in der Liste "Meine Kontakte" wird er permanent gelöscht.
+					 */
+				} else if (kl.getTitel() == "Meine Kontakte" && k.getOwnerId() == n.getId() && k.getIdentifier() != 'r'){
+					ev.deleteKontakt(k, new AsyncCallback<Void>() {
 
-						Window.alert("Tut uns leid, die Standard Listen können hier nicht gelöscht werden.");
-					} else {
-						ev.deleteKontaktliste(kl, new AsyncCallback<Void>() {
+						@Override
+						public void onFailure(Throwable caught) {
+							caught.getMessage().toString();
+							
+						}
+
+						@Override
+						public void onSuccess(Void result) {
+							Window.alert("Der Kontakt wurde erfolgreich gelöscht.");
+							
+						}
+						
+					});
+					/*
+					 * Case 1:
+					 * Ist man nicht der Owner und befindet sich in der Kontaktliste "Meine Kontakte"
+					 * wird der Kontakt nur aus der Kontaktliste entfernt.
+					 * 
+					 * Case 2:
+					 * Befindet man sich nicht in der Kontaktliste "Mit mir geteilte Kontakte" oder ist der 
+					 * Owner des Kontakts wird der Kontakt nur aus der Kontaktliste entfernt.
+					 */
+				} else if (kl.getTitel() == "Meine Kontakte" && k.getOwnerId() != n.getId() ||
+						kl.getTitel() != "Mit mir geteilte Kontakte" && k.getOwnerId() != n.getId()) {
+					 ev.removeKontaktFromKontaktliste(kl, k, new AsyncCallback<Void>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							caught.getMessage().toString();							
+						}
+
+						@Override
+						public void onSuccess(Void result) {
+							Window.alert("Der Kontakt " + k.getVorname() + k.getNachname() + 
+									" wurde erfolgreich aus der Kontaktliste " + kl.getTitel());
+							
+						}
+						 
+						 
+					 });
+					 /*
+					  * Ist man Owner und will einen Kontakt aus einer NICHT Standard Kontaktliste löschen.
+					  */
+				} else if(kl.getTitel() != "Meine Kontakte" && k.getOwnerId() == n.getId()) {
+					 ev.removeKontaktFromKontaktliste(kl, k, new AsyncCallback<Void>() {
 
 							@Override
 							public void onFailure(Throwable caught) {
-								caught.getMessage().toString();
+								caught.getMessage().toString();							
 							}
 
 							@Override
 							public void onSuccess(Void result) {
-								Window.Location.reload();
-
+								Window.alert("Der Kontakt " + k.getVorname() + k.getNachname() + 
+										" wurde erfolgreich aus der Kontaktliste " + kl.getTitel());
+								
 							}
-						});
-					}
+							 
+							 
+						 });
+					
+				} else {
+					Window.alert("Sie können Ihren eigenen Kontakt nicht löschen.");
 				}
+			} else {
+				Window.alert("Bitte wählen sie einen Kontakt aus der gelöscht werden soll.");
+			}
 			}
 		});
 	}
@@ -701,48 +769,50 @@ public class ShowKontakte extends VerticalPanel {
 		n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
 		kontaktTable = new CellTable<Kontakt>();
+		
+		allKontakte();
 
-		// Meine Kontakte des Nutzers herauslesen.
-		ev.findKontaktlisteByTitel(n, "Meine Kontakte", new AsyncCallback<Kontaktliste>() {
-
-			@Override
-			public void onFailure(Throwable err) {
-				Window.alert("Fehler beim RPC Call" + err.toString());
-
-			}
-
-			// Aufruf der der Default Kontaktliste des Nutzers.
-			public void onSuccess(Kontaktliste result) {
-
-				// Aufruf der Kontakte der Default Kontaktliste.
-				ev.getKontakteByKontaktliste(result.getId(), new AsyncCallback<Vector<Kontakt>>() {
-
-					@Override
-					public void onFailure(Throwable err) {
-						Window.alert("Fehler beim RPC Call" + err.toString());
-
-					}
-
-					// Aufruf der der Default Kontaktliste des Nutzers. ("Meine Kontakte")
-					public void onSuccess(Vector<Kontakt> result) {
-						if (result.size() == 0) {
-							kontaktTable.setVisible(false);
-							hp.setVisible(false);
-
-						} else {
-
-							kontaktTable.setVisible(true);
-							hp.setVisible(true);
-						}
-
-						kontaktTable.setRowCount(result.size(), true);
-						kontaktTable.setVisibleRange(0, 10);
-						kontaktTable.setRowData(result);
-
-					}
-				});
-			}
-		});
+//		// Meine Kontakte des Nutzers herauslesen.
+//		ev.findKontaktlisteByTitel(n, "Meine Kontakte", new AsyncCallback<Kontaktliste>() {
+//
+//			@Override
+//			public void onFailure(Throwable err) {
+//				Window.alert("Fehler beim RPC Call" + err.toString());
+//
+//			}
+//
+//			// Aufruf der der Default Kontaktliste des Nutzers.
+//			public void onSuccess(Kontaktliste result) {
+//
+//				// Aufruf der Kontakte der Default Kontaktliste.
+//				ev.getKontakteByKontaktliste(result.getId(), new AsyncCallback<Vector<Kontakt>>() {
+//
+//					@Override
+//					public void onFailure(Throwable err) {
+//						Window.alert("Fehler beim RPC Call" + err.toString());
+//
+//					}
+//
+//					// Aufruf der der Default Kontaktliste des Nutzers. ("Meine Kontakte")
+//					public void onSuccess(Vector<Kontakt> result) {
+//						if (result.size() == 0) {
+//							kontaktTable.setVisible(false);
+//							hp.setVisible(false);
+//
+//						} else {
+//
+//							kontaktTable.setVisible(true);
+//							hp.setVisible(true);
+//						}
+//
+//						kontaktTable.setRowCount(result.size(), true);
+//						kontaktTable.setVisibleRange(0, 10);
+//						kontaktTable.setRowData(result);
+//
+//					}
+//				});
+//			}
+//		});
 
 		/**
 		 * Tabelle Befüllen mit den aus der DB abgerufenen Kontakt Informationen.
@@ -841,6 +911,63 @@ public class ShowKontakte extends VerticalPanel {
 				}
 			}
 
+		});
+
+	}
+	
+	public void allKontakte() {
+		//Setzen der Cookies für den Nutzer um mit ihm arbeiten zu können.
+		Nutzer n = new Nutzer();
+		n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+		n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
+		
+		/**
+		 * Diese aufeinander folgenden Methoden rufen für den Nutzer die eigenen
+		 * Kontakte und die mit IHM geteilten Kontakte auf und führt sie in einer
+		 * gemeinsamen Liste zusammen.
+		 */
+		ev.getAllKontakteByOwner(n, new AsyncCallback<Vector<Kontakt>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.getMessage().toString();
+
+			}
+
+			// Meine Kontakte des Nutzers bei dem er der Owner ist werden der Table
+			// hinzugefügt.
+			@Override
+			public void onSuccess(Vector<Kontakt> ownKontakte) {
+
+				// Holt Meine Kontakte die mit dem Nutzer geteilt wurden.
+				ev.getAllSharedKontakteByReceiver(n.getId(), new AsyncCallback<Vector<Kontakt>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.getMessage().toString();
+
+					}
+
+					// Alle geteilten Kontakte werden der Tabel hinzugefügt.
+					@Override
+					public void onSuccess(Vector<Kontakt> sharedKontakte) {
+						
+						// Leerer Vector für Zusammenführung erzeugen.
+						Vector<Kontakt> zsm = new Vector<Kontakt>();
+
+						// Zusammenführung von geteilten und eigenen Kontakten des Nutzers in einer
+						// Tabelle.
+						zsm.addAll(ownKontakte);
+						zsm.addAll(sharedKontakte);
+
+						kontaktTable.setRowCount(zsm.size(), true);
+						kontaktTable.setVisibleRange(0, 10);
+						kontaktTable.setRowData(zsm);
+
+					}
+
+				});
+			}
 		});
 
 	}

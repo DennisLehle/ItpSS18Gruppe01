@@ -24,7 +24,7 @@ public interface EditorServiceAsync {
 	void init(AsyncCallback<Void> callback);
 
 	
-	void findNutzerById(int nutzerId, AsyncCallback<Nutzer> callback);
+	void getNutzerById(int nutzerId, AsyncCallback<Nutzer> callback);
 	
 	
 	void createNutzer(String emailAddress, AsyncCallback<Nutzer> callback);
@@ -36,7 +36,7 @@ public interface EditorServiceAsync {
 	void getUserByGMail(String email, AsyncCallback<Nutzer> callback);
 
 	
-	void createKontakt(String vorname, String nachname, Nutzer n, AsyncCallback<Void> callback);
+	void createKontakt(String vorname, String nachname, Nutzer n, AsyncCallback<Kontakt> callback);
 
 
 	void saveKontakt(Kontakt k, AsyncCallback<Kontakt> callback);

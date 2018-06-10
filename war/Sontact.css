@@ -37,6 +37,7 @@ html, body {
 	background: #999 url('https://i.pinimg.com/originals/df/c3/09/dfc309dd3b5d8971c5425ea1f8a28f3d.jpg') no-repeat left 50%;
 	background-size: cover;
 	color: white;
+	
 }
 
 /** Das Nutzermenu setzt den Namen des Users und den Logout Link auf die obere Rechte Seite des Headers */
@@ -44,10 +45,17 @@ html, body {
 	display: flex;
 	width: 30%;
 	justify-content: flex-end;
+	padding-top: 60px;
+	font-size:15px;
+	font: 'Gotham';
+	font-weight: 100px;
+	font-style: oblique;
+	letter-spacing: 1px;
 }
 
 #nutzermenu .gwt-HTML {
-	padding: 20px 0px;
+	padding:  0px;
+	margin-left: 10px;
 }
 
 #nutzermenu p {
@@ -87,8 +95,18 @@ h1 {
 }
 
 h2 {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	text-align: right;
+}
+
+h3 {
+	font-family: 'Gotham';
+	font-weight: 100;
+	text-align: center;
+	letter-spacing: 7px;
+	font-size: 18px;
+	font-style: oblique;
+	border: 10px;
+	padding-top: 20px;
 }
 
 h1 a {
@@ -96,6 +114,11 @@ h1 a {
 	color: rgba(255, 255, 255, 0.0);
 	padding: 20px 0px 20px 30px;
 }
+
+h5 {
+	font: roboto;
+	font-weight: bold;
+	}
 
 /*
  * Ende des Headers
@@ -184,8 +207,9 @@ h1 a {
 #footer {
 	padding: 10px 0px;
 	text-align: center;
-	color: #777;
+	color: #666666;
 	font-size: 80%;
+	letter-spacing: 1px;
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -194,6 +218,7 @@ h1 a {
 
 #footer .gwt-HTML {
 	margin: 0px 5px;
+	color: #666666
 }
 
 #footer a {

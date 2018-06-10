@@ -117,7 +117,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 					int id = kontakt.elementAt(i).getOwnerId();
 
 					if (teilung == true) {
-						kon.addColumn(new Column("Geteilt von: " + getEditorService().findNutzerById(id).getEmailAddress()));
+
+						kon.addColumn(new Column("Geteilt von: " + getEditorService().getNutzerById(id).getEmailAddress()));
+
 					} else {
 						kon.addColumn(new Column("Nicht geteilt"));
 					}

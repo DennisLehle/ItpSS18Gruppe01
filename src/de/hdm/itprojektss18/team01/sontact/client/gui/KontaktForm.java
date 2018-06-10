@@ -106,11 +106,11 @@ public class KontaktForm extends VerticalPanel {
 				BtnPanel.add(editKontaktBtn);
 				
 				//ClickHandler zum teilen von Kontakten
-				Button shareBtn = new Button(
-						"<image src='/images/share.png' width='30px' height='30px' align='center' /> teilen");
+				Button sharedeleteBtn = new Button(
+						"<image src='/images/share.png' width='30px' height='30px' align='center' /> löschen");
 
-				shareBtn.addClickHandler(new shareKontaktlisteClickHandler());
-				BtnPanel.add(shareBtn);
+				sharedeleteBtn.addClickHandler(new shareKontaktlisteClickHandler());
+				BtnPanel.add(sharedeleteBtn);
 				
 				
 				//Abfrage wer der Owner des Kontaktes ist.
@@ -206,7 +206,7 @@ public class KontaktForm extends VerticalPanel {
 				vp.add(ownerLb);
 	
 				RootPanel.get("content").add(vp);
-				RootPanel.get("content").add(new ShowEigenschaften(n, selectedKontakt));
+				RootPanel.get("content").add(new ShowEigenschaften(n, k));
 				RootPanel.get("content").add(BtnPanel);
 				
 				RootPanel.get("content").add(datePanel);
@@ -310,18 +310,15 @@ public class KontaktForm extends VerticalPanel {
 	}
 	
 	/**
-	 * ClickHandler zum teilen von Kontakten.
+	 * ClickHandler zum löschen einer Teilung.
 	 * 
 	 * @author Dennis Lehle
 	 *
 	 */
 	private class shareKontaktlisteClickHandler implements ClickHandler {
 		public void onClick(ClickEvent event) {
-
-			Kontakt k = selectedKontakt;
 			
-			
-		
+			MessageBox.deleteTeilhaber("Teilhaberschaft entfernen", "Wählen sie für die Löschung einer Teilhaberschaft eine EMail Adresse aus.", null, selectedKontakt);	
 
 		}
 

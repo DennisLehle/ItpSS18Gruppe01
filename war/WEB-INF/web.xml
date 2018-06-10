@@ -24,7 +24,7 @@
   
   <servlet-mapping>
     <servlet-name>reportServlet</servlet-name>
-    <url-pattern>/sontactreport/reportservice</url-pattern>
+    <url-pattern>/sontactreport/reportgenerator</url-pattern>
   </servlet-mapping>
 
  <servlet>

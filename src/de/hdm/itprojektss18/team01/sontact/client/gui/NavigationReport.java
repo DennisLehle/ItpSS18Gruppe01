@@ -8,6 +8,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -16,6 +17,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 import de.hdm.itprojektss18.team01.sontact.shared.report.AlleKontakteReport;
 import de.hdm.itprojektss18.team01.sontact.shared.report.HTMLReportWriter;
+import de.hdm.itprojektss18.team01.sontact.shared.report.PlainTextReportWriter;
 
 
 /**
@@ -34,15 +36,17 @@ public class NavigationReport extends VerticalPanel{
 	 * Buttons der Navigation. 
 	 * final, damit Callbacks sie verändern können.
 	 */
-	final Button showAllKontakteReport = new Button("Meine Kontakte Anzeigen");
+	
 	final Button showAllKontakteNachBestimmtenAusp = new Button("Kontakte nach Ausprägungen");
 	final Button showReportNotVisitedButton = new Button("Alle geteilten Kontakte anzeigen");
+	Nutzer nutzer = new Nutzer();
+	VerticalPanel reportPanel = new VerticalPanel();
 	
-	final VerticalPanel reportPanel = new VerticalPanel();
 	
 	
 
 	public NavigationReport(final Nutzer n){
+		final Button showAllKontakteReport = new Button("Meine Kontakte Anzeigen");
 		
 		VerticalPanel vp = new VerticalPanel();
 		/**
@@ -78,44 +82,32 @@ public class NavigationReport extends VerticalPanel{
 			 * Button geklickt wird.
 			 */
 			public void onClick(ClickEvent event) {
-
-				RootPanel.get("contentR").clear();
-				
-				
-				reportverwaltung.createAlleKontakteReport(n, new AsyncCallback<AlleKontakteReport>(){
+				final HTMLReportWriter writer = new HTMLReportWriter();
+			//	final PlainTextReportWriter write3r = new PlainTextReportWriter();
+				ClientsideSettings.getReportGeneratorService().createAlleKontakteReport(n, new AsyncCallback <AlleKontakteReport>() {
 
 					@Override
-					public void onFailure(Throwable error) {
-						error.getMessage().toString();
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
 						
 					}
 
 					@Override
-					public void onSuccess(AlleKontakteReport report) {
-						if (report != null) {
-							/*
-							 * Um den Report in HTML-Text zu überführen benötigen wir einen HTMLReportWriter
-							 */
-							HTMLReportWriter writer = new HTMLReportWriter();
-							writer.process(report);
-							/*
-							 * Wir leeren das subPanel, damit etwaige vorherige Reports nicht mehr angezeigt werden
-							 */
-							RootPanel.get("contentR").add(reportPanel);
-							/*
-							 * Wir befüllen das subPanel mit dem HTML-Text den wir vom ReporWriter erhalten
-							 */
-							reportPanel.add(new HTML(writer.getReportText()));
-							/*
-							 * Wir aktivieren den Button zur Anforderung eines Reports wieder, da der angeforderte Report ausgegeben ist
-							 */
-							showAllKontakteReport.setEnabled(true);
-						}
+					public void onSuccess(AlleKontakteReport result) {
+						
+						RootPanel.get("contentR").clear();
+						//write3r.process(result);
+					writer.process(result);
+					
+					
+					RootPanel.get("contentR").add(new HTML (writer.getReportText()));
 						
 					}
 					
+					
 				});
-
+				
+				
 			}
 		});
 		
@@ -155,5 +147,48 @@ public class NavigationReport extends VerticalPanel{
 			}
 		});
 	}
+	
+	class createAllKontakteReportCallback implements
+	AsyncCallback<AlleKontakteReport> {
+		@Override
+		public void onFailure(Throwable error) {
+			Window.alert("Profile Generation failed: " + error.getMessage());
+			
+
+		}
+
+		@Override
+		public void onSuccess(AlleKontakteReport report) {
+			
+			if (report != null) {
+				
+				/*
+				 * Um den Report in HTML-Text zu überführen benötigen wir einen HTMLReportWriter
+				 */
+				HTMLReportWriter writer = new HTMLReportWriter();
+				writer.process(report);
+			
+				
+			
+				/*
+				 * Wir leeren das subPanel, damit etwaige vorherige Reports nicht mehr angezeigt werden
+				 */
+			//	reportPanel.clear();
+				/*
+				 * Wir befüllen das subPanel mit dem HTML-Text den wir vom ReporWriter erhalten
+				 */
+				RootPanel.get("contentR").add(new HTML(writer.getReportText()));
+				//Window.alert(writer.getReportText());
+				/*
+				 * Wir aktivieren den Button zur Anforderung eines Reports wieder, da der angeforderte Report ausgegeben ist
+				 */
+			//	RootPanel.get("contentR").add(reportPanel);
+			}
+		//	reportPanel.add((IsWidget) this);
+		}
+		
+		
+	}	
+
 	
 }

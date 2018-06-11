@@ -25,6 +25,9 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.*;
 import de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl;
 import de.hdm.itprojektss18.team01.sontact.shared.ReportGenerator;
 
+/**
+ * Implementierung des serverseitigen RPC-Services für den Report. 
+ */
 public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportGenerator {
 
 	/**
@@ -59,8 +62,30 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * *************************************************************************
 	 */
 
+	
+	/**
+	 * 
+	 * KontaktReport: = simpleReport 
+	 * 
+	 * 
+	 * -> K mit allen A`s
+	 * 
+	 */
+	
+	
+	
+	
+	
 	/**
 	 * Report der alle Kontakte eines Nutzers ausgibt.
+	 * 
+	 * 
+	 * AllKontakteReport: compositeReprort
+	 * 
+	 * iternativ RO KoktaktReport, soviele Kontakte es gibt. 
+	 * 
+	 * 
+	 * 
 	 */
 	@Override
 	public AlleKontakteReport createAlleKontakteReport(Nutzer n) throws IllegalArgumentException {
@@ -88,8 +113,10 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		head.addColumn(new Column("Erstellungsdatum"));
 		head.addColumn(new Column("Modifikationsdatum"));
 
-		// Kontakt der Geteilt oder nicht Geteilt wurde
-		head.addColumn(new Column("Status"));
+		/* Eigentuemer des Kontaktes fuer die Fallunterscheidung
+		 * welcher Kontakt mit dem 
+		 */
+		head.addColumn(new Column("Eigentümer"));
 
 		// Kopfzeile dem Report hinzufuegen
 		//report.addRow();
@@ -111,25 +138,22 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			kon.addColumn(new Column(kontakt.elementAt(i).getErstellDat().toString()));
 			kon.addColumn(new Column(kontakt.elementAt(i).getModDat().toString()));
 			
-
-				if (kontakt != null) {
-					boolean teilung = this.getEditorService().getStatusForObject(kontakt.elementAt(i).getId(), 'k');
-					int id = kontakt.elementAt(i).getOwnerId();
-
-					if (teilung == true) {
-
-						kon.addColumn(new Column("Geteilt von: " + getEditorService().getNutzerById(id).getEmailAddress()));
-
-					} else {
-						kon.addColumn(new Column("Nicht geteilt"));
-					}
-				}
-
-				report.addRow(kon);
 			
+				if (kontakt != null) {
+//					boolean teilung = this.getEditorService().getStatusForObject(kontakt.elementAt(i).getId(), 'k');
+//					int id = kontakt.elementAt(i).getOwnerId();
+//					if (teilung == true) {
 
+						kon.addColumn(new Column(getEditorService().getNutzerById(kontakt.elementAt(i).getOwnerId()).getEmailAddress()));
 
+//					} else {
+//						kon.addColumn(new Column(getEditorService().getNutzerById(id).getEmailAddress()));
+//				}
+				}
+				
+				report.addRow(kon);
 		}
+		
 		return report;
 	}
 

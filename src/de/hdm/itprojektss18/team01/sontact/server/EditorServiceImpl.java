@@ -21,6 +21,10 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
+
+/**
+ * Implementierung des serverseitigen RPC-Services für den Editor. 
+ */
 public class EditorServiceImpl extends RemoteServiceServlet implements EditorService {
 
 	public EditorServiceImpl() throws IllegalArgumentException {
@@ -32,10 +36,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// /**
-	// * Ein spezielles Nutzer-Objekt wird referenziert.
-	// */
-	// private Nutzer nutzer = null;
 
 	/**
 	 * Die Mapperklasse wird referenziert, die das Businessobject <Nutzer> mit der
@@ -56,8 +56,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	private KontaktlistenMapper klMapper = null;
 
 	/**
-	 * Die Mapperklasse wird referenziert, die das Businessobject
-	 * <KontaktlisteKontakt> mit der Datenbank vergleicht.
+	 * Die Mapperklasse wird referenziert, die das Businessobject <KontaktlisteKontakt> mit
+	 * der Datenbank vergleicht.
 	 */
 	private KontaktlisteKontaktMapper klkMapper = null;
 
@@ -80,16 +80,18 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	private BerechtigungMapper bMapper = null;
 
 	/*
-	 * *************************************************************************
-	 * ABSCHNITT - Beginn: Initialisierung
-	 * *************************************************************************
+	 * *********************************************************************************
+	 * ABSCHNITT ANFANG: Initialisierung
+	 * *********************************************************************************
 	 */
 
 	/**
 	 * Vollstaendiger Satz von Mappern mit deren Hilfe die Administratorenklasse
 	 * <EditorServiceImpl> mit der Datenbank kommunizieren kann.
 	 */
-	public void init() throws IllegalArgumentException {
+	public void init()
+			throws IllegalArgumentException {
+		
 		this.nMapper = NutzerMapper.nutzerMapper();
 		this.kMapper = KontaktMapper.kontaktMapper();
 		this.klMapper = KontaktlistenMapper.kontaktlistenMapper();
@@ -98,50 +100,142 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.aMapper = AuspraegungMapper.auspraegungMapper();
 		this.bMapper = BerechtigungMapper.berechtigungMapper();
 	}
-
+	
 	/*
-	 * *************************************************************************
-	 * ABSCHNITT - Ende: Initialisierung
-	 * *************************************************************************
+	 * *********************************************************************************
+	 * ABSCHNITT ENDE: Initialisierung
+	 * *********************************************************************************
 	 */
-
+	
 	/*
-	 * *************************************************************************
-	 * ABSCHNITT - Beginn Methoden fuer das Erstellen von Objekten:
-	 * 
-	 * Nutzer Kontakt + KontaktRegistrierung Kontaktliste +
-	 * KontaktlisteRegistrierung Eigenschaft Auspraegung + Auspraegung fuer neue
-	 * Eigenschaft Berechtigung
-	 * 
-	 * *************************************************************************
+	 * *********************************************************************************
+	 * ABSCHNITT ANFANG: NUTZER 
+	 * *********************************************************************************
 	 */
-
+	
 	/**
 	 * Erzeugen eines neuen Nutzers, dieser wird angelegt und anschliessend in der
 	 * DB gespeichert.
 	 * 
-	 * @param String
-	 *            emailAdress
+	 * @param String email
 	 * @return Nutzer
 	 */
-
-	public Nutzer createNutzer(String emailAddress) throws IllegalArgumentException {
-
-		init();
-
+	public Nutzer createNutzer(String email)
+			throws IllegalArgumentException {
+		
 		// Das Erstellen eines Nutzerobjektes.
 		Nutzer nutzer = new Nutzer();
-
+	
 		// Hier wird die (vorausgesetzte) gMail-Adresse des Nutzers hinterlegt.
-		nutzer.setEmailAddress(emailAddress);
-
+		nutzer.setEmailAddress(email);
+	
 		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der
 		// naechst hoeheren ID angepasst wird.
 		nutzer.setId(1);
-
+	
 		// Speichern und Eintragen des erstellten Nutzers in der DB.
 		return this.nMapper.insert(nutzer);
 	}
+	
+	
+	/**
+	 * Anhand der identifizierenden Emailaddresse wird ueberprueft, ob diese als
+	 * Nutzer bereits existiert.
+	 * 
+	 * @param email
+	 * @return Nutzer
+	 */
+	public Nutzer getUserByGMail(String email)
+			throws IllegalArgumentException {
+
+		try {
+			if (nMapper.findUserByGMail(email) == null) {
+				return null;
+
+			} else {
+				return nMapper.findUserByGMail(email);
+			}
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		
+		return null;
+	}
+
+	
+	/**
+	 * Auslesen eines Nutzers anhand der id. 
+	 */
+	public Nutzer getNutzerById(int nutzerId)
+			throws IllegalArgumentException {
+		
+		return this.nMapper.findNutzerById(nutzerId);
+	}
+
+	
+	/**
+	 * Ein Nutzer wird mit allen Zusammenhaengen zum Objekt aus der Datenbank
+	 * geloescht.
+	 * 
+	 * @param Nutzer
+	 * @return void
+	 */
+	public void deleteNutzer(Nutzer n)
+			throws IllegalArgumentException {
+
+		/* entfernt alle Berechtigungen auf Kontakt-, Kontaktlisten- oder Aupraegungs-
+		 * Objekte, welche nutzerseitig gesetzt sind */
+		Vector<Berechtigung> bvo = this.getAllBerechtigungenByOwner(n.getId());
+		if (bvo != null) {
+			for (Berechtigung b : bvo) {
+				this.bMapper.delete(b);
+			}
+		}
+
+		/* entfernt alle Kontaktlisten, welche mit dem Nutzer in einer
+		 * Eigentumsbeziehung stehen sowie alle Eintraege der Kontaktliste (aus
+		 * KontaktlisteKontakt) und Berechtigungen auf die Kontaktliste */
+		Vector<Kontaktliste> klv = this.getKontaktlistenByOwner(n);
+		if (klv != null) {
+			for (Kontaktliste kl : klv) {
+				this.deleteKontaktliste(kl);
+			}
+		}
+
+		/* entfernt Meine Kontakte, welche mit dem Nutzer in einer Eigentumsbeziehung
+		 * stehen sowie alle Auspraegungen eines jeden Kontaktes, alle
+		 * Kontaktlisteneintrï¿½ge und alle Berechtigungen auf den Kontakt */
+		Vector<Kontakt> kv = this.getAllKontakteByOwner(n);
+		if (kv != null) {
+			for (Kontakt k : kv) {
+				this.deleteKontakt(k);
+			}
+		}
+
+		/* entfernt alle Berechtigungen auf Kontakt-, Kontaktliste- oder Auspraegungs-
+		 * Objekte, welche fuer den Nutzer gesetzt sind */
+		Vector<Berechtigung> bvr = this.getAllBerechtigungenByReceiver(n.getId());
+		if (bvr != null) {
+			for (Berechtigung b : bvr) {
+				this.bMapper.delete(b);
+			}
+		}
+		
+		// entfernen des Nutzer
+		this.nMapper.delete(n);
+	}
+	
+	/*
+	 * *********************************************************************************
+	 * ABSCHNITT ENDE: NUTZER 
+	 * *********************************************************************************
+	 */
+	
+	/*
+	 * *********************************************************************************
+	 * ABSCHNITT ANFANG: KONTAKT 
+	 * *********************************************************************************
+	 */
 
 	/**
 	 * Erzeugen eines neuen Kontakts, dieser wird angelegt und anschliessend in der
@@ -149,49 +243,43 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Nutzers "Meine Kontakte" zugeordnet und steht dem Nutzer nun zu weiteren
 	 * Funktionen zur Verfuegung.
 	 * 
-	 * @param String
-	 *            vorname
-	 * @param String
-	 *            nachname
-	 * @param Nutzer
-	 *            n
-	 * @return void
+	 * @param String vorname, String nachname, Nutzer n
+	 * @return Kontakt
 	 */
-
-	public Kontakt createKontakt(String vorname, String nachname, Nutzer n) throws IllegalArgumentException {
-
-		init();
-
+	public Kontakt createKontakt(String vorname, String nachname, Nutzer n)
+			throws IllegalArgumentException {
+	
 		// Das Erstellen eines Kontakt Objektes mit Vor- und Nachnamen.
 		Kontakt k = new Kontakt();
 		k.setVorname(vorname);
 		k.setNachname(nachname);
-
+	
 		// Setzen des Erstellungsdatums vom Typ Date.
 		k.setErstellDat(new Timestamp(System.currentTimeMillis()));
-
+	
 		// Zeitgleiches setzen des Modifikationsdatums vom Typ Date.
 		k.setModDat(new Timestamp(System.currentTimeMillis()));
-
+	
 		// Das Setzen der Owner-ID nach dem eingeloggten Nutzer.
 		k.setOwnerId(n.getId());
-
+	
 		// Kontakt wird mit einem Objektypen vom Datentyp Char gekennzeichnet.
 		k.setIdentifier('k');
-
+	
 		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der
 		// naechst hoeheren ID angepasst wird.
 		k.setId(1);
 		
 		Kontakt k1 = new Kontakt();
 		k1 = kMapper.insert(k);
-
+	
 		// Kontaktliste und Kontakt werden der Zwischentabelle hinzugefuegt.
 		this.addKontaktToKontaktliste(findKontaktlisteByTitel(n, "Meine Kontakte"), k1);
 		return k1;
 		
 	}
-
+	
+	
 	/**
 	 * Erzeugen eines neuen Kontakts fï¿½r den Nutzers bei der Systemregistrierung.
 	 * Dieser Kontakt stellt eine Art "Visitenkarte" des eingeloggten Nutzers dar,
@@ -200,13 +288,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * des Nutzers und alle weiteren, die vom Nutzer angelegt werden, gespeichert
 	 * sind.
 	 * 
-	 * @param String
-	 *            vorname
-	 * @param String
-	 *            nachname
-	 * @param Nutzer
-	 *            n
-	 * @return Kontakt k1
+	 * @param String vorname, String nachname, Nutzer n
+	 * @return Kontakt
 	 */
 
 	public Kontakt createKontaktRegistrierung(String vorname, String nachname, Nutzer n)
@@ -249,315 +332,33 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		return k;
 	}
-
+	
 	/**
-	 * Erzeugen einer neuen Kontaktliste, diese wird angelegt und anschliessend in
-	 * der DB gespeichert. Die Kontaktliste steht dem Nutzer nun zu weiteren
-	 * Funktionen zur Verfuegung.
+	 * Modifikation eines Kontakts.
 	 * 
-	 * @param String
-	 *            titel
-	 * @param Nutzer
-	 *            n
-	 * @return Kontaktliste
-	 */
-
-	public Kontaktliste createKontaktliste(String titel, Nutzer n) throws IllegalArgumentException {
-
-		init();
-
-		// Das Erstellen eines Kontaktlisten Objektes mit Titel und Owner-ID.
-		Kontaktliste kl = new Kontaktliste();
-		kl.setTitel(titel);
-		kl.setOwnerId(n.getId());
-
-		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der
-		// naechst hoeheren ID angepasst wird.
-		kl.setId(1);
-
-		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
-		return this.klMapper.insert(kl);
-	}
-
-	/**
-	 * Erzeugen der Default Kontaktliste "Meine Kontakte" des Nutzer. Diese wird
-	 * angelegt und anschliessend in der DB gespeichert. Die Kontaktliste bildet den
-	 * Speicherort aller angelegten Kontakte.
-	 * 
-	 * @param Nutzer
-	 *            n
-	 * @return Kontaktliste
-	 */
-
-	public Kontaktliste createKontaktlisteRegistrierung(Nutzer n) throws IllegalArgumentException {
-
-		init();
-
-		// Das Erstellen eines Kontaktlisten Objektes mit Titel "Meine Kontakte" und
-		// Owner-ID.
-		Kontaktliste kl = new Kontaktliste();
-		kl.setTitel("Meine Kontakte");
-		kl.setOwnerId(n.getId());
-		kl.setId(1);
-
-		// Erstellen der eigenen Kontaktliste bei dem die geteilten Kontakte
-		// hineingespeichert werden.
-		createKontaktliste("Mit mir geteilte Kontakte", n);
-
-		return this.klMapper.insert(kl);
-
-	}
-
-	/**
-	 * Erzeugen einer Eigenschaft, welche angelegt und anschliessend in der DB
-	 * gespeichert wird. Der Nutzer kann hiermit eigene Eigenschaften anlegen und
-	 * mit Auspraegungen vervollstaendigen.
-	 * 
-	 * @param String
-	 *            bezeichnung
-	 * @return Eigenschaft
-	 */
-
-	public Eigenschaft createEigenschaft(String bezeichnung) throws IllegalArgumentException {
-
-		init();
-
-		// Das Erstellen eines Eigenschaft Objektes mit Bezeichnung.
-		Eigenschaft e = new Eigenschaft();
-		e.setBezeichnung(bezeichnung);
-
-		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der
-		// naechst hoeheren ID angepasst wird.
-		// e.setId(1);
-
-		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
-		return this.eMapper.insert(e);
-	}
-
-	/**
-	 * Erzeugen einer neuen Auspraegung, welche angelegt und anschliessend in der DB
-	 * gespeichert wird. Der Nutzer kann hiermit seine Kontakte mit Auspraegungen
-	 * bereichern und erhaelt die Moeglichkeit "Kontaktinformationen" in Form von
-	 * Auspraegungen zu hinterlegen.
-	 * 
-	 * @param String
-	 *            wert
-	 * @param int
-	 *            eigenschaftId
-	 * @param int
-	 *            kontaktId
-	 * @return Auspraegung
-	 */
-
-	public Auspraegung createAuspraegung(String wert, int eigenschaftId, int kontaktId)
-			throws IllegalArgumentException {
-
-		// Das Erstellen eines Auspraegung Objektes mit Wert, EigenschaftId und
-		// KontaktId.
-		Auspraegung a = new Auspraegung();
-		a.setWert(wert);
-		a.setEigenschaftId(eigenschaftId);
-		a.setKontaktId(kontaktId);
-
-		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der
-		// naechst hoeheren ID angepasst wird.
-		// a.setId(1);
-
-		// Anpassung des Modifikationsdatums des Kontakt Objektes
-		// saveModifikationsdatum(a.getKontaktId());
-
-		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
-		return this.aMapper.insert(a);
-	}
-
-	/**
-	 * Erzeugen einer neuen Auspraegung fuer eine vom Nutzer definierte Eigenschaft.
-	 * Diese wird angelegt und anschliessend in der DB gespeichert. Der Nutzer kann
-	 * hiermit in einem Zuge Eigenschaften anlegen und mit einem Auspraegungswert
-	 * befuellen.
-	 * 
-	 * @param String
-	 *            bezeichnung
-	 * @param String
-	 *            wert
-	 * @param Kontakt
-	 *            k
-	 * @return void
-	 */
-
-	public void createAuspraegungForNewEigenschaft(String bezeichnung, String wert, Kontakt k)
-			throws IllegalArgumentException {
-
-		//Es wird eine EIgenschaft erstellt und dieser wird die EigenschaftsId Ã¼bermittelt.
-		createAuspraegung(wert, createEigenschaft(bezeichnung).getId(), k.getId());
-	}
-
-	/**
-	 * Erstellung einer neuen Berechtigung. Es wird eine neue Berechtigung fuer eine
-	 * neue Teilhaberschaft an einem bestimmten Objekt erteilt.
-	 * 
-	 * @param int
-	 *            ownerId
-	 * @param int
-	 *            receiverId
-	 * @param int
-	 *            objectId
-	 * @param char
-	 *            type
-	 * @return Berechtigung
-	 */
-
-	public Berechtigung createBerechtigung(int ownerId, int receiverId, int objectId, char type)
-			throws IllegalArgumentException {
-
-		init();
-
-		// Erzeugen eines neuen Berechtigung Objektes mit OwnerId, ReceiverId, ObjectId
-		// und Type.
-		Berechtigung b = new Berechtigung();
-		b.setId(1);
-		b.setOwnerId(ownerId);
-		b.setReceiverId(receiverId);
-		b.setObjectId(objectId);
-		b.setType(type);
-
-		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
-		return this.bMapper.insert(b);
-	}
-
-	/*
-	 * *************************************************************************
-	 * ABSCHNITT - Ende: Methoden fuer das Erstellen von Objekten
-	 * *************************************************************************
-	 */
-
-	/**
-	 * Anhand der identifizierenden Emailaddresse wird der Nutzer ï¿½berprï¿½ft, ob
-	 * der Nutzer unter der hinterlegten Emailadresse existiert.
-	 * 
-	 * @param email
-	 * @return Nutzer
-	 */
-	public Nutzer getUserByGMail(String email) throws IllegalArgumentException {
-
-		init();
-		try {
-			if (nMapper.findUserByGMail(email) == null) {
-				return null;
-
-			} else {
-				return nMapper.findUserByGMail(email);
-			}
-		} catch (Exception e) {
-			e.getMessage();
-		}
-		return null;
-	}
-
-	/**
-	 * Diese Methode identifiziert einen Nutzer anhand seiner Id.
-	 */
-	public Nutzer getNutzerById(int nutzerId) throws IllegalArgumentException {
-		return this.nMapper.findNutzerById(nutzerId);
-	}
-
-	/**
-	 * Ein Nutzer wird mit all seinen hinterlegten Objekten aus der Datenbank
-	 * geloescht.
-	 * 
-	 * @param Nutzer
-	 * @return void
-	 */
-	public void deleteNutzer(Nutzer n) throws IllegalArgumentException {
-
-		/*
-		 * entfernt alle Berechtigungen auf Kontakt-, Kontaktlisten- oder Aupraegungs-
-		 * Objekte, welche nutzerseitig gesetzt sind
-		 */
-		Vector<Berechtigung> bvo = this.getAllBerechtigungenByOwner(n.getId());
-		if (bvo != null) {
-			for (Berechtigung b : bvo) {
-				this.bMapper.delete(b);
-			}
-		}
-
-		/*
-		 * entfernt alle Kontaktlisten, welche mit dem Nutzer in einer
-		 * Eigentumsbeziehung stehen sowie alle Eintraege der Kontaktliste (aus
-		 * KontaktlisteKontakt) und Berechtigungen auf die Kontaktliste
-		 */
-		Vector<Kontaktliste> klv = this.getKontaktlistenByOwner(n);
-		if (klv != null) {
-			for (Kontaktliste kl : klv) {
-				this.deleteKontaktliste(kl);
-			}
-		}
-
-		/*
-		 * entfernt Meine Kontakte, welche mit dem Nutzer in einer Eigentumsbeziehung
-		 * stehen sowie alle Auspraegungen eines jeden Kontaktes, alle
-		 * Kontaktlisteneintrï¿½ge und alle Berechtigungen auf den Kontakt
-		 */
-		Vector<Kontakt> kv = this.getAllKontakteByOwner(n);
-		if (kv != null) {
-			for (Kontakt k : kv) {
-				this.deleteKontakt(k);
-			}
-		}
-
-		/*
-		 * entfernt alle Berechtigungen auf Kontakt-, Kontaktliste- oder Auspraegungs-
-		 * Objekte, welche fuer den Nutzer gesetzt sind
-		 * 
-		 */
-		Vector<Berechtigung> bvr = this.getAllBerechtigungenByReceiver(n.getId());
-		if (bvr != null) {
-			for (Berechtigung b : bvr) {
-				this.bMapper.delete(b);
-			}
-		}
-		// entfernen des Nutzer
-		this.nMapper.delete(n);
-	}
-
-	/*
-	 * *************************************************************************
-	 * ABSCHNITT - Ende: Methoden fuer Nutzer
-	 * *************************************************************************
-	 */
-
-	/*
-	 * *************************************************************************
-	 * ABSCHNITT - Beginn: Methoden fuer Kontakt
-	 * *************************************************************************
-	 */
-
-	/**
-	 * Aktualisierung eines modifizierten Kontakts.
-	 * 
-	 * @param Kontakt
-	 *            k
+	 * @param Kontakt k
 	 * @return Kontakt
 	 */
-	public Kontakt saveKontakt(Kontakt k) throws IllegalArgumentException {
-		init();
+	public Kontakt saveKontakt(Kontakt k)
+			throws IllegalArgumentException {
+		
 		// Modifikationsdatum wird aktualisiert.
 		k.setModDat(new Timestamp(System.currentTimeMillis()));
 		return kMapper.update(k);
 	}
 
+	
 	/**
 	 * Loeschen eines Kontakts mit seinen Auspraegungen seinen
-	 * Kontaktlistenzugehoerigkeiten und seinen Berechtigungen
+	 * Kontaktlistenzugehoerigkeiten und seinen Berechtigungseintraegen
 	 * 
-	 * @param Kontakt
-	 *            k
+	 * @param Kontakt k
 	 * @return void
 	 */
-	public void deleteKontakt(Kontakt k) throws IllegalArgumentException {
+	public void deleteKontakt(Kontakt k)
+			throws IllegalArgumentException {
 
-		/*
-		 * zunï¿½chst Abruf aller Berechtgigungen: Abgleich aller Berechtigungen
+		/* zunaechst Abruf aller Berechtgigungen: Abgleich aller Berechtigungen
 		 * (objektId) mit der Id des Kontaktes bei ï¿½bereinstummung entfernen der
 		 * Berechtigungen fï¿½r den Kontakt mit allen zugehï¿½rigen Berechtigungen die
 		 * Auspraegungen des Kontaktes k
@@ -584,14 +385,17 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.kMapper.delete(k);
 	}
 
+	
 	/**
 	 * Auslesen eines Kontaktes anhand seiner Id.
 	 * 
 	 */
-	public Kontakt getKontaktById(int id) throws IllegalArgumentException {
-		init();
+	public Kontakt getKontaktById(int id)
+			throws IllegalArgumentException {
+	
 		return this.kMapper.findKontaktById(id);
 	}
+	
 
 	/**
 	 * Auslesen des Registierungs- Kontaktformulars eines Nutzers.
@@ -599,29 +403,33 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param n
 	 * @return
 	 */
-	public Kontakt getOwnKontakt(Nutzer n) {
+	public Kontakt getOwnKontakt(Nutzer n)
+			throws IllegalArgumentException {
+		
 		return this.kMapper.findNutzerKontaktByIdentifier(n.getId());
 	}
+	
 
 	/**
-	 * Auslesen aller Kontakte, bei diesen der Nutzer als Eigentuemer hinterlegt
+	 * Ausgabe aller Kontakte, bei welchen der Nutzer als Eigentuemer hinterlegt
 	 * ist.
 	 * 
-	 * @param Nutzer
-	 *            n
+	 * @param Nutzer n
 	 * @return Vector <Kontakt>
 	 */
-	public Vector<Kontakt> getAllKontakteByOwner(Nutzer n) throws IllegalArgumentException {
-		init();
+	public Vector<Kontakt> getAllKontakteByOwner(Nutzer n)
+			throws IllegalArgumentException {
+	
 		return this.kMapper.findAllByOwner(n.getId());
 	}
 
+	
 	/**
-	 * Auslesen aller Kontakt, bei diesen der Nutzer als Eigentï¿½mer hinterlegt ist, sowie 
-	 * als Teilhaber auf den Kontakt zugreifen kann.
+	 * Ausgabe aller eigenen Kontakt, sowie aller mit dem Nutzer geteilten Kontakte.
 	 * 
 	 */
-	public Vector<Kontakt> getAllKontakteByNutzer(Nutzer n) throws IllegalArgumentException {
+	public Vector<Kontakt> getAllKontakteByNutzer(Nutzer n)
+			throws IllegalArgumentException {
 		
 		Vector<Kontakt> kv = getAllKontakteByOwner(n);
 		if (kv != null) {
@@ -640,73 +448,121 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return kvs;
 	}
 	
+	
 	/**
 	 * Zuweisung eines Kontakt zu einer Kontaktliste.
 	 * 
-	 * @param Kontaktliste
-	 *            kl
-	 * @param Kontakt
-	 *            k
+	 * @param Kontaktliste kl, Kontakt k
 	 * @return void
 	 */
-	public void addKontaktToKontaktliste(Kontaktliste kl, Kontakt k) throws IllegalArgumentException {
-		init();
+	public void addKontaktToKontaktliste(Kontaktliste kl, Kontakt k)
+			throws IllegalArgumentException {
+	
 		this.klkMapper.addKontaktToKontaktliste(kl, k);
 	}
 
+	
 	/**
 	 * Aufhebung der Zuweisung eines Kontakts zu einer Kontaktliste
 	 * 
-	 * @param Kontaktliste
-	 *            kl
-	 * @param Kontakt
-	 *            k
+	 * @param Kontaktliste kl, Kontakt k
 	 * @return void
 	 */
-	public void removeKontaktFromKontaktliste(Kontaktliste kl, Kontakt k) throws IllegalArgumentException {
-		init();
+	public void removeKontaktFromKontaktliste(Kontaktliste kl, Kontakt k)
+			throws IllegalArgumentException {
+	
 		this.klkMapper.removeKontaktFromKontaktliste(kl, k);
 	}
-	
-	
+
 
 	/*
-	 * *************************************************************************
-	 * ABSCHNITT - Ende: Methoden fuer Kontakt
-	 * *************************************************************************
+	 * *********************************************************************************
+	 * ABSCHNITT ENDE: /KONTAKT 
+	 * *********************************************************************************
 	 */
-
+	
 	/*
-	 * *************************************************************************
-	 * ABSCHNITT - Beginn: Methoden fuer Kontaktlisten
-	 * *************************************************************************
+	 * *********************************************************************************
+	 * ABSCHNITT ANFANG: KONTAKTLISTE 
+	 * *********************************************************************************
 	 */
+	
+	/**
+	 * Erzeugen einer neuen Kontaktliste, diese wird angelegt und anschliessend in
+	 * der DB gespeichert. Die Kontaktliste steht dem Nutzer nun zu weiteren
+	 * Funktionen zur Verfuegung.
+	 * 
+	 * @param String titel, Nutzer n
+	 * @return Kontaktliste
+	 */
+	public Kontaktliste createKontaktliste(String titel, Nutzer n)
+			throws IllegalArgumentException {
+
+		init();
+
+		// Das Erstellen eines Kontaktlisten Objektes mit Titel und Owner-ID.
+		Kontaktliste kl = new Kontaktliste();
+		kl.setTitel(titel);
+		kl.setOwnerId(n.getId());
+
+		// Setzen einer vorlaeufigen Id, die in der DB nach Verfuegbarkeit mit der
+		// naechst hoeheren ID angepasst wird.
+		kl.setId(1);
+
+		// Speichern und Eintragen der erstellen Kontaktliste in der DB.
+		return this.klMapper.insert(kl);
+	}
+
+	
+	/**
+	 * Erzeugen der Default Kontaktliste "Meine Kontakte" des Nutzer. Diese wird
+	 * angelegt und anschliessend in der DB gespeichert. Die Kontaktliste bildet den
+	 * Speicherort aller angelegten Kontakte.
+	 * 
+	 * @param Nutzer n
+	 * @return Kontaktliste
+	 */
+	public Kontaktliste createKontaktlisteRegistrierung(Nutzer n)
+			throws IllegalArgumentException {
+
+
+		// Erstellen der Default-Kontaktliste 'Meine Kontakte'
+		Kontaktliste kl = new Kontaktliste();
+		kl.setTitel("Meine Kontakte");
+		kl.setOwnerId(n.getId());
+		kl.setId(1);
+
+		// Erstellen der Defaukt-Kontaktliste 'Mit mir geteilte Kontakte'
+		createKontaktliste("Mit mir geteilte Kontakte", n);
+
+		return this.klMapper.insert(kl);
+	}
+	
 
 	/**
 	 * Speichern einer modifizierten Kontaktliste
 	 * 
-	 * @param Kontaktliste
-	 *            kl
+	 * @param Kontaktliste kl
 	 * @return void
 	 */
-	public void saveKontaktliste(Kontaktliste kl) throws IllegalArgumentException {
-		init();
-		klMapper.update(kl);
+	public void saveKontaktliste(Kontaktliste kl)
+			throws IllegalArgumentException {
+
+		this.klMapper.update(kl);
 	}
+	
 
 	/**
 	 * Loeschen einer Kontaktliste. Eine Kontaktliste wird mit allen
 	 * zusammenhaengenden Objekten aus der DB entfernt.
 	 * 
-	 * @param Kontaktliste
-	 *            kl
+	 * @param Kontaktliste kl
 	 * @return void
 	 */
-	public void deleteKontaktliste(Kontaktliste kl) throws IllegalArgumentException {
-		init();
+	public void deleteKontaktliste(Kontaktliste kl)
+			throws IllegalArgumentException {
 
-		/*
-		 * zunï¿½chst Abruf aller Berechtgigungen: Abgleich aller Berechtigungen
+		/* zunaechst Abruf aller Berechtgigungen: Abgleich aller Berechtigungen
 		 * (objektId) mit der Id der Kontaktliste bei ï¿½bereinstummung entfernen der
 		 * Berechtigungen fï¿½r die Kontaktliste mit allen zugehï¿½rigen Berechtigungen
 		 * auf die Kontakte und Auspraegungen der Kontaktliste kl
@@ -718,253 +574,315 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			}
 		}
 
-		// entfernen alle Kontakt-Eintrï¿½ge der Kontaktliste kl aus
-		// <code>KontaktlisteKontakt</code>
+		// entfernen alle Kontakt-Eintrï¿½ge der Kontaktliste kl aus <code>KontaktlisteKontakt</code>
 		Vector<Kontakt> kv = klkMapper.findAllKontakteByKontaktliste(kl.getId());
 		if (kv != null) {
 			for (Kontakt k : kv) {
 				this.klkMapper.removeKontaktFromKontaktliste(kl, k);
 			}
 		}
+		
 		// entfernen der leeren Kontaktliste
 		this.klMapper.delete(kl);
 	}
 
+	
 	/**
-	 * Alle Kontaktlisten eines Nutzers anhand der OwnerId auslesen.
+	 * Auslesen einer Kontaktliste anhand id.
 	 * 
-	 * @param Nutzer
-	 *            n
+	 * @param id
+	 * @return Kontaktliste 
+	 */
+	public Kontaktliste getKontaktlisteById(int id)
+			throws IllegalArgumentException {
+		
+		return this.klMapper.findById(id);
+	}
+	
+	
+	/**
+	 * 
+	 * Ausgabe Kontaktliste nach Name
+	 */
+	public Kontaktliste findKontaktlisteByTitel(Nutzer n, String titel)
+			throws IllegalArgumentException {
+		
+		return this.klMapper.findByTitel(n, titel);
+	}
+	
+	
+	/**
+	 * Ausgabe aller Kontaktlisten eines Nutzers
+	 * 
+	 * @param Nutzer n
 	 * @return Vector <Kontaktliste>
 	 */
-	public Vector<Kontaktliste> getKontaktlistenByOwner(Nutzer n) throws IllegalArgumentException {
-		// init();
+	public Vector<Kontaktliste> getKontaktlistenByOwner(Nutzer n)
+			throws IllegalArgumentException {
+		
 		return this.klMapper.findKontaktlistenByOwner(n.getId());
 	}
+	
 
 	/**
-	 * Filtert fuer eine spezielle Kontaktliste, dessen Kontakte heraus.
+	 * Ausgabe der Kontakte einer Kontaktliste
 	 * 
 	 * @param kl
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Kontakt> getKontakteByKontaktliste(int kontaktlisteId) throws IllegalArgumentException {
+	public Vector<Kontakt> getKontakteByKontaktliste(int kontaktlisteId)
+			throws IllegalArgumentException {
+		
 		return this.klkMapper.findAllKontakteByKontaktliste(kontaktlisteId);
 	}
-
-	/**
-	 * Kontaktliste "Meine Kontakte" fÃ¼r den Nutzer in der Db finden
-	 * (DefaultKontaktliste).
+	
+	
+	/*
+	 * *********************************************************************************
+	 * ABSCHNITT ENDE: /KONTAKTLISTE
+	 * *********************************************************************************
+	 */
+	
+	/*
+	 * *********************************************************************************
+	 * ABSCHNITT ANFANG: EIGENSCHAFT & AUSPRAEGUNG  
+	 * *********************************************************************************
 	 */
 
-	public Kontaktliste findKontaktlisteByTitel(Nutzer n, String titel) throws IllegalArgumentException {
-
-		init();
-
-		return this.klMapper.findByTitel(n, titel);
-
-	}
-
 	/**
-	 * Alle Kontaktlisten werden anhand der Id ausgelesen.
+	 * Erzeugen einer Eigenschaft, welche angelegt und anschliessend in der DB
+	 * gespeichert wird. Der Nutzer kann hiermit eigene Eigenschaften anlegen und
+	 * mit Auspraegungen vervollstaendigen.
 	 * 
-	 * @param id
-	 * @return
+	 * @param String bezeichnung
+	 * @return Eigenschaft
 	 */
-	public Kontaktliste getKontaktlisteById(int id) {
-		init();
-		return this.klMapper.findById(id);
+	public Eigenschaft createEigenschaft(String bezeichnung)
+			throws IllegalArgumentException {
+
+		Eigenschaft e = new Eigenschaft();
+		e.setBezeichnung(bezeichnung);
+		return this.eMapper.insert(e);
 	}
-	/*
-	 * *************************************************************************
-	 * ABSCHNITT - Ende: Methoden fuer Kontaktlisten
-	 * *************************************************************************
-	 */
-
-	/*
-	 * *************************************************************************
-	 * ABSCHNITT - Beginn: Methoden fuer Eigenschaft
-	 * *************************************************************************
-	 */
-
+	
+	
 	/**
 	 * Speichern einer modifizierten Eigenschaft.
-	 * 
 	 */
-	public Eigenschaft saveEigenschaft(Eigenschaft e) throws IllegalArgumentException {
-		init();
+	public Eigenschaft saveEigenschaft(Eigenschaft e)
+			throws IllegalArgumentException {
+		
 		return eMapper.update(e);
 	}
 
+	
 	/**
 	 * Loeschen einer Eigenschaft.
-	 * 
 	 */
-	public void deleteEigenschaft(Eigenschaft e) throws IllegalArgumentException {
-		init();
+	public void deleteEigenschaft(Eigenschaft e)
+			throws IllegalArgumentException {
+		
 		this.eMapper.delete(e);
 	}
 
 	/**
-	 * Gibt eine Eigenschaft anhand ihrer ID zurï¿½ck.
+	 * Gibt eine Eigenschaft anhand ihrer ID zururck.
 	 * 
 	 * @return Eigenschaft
 	 * @throws IllegalArgumentException
 	 */
-	public Eigenschaft getEigenschaftById(int eigenschaftId) throws IllegalArgumentException {
-
-		init();
-
+	public Eigenschaft getEigenschaftById(int eigenschaftId)
+			throws IllegalArgumentException {
+		
 		return this.eMapper.findEigenschaftById(eigenschaftId);
 	}
-
+	
+	
 	/**
-	 * Gibt die vordefinierte Auswahl der Eigenschaften zurï¿½ck.
+	 * Gibt eine vordefinierte Auswahl an Eigenschaften zuruck.
 	 * 
 	 * @return Vector <Eigenschaft>
 	 * @throws IllegalArgumentException
 	 */
-
-	public Vector<Eigenschaft> getEigenschaftAuswahl() throws IllegalArgumentException {
-
-		init();
-
+	public Vector<Eigenschaft> getEigenschaftAuswahl()
+			throws IllegalArgumentException {
+		
 		return this.eMapper.findEigenschaftAuswahl();
 	}
+	
 
-	/*
-	 * ************************************************************************* **
-	 * ABSCHNITT, Ende: Methoden fuer Eigenschaft-Objekte
-	 * *************************************************************************
+//	-> ?
+	/**
+	 * Auslesen einer Eigenschaft anhand der uebergebener Bezeichnung.
 	 */
-	/*
-	 * ************************************************************************* **
-	 * ABSCHNITT, Beginn: Methoden fuer Auspraegung-Objekte
-	 * *************************************************************************
+	public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung)
+			throws IllegalArgumentException {
+		
+		return this.eMapper.findEigenschaft(bezeichnung);
+	} //	-> ?
+	
+	
+	/**
+	 * Erzeugen einer neuen Auspraegung, welche angelegt und anschliessend in der DB
+	 * gespeichert wird. Der Nutzer kann hiermit seine Kontakte mit Auspraegungen
+	 * bereichern und erhaelt die Moeglichkeit "Kontaktinformationen" in Form von
+	 * Auspraegungen zu hinterlegen.
+	 * 
+	 * @param String wert, int eigenschaftId, int kontaktId
+	 * @return Auspraegung
 	 */
+	public Auspraegung createAuspraegung(String wert, int eigenschaftId, int kontaktId)
+			throws IllegalArgumentException {
+
+		// Erstellen eines Auspraegung Objektes
+		Auspraegung a = new Auspraegung();
+		a.setWert(wert);
+		a.setEigenschaftId(eigenschaftId);
+		a.setKontaktId(kontaktId);
+
+
+		// Anpassung des Modifikationsdatums des Kontakt Objektes
+		saveModifikationsdatum(a.getKontaktId());
+
+		// Speichern der Auspraegung
+		return this.aMapper.insert(a);
+	}
+	
 
 	/**
-	 * Erzeugen einer neuen Auspraegung.
+	 * Erzeugen einer neuen Auspraegung fuer eine vom Nutzer definierte Eigenschaft.
+	 * Diese wird angelegt und anschliessend in der DB gespeichert. Der Nutzer kann
+	 * hiermit in einem Zuge Eigenschaften anlegen und mit einem Auspraegungswert
+	 * befuellen.
 	 * 
+	 * @param String bezeichnung, String wert, Kontakt k
+	 * @return void
 	 */
-
-	// public Auspraegung createAuspraegung(String wert, int eigenschaftId,
-	// int kontaktId) throws IllegalArgumentException {
-	//
-	// init();
-	//
-	// Auspraegung a = new Auspraegung();
-	// a.setWert(wert);
-	// a.setEigenschaftId(eigenschaftId);
-	// a.setKontaktId(kontaktId);
-	//
-	//
-	//
-	// this.saveModifikationsdatum(a.getKontaktId());
-	// return this.aMapper.insert(a);
-	//
-	// }
-
+	public void createAuspraegungForNewEigenschaft(String bezeichnung, String wert, Kontakt k)
+			throws IllegalArgumentException {
+		createAuspraegung(wert, createEigenschaft(bezeichnung).getId(), k.getId());
+	}
+	
+	
 	/**
-	 * 
-	 * >>>>>>> refs/remotes/origin/master Speichern einer modifizierten Auspraegung.
-	 * 
+	 * Modifikation einer Auspraegung.
 	 */
-	public Auspraegung saveAuspraegung(Auspraegung a) throws IllegalArgumentException {
-		init();
+	public Auspraegung saveAuspraegung(Auspraegung a)
+			throws IllegalArgumentException {
+		
 		this.saveModifikationsdatum(a.getKontaktId());
 		return aMapper.update(a);
 	}
 
+	
 	/**
-	 * Eine Auspraegung wird aus einem Kontakt herausgelï¿½scht.
-	 * 
+	 * Loeschen einer Auspraegung. 
 	 */
-	public void deleteAuspraegung(Auspraegung a) throws IllegalArgumentException {
-		init();
-		// das Modifikationsdatum des zugehï¿½rigen Kontakts wird gelï¿½scht.
+	public void deleteAuspraegung(Auspraegung a)
+			throws IllegalArgumentException {
+		
 		this.saveModifikationsdatum(a.getKontaktId());
-
-		// Aufruf der DB-Methode zum entfernen des Wertes einer Auspraegung.
 		this.aMapper.delete(a);
 	}
+	
+	
+//  -> ?	
 	/**
-	 * LÃ¶scht eine AusprÃ¤gung anhand der Ã¼bergebenen id.
+	 * Loeschen einer Auspraegung anhand der id.
 	 * @param a
 	 * @throws IllegalArgumentException
 	 */
 	public void deleteAuspraegungById(int auspraegungId) throws IllegalArgumentException {
-		
 		this.aMapper.deleteById(auspraegungId);
-	}
-
+	} //  -> ?
+	
+	
 	/**
-	 * Auslesen einer bestimmten Auspraegung anhand der zugehï¿½rigen Objektid.
-	 * 
+	 * Auslesen einer Auspraegung anhand id.
 	 */
-	public Auspraegung getAuspraegungById(int auspraegungId) throws IllegalArgumentException {
-
-		init();
-
+	public Auspraegung getAuspraegungById(int auspraegungId)
+			throws IllegalArgumentException {
+		
 		return this.aMapper.findAuspraegungById(auspraegungId);
 	}
 
+	
 	/**
-	 * Ruft eine Liste aller Auspraegungen des zugehoerigen Kontakts auf.
-	 * 
+	 * Gibt alle Auspraegungen eines Kontaktes zurueck
+	 * @return Vector<Auspraegung>
 	 */
-	public Vector<Auspraegung> getAllAuspraegungenByKontakt(int kontaktId) throws IllegalArgumentException {
-
-		init();
+	public Vector<Auspraegung> getAllAuspraegungenByKontakt(int kontaktId)
+			throws IllegalArgumentException {
+		
 		return this.aMapper.findAuspraegungByKontakt(kontaktId);
 	}
 	
+	
 	/**
-	 * Ruft eine Liste aller Auspraegungen des zugehoerigen Kontakts auf.
-	 * 
+	 * Gibt alle Auspraegungen eines Kontaktes zurueck 
+	 * @return Vector<Relatable>
 	 */
-	public Vector<Relatable> getAllAuspraegungenByKontaktRelatable(int kontaktId) throws IllegalArgumentException {
-
-		init();
+	public Vector<Relatable> getAllAuspraegungenByKontaktRelatable(int kontaktId)
+			throws IllegalArgumentException {
+		
 		return this.aMapper.findAuspraegungByKontaktRelatable(kontaktId);
 	}
-
-	public Eigenschaft getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException {
-		return eMapper.findEigenschaftForAuspraegung(eigenschaftId);
-
-	}
-	/**
-	 * Das Entfernen einer selbstdefinierten Eigenschaft mit ihren Auspraegungen des
-	 * Kontakts.
-	 */
-
-	// getAllAuspraegungenByEigenschaft (?)
+	
 
 	/*
-	 * ************************************************************************* **
-	 * ABSCHNITT, Ende: Methoden fuer Auspraegung-Objekte
-	 * *************************************************************************
+	 * *********************************************************************************
+	 * ABSCHNITT ENDE: /EIGENSCHAFT & AUSPRAEGUNG  
+	 * *********************************************************************************
 	 */
+	
 	/*
-	 * ************************************************************************* **
-	 * ABSCHNITT, Beginn: Methoden fuer Berechtigung-Objekte
-	 * *************************************************************************
+	 * *********************************************************************************
+	 * ABSCHNITT ANFANG: BERECHTIGUNG
+	 * *********************************************************************************
 	 */
-
+	
 	/**
-	 * Es wird eine Berechtigung fï¿½r ein bestimmtes Objekt erteilt. Das
-	 * tatsï¿½chlich geteilte Objekt wird angesprochen und als Typ identifiziert. Es
-	 * wird eine Berechtigung fï¿½r ein bestimmtes Objekt erteilt. Das tatsï¿½chlich
-	 * geteilte Objekt wird angesprochen und als Typ identifiziert.
+	 * Erstellung einer neuen Berechtigung. Es wird eine neue Berechtigung fuer eine
+	 * Teilhaberschaft an einem bestimmten Objekt (Kontaktliste, Kontakt oder
+	 * Auspraegung) erteilt. Die Berechtigung ergibt sich aus (Sender) ownerId und
+	 * (Empfaenger) receiverId, welche die jeweiligen Nutzer referenzieren, sowie
+	 * die objectId, welche sich auf das geteilte Objekt bezieht und in Verbindung
+	 * mit dem type eindeutig ist.
 	 * 
-	 * @param ownerId
-	 * @param receiverId
-	 * @param objectId
-	 * @param type
+	 * 
+	 * @param ownerId, receiverId, objectId, type
+	 * @return Berechtigung
+	 */
+	public Berechtigung createBerechtigung(int ownerId, int receiverId, int objectId, char type)
+			throws IllegalArgumentException {
+
+		// Erzeugen eines neuen Berechtigung Objektes 
+		Berechtigung b = new Berechtigung();
+		b.setId(1);
+		b.setOwnerId(ownerId);
+		b.setReceiverId(receiverId);
+		b.setObjectId(objectId);
+		b.setType(type);
+
+		// Speichern der Berechtigung
+		return this.bMapper.insert(b);
+	}
+	
+
+	/**
+	 * Das Teilen eines Objektes (Kontaktliste, Kontakt oder Auspraegung) mit einem
+	 * anderen Nutzer. Diese Methode setzt die Berechtigung und damit die
+	 * Teilhaberschaft zu einem bestimmten Objekt, weches mit einem anderen Nutzer
+	 * geteilt werden soll. Es werden alle abhaengigen Objekte wie bspw. bei einer
+	 * Kontaktliste die Kontakte, welche wiederum Auspraegungen beinhalten
+	 * berücksichtigt. Alle abhaengingen Objekte werden fortlaufend mit den
+	 * Parametern Sender, Empfaenger, sowie ObjektId, welches in Verbindung mit type
+	 * des Objekts eindeutig ist, eingetragen.
+	 * 
+	 * @param ownerId, receiverId, objectId, type
 	 * @throws IllegalArgumentException
 	 */
-	// CHECK
 	public void shareObject(int ownerId, int receiverId, int objectId, char type, Vector<Relatable> avshare)
 			throws IllegalArgumentException {
 
@@ -1028,20 +946,21 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			this.createBerechtigung(ownerId, receiverId, objectId, type);
 		}
 	}
+	
 
 	/**
-	 * Das Loeschen einer Berechtigung. Diese Methode hebt die Berechtigung einer
-	 * Teilhaberschaft zu einem bestimmten Objekttyp auf. Es werden z.B. alle
-	 * abhaengigen Objekte einer Kontaktliste, also Kontakte angesprochen, die
-	 * wiederum Auspraegungen beinhalten. Alle Objekte werden fortlaufend von der
-	 * Berechtigung geloest.
+	 * Das Loeschen einer Berechtigung. Diese Methode hebt die Berechtigung und
+	 * damit die Teilhaberschaft zu einem bestimmten Objekt auf. Es werden alle
+	 * abhaengigen Objekte wie bspw. bei einer Kontaktliste die Kontakte, welche
+	 * wiederum Auspraegungen beinhalten berücksichtigt. Alle Objekte werden
+	 * fortlaufend von der Teilhaberschaft geloest ergo werden alle Berechtigungen
+	 * auf die entsprechenden Objekte einzeln geloescht.
 	 * 
-	 * @param b
+	 * @param Berechtigung b
 	 * @throws IllegalArgumentException
 	 */
-
-	public void deleteBerechtigung(Berechtigung b) throws IllegalArgumentException {
-		init();
+	public void deleteBerechtigung(Berechtigung b)
+			throws IllegalArgumentException {
 
 		// Pruefung des Objekttypes
 		if (b.getType() == 'l') {
@@ -1123,17 +1042,46 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 	
+
+	/**
+	 * Gibt alle Objekt-Berechtigungen ueber jene Objekte aus, welche vom Nutzer
+	 * geteilt wurden.
+	 * 
+	 * @param ownerId
+	 * @return Berechtigungen
+	 */
+	public Vector<Berechtigung> getAllBerechtigungenByOwner(int nutzerId)
+			throws IllegalArgumentException {
+
+		Vector<Berechtigung> b = this.bMapper.findAllBerechtigungenByOwner(nutzerId);
+		return b;
+	}
+
+	/**
+	 * Gibt alle Objekt-Berechtigungen ueber jene Objekte aus, welche mit dem
+	 * Nutzer geteilt wurden.
+	 * 
+	 * @param receiverId
+	 * @return Berechtigungen
+	 */
+	public Vector<Berechtigung> getAllBerechtigungenByReceiver(int nutzerId)
+			throws IllegalArgumentException {
+
+		Vector<Berechtigung> b = this.bMapper.findAllBerechtigungenByReceiver(nutzerId);
+		return b;
+	}
+	
+	
 	/**
 	 * Gibt alle Nutzer zurueck, mit welchem ein bestimmtes Objekt (Konakt,
-	 * Kontaktliste oder Auspraegung) geteilt wurde. (Relevant fï¿½r die Aufhebaung/
+	 * Kontaktliste oder Auspraegung) geteilt wurde. (Relevant fuer die Aufhebaung/
 	 * Loeschung einer Teilhaberschaft als Owner).
 	 * 
-	 * @param objectId
-	 * @param type
-	 * @param n
+	 * @param int objectId, char type, Nutzer n
 	 * @return Vector<Nutzer>
 	 */
-	public Vector<Nutzer> sharedWith(int objectId, char type, Nutzer n) throws IllegalArgumentException {
+	public Vector<Nutzer> sharedWith(int objectId, char type, Nutzer n)
+			throws IllegalArgumentException {
 		
 		// Vektor mit allen Berechtigungen welche Nutzerseitig gesetzt wurden
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(n.getId());
@@ -1150,8 +1098,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 				// Nutzerobjekt/ receiver dem Vektor hinzufuegen
 				nv.add(this.getNutzerById(b.getReceiverId()));
-				
-
 			}
 		}
 		
@@ -1159,43 +1105,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return nv;
 	}
 
-	/**
-	 * Gibt alle Objekt-Berechtigungen ï¿½ber jene Objekte aus, welche vom Nutzer
-	 * geteilt wurden.
-	 * 
-	 * @param ownerId
-	 * @return Berechtigungen
-	 */
-	public Vector<Berechtigung> getAllBerechtigungenByOwner(int nutzerId) throws IllegalArgumentException {
-		init();
-
-		Vector<Berechtigung> b = this.bMapper.findAllBerechtigungenByOwner(nutzerId);
-		return b;
-	}
-
-	/**
-	 * Gibt alle Objekt-Berechtigungen ï¿½ber jene Objekte aus, welche mit dem
-	 * Nutzer geteilt wurden.
-	 * 
-	 * @param receiverId
-	 * @return Berechtigungen
-	 */
-	public Vector<Berechtigung> getAllBerechtigungenByReceiver(int nutzerId) throws IllegalArgumentException {
-		init();
-
-		Vector<Berechtigung> b = this.bMapper.findAllBerechtigungenByReceiver(nutzerId);
-		return b;
-	}
-
 	/*
-	 * ************************************************************************* **
-	 * ABSCHNITT ENDE: Berechtigungs-Objekte
-	 * *************************************************************************
+	 * *********************************************************************************
+	 * ABSCHNITT ENDE: /BERECHTIGUNG  
+	 * *********************************************************************************
 	 */
+	
 	/*
-	 * ************************************************************************* **
-	 * ABSCHNITT BEGINN: Abruf der geteilten Objekte
-	 * *************************************************************************
+	 * *********************************************************************************
+	 * ABSCHNITT ANFANG: ABRUF DER GETEILTE OBJEKTE
+	 * *********************************************************************************
 	 */
 
 	/**
@@ -1204,8 +1123,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param ownerId
 	 * @return Vector<Kontakt>
 	 */
-	public Vector<Kontakt> getAllSharedKontakteByOwner(int nutzerId) throws IllegalArgumentException {
-		init();
+	public Vector<Kontakt> getAllSharedKontakteByOwner(int nutzerId)
+			throws IllegalArgumentException {
 		
 		// Vektor welcher alle nutzerseitig gesetzten Berechtigungen enthaelt
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(nutzerId);
@@ -1238,8 +1157,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param nutzerId
 	 * @return Vector<Kontakt>
 	 */
-	public Vector<Kontakt> getAllSharedKontakteByReceiver(int nutzerId) throws IllegalArgumentException {
-		init();
+	public Vector<Kontakt> getAllSharedKontakteByReceiver(int nutzerId)
+			throws IllegalArgumentException {
 		
 		// Vektor welcher alle fuer den Nutzer gesetzten Berechtigungen enthaelt
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(nutzerId);
@@ -1272,8 +1191,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param nutzerId
 	 * @return Vector<Kontakt>
 	 */
-	public Vector<Kontaktliste> getAllSharedKontaktlistenByOwner(int nutzerId) throws IllegalArgumentException {
-		init();
+	public Vector<Kontaktliste> getAllSharedKontaktlistenByOwner(int nutzerId)
+			throws IllegalArgumentException {
 		
 		// Vektor welcher alle nutzerseitig gesetzten Berechtigungen enthaelt
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(nutzerId);
@@ -1306,8 +1225,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param nutzerId
 	 * @return Vector<Kontakt>
 	 */
-	public Vector<Kontaktliste> getAllSharedKontaktlistenByReceiver(int nutzerId) throws IllegalArgumentException {
-		init();
+	public Vector<Kontaktliste> getAllSharedKontaktlistenByReceiver(int nutzerId)
+			throws IllegalArgumentException {
 		
 		// Vektor welcher alle fuer den Nutzer gesetzten Berechtigungen enthaelt
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(nutzerId);
@@ -1333,6 +1252,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return klv;
 	}
 
+	
 	/**
 	 * Gibt alle geteilten Auspraegungen zu einem geteilten Kontakt k mit einem
 	 * Nutzer n aus.
@@ -1340,8 +1260,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param Kontakt k, Nutzer n
 	 * @return Vector<Auspraegung>
 	 */
-	public Vector<Relatable> getAllSharedAuspraegungenByKontaktAndNutzer(Kontakt k, Nutzer n) {
-		init();
+	public Vector<Relatable> getAllSharedAuspraegungenByKontaktAndNutzer(Kontakt k, Nutzer n)
+			throws IllegalArgumentException {
 
 		// Vektor welcher alle gesetzten Berechtigungen enthaelt
 		Vector<Berechtigung> bv = this.bMapper.findAll();
@@ -1376,115 +1296,77 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/*
-	 * *************************************************************************
-	 * ABSCHNITT ENDE: Abruf der geteilten Objekte
-	 * *************************************************************************
+	 * *********************************************************************************
+	 * ABSCHNITT ENDE: /ABRUF DER GETEILTE OBJEKTE 
+	 * *********************************************************************************
 	 */
-
+	
 	/*
-	 * *************************************************************************
-	 * ABSCHNITT BEGINN: Suchfunktion
-	 * *************************************************************************
+	 * *********************************************************************************
+	 * ABSCHNITT ANFANG: SUCHE
+	 * *********************************************************************************
 	 */
+	
 	/**
 	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach dem
 	 * Namen und gibt diese zurueck. Hierbei wird Vor- und Nachname des Kontaktes
 	 * mit dem vom Nutzer uebergebenem String abgeglichen.
 	 * 
-	 * @param name,
-	 *            vom Nutzer uebergebener String
-	 * @param n
-	 *            Nutzer
+	 * @param name, vom Nutzer uebergebener String
+	 * @param n Nutzer
 	 * @return Vector<Kontakt>
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Kontakt> getKontakteByName(String name, Nutzer n) throws IllegalArgumentException {
-		init();
+	public Vector<Kontakt> getKontakteByName(String name, Nutzer n)
+			throws IllegalArgumentException {
+		
 		return this.kMapper.findKontakteByName(name, n);
 	}
 
+	
 	/**
 	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Auspraegungen nach
 	 * dem Wert und gibt diesen zurueck. Hierbei wird die Auspraegung eines
 	 * Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
 	 * 
-	 * @param wert,
-	 *            vom Nutzer uebergebener String
-	 * @param n
-	 *            Nutzer
+	 * @param wert, vom Nutzer uebergebener String
+	 * @param n Nutzer
 	 * @return Vector<Kontakt>
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Kontakt> getKontakteByAuspraegung(String wert, Nutzer n) throws IllegalArgumentException {
-		init();
+	public Vector<Kontakt> getKontakteByAuspraegung(String wert, Nutzer n)
+			throws IllegalArgumentException {
+		
 		return this.kMapper.findKontakteByAuspraegung(wert, n);
 	}
-
-	/**
-	 * Auslesen einer Eigenschaft anhand der ï¿½bergebenen Bezeichnung.
-	 */
-	public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung) throws IllegalArgumentException {
-		init();
-		return this.eMapper.findEigenschaft(bezeichnung);
-	}
-
+	
+	
 	/**
 	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte EIgenschaften nach
 	 * der Bezeichnung und gibt diesen zurueck. Hierbei wird die Eigenschaft eines
 	 * Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
 	 * 
-	 * @param wert,
-	 *            vom Nutzer uebergebener String
-	 * @param n
-	 *            Nutzer
+	 * @param wert, vom Nutzer uebergebener String
+	 * @param n Nutzer
 	 * @return Vector<Kontakt>
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Kontakt> getKontakteByEigenschaft(String bezeichnung, Nutzer n) throws IllegalArgumentException {
-		init();
+	public Vector<Kontakt> getKontakteByEigenschaft(String bezeichnung, Nutzer n)
+			throws IllegalArgumentException {
+		
 		return this.kMapper.findKontakteByEigenschaft(bezeichnung, n);
 	}
 
-	/**
-	 * Die Suche nach Kontaktnamen, Auspraegungen oder Eigenschaften wird in der
-	 * folgenden Methode zusammengefasst aufgerufen. Je nach Treffer der
-	 * Sucheingabe, wird das aufgerufene Objekt zurï¿½ckgeben.
-	 * 
-	 * @param listBoxWert,
-	 *            testBoxWert
-	 * @param n
-	 *            Nutzer
-	 * @return Vector<Kontakt>
-	 * @throws IllegalArgumentException
-	 */
-	public Vector<Kontakt> getKontakteBySuche(String listBoxWert, String testBoxWert, Nutzer n)
-			throws IllegalArgumentException {
-		init();
-
-		if (listBoxWert == "name") {
-			return this.getKontakteByName(testBoxWert, n);
-
-		} else if (listBoxWert == "auspraegung") {
-			return this.getKontakteByAuspraegung(testBoxWert, n);
-
-		} else if (listBoxWert == "eigenschaft") {
-			return this.kMapper.findKontakteByEigenschaft(testBoxWert, n);
-
-		} else
-
-			return null;
-	}
-
 	/*
-	 * *************************************************************************
-	 * ABSCHNITT Ende - Suchfunktion
-	 * *************************************************************************
+	 * *********************************************************************************
+	 * ABSCHNITT ENDE: /SUCHE
+	 * *********************************************************************************
 	 */
-
+	
 	/*
-	 * *************************************************************************
-	 * ABSCHNITT Beginn - Sonstiges
-	 * *************************************************************************
+	 * *********************************************************************************
+	 * ABSCHNITT ANFANG: SONSTIGES 
+	 * *********************************************************************************
 	 */
 
 	/**
@@ -1492,50 +1374,56 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * oder Auspraegung a) sich in einem geteilten Status befindet.
 	 */
 	public boolean getStatusForObject(int objectId, char type) throws IllegalArgumentException {
-		
-		init();
 
-		// Auslesen alle Berechtigungen
+		// Vektor welcher alle Berechtigungen zu allen Objekten enthaelt
 		Vector<Berechtigung> bv = this.bMapper.findAll();
 
-		// Abgleich der ObjectId mit den geteilten Objekte
+		// Schleife welche alle Berechtigungsobjekte durchlaeuft
 		for (Berechtigung b : bv) {
+
+			// Abgleich der objectId und type um die Eindeutigkeit zu gewaehrleisten
 			if (objectId == b.getObjectId() && type == b.getType()) {
+
 				return true;
 			}
-
 		}
+
 		return false;
 	}
 
+
 	/**
-	 * Aktualisierung des Modifikationsdatums, durch aufrufen der Methode.
+	 * Aktualisierung des Modifikationsdatums.
 	 */
-	public void saveModifikationsdatum(int id) throws IllegalArgumentException {
-		init();
+	public void saveModifikationsdatum(int id)
+			throws IllegalArgumentException {
+
 		this.kMapper.updateModifikationsdatum(id);
 	}
 
+	/*
+	 * *********************************************************************************
+	 * ABSCHNITT ENDE: /SONSTIGES
+	 * *********************************************************************************
+	 */
 	
-	/*
-	 * ************************************************************************* **
-	 * ABSCHNITT Ende - Sonstiges
-	 * *************************************************************************
-	 */
+	
+// /END!
+	
+	
+//	BEREINIGUNGSPROZESS:  ############################################################################################################
+	
+	@Override
+	public Eigenschaft getEigenschaftForAuspraegung(int eigenschaftId) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+//	BEREINIGUNGSPROZESS:  ############################################################################################################
 
-	/*
-	 * ************************************************************************* **
-	 * Auskommentierte Methoden
-	 * *************************************************************************
-	 */
 
-	/**
-	 * Nutzer
-	 * 
-	 * @param n
-	 */
-	// public void setNutzer(Nutzer n) throws IllegalArgumentException {
-	// init(); nutzer = n;
-	// }
-
+	
+	
+	
+	
 }

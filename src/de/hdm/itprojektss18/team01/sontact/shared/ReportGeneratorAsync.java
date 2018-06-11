@@ -8,6 +8,10 @@ import de.hdm.itprojektss18.team01.sontact.shared.report.AlleGeteiltenKontakteRe
 import de.hdm.itprojektss18.team01.sontact.shared.report.AlleKontakteNachEigenschaftenReport;
 import de.hdm.itprojektss18.team01.sontact.shared.report.AlleKontakteReport;
 
+/**
+ * Asynchrones Gegenstueck des Interfaces <code>ReportGenerator</code>
+ *
+ */
 public interface ReportGeneratorAsync {
 
 	void init(AsyncCallback<Void> callback);

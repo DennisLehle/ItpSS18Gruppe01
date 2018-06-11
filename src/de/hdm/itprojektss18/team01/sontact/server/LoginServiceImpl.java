@@ -11,7 +11,9 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import de.hdm.itprojektss18.team01.sontact.shared.LoginService;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.LoginInfo;
 
-
+/**
+ * Implementierung des serverseitigen RPC-Services für den Login. 
+ */
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService, IsSerializable{
 
 	/**

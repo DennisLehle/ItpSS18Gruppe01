@@ -30,8 +30,8 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
  * Klasse welche Formulare fï¿½r Kontaktd darstellt, diese erlauben
- * Interaktionsmï¿½glichkeiten um Kontakte Anzuzeigen, zu Bearbeiten, zu Lï¿½schen
- * oder Neuanzulegen.
+ * Interaktionsmï¿½glichkeiten um Kontakte Anzuzeigen, zu Bearbeiten, zu
+ * Lï¿½schen oder Neuanzulegen.
  * 
  * @author Kevin Batista, Dennis Lehle, Ugur Bayrak
  */
@@ -135,8 +135,8 @@ public class KontaktForm extends VerticalPanel {
 				// ClickHandler fï¿½r das Updaten eines Kontakts
 				editKontaktBtn.addClickHandler(new updateKontaktClickHandler());
 				BtnPanel.add(editKontaktBtn);
-				
-				//ClickHandler zum teilen von Kontakten
+
+				// ClickHandler zum teilen von Kontakten
 				Button sharedeleteBtn = new Button(
 						"<image src='/images/share.png' width='30px' height='30px' align='center' /> lÃ¶schen");
 
@@ -146,10 +146,9 @@ public class KontaktForm extends VerticalPanel {
 
 				sharedeleteBtn.addClickHandler(new shareKontaktlisteClickHandler());
 				BtnPanel.add(sharedeleteBtn);
-				
+
 				shareBtn.addClickHandler(new shareKontaktlisteClickHandler());
 				BtnPanel.add(shareBtn);
-
 
 				// Abfrage wer der Owner des Kontaktes ist.
 				if (k.getOwnerId() != n.getId()) {
@@ -446,25 +445,31 @@ public class KontaktForm extends VerticalPanel {
 
 					@Override
 					public void onSuccess(Kontakt result) {
+						Window.alert("Kontakt angelegt, beginn speichern der Auswahleigenschaften");
 						k = result;
-						/*
-						 * Nun speichern wir die Auswahleigenschaften und die vom Nutzer angegebenen
-						 * Auspraegungen
-						 */
-						for (int i = 2; i < kontaktInfoTable.getRowCount(); i++) {
-							Widget w = kontaktInfoTable.getWidget(i, 0);
-							if (w instanceof ListBox) {
-								if (!((ListBox) w).getSelectedItemText().isEmpty()) {
-									String bez = ((ListBox) w).getSelectedItemText();
 
-									Widget v = kontaktInfoTable.getWidget(i, 1);
-									if (v instanceof TextBox) {
-										if (!((TextBox) v).getValue().isEmpty()) {
-											a.setWert(((TextBox) v).getValue());
+						if (kontaktInfoTable.isCellPresent(0, 0)) {
 
-											for (int j = 0; j < kontakteigenschaften.size(); j++) {
-												if (kontakteigenschaften.elementAt(j).getBezeichnung() == bez) {
-													e = kontakteigenschaften.elementAt(j);
+							/*
+							 * Nun speichern wir die Auswahleigenschaften und die vom Nutzer angegebenen
+							 * Auspraegungen
+							 */
+							for (int i = 2; i < kontaktInfoTable.getRowCount(); i++) {
+								Widget w = kontaktInfoTable.getWidget(i, 0);
+								if (w instanceof ListBox) {
+									if (!((ListBox) w).getSelectedItemText().isEmpty()) {
+										String bez = ((ListBox) w).getSelectedItemText();
+
+										Widget v = kontaktInfoTable.getWidget(i, 1);
+										if (v instanceof TextBox) {
+											if (!((TextBox) v).getValue().isEmpty()) {
+												a.setWert(((TextBox) v).getText());
+
+												for (int j = 0; j < kontakteigenschaften.size(); j++) {
+													if (kontakteigenschaften.elementAt(j).getBezeichnung() == bez) {
+														e = kontakteigenschaften.elementAt(j);
+
+													}
 
 												}
 
@@ -476,66 +481,84 @@ public class KontaktForm extends VerticalPanel {
 
 								}
 
+								ev.createAuspraegung(a.getWert(), e.getId(), k.getId(),
+										new AsyncCallback<Auspraegung>() {
+
+											@Override
+											public void onFailure(Throwable caught) {
+												Window.alert(caught.getMessage());
+
+											}
+
+											@Override
+											public void onSuccess(Auspraegung result) {
+												Window.alert("Auspraegung zur Auwahleigenshaft gespeichert "
+														+ "beginn speichern der selbst definierten Eigenschaften "
+														+ "und Auspraegungen");
+												// RootPanel.get("content").clear();
+												// RootPanel.get("content").add(new ShowKontakte(n));
+												// Window.Location.reload();
+
+												if (eigeneEigenschaftenTable.isCellPresent(0, 0)) {
+													/**
+													 * Speichern der selbst definierten Eigenschafte und Auspraegungen
+													 */
+													for (int i = 0; i < eigeneEigenschaftenTable.getRowCount(); i++) {
+
+														Widget w = eigeneEigenschaftenTable.getWidget(i, 0);
+														if (w instanceof TextBox) {
+															String bez = ((TextBox) w).getText();
+
+															Widget v = eigeneEigenschaftenTable.getWidget(i, 1);
+															if (v instanceof TextBox) {
+																if (!((TextBox) v).getValue().isEmpty()) {
+																	a2.setWert(((TextBox) v).getText());
+
+																	ev.createAuspraegungForNewEigenschaft(bez,
+																			a2.getWert(), k, new AsyncCallback<Void>() {
+
+																				@Override
+																				public void onFailure(
+																						Throwable caught) {
+																					// Nothing to do here
+
+																				}
+
+																				@Override
+																				public void onSuccess(Void result) {
+																					Window.alert(
+																							"Neue Auspraegung und Eigenschaft gespeichert");
+
+																				}
+
+																			});
+
+																}
+
+															}
+														}
+
+													}
+												} else {
+
+													RootPanel.get("content").clear();
+													RootPanel.get("content").add(new ShowKontakte(n));
+													Window.Location.reload();
+
+												}
+
+											}
+										});
+
 							}
 
-							ev.createAuspraegung(a.getWert(), e.getId(), k.getId(), new AsyncCallback<Auspraegung>() {
-
-								@Override
-								public void onFailure(Throwable caught) {
-									Window.alert(caught.getMessage());
-
-								}
-
-								@Override
-								public void onSuccess(Auspraegung result) {
-									RootPanel.get("content").clear();
-									RootPanel.get("content").add(new ShowKontakte(n));
-									Window.Location.reload();
-
-								}
-							});
-
 						}
+						RootPanel.get("content").clear();
+						RootPanel.get("content").add(new ShowKontakte(n));
+						Window.Location.reload();
 
 					}
 				});
-
-			}
-
-			/**
-			 * Speichern der selbst definierten Eigenschafte und Auspraegungen
-			 */
-			for (int i = 0; i < eigeneEigenschaftenTable.getRowCount(); i++) {
-
-				Widget w = eigeneEigenschaftenTable.getWidget(i, 0);
-				if (w instanceof TextBox) {
-					String bez = ((TextBox) w).getText();
-
-					Widget v = eigeneEigenschaftenTable.getWidget(i, 1);
-					if (v instanceof TextBox) {
-						if (!((TextBox) v).getValue().isEmpty()) {
-							a2.setWert(((TextBox) v).getValue());
-
-							ev.createAuspraegungForNewEigenschaft(bez, a2.getWert(), k, new AsyncCallback<Void>() {
-
-								@Override
-								public void onFailure(Throwable caught) {
-									// Nothing to do here..
-
-								}
-
-								@Override
-								public void onSuccess(Void result) {
-									Window.alert("Succeed");
-
-								}
-
-							});
-
-						}
-
-					}
-				}
 
 			}
 
@@ -550,9 +573,10 @@ public class KontaktForm extends VerticalPanel {
 	 */
 	private class shareKontaktlisteClickHandler implements ClickHandler {
 		public void onClick(ClickEvent event) {
-			
-			MessageBox.deleteTeilhaber("Teilhaberschaft entfernen", "WÃ¤hlen sie fÃ¼r die LÃ¶schung einer Teilhaberschaft eine EMail Adresse aus.", null, selectedKontakt);	
 
+			MessageBox.deleteTeilhaber("Teilhaberschaft entfernen",
+					"WÃ¤hlen sie fÃ¼r die LÃ¶schung einer Teilhaberschaft eine EMail Adresse aus.", null,
+					selectedKontakt);
 
 		}
 
@@ -570,89 +594,37 @@ public class KontaktForm extends VerticalPanel {
 
 			RootPanel.get("content").clear();
 
-			HorizontalPanel BtnPanel = new HorizontalPanel();
-			HorizontalPanel headerPanel = new HorizontalPanel();
-			HorizontalPanel InfoPanel = new HorizontalPanel();
-			headerPanel.add(new HTML("<h2>Kontakt:  <em>" + selectedKontakt.getVorname() + " "
-					+ selectedKontakt.getNachname() + "</em> bearbeiten</h2>"));
-			InfoPanel.add(new HTML("<h4>Kontaktinformationen:</h4>"));
-
-			Button cancelBtn = new Button("abbrechen");
-
-			cancelBtn.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					RootPanel.get("content").clear();
-					RootPanel.get("content").add(new KontaktForm(selectedKontakt));
-				}
-			});
-
-			BtnPanel.add(cancelBtn);
-
-			// Instanziierung Button zum Speichern der ï¿½nderungen an des selektierten
-			// Kontakts
-			Button saveBtn = new Button("speichern");
-			// ClickHandler fuer das Speichern der neuen Auspraegungen
-			saveBtn.addClickHandler(new ClickHandler() {
-
-				@Override
-				public void onClick(ClickEvent event) {
-
-					TextBox txtboxvorname = (TextBox) kontaktInfoTable.getWidget(0, 1);
-					TextBox txtboxnachname = (TextBox) kontaktInfoTable.getWidget(1, 1);
-					selectedKontakt.setVorname(txtboxvorname.getText());
-					selectedKontakt.setNachname(txtboxnachname.getText());
-
-					ev.saveKontakt(selectedKontakt, new AsyncCallback<Kontakt>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-							Window.alert(caught.toString());
-
-						}
-
-						@Override
-						public void onSuccess(Kontakt result) {
-											
-						
-
-						}
-					});
-					
-		
-				}
-
-			});
-
-			BtnPanel.add(saveBtn);
-
+			/*
+			 * Tabelle für das Editieren vorbereiten
+			 */
 			vornameTxtBox.setText(selectedKontakt.getVorname());
 			nachnameTxtBox.setText(selectedKontakt.getNachname());
-
 			kontaktInfoTable.setWidget(0, 0, vorname);
 			kontaktInfoTable.setWidget(0, 1, vornameTxtBox);
 			kontaktInfoTable.setWidget(1, 0, nachname);
 			kontaktInfoTable.setWidget(1, 1, nachnameTxtBox);
 
+			/*
+			 * Tabelle mit den Eigenschaften und den Auspraegungen des Nutzers befuellen
+			 */
+			// Holen der Auspraegungen des selektierten Kontakts
 			ev.getAllAuspraegungenByKontakt(selectedKontakt.getId(), new AsyncCallback<Vector<Auspraegung>>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
-					caught.getMessage().toString();
+					Window.alert(caught.toString());
 
 				}
 
 				@Override
 				public void onSuccess(Vector<Auspraegung> result) {
-					Vector<Auspraegung> auspraegungen = new Vector<>();
-					auspraegungen = result;
-
-					for (int i = 0; i < auspraegungen.size(); i++) {
+					kontaktauspraegungen = result;
+					for (int i = 0; i < kontaktauspraegungen.size(); i++) {
 
 						TextBox auspraegung = new TextBox();
-						auspraegung.setText(auspraegungen.elementAt(i).getWert());
+						auspraegung.setText(kontaktauspraegungen.elementAt(i).getWert());
 
-						ev.getEigenschaftForAuspraegung(auspraegungen.elementAt(i).getEigenschaftId(),
+						ev.getEigenschaftForAuspraegung(kontaktauspraegungen.elementAt(i).getEigenschaftId(),
 								new AsyncCallback<Eigenschaft>() {
 
 									@Override
@@ -678,9 +650,124 @@ public class KontaktForm extends VerticalPanel {
 					}
 
 				}
+			});
+
+			/*
+			 * Elemente zum Aufbau der Bearbeitungansicht
+			 */
+			HorizontalPanel BtnPanel = new HorizontalPanel();
+			HorizontalPanel headerPanel = new HorizontalPanel();
+			HorizontalPanel InfoPanel = new HorizontalPanel();
+			headerPanel.add(new HTML("<h2>Kontakt:  <em>" + selectedKontakt.getVorname() + " "
+					+ selectedKontakt.getNachname() + "</em> bearbeiten</h2>"));
+			InfoPanel.add(new HTML("<h4>Kontaktinformationen:</h4>"));
+
+			Button cancelBtn = new Button("abbrechen");
+
+			cancelBtn.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					RootPanel.get("content").clear();
+					RootPanel.get("content").add(new KontaktForm(selectedKontakt));
+				}
+			});
+
+			BtnPanel.add(cancelBtn);
+
+			// Instanziierung Button zum Speichern der Aenderungen an dem selektierten
+			// Kontakts
+			Button saveBtn = new Button("speichern");
+
+			/*
+			 * Nun werden die Aenderungen übernommen bzw. gespeichert
+			 */
+			saveBtn.addClickHandler(new ClickHandler() {
+
+				@Override
+				public void onClick(ClickEvent event) {
+
+					TextBox txtboxvorname = (TextBox) kontaktInfoTable.getWidget(0, 1);
+					TextBox txtboxnachname = (TextBox) kontaktInfoTable.getWidget(1, 1);
+					selectedKontakt.setVorname(txtboxvorname.getText());
+					selectedKontakt.setNachname(txtboxnachname.getText());
+
+					ev.saveKontakt(selectedKontakt, new AsyncCallback<Kontakt>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							Window.alert(caught.toString());
+
+						}
+
+						@Override
+						public void onSuccess(Kontakt result) {
+							Window.alert("Kontakt erfolgreich upgedated, beginn update Auspraegungen");
+
+							for (int i = 2; i < kontaktInfoTable.getRowCount(); i++) {
+								Widget w = kontaktInfoTable.getWidget(i, 1);
+								if (w instanceof TextBox) {
+									/*
+									 * Der neue Wert den der Nutzer als Auspraegung angebenen hat zum Zeitpunkt als
+									 * er auf "speichern" geklickt hat.
+									 */
+									String neuerwert = ((TextBox) w).getText();
+
+									for (int j = 0; j < kontaktInfoTable.getRowCount(); j++) {
+										Widget v = kontaktInfoTable.getWidget(i, 0);
+										/*
+										 * Die Eigenschaft welche links von der Tabelle steht
+										 */
+										String eigenschaft = ((TextBox) v).getText();
+										/*
+										 * Durchsuchen der Auspraegungen fuer den Kontakt welcher upgedated werden soll,
+										 * um die "alte" Auspraegung zu der Eigenschaft zu holen
+										 */
+										for (int k = 0; k < kontaktauspraegungen.size(); k++) {
+											if (kontaktauspraegungen.elementAt(k).getBezeichnung() == eigenschaft) {
+												Auspraegung a = new Auspraegung();
+												a = kontaktauspraegungen.elementAt(k);
+												/*
+												 * Nun wird die alte Auspraegung mit der vom Nutzer neu angegeben
+												 * Auspraegung überschrieben
+												 */
+												a.setWert(neuerwert);
+												/*
+												 * Das Auspraegungsobjekt wird nun mit dem neuen Wert an den Server
+												 * übergeben und letzendlich die Auspraegung geupdated
+												 */
+												ev.saveAuspraegung(a, new AsyncCallback<Auspraegung>() {
+
+													@Override
+													public void onFailure(Throwable caught) {
+														Window.alert(caught.toString());
+
+													}
+
+													@Override
+													public void onSuccess(Auspraegung result) {
+														Window.alert("Auspraegungen aktualisiert");
+														Window.Location.reload();
+
+													}
+												});
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+					});
+
+				}
 
 			});
 
+			BtnPanel.add(saveBtn);
 			vp.add(headerPanel);
 			vp.add(InfoPanel);
 			vp.add(kontaktInfoTable);

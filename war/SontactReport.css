@@ -1,10 +1,6 @@
 /** Add css rules here for your application. */
 /** Example rules used by the template application (remove for your app) */
 
-PM>Install-Package bootstrap -Version 4.1.1
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,700');
-@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
-@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css");
 
 /*
  * Allgemeine Regeln für die Seitenrichtlinien
@@ -20,8 +16,6 @@ html,body {
 	height: 100%;
 	
 }
-
-
 
 #topR {
 	cursor: default;
@@ -61,20 +55,22 @@ html,body {
 }
 
 h1 {
-	font-weight: 400;
-	font-size: 30px;
-	width: 55%;
-	background:  url(/images/sontact2.png) no-repeat left 80%;
+	background:  url(/images/sontact2.png) no-repeat left 150%;
+	font-size: 20px;
+	width: 85%;
 	background-size: contain;
-	margin-left: 20px;
-	color: white;
-	font: 'Gotham';
+	margin-left: 200px;
+	color: blau;
+	font: 'Gotham' center 50% ; 
 	font-weight: lighter !important;
 	font-variant: small-caps;
-	letter-spacing: 7px;
+	letter-spacing: 2px;
 	height:auto;
 	
+	
 }
+
+
 
 h1 a {
 
@@ -85,6 +81,7 @@ h1 a {
 
 h2{
 	font: 'Gotham';
+	color: #191970; 
 	font-weight: lighter !important;
 	font-variant: small-caps;
 	letter-spacing: 7px;
@@ -198,3 +195,11 @@ h2{
 	text-align: center;
 	margin: 3px;
 }	
+
+.reportgenerator td {
+	padding: 10px;
+}
+
+.reportgenerator table {
+	padding: 10px;
+}

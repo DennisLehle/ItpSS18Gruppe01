@@ -16,13 +16,13 @@ public interface ReportGenerator extends RemoteService{
 	
 	void init();
 	
-	public AlleKontakteNachEigenschaftenReport createAuspraegungReport() 
+	public AlleKontakteNachEigenschaftenReport createAuspraegungReport(String bezeichnung, String wert, Nutzer n) 
 			throws IllegalArgumentException;
 	
 	public AlleKontakteReport createAlleKontakteReport(Nutzer n) 
 			throws IllegalArgumentException;
 	
-	public AlleGeteiltenKontakteReport createAlleGeteilteReport() 
+	public AlleGeteiltenKontakteReport createAlleGeteilteReport(int ownerId, int receiverId, Nutzer n) 
 			throws IllegalArgumentException;
 
 	

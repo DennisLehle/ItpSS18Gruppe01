@@ -8,8 +8,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
@@ -40,14 +43,15 @@ public class NavigationReport extends VerticalPanel{
 	final Button showAllKontakteNachBestimmtenAusp = new Button("Kontakte nach Ausprägungen");
 	final Button showReportNotVisitedButton = new Button("Alle geteilten Kontakte anzeigen");
 	Nutzer nutzer = new Nutzer();
-	VerticalPanel reportPanel = new VerticalPanel();
+	VerticalPanel contentPanel = new VerticalPanel();
 	
 	
 	
 
 	public NavigationReport(final Nutzer n){
 		final Button showAllKontakteReport = new Button("Meine Kontakte Anzeigen");
-		
+		final Button searchButton = new Button("Suche Starten!");
+
 		VerticalPanel vp = new VerticalPanel();
 		/**
 		 * Styling der Buttons
@@ -121,10 +125,57 @@ public class NavigationReport extends VerticalPanel{
 			 * Button geklickt wird.
 			 */
 			public void onClick(ClickEvent event) {
+				HorizontalPanel hp = new HorizontalPanel();
+				TextBox eingabe = new TextBox();
+				ListBox auswahl = new ListBox();
+				Button btn = new Button("Report starten !");
+				auswahl.addItem("Eigenschaft");
+				auswahl.addItem("Ausprägung");
+				
+				Window.alert("hey");
+				hp.add(btn);
+				hp.add(auswahl);
+				hp.add(eingabe);
+				
+				RootPanel.get("contentR").add(hp);
+				btn.addClickHandler(new ClickHandler() {
 
-				RootPanel.get("contentR").clear();
-			
-
+					@Override
+					public void onClick(ClickEvent event) {
+						
+						
+//						final HTMLReportWriter writer = new HTMLReportWriter();
+//						//	final PlainTextReportWriter write3r = new PlainTextReportWriter();
+//							ClientsideSettings.getReportGeneratorService().createAuspraegungReport(tb.getValue(), n, new AsyncCallback <AlleKontakteReport>() {
+//
+//								@Override
+//								public void onFailure(Throwable caught) {
+//									// TODO Auto-generated method stub
+//									
+//								}
+//
+//								@Override
+//								public void onSuccess(AlleKontakteReport result) {
+//									
+//									RootPanel.get("contentR").clear();
+//									//write3r.process(result);
+//								writer.process(result);
+//								
+//								
+//								RootPanel.get("contentR").add(new HTML (writer.getReportText()));
+//									
+//								}
+//								
+//								
+//							});
+//							
+						
+					}
+					
+					
+					
+				});
+				
 
 			}
 		});

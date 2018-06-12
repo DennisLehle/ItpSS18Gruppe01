@@ -6,6 +6,8 @@ import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -291,16 +293,13 @@ public class Kontaktsuche extends VerticalPanel {
 		});
 		
 		
-		// ClickHandler für die persönliche suche von anderen Kontakten.
-		showKontakt.addClickHandler(new ClickHandler() {
+		//Lässt Kontakte mit einem Doppel Klick anzeigen.
+		searchTable.addDomHandler(new DoubleClickHandler() {
 
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onDoubleClick(DoubleClickEvent event) {
 				
-				if (selectionModel.getSelectedObject() == null) {
-					MessageBox.alertWidget("Hinweis", "Bitte wählen Sie einen Kontakt aus.");
-				} else {
-					RootPanel.get("content").clear();
+					//RootPanel.get("content").clear();
 					ev.getKontaktById(selectionModel.getSelectedObject().getId(), new AsyncCallback<Kontakt>() {
 						@Override
 						public void onFailure(Throwable caught) {
@@ -310,17 +309,14 @@ public class Kontaktsuche extends VerticalPanel {
 
 						@Override
 						public void onSuccess(Kontakt result) {
-
+							RootPanel.get("content").add(new KontaktForm(result));
 						}
 					});
-					clear();
-					add(new KontaktForm(selectionModel.getSelectedObject()));
 
-				}
-			}
-		});
+				}			
+			
+	    }, DoubleClickEvent.getType());
 		
-
 	}
 
 	/**

@@ -18,9 +18,11 @@ public interface ReportGeneratorAsync {
 
 	void createAlleKontakteReport(Nutzer n, AsyncCallback<AlleKontakteReport> callback);
 
-	void createAuspraegungReport(AsyncCallback<AlleKontakteNachEigenschaftenReport> callback);
+	void createAuspraegungReport(String bezeichnung, String wert, Nutzer n,
+			AsyncCallback<AlleKontakteNachEigenschaftenReport> callback);
 
-	void createAlleGeteilteReport(AsyncCallback<AlleGeteiltenKontakteReport> callback);
+	void createAlleGeteilteReport(int ownerId, int receiverId, Nutzer n,
+			AsyncCallback<AlleGeteiltenKontakteReport> callback);
 	
 	
 

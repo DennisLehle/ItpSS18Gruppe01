@@ -110,13 +110,12 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		Row head = new Row();
 		head.addColumn(new Column("Vorname"));
 		head.addColumn(new Column("Nachname"));
-		head.addColumn(new Column("Erstellungsdatum"));
-		head.addColumn(new Column("Modifikationsdatum"));
-
+		head.addColumn(new Column("Erstellungszeitpunkt"));
+		head.addColumn(new Column("Modifikationszeitpunkt"));
 		/* Eigentuemer des Kontaktes fuer die Fallunterscheidung
 		 * welcher Kontakt mit dem 
 		 */
-		head.addColumn(new Column("Eigentümer"));
+		head.addColumn(new Column("Kontakteigentümer"));
 
 		// Kopfzeile dem Report hinzufuegen
 		//report.addRow();
@@ -127,8 +126,10 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		// hinzufuegen
 		Vector<Kontakt> kontakt = new Vector<Kontakt>();
 		
-		kontakt.addAll(this.getEditorService().getAllKontakteByNutzer(n));
 		
+		kontakt.addAll(this.getEditorService().getAllKontakteByOwner(n));
+		kontakt.addAll(this.getEditorService().getAllSharedKontakteByReceiver(n.getId()));
+
 		for (int i = 0; i < kontakt.size(); i++) {
 			
 		
@@ -160,17 +161,71 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		
 		
 	
-	
 	/**
 	 * Report der alle Kontakte nach Eigenschaften mit ihrer Auspraegung ausgibt. 
 	 * Die bestimmten Eigenschaften kï¿½nnen aus der Suchleiste ausgelesen 
 	 * werden und werden mit der entsprechenden Auspraegung zurï¿½ckgegeben.  
 	 */
 	@Override
-	public AlleKontakteNachEigenschaftenReport createAuspraegungReport() 
-			throws IllegalArgumentException {
+	public AlleKontakteNachEigenschaftenReport createAuspraegungReport(String bezeichnung,
+			String wert, Nutzer n) throws IllegalArgumentException {
+		
+		if (this.getEditorService() == null) {
+			return null;
+		}
 
-		return null;
+		// Erstellung einer Instanz des Reports
+		AlleKontakteNachEigenschaftenReport report = new AlleKontakteNachEigenschaftenReport();
+		
+
+		// Setzen des Report Titels und dem Generierungsdatums
+//		Row header = new Row();
+		report.setTitle("Alle Kontakte nach bestimmten Eigenschaften und Auspraegungen");
+		report.setCreated(new Date());
+
+		// Erzeugung der Kopfdaten
+		//report.setHeaderData(createHeaderData(n));
+
+		// Kopfzeile mit den Ueberschriften mit den einzelnen Spalten im Report
+		// erstellen
+		Row head = new Row();
+		head.addColumn(new Column("Vorname"));
+		head.addColumn(new Column("Nachname"));
+		head.addColumn(new Column("Eigenschaft"));
+		head.addColumn(new Column("Ausprägung"));
+		head.addColumn(new Column("Modifikationsdatum"));
+		head.addColumn(new Column("Kontakteigentümer"));
+
+		// Kopfzeile dem Report hinzufuegen
+		//report.addRow();
+		report.addRow(head);
+
+
+		// Relevante Kontaktdaten in den Vektor laden und Zeile fuer Zeile dem Report
+		// hinzufuegen
+		Vector<Kontakt> kontakt = new Vector<Kontakt>();
+		Vector<Relatable> auspraegung = new Vector<Relatable>();
+		
+		kontakt.addAll(this.getEditorService().getAllKontakteByOwner(n));
+		kontakt.addAll(this.getEditorService().getAllSharedKontakteByReceiver(n.getId()));
+
+		for (int i = 0; i < kontakt.size(); i++) {
+			auspraegung.addAll(this.editorService.getAllAuspraegungenByKontaktRelatable(kontakt.elementAt(i).getId()));
+		
+			Row kon = new Row();
+			kon.addColumn(new Column(kontakt.elementAt(i).getVorname()));
+			kon.addColumn(new Column(kontakt.elementAt(i).getNachname()));
+			kon.addColumn(new Column(auspraegung.elementAt(i).getBezeichnung()));
+			kon.addColumn(new Column(auspraegung.elementAt(i).getWert()));
+			kon.addColumn(new Column(kontakt.elementAt(i).getModDat().toString()));
+				
+			if (kontakt != null) {
+					kon.addColumn(new Column(getEditorService().getNutzerById(kontakt.elementAt(i).getOwnerId()).getEmailAddress()));
+			}
+				report.addRow(kon);
+		}
+		
+		return report;
 	}
 
 	/**
@@ -178,10 +233,71 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * Teilhaberschaften fuer andere Nutzer freigegeben wurden.
 	 */
 	@Override
-	public AlleGeteiltenKontakteReport createAlleGeteilteReport() 
+	public AlleGeteiltenKontakteReport createAlleGeteilteReport(int ownerId, int receiverId, Nutzer n) 
 			throws IllegalArgumentException {
+		
+		if (this.getEditorService() == null) {
+			return null;
+		}
 
-		return null;
+		// Erstellung einer Instanz des Reports
+		AlleGeteiltenKontakteReport report = new AlleGeteiltenKontakteReport();
+		
+
+		// Setzen des Report Titels und dem Generierungsdatums
+//		Row header = new Row();
+		report.setTitle("Alle Kontakte nach bestimmten Teilhaberschaften");
+		report.setCreated(new Date());
+
+		// Erzeugung der Kopfdaten
+		//report.setHeaderData(createHeaderData(n));
+
+		// Kopfzeile mit den Ueberschriften mit den einzelnen Spalten im Report
+		// erstellen
+		Row head = new Row();
+		head.addColumn(new Column("Vorname"));
+		head.addColumn(new Column("Nachname"));
+		head.addColumn(new Column("Eigenschaft"));
+		head.addColumn(new Column("Ausprägung"));
+		head.addColumn(new Column("Modifikationsdatum"));
+		head.addColumn(new Column("Kontakteigentümer"));
+		head.addColumn(new Column("Kontaktteilhaber"));
+
+		// Kopfzeile dem Report hinzufuegen
+		//report.addRow();
+		report.addRow(head);
+
+
+		// Relevante Kontaktdaten in den Vektor laden und Zeile fuer Zeile dem Report
+		// hinzufuegen
+		Vector<Kontakt> kontakt = new Vector<Kontakt>();
+		Vector<Relatable> auspraegung = new Vector<Relatable>();
+		Vector<Kontakt> teilkontakt = new Vector <Kontakt>();
+		
+		//kontakt.addAll(this.getEditorService().getAllKontakteByOwner(n));
+		kontakt.addAll(this.getEditorService().getAllSharedKontakteByOwner(n.getId()));
+
+		for (int i = 0; i < kontakt.size(); i++) {
+			teilkontakt.addAll(this.editorService.getAllSharedKontakteByReceiver(kontakt.elementAt(i).getBerechtigung().getReceiverId()));
+			auspraegung.addAll(this.editorService.getAllAuspraegungenByKontaktRelatable(kontakt.elementAt(i).getId()));
+
+			Row kon = new Row();
+			kon.addColumn(new Column(kontakt.elementAt(i).getVorname()));
+			kon.addColumn(new Column(kontakt.elementAt(i).getNachname()));
+			kon.addColumn(new Column(auspraegung.elementAt(i).getBezeichnung()));
+			kon.addColumn(new Column(auspraegung.elementAt(i).getWert()));
+			kon.addColumn(new Column(kontakt.elementAt(i).getModDat().toString()));
+				
+			if (kontakt != null) {
+					kon.addColumn(new Column(getEditorService().getNutzerById(kontakt.elementAt(i).getOwnerId()).getEmailAddress()));
+			}
+//			if (teilkontakt != null) {
+//				kon.addColumn(new Column(getEditorService().getNutzerById(teilkontakt.elementAt(i).getBerechtigung(getReceiverId().getEmailAddress());
+//			}
+			report.addRow(kon);
+		}
+		
+		return report;
 	}
 
 

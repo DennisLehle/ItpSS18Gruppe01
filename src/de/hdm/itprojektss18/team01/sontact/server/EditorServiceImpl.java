@@ -424,29 +424,29 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	
-	/**
-	 * Ausgabe aller eigenen Kontakt, sowie aller mit dem Nutzer geteilten Kontakte.
-	 * 
-	 */
+//	/**
+//	 * Ausgabe aller eigenen Kontakt, sowie aller mit dem Nutzer geteilten Kontakte.
+//	 * 
+//	 */
 	public Vector<Kontakt> getAllKontakteByNutzer(Nutzer n)
 			throws IllegalArgumentException {
-		
-		Vector<Kontakt> kv = getAllKontakteByOwner(n);
-		if (kv != null) {
-			return this.getAllKontakteByOwner(n);
-			}
-		
-		Vector<Kontakt> ks = getAllSharedKontakteByReceiver(n.getId());
-		if (ks != null) {
-			return this.getAllSharedKontakteByReceiver(n.getId());
-			}
-		
-		Vector<Kontakt> kvs = new Vector<Kontakt>();
-			kvs.addAll(kv);
-			kvs.addAll(ks);
-		
-		return kvs;
-	}
+				return null;
+//		
+//		Vector<Kontakt> kvs = new Vector<Kontakt>();
+//		
+//		Vector<Kontakt> kv = getAllKontakteByOwner(n);
+//		if (kv != null) {
+//			kvs.addAll(kv);
+//					
+//		Vector<Kontakt> ks = getAllSharedKontakteByReceiver(n.getId());
+//		if (ks != null) {
+//			 kvs.addAll(ks);
+//			}
+//		}
+//		
+//				
+	
+		}
 	
 	
 	/**

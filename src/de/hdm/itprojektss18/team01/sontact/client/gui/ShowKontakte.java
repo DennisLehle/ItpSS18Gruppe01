@@ -6,6 +6,8 @@ import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -58,7 +60,6 @@ public class ShowKontakte extends VerticalPanel {
 	 * Buttons der Klasse deklarieren.
 	 */
 	private Button deleteKontakt;
-	private Button showKontakt;
 	private Button addKontaktToKontaktliste;
 	private Button deleteKontaktFromKontaktliste;
 	private Button showKontaktFromKontaktliste;
@@ -115,8 +116,6 @@ public class ShowKontakte extends VerticalPanel {
 		onLoad(n);
 
 		// Buttons die inizialisiert werden bei Start dieser Klasse
-		hp.add(showKontakt);
-	//	hp.add(deleteKontakt);
 		hp.add(addKontaktToKontaktliste);
 	
 
@@ -172,55 +171,6 @@ public class ShowKontakte extends VerticalPanel {
 		this.add(searchbar);
 		
 		allKontakte();
-//		/**
-//		 * Diese aufeinander folgenden Methoden rufen für den Nutzer die eigenen
-//		 * Kontakte und die mit IHM geteilten Kontakte auf und führt sie in einer
-//		 * gemeinsamen Liste zusammen.
-//		 */
-//		ev.getAllKontakteByOwner(n, new AsyncCallback<Vector<Kontakt>>() {
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				caught.getMessage().toString();
-//
-//			}
-//
-//			// Meine Kontakte des Nutzers bei dem er der Owner ist werden der Table
-//			// hinzugefügt.
-//			@Override
-//			public void onSuccess(Vector<Kontakt> ownKontakte) {
-//
-//				// Holt Meine Kontakte die mit dem Nutzer geteilt wurden.
-//				ev.getAllSharedKontakteByReceiver(n.getId(), new AsyncCallback<Vector<Kontakt>>() {
-//
-//					@Override
-//					public void onFailure(Throwable caught) {
-//						caught.getMessage().toString();
-//
-//					}
-//
-//					// Alle geteilten Kontakte werden der Tabel hinzugefügt.
-//					@Override
-//					public void onSuccess(Vector<Kontakt> sharedKontakte) {
-//						
-//						// Leerer Vector für Zusammenführung erzeugen.
-//						Vector<Kontakt> zsm = new Vector<Kontakt>();
-//
-//						// Zusammenführung von geteilten und eigenen Kontakten des Nutzers in einer
-//						// Tabelle.
-//						zsm.addAll(ownKontakte);
-//						zsm.addAll(sharedKontakte);
-//
-//						kontaktTable.setRowCount(zsm.size(), true);
-//						kontaktTable.setVisibleRange(0, 10);
-//						kontaktTable.setRowData(zsm);
-//
-//					}
-//
-//				});
-//			}
-//		});
-
 		
 		/**
 		 * Tabelle Befüllen mit den aus der DB abgerufenen Kontakt Informationen.
@@ -285,8 +235,7 @@ public class ShowKontakte extends VerticalPanel {
 		 */
 		this.deleteKontakt = new Button(
 				"<image src='/images/user.png' width='20px' height='20px' align='center' /> löschen");
-		this.showKontakt = new Button(
-				"<image src='/images/user.png' width='20px' height='20px' align='center' /> anzeigen");
+		
 		this.addKontaktToKontaktliste = new Button(
 				"<image src='/images/kontaktliste.png' width='20px' height='20px' align='center' /> hinzufügen");
 
@@ -295,39 +244,29 @@ public class ShowKontakte extends VerticalPanel {
 		this.add(sp);
 		this.add(hp);
 
-		/**
-		 * Button ClickHandler fürs anzeigen eines Kontaktes aus der Kontaktliste. Die
-		 * KontaktFormular Klasse wird instanzieiert.
-		 */
-		showKontakt.addClickHandler(new ClickHandler() {
+		//Lässt Kontakte mit einem Doppel Klick anzeigen.
+		kontaktTable.addDomHandler(new DoubleClickHandler() {
 
-			@Override
-			public void onClick(ClickEvent event) {
+					@Override
+					public void onDoubleClick(DoubleClickEvent event) {
+						//RootPanel.get("content").clear();
+						ev.getKontaktById(selectionModel.getSelectedObject().getId(), new AsyncCallback<Kontakt>() {
+							@Override
+							public void onFailure(Throwable caught) {
+								Window.alert("Der ausgewählte Kontakt konnte nicht angezeigt werden.");
 
-				Kontakt k = selectionModel.getSelectedObject();
+							}
 
-				if (k == null) {
-					MessageBox.alertWidget("Hinweis", "Bitte wählen Sie einen Kontakt aus.");
-				} else {
-					RootPanel.get("content").clear();
-					ev.getKontaktById(k.getId(), new AsyncCallback<Kontakt>() {
-						@Override
-						public void onFailure(Throwable caught) {
-							Window.alert("Der ausgewählte Kontakt konnte nicht angezeigt werden.");
-
+							@Override
+							public void onSuccess(Kontakt result) {
+								RootPanel.get("content").add(new KontaktForm(result));
+							}
+						});
+							
 						}
-
-						@Override
-						public void onSuccess(Kontakt result) {
-
-						}
-					});
-					clear();
-					add(new KontaktForm(k));
-
-				}
-			}
-		});
+						
+					
+			    }, DoubleClickEvent.getType());
 
 		/**
 		 * Button ClickHandler um eine Teilungen zu entfernen und Kontakt zu löschen
@@ -483,9 +422,7 @@ public class ShowKontakte extends VerticalPanel {
 	// Wird aufgerufen wenn man Kontakte einer speziellen Kontaktliste anzeigen
 	// lassen will.
 	protected void showKontakteOfKontaktliste(final Nutzer n, Kontaktliste kl) {
-		
-		//Selektierten Kontakt holen.
-		Kontakt k = selectionModel.getSelectedObject();
+
 
 		/**
 		 * Initialisierung des Labels und eines CellTabels für die Kontakte
@@ -772,47 +709,6 @@ public class ShowKontakte extends VerticalPanel {
 		
 		allKontakte();
 
-//		// Meine Kontakte des Nutzers herauslesen.
-//		ev.findKontaktlisteByTitel(n, "Meine Kontakte", new AsyncCallback<Kontaktliste>() {
-//
-//			@Override
-//			public void onFailure(Throwable err) {
-//				Window.alert("Fehler beim RPC Call" + err.toString());
-//
-//			}
-//
-//			// Aufruf der der Default Kontaktliste des Nutzers.
-//			public void onSuccess(Kontaktliste result) {
-//
-//				// Aufruf der Kontakte der Default Kontaktliste.
-//				ev.getKontakteByKontaktliste(result.getId(), new AsyncCallback<Vector<Kontakt>>() {
-//
-//					@Override
-//					public void onFailure(Throwable err) {
-//						Window.alert("Fehler beim RPC Call" + err.toString());
-//
-//					}
-//
-//					// Aufruf der der Default Kontaktliste des Nutzers. ("Meine Kontakte")
-//					public void onSuccess(Vector<Kontakt> result) {
-//						if (result.size() == 0) {
-//							kontaktTable.setVisible(false);
-//							hp.setVisible(false);
-//
-//						} else {
-//
-//							kontaktTable.setVisible(true);
-//							hp.setVisible(true);
-//						}
-//
-//						kontaktTable.setRowCount(result.size(), true);
-//						kontaktTable.setVisibleRange(0, 10);
-//						kontaktTable.setRowData(result);
-//
-//					}
-//				});
-//			}
-//		});
 
 		/**
 		 * Tabelle Befüllen mit den aus der DB abgerufenen Kontakt Informationen.

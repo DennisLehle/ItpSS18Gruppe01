@@ -250,7 +250,7 @@ public class ShowEigenschaften extends VerticalPanel {
 		dataProvider.addDataDisplay(eigenschaftAuspraegungTable);
 		eigenschaftAuspraegungTable.addColumnSortHandler(sort);
 		eigenschaftAuspraegungTable.setSelectionModel(selectionModel,
-				DefaultSelectionEventManager.<Relatable>createCheckboxManager());
+				DefaultSelectionEventManager.<Relatable>createDefaultManager());
 
 		this.add(eigenschaftAuspraegungTable);
 

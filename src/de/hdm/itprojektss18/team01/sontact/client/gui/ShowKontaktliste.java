@@ -6,6 +6,8 @@ import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -45,10 +47,6 @@ public class ShowKontaktliste extends VerticalPanel {
 	final SingleSelectionModel<Kontaktliste> selectionModel = new SingleSelectionModel<Kontaktliste>();
 	final ListDataProvider<Kontaktliste> dataProvider = new ListDataProvider<Kontaktliste>();
 
-
-	private Button addKontaktToKontaktliste;
-
-	
 	HorizontalPanel hp3 = new HorizontalPanel();
 	HorizontalPanel head = new HorizontalPanel();
 	ScrollPanel sp = new ScrollPanel();
@@ -63,9 +61,6 @@ public class ShowKontaktliste extends VerticalPanel {
 		RootPanel.get("content").add(head);
 		// Methode die beim Start dieser Klasse aufgerufen wird.
 		onLoad(n, k);
-
-		hp3.add(addKontaktToKontaktliste);
-
 		
 
 	}
@@ -157,29 +152,20 @@ public class ShowKontaktliste extends VerticalPanel {
 		
 		this.add(kontaktListenTable2);
 		
-		this.addKontaktToKontaktliste = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' />" + "<image src='/images/kontaktliste.png' width='20px' height='20px' align='center' /> hinzufügen");
-
 		//Größe des ScrollPanels bestimmen plus in das ScrollPanel die CellTable hinzufügen.
 		sp.setSize("900px", "400px");
 		sp.add(kontaktListenTable2);
 		this.add(sp);
 		this.add(hp3);
 
-		/**
-		 * Button ClickHandler zum hinzufügen eines Kontaktes einer speziellen Kontaktliste.
-		 */
-		addKontaktToKontaktliste.addClickHandler(new ClickHandler() {
+		//Mit doppel Klick wird der Kontakt einer Kontaktliste hinzugefügt.
+		kontaktListenTable2.addDomHandler(new DoubleClickHandler() {
 
-			public void onClick(ClickEvent event) {
-
-				//Selektierte Kontaktliste
-				Kontaktliste kl = selectionModel.getSelectedObject();
-				//Sicherheitsabfrage ob selektierter Kontakt null ist.
-				if(kl == null) {
-					Window.alert("Bitte wähle eine Kontaktliste aus.");
-				} else {
+			@Override
+			public void onDoubleClick(DoubleClickEvent event) {
+				
 				//Es wird die selektierte Kontaktliste übergeben und der Kontakt der zuvor ausgewählt wurde. (Kostruktor übergabe)
-				ev.addKontaktToKontaktliste(kl, k, new AsyncCallback<Void>() {
+				ev.addKontaktToKontaktliste(selectionModel.getSelectedObject(), k, new AsyncCallback<Void>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -192,10 +178,12 @@ public class ShowKontaktliste extends VerticalPanel {
 						
 					}
 				});
+				
+					
 				}
-			}
-
-		});
+				
+			
+	    }, DoubleClickEvent.getType());
 
 	}
 

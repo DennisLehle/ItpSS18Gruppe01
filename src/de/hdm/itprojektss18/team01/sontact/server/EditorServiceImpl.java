@@ -23,7 +23,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
 
 /**
- * Implementierung des serverseitigen RPC-Services für den Editor. 
+ * Implementierung des serverseitigen RPC-Services fï¿½r den Editor. 
  */
 public class EditorServiceImpl extends RemoteServiceServlet implements EditorService {
 
@@ -876,7 +876,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Teilhaberschaft zu einem bestimmten Objekt, weches mit einem anderen Nutzer
 	 * geteilt werden soll. Es werden alle abhaengigen Objekte wie bspw. bei einer
 	 * Kontaktliste die Kontakte, welche wiederum Auspraegungen beinhalten
-	 * berücksichtigt. Alle abhaengingen Objekte werden fortlaufend mit den
+	 * berï¿½cksichtigt. Alle abhaengingen Objekte werden fortlaufend mit den
 	 * Parametern Sender, Empfaenger, sowie ObjektId, welches in Verbindung mit type
 	 * des Objekts eindeutig ist, eingetragen.
 	 * 
@@ -952,7 +952,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Das Loeschen einer Berechtigung. Diese Methode hebt die Berechtigung und
 	 * damit die Teilhaberschaft zu einem bestimmten Objekt auf. Es werden alle
 	 * abhaengigen Objekte wie bspw. bei einer Kontaktliste die Kontakte, welche
-	 * wiederum Auspraegungen beinhalten berücksichtigt. Alle Objekte werden
+	 * wiederum Auspraegungen beinhalten berï¿½cksichtigt. Alle Objekte werden
 	 * fortlaufend von der Teilhaberschaft geloest ergo werden alle Berechtigungen
 	 * auf die entsprechenden Objekte einzeln geloescht.
 	 * 
@@ -1104,6 +1104,32 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Rueckgabe des Vektors mit den Nutzerobjekten mit welchen die uebergebene objectId geteilt wurde
 		return nv;
 	}
+	
+	public Vector<Nutzer> sharedWithEmail(Nutzer n) throws IllegalArgumentException {
+		
+		// Vektor mit allen Berechtigungen welche Nutzerseitig gesetzt wurden
+				Vector<Berechtigung> bv = this.getAllBerechtigungenByOwner(n.getId());
+		
+				// Leerer Vektor fuer Nutzerobjekten mit welchen die ï¿½bergebene objectId geteilt wurde
+				Vector<Nutzer> nv = new Vector<Nutzer>();
+				
+				// Schleife welche alle Berechtigungen, die Nutzerseitig gesetzt wurden, durchgeht
+				for (Berechtigung b : bv) {
+				
+
+					// Abgleich der objektId und des types um die Eindeutigkeit zu gewaehrleisten
+					if (bv != null) {
+
+						// Nutzerobjekt/ receiver dem Vektor hinzufuegen
+						nv.add(this.getNutzerById(b.getReceiverId()));
+					}
+				}
+				return nv;
+	}
+
+			
+		
+	
 
 	/*
 	 * *********************************************************************************
@@ -1137,12 +1163,13 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			
 			// Abgleich des Nutzers als Owner sowie des Objekttypes um die Eindeutigkeit zu gewaehrleisten
 			if (bv != null && nutzerId == bv.elementAt(b).getOwnerId() && bv.elementAt(b).getType() == 'k') {
-			
+				
 				// Erstellen des Kontaktobjekts
 				Kontakt k = this.getKontaktById(bv.elementAt(b).getObjectId());
-				
-				// Kontakt dem Vektor hinzufuegen
-				kv.addElement(k);
+				if(!kv.contains(k)) {
+					kv.addElement(k);
+				}
+
 			}
 		}
 	

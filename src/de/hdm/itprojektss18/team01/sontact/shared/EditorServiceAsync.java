@@ -123,6 +123,8 @@ public interface EditorServiceAsync {
 	void getAllKontakteByNutzer(Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
 	void sharedWith(int objectId, char type, Nutzer n, AsyncCallback<Vector<Nutzer>> callback);
+	
+	void sharedWithEmail(Nutzer n, AsyncCallback<Vector<Nutzer>> callback);
 
 	void getAllSharedAuspraegungenByKontaktAndNutzer(Kontakt k, Nutzer n, AsyncCallback<Vector<Relatable>> callback);
 

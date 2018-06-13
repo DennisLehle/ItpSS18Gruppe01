@@ -393,6 +393,12 @@ public interface EditorService extends RemoteService {
 	public Vector<Nutzer> sharedWith(int objectId, char type, Nutzer n)
 			throws IllegalArgumentException;
 
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
+	 * 		#sharedWithEmail(Nutzer n);
+	 */
+	public Vector<Nutzer> sharedWithEmail(Nutzer n)
+			throws IllegalArgumentException;
 	
  /* ********************************************************************** *
   * ABSCHNITT: ABRUF DER GETEILTEN OBJEKTE			     				   *

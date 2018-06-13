@@ -128,4 +128,8 @@ public interface EditorServiceAsync {
 
 	void getEigenschaftById(int eigenschaftId, AsyncCallback<Eigenschaft> callback);
 
+	void getEigenschaftByBezeichnung(String bezeichnung, AsyncCallback<Vector<Eigenschaft>> callback);
+
+	void getAuspraegungByWert(String wert, AsyncCallback<Vector<Auspraegung>> callback);
+
 }

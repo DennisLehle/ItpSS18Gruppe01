@@ -463,6 +463,24 @@ public interface EditorService extends RemoteService {
 	public Vector<Kontakt> getKontakteByEigenschaft(String bezeichnung, Nutzer n) 
 			throws IllegalArgumentException;
 	
+/* ********************************************************************** *
+ * ABSCHNITT: REPORT								     				  *
+ * ********************************************************************** */
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
+	 * 		#getEigenschaftByBezeichnung(String bezeichnung);
+	 */
+	public Vector<Eigenschaft> getEigenschaftByBezeichnung(String bezeichnung)
+			throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
+	 * 		#getAuspraegungByWert(String wert);
+	 */
+	public Vector<Auspraegung> getAuspraegungByWert(String wert)
+			throws IllegalArgumentException;	
+	
 	
  /* ********************************************************************** *
   * ABSCHNITT: SONSTIGES								     			   *

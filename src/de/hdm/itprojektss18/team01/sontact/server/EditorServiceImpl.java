@@ -1386,7 +1386,50 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	/*
 	 * *********************************************************************************
-	 * ABSCHNITT ENDE: /SUCHE
+	 * ABSCHNITT ENDE: SUCHE
+	 * *********************************************************************************
+	 */
+	
+	/*
+	 * *********************************************************************************
+	 * ABSCHNITT ANFANG: REPORT 
+	 * *********************************************************************************
+	 */
+	
+	/**
+	 *  Durchsucht den angesprochenen Kontakt nach einem bestimmten übergebenen Bezeichnung
+	 * der Eigenschaft und gibt diesen zurueck. Hierbei wird die Eigenschaft mit der
+	 * dazugehoerigen Auspraegung dem Kontakt zurueckgegeben.
+	 * 
+	 * @param bezeichnung, vom Nutzer uebergebener String
+	 * @return Vector<Eigenschaft>
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Eigenschaft> getEigenschaftByBezeichnung(String bezeichnung)
+			throws IllegalArgumentException {
+		
+		return this.eMapper.findEigenschaftByBezeichnung(bezeichnung);
+	}
+	
+	/**
+	 * Durchsucht den angesprochenen Kontakt nach einem bestimmten übergebenen Wert
+	 * der Auspraegung und gibt diesen zurueck. Hierbei wird die Auspraegung mit der
+	 * dazugehoerigen Eigenschaft dem Kontakt zurueckgegeben.
+	 * 
+	 * @param wert,
+	 *            vom Nutzer uebergebener String
+	 * @return Vector<Auspraegung>
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Auspraegung> getAuspraegungByWert(String wert)
+			throws IllegalArgumentException {
+		
+		return this.aMapper.findAuspraegungByWert(wert);
+	}
+	
+	/*
+	 * *********************************************************************************
+	 * ABSCHNITT ENDE: SUCHE
 	 * *********************************************************************************
 	 */
 	

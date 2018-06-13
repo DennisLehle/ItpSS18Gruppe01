@@ -425,6 +425,52 @@ public class AuspraegungMapper {
 
 		return result;
 	}
+	
+	/** Suche nach dem wert einer Auspraegung für die Ausgabe der Auspraegung innerhalb des Reports  
+	 * @param wert
+	 * @return
+	 */
+	
+public Vector<Auspraegung> findAuspraegungByWert(String wert){
+	Connection con = null;
+	PreparedStatement stmt = null;
+	
+	Vector<Auspraegung> result = new Vector<Auspraegung>();
+		try {			
+		con = DBConnection.connection();
+		stmt = con.prepareStatement(
+				"SELECT * FROM auspraegung"
+						+ "JOIN eigenschaft ON auspraegung.eigenschaftid = eigenschaft.id "
+						+ "JOIN kontakt ON auspraegung.kontaktid = kontakt.id" 
+						+ "WHERE wert like '%" + wert + "%'" );
+		
+
+		ResultSet rs = stmt.executeQuery();
+		
+		while (rs.next()) {
+			
+			// Ergebnis-Tupel in Objekt umwandeln
+			Auspraegung a = new Auspraegung();
+
+			// Setzen der Attribute den Datensï¿½tzen aus der DB entsprechend
+			a.setId(rs.getInt("id"));
+			a.setWert(rs.getString("wert"));
+			a.setEigenschaftId(rs.getInt("eigenschaftid"));
+			a.setKontaktId(rs.getInt("kontaktid"));
+
+			// Hinzufï¿½gen des neuen Objekts zum Ergebnisvektor
+			result.addElement(a);
+			
+		}
+		return result;
+		}
+		
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		
+		return null;
+	}
 
 	// public void deleteAllByOwner(Nutzer n) {
 	//

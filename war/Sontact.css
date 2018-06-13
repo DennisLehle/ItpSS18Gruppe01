@@ -1,27 +1,50 @@
 /** Add css rules here for your application. */
 /** Example rules used by the template application (remove for your app) */
 
-PM> Install-Package bootstrap-Version 4.1.1
-
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,700');
-
-@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
-
-@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css");
 
 
 /*
- * Allgemeine Richtlinien für die Seitenregelung
+ * Beginn des Logins
+ */
+.login {
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    position: absolute;
+    background: url('http://hintergrundbild.org/wallpaper/full/a/d/2/41863-vertical-blau-hintergrundbilder-1920x1200.jpg');
+    display: block;
+    padding: 200px 30% 0px 30%;
+}
+
+.login tbody {
+    background: #fff;
+    padding: 40px;
+    display: block;
+    box-shadow: 0px 0px 8px #999;
+}
+
+.login h1 {
+	padding: 20px 0px 20px 30px;
+	margin-left: 0px;
+    margin-bottom: 20px;
+    width: 100%;
+	background-position: 50%;
+}
+
+.login a {
+    margin: 30px 40px 0px 40px;
+    padding: 10px 20px;
+    background: #c0c0c0;
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;    
+}
+/*
+ * Ende des Logins
  */
 
-*{
-	margin: 0;
-	padding: 0;
-}
-
-html, body {
-	height: 100%;
-}
 
 /*
  * Beginn des Headers
@@ -36,11 +59,10 @@ html, body {
 	box-sizing: border-box;
 	background: #999 url('https://i.pinimg.com/originals/df/c3/09/dfc309dd3b5d8971c5425ea1f8a28f3d.jpg') no-repeat left 50%;
 	background-size: cover;
-	color: white;
-	
+	color: white;	
 }
 
-/** Das Nutzermenu setzt den Namen des Users und den Logout Link auf die obere Rechte Seite des Headers */
+/** Das Nutzermenu setzt den Namen des Users und den Logout Link auf die untere Rechte Seite des Headers */
 #nutzermenu {
 	display: flex;
 	width: 30%;
@@ -59,7 +81,6 @@ html, body {
 }
 
 #nutzermenu p {
-	
 	font-size: 16px;
 	text-align: right;
 	cursor: pointer;
@@ -72,11 +93,92 @@ html, body {
 	color: #ffffff;
 	border-left: 1px solid #666;
 }
-
-
-.deleteNutzer{
-	float: right;
+/*
+ * Ende des Headers
+ */
+ 
+ 
+/*
+ * Beginn des Navigators
+ */
+#navigator {
+	float: left;
+	background: #eeeeee;
+	background-size: cover;
+	color: black;
 }
+
+#navigator button {
+	text-align: center;
+	font-size: 100%;
+	postion: absolute;
+	align: center;
+	padding-left: 10px;
+}
+/*
+ * Ende des Navigators
+ */
+ 
+ 
+/*
+ * Beginn des Contents
+ */
+#content {
+	width: 77%;
+	min-height: 550px;
+	float: right;
+	padding-left: 100px;
+	padding-top: 20px;
+}
+
+/** Der contentHeader ist für die Überschriften innerhalb des Contents zuständig */
+#contentHeader {
+	font: 'Gotham';
+	font-weight: lighter !important;
+	font-variant: small-caps;
+	letter-spacing: 4px;
+	display: flex;
+	align-items: left;
+	justify-content: left;
+	padding-bottom: 30px;
+}
+/*
+ * Ende des Contents
+ */
+ 
+ 
+/*
+ * Beginn des Footers
+ */
+#footer {
+	padding: 10px 0px;
+	text-align: center;
+	color: #666666;
+	font-size: 80%;
+	letter-spacing: 1px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	background: #999 url('http://mindchamps-medical.com/wp-content/uploads/2015/04/Abstract-Background-White.jpg') no-repeat left 50%;
+}
+
+#footer .gwt-HTML {
+	margin: 0px 5px;
+	color: #666666
+}
+
+#footer a {
+	color: #1c9cd8;
+	text-decoration: none;
+}
+/*
+ * Ende des Footers
+ */
+ 
+ 
+/*
+ * Beginn der Überschriften
+ */
 
 /** Hier wird das Logo und der Text: Sontact auf die linke Seite des Headers gesetzt */
 h1 {
@@ -91,13 +193,19 @@ h1 {
 	font-weight: lighter !important;
 	font-variant: small-caps;
 	letter-spacing: 7px;
-	height: auto;
+}
+
+h1 a {
+	display: block;
+	color: rgba(255, 255, 255, 0.0);
+	padding: 20px 0px 20px 30px;
 }
 
 h2 {
 	text-align: right;
 }
 
+/** Hier wird der Text SHARE YOUR CONTACTS im Header gestylt */
 h3 {
 	font-family: 'Gotham';
 	font-weight: 100;
@@ -109,21 +217,24 @@ h3 {
 	padding-top: 20px;
 }
 
-h1 a {
-	display: block;
-	color: rgba(255, 255, 255, 0.0);
-	padding: 20px 0px 20px 30px;
-}
-
+/** Hier wird der Text "Meine Kontaktlisten in der Navigation gestylt" */
 h5 {
 	font: roboto;
 	font-weight: bold;
-	}
-
+}
 /*
- * Ende des Headers
+ * Ende der Überschriften
  */
  
+ 
+ 
+ 
+ ##################################################
+ 
+.deleteNutzer{
+	float: right;
+}
+
 .sendButton {
 	display: block;
 	font-size: 16pt;
@@ -155,113 +266,6 @@ h5 {
 	background: #eee;
 	box-sizing: border-box;
 }
-
-/*
- * Beginn des Contents
- */
-#content {
-	width: 77%;
-	min-height: 550px;
-	float: right;
-	padding-left: 100px;
-	padding-top: 20px;
-}
-
-/** Der contentHeader ist für die Überschriften innerhalb des Contents zuständig */
-#contentHeader {
-	font: 'Gotham';
-	font-weight: lighter !important;
-	font-variant: small-caps;
-	letter-spacing: 4px;
-	display: flex;
-	align-items: left;
-	justify-content: left;
-	padding-bottom: 30px;
-}
-
-/*
- * Beginn des Navigators
- */
-#navigator {
-	float: left;
-	background: #eeeeee;
-	background-size: cover;
-	color: black;
-}
-
-#navigator label {
-	color: blue;
-}
-#navigator button {
-	
-	text-align: center;
-	font-size: 100%;
-	postion: absolute;
-	align: center;
-	padding-left: 10px;
-}
-
-/* 
- * Beginn des Footers
- */
-#footer {
-	padding: 10px 0px;
-	text-align: center;
-	color: #666666;
-	font-size: 80%;
-	letter-spacing: 1px;
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	background: #999 url('http://mindchamps-medical.com/wp-content/uploads/2015/04/Abstract-Background-White.jpg') no-repeat left 50%;
-}
-
-#footer .gwt-HTML {
-	margin: 0px 5px;
-	color: #666666
-}
-
-#footer a {
-	color: #1c9cd8;
-	text-decoration: none;
-}
-
-/* Beginn des Logins */ 
-/* .login { */
-/*     top: 0px; */
-/*     left: 0px; */
-/*     bottom: 0px; */
-/*     right: 0px; */
-/*     position: absolute; */
-/*     background: rgba(200,200,200,.8) url('https://st2.depositphotos.com/3008028/5542/i/950/depositphotos_55423195-stock-photo-light-grey-background.jpg'); */
-/*     display: block; */
-/*     padding: 200px 30% 0px 30%; */
-/* } */
-
-/* .login tbody { */
-/*     background: #fff; */
-/*     padding: 40px; */
-/*     display: block; */
-/*     box-shadow: 0px 0px 8px #999; */
-/* } */
-
-/* .login h1 { */
-/* 	padding: 20px 0px 20px 30px; */
-/* 	margin-left: 0px; */
-/*     margin-bottom: 20px; */
-/*     width: 100%; */
-/* 	background-position: 50%; */
-/* } */
-
-/* .login a { */
-/*     margin: 30px 40px 0px 40px; */
-/*     padding: 10px 20px; */
-/*     background: #1c9cd8; */
-/*     display: block; */
-/*     color: #fff; */
-/*     text-decoration: none; */
-/*     text-align: center; */
-/* } */
 
 .ButtonStyle {
 	color: #125485;

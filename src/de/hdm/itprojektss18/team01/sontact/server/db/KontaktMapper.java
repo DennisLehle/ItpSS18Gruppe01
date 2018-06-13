@@ -397,7 +397,7 @@ public class KontaktMapper {
 				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
 				k.setModDat(rs.getTimestamp("modifikationsdatum"));
 				k.setOwnerId(rs.getInt("ownerid"));
-				k.setIdentifier(rs.getString("identifier").charAt(0));
+				//k.setIdentifier(rs.getString("identifier").charAt(0));
 				
 				return k;
 			}

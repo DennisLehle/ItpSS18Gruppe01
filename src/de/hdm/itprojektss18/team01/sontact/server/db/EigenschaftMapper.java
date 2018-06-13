@@ -218,7 +218,7 @@ public Eigenschaft insert(Eigenschaft e){
 		Connection con = null; 
 		PreparedStatement stmt = null; 
 		
-		String selectByAuswahl = "SELECT * FROM eigenschaft WHERE id BETWEEN 1 AND 17";
+		String selectByAuswahl = "SELECT * FROM eigenschaft WHERE id BETWEEN 1 AND 19";
 		
 		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
 		Vector <Eigenschaft> result = new Vector<Eigenschaft>();

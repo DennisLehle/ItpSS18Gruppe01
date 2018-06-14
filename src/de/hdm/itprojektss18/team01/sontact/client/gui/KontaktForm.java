@@ -117,10 +117,8 @@ public class KontaktForm extends VerticalPanel {
 				selectedKontakt = result;
 
 				HorizontalPanel headerPanel = new HorizontalPanel();
-				headerPanel.setBorderWidth(10);
 				headerPanel.setWidth("70%");
 				HorizontalPanel BtnPanel = new HorizontalPanel();
-				BtnPanel.setBorderWidth(10);
 				BtnPanel.getElement().getStyle().setDisplay(Display.BLOCK);
 				VerticalPanel vp = new VerticalPanel();
 				Label ownerLb = new Label();
@@ -140,15 +138,9 @@ public class KontaktForm extends VerticalPanel {
 				Button sharedeleteBtn = new Button(
 						"<image src='/images/share.png' width='30px' height='30px' align='center' /> lÃ¶schen");
 
-				// ClickHandler zum teilen von Kontakten
-				Button shareBtn = new Button(
-						"<image src='/images/share.png' width='30px' height='30px' align='center' /> teilen");
-
 				sharedeleteBtn.addClickHandler(new shareKontaktlisteClickHandler());
 				BtnPanel.add(sharedeleteBtn);
 
-				shareBtn.addClickHandler(new shareKontaktlisteClickHandler());
-				BtnPanel.add(shareBtn);
 
 				// Abfrage wer der Owner des Kontaktes ist.
 				if (k.getOwnerId() != n.getId()) {
@@ -595,7 +587,7 @@ public class KontaktForm extends VerticalPanel {
 			RootPanel.get("content").clear();
 
 			/*
-			 * Tabelle für das Editieren vorbereiten
+			 * Tabelle fï¿½r das Editieren vorbereiten
 			 */
 			vornameTxtBox.setText(selectedKontakt.getVorname());
 			nachnameTxtBox.setText(selectedKontakt.getNachname());
@@ -679,7 +671,7 @@ public class KontaktForm extends VerticalPanel {
 			Button saveBtn = new Button("speichern");
 
 			/*
-			 * Nun werden die Aenderungen übernommen bzw. gespeichert
+			 * Nun werden die Aenderungen ï¿½bernommen bzw. gespeichert
 			 */
 			saveBtn.addClickHandler(new ClickHandler() {
 
@@ -728,12 +720,12 @@ public class KontaktForm extends VerticalPanel {
 												a = kontaktauspraegungen.elementAt(k);
 												/*
 												 * Nun wird die alte Auspraegung mit der vom Nutzer neu angegeben
-												 * Auspraegung überschrieben
+												 * Auspraegung ï¿½berschrieben
 												 */
 												a.setWert(neuerwert);
 												/*
 												 * Das Auspraegungsobjekt wird nun mit dem neuen Wert an den Server
-												 * übergeben und letzendlich die Auspraegung geupdated
+												 * ï¿½bergeben und letzendlich die Auspraegung geupdated
 												 */
 												ev.saveAuspraegung(a, new AsyncCallback<Auspraegung>() {
 

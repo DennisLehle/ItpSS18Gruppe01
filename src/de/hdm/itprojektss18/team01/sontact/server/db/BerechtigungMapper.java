@@ -236,7 +236,7 @@ public class BerechtigungMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		
-		String selectByKey = "SELECT DISTINCT *  FROM berechtigung WHERE ownerid=?";
+		String selectByKey = "SELECT *  FROM berechtigung WHERE ownerid=?";
 		
 		//Erstellung des Ergebnisvektors
 		Vector<Berechtigung> result = new Vector<Berechtigung>();

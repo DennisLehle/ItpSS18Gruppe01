@@ -22,9 +22,9 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * Klasse welche Formulare für Kontaktlisten darstellt,* diese erlauben
- * Interaktionsmöglichkeiten um Kontaktlisten Anzuzeigen, zu Bearbeiten, Löschen
- * oder Neuanzulegen.
+ * Klasse welche Formulare für Kontaktlisten darstellt, diese erlauben
+ * Interaktionsmöglichkeiten um Kontaktlisten Anzuzeigen, zu Bearbeiten, zu Löschen
+ * oder neu anzulegen.
  * 
  * @author Kevin Batista, Dennis Lehle, Ugur Bayrak
  */
@@ -40,7 +40,6 @@ public class KontaktlisteForm extends VerticalPanel {
 
 	TextBox txtBox = new TextBox();
 
-
 	/**
 	 * Konstruktor der zum Einsatz kommt, wenn eine Kontaktliste bereits vorhanden
 	 * ist.
@@ -51,6 +50,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 		this.selectedKontaktliste = kl;
 		RootPanel.get("content").clear();
+		RootPanel.get("contentHeader").clear();
 
 		ev.getKontaktlisteById(kl.getId(), new AsyncCallback<Kontaktliste>() {
 
@@ -62,8 +62,6 @@ public class KontaktlisteForm extends VerticalPanel {
 			@Override
 			public void onSuccess(Kontaktliste result) {
 				
-				
-
 				Nutzer n = new Nutzer();
 				n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 				n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
@@ -108,13 +106,12 @@ public class KontaktlisteForm extends VerticalPanel {
 				BtnPanel.add(shareBtn);
 				
 				
-				//ClickHandler zum teilen von Kontaktlisten.
+				//ClickHandler zum Löschen von Kontaktlisten-Teilhaberschaften.
 				Button deleteTeilhaber = new Button("<image src='/images/share.png' width='20px' height='20px' align='center' /> löschen");
 
 				deleteTeilhaber.addClickHandler(new deleteTeilhaberClickHandler());
 				BtnPanel.add(deleteTeilhaber);
-				
-				
+							
 				//Abfrage wer der Owner der Liste ist.
 				if(kl.getOwner() != n.getId()) {
 				ev.getNutzerById(kl.getOwnerId(), new AsyncCallback<Nutzer>() {
@@ -127,14 +124,14 @@ public class KontaktlisteForm extends VerticalPanel {
 
 					@Override
 					public void onSuccess(Nutzer result) {
-						ownerLb.setText("Eigentümer: "+result.getEmailAddress());
+						ownerLb.setText("Eigentümer: " + result.getEmailAddress());
 						
 					}
 					
 				});
 				}
 				
-				//Überprüft Status eines Objekts ob es geteilt wurde.
+				//Überprüft den Status eines Objektes ob es geteilt wurde.
 				ev.getStatusForObject(kl.getId(),kl.getType(), new AsyncCallback<Boolean>() {
 
 					@Override
@@ -152,9 +149,8 @@ public class KontaktlisteForm extends VerticalPanel {
 					}
 					
 				});
-				vp.add(headerPanel);
-		
 				
+				vp.add(headerPanel);
 				vp.add(ownerLb);
 				vp.add(BtnPanel);
 				RootPanel.get("content").add(vp);
@@ -166,11 +162,13 @@ public class KontaktlisteForm extends VerticalPanel {
 	}
 
 	/**
-	 * Konstruktor der zum Einsatz kommt, wenn eine Kontaktliste neu erstellt wird
+	 * Konstruktor der zum Einsatz kommt, wenn eine Kontaktliste neu erstellt wird.
 	 */
 	public KontaktlisteForm(final Nutzer n) {
+		
 		// RootPanel leeren damit neuer Content geladen werden kann.
 		RootPanel.get("content").clear();
+		RootPanel.get("contentHeader").clear();
 
 		HorizontalPanel headerPanel = new HorizontalPanel();
 		headerPanel.add(new HTML("<h2>Neue Kontaktliste erstellen</h2>"));
@@ -183,7 +181,8 @@ public class KontaktlisteForm extends VerticalPanel {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// Methode zum Refresh der aktuellen Anzeige im Browser aufrufen
+				
+				// Methode zum Refresh der aktuellen Anzeige im Browser aufrufen.
 				Window.Location.reload();
 
 			}
@@ -211,10 +210,10 @@ public class KontaktlisteForm extends VerticalPanel {
 
 	}
 
-	// ClickHandler
+	// Beginn der ClickHandler
 
 	/**
-	 * ClickHandler f�r das L�schen einer Kontaktliste
+	 * ClickHandler fuer das Loeschen einer Kontaktliste.
 	 * 
 	 * @author Batista
 	 *
@@ -224,15 +223,15 @@ public class KontaktlisteForm extends VerticalPanel {
 		@Override
 		public void onClick(ClickEvent event) {
 
-			Window.alert("Sind Sie sicher die Kontaktliste " + selectedKontaktliste.getTitel() + " löschen zu wollen?");
-
+			Window.confirm("Sind Sie sicher die Kontaktliste " + selectedKontaktliste.getTitel() + " löschen zu wollen?");
+			
+			// Nutzer Cookies setzen und dann per Nutzer holen.
 			Nutzer n = new Nutzer();
 			n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 			n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
 			// Wenn man nicht der Owner ist wird erst die Berechtigung entfernt.
 			if (n.getId() != selectedKontaktliste.getOwnerId()) {
-				// Nutzer Cookies setzen und dann per Nutzer holen.
 
 				/*
 				 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und 
@@ -267,7 +266,20 @@ public class KontaktlisteForm extends VerticalPanel {
 
 									@Override
 									public void onSuccess(Void result) {
+										
 										Window.alert("Die Teilhaberschaft wurde aufgelöst.");
+										
+										// Nutzer Cookies holen.
+										Nutzer n = new Nutzer();
+										n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+										n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
+
+										RootPanel.get("navigator").clear();
+										Navigation save = new Navigation(n);  
+										RootPanel.get("navigator").add(save);
+										RootPanel.get("content").clear();
+										RootPanel.get("content").add(new ShowKontakte(n));
+
 										
 									}
 								});
@@ -279,15 +291,18 @@ public class KontaktlisteForm extends VerticalPanel {
 
 				});
 
-				// Ist man Owner der Kontaktliste wird die Kontaktliste direkt gelöscht.
+			// Ist man Owner der Kontaktliste wird die Kontaktliste direkt gelöscht.
 			} else {
+				
 				//Zusätzliche Prüfung ob es sich um eines der default Kontaktlisten handelt.
 				if(selectedKontaktliste.getTitel() == "Meine Kontakte" && selectedKontaktliste.getOwnerId() == n.getId()|| 
 						selectedKontaktliste.getTitel() == "Mit mir geteilte Kontakte" && selectedKontaktliste.getOwnerId() == n.getId()) {
 					
 					Window.alert("Tut uns leid, die Standard Listen können hier nicht gelöscht werden.");
-				}else {
-				//Wenn es nicht nicht um eine Standard Liste handelt kann sie gelöscht werden.
+					
+				} else {
+					
+				//Wenn es sich nicht um eine Standard Liste handelt kann sie gelöscht werden.
 				ev.deleteKontaktliste(selectedKontaktliste, new AsyncCallback<Void>() {
 
 					@Override
@@ -297,7 +312,17 @@ public class KontaktlisteForm extends VerticalPanel {
 
 					@Override
 					public void onSuccess(Void result) {
-						Window.Location.reload();
+						
+						// Nutzer Cookies holen.
+						Nutzer n = new Nutzer();
+						n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+						n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
+
+						RootPanel.get("navigator").clear();
+						Navigation save = new Navigation(n);  
+						RootPanel.get("navigator").add(save);
+						RootPanel.get("content").clear();
+						RootPanel.get("content").add(new ShowKontakte(n));
 					}
 				});
 				}
@@ -306,16 +331,15 @@ public class KontaktlisteForm extends VerticalPanel {
 	}
 
 	/**
-	 * ClickHandler zum Sperichern einer neu angelegten Kontaktliste
+	 * ClickHandler zum Speichern einer neu angelegten Kontaktliste.
 	 */
 	public class speichernKontaktlisteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			Nutzer n = new Nutzer();
-
+			
 			// Cookies des Nutzers holen.
-
+			Nutzer n = new Nutzer();
 			n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 			n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
@@ -329,10 +353,17 @@ public class KontaktlisteForm extends VerticalPanel {
 
 				@Override
 				public void onSuccess(Kontaktliste result) {
-					RootPanel.get("content").add(new KontaktlisteForm(result));
 
+					// Nutzer Cookies holen.
+					Nutzer n = new Nutzer();
+					n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+					n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
+					
 					// Refresh der Seite für die Aktualisierug des Baumes.
-					Window.Location.reload();
+					RootPanel.get("navigator").clear();
+					Navigation save = new Navigation(n);  
+					RootPanel.get("navigator").add(save);
+					RootPanel.get("content").add(new KontaktlisteForm(result));
 
 				}
 			});
@@ -370,10 +401,9 @@ public class KontaktlisteForm extends VerticalPanel {
 
 
 	/**
-	 * ClickHandler f�r das Updaten einer Kontaktliste
+	 * ClickHandler fuer das Updaten einer Kontaktliste.
 	 * 
 	 * @author Batista
-	 *
 	 */
 	private class updateKontaktlisteClickHandler implements ClickHandler {
 		@Override
@@ -398,14 +428,15 @@ public class KontaktlisteForm extends VerticalPanel {
 
 			BtnPanel.add(cancelBtn);
 
-			// Instanziierung Button zum Speichern der �nderungen an der selektierten
-			// Kontaktliste
+			// Instanziierung Button zum Speichern der Aenderungen an der selektierten Kontaktliste
 			Button saveBtn = new Button("speichern");
-			// ClickHandler f�r das Speichern
+			
+			// ClickHandler fuer das Speichern
 			saveBtn.addClickHandler(new ClickHandler() {
 
 				@Override
 				public void onClick(ClickEvent event) {
+					
 					selectedKontaktliste.setTitel(txtBox.getText());
 
 					ev.saveKontaktliste(selectedKontaktliste, new AsyncCallback<Void>() {
@@ -418,8 +449,17 @@ public class KontaktlisteForm extends VerticalPanel {
 
 						@Override
 						public void onSuccess(Void result) {
+							
+							// Nutzer Cookies holen.
+							Nutzer n = new Nutzer();
+							n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+							n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
+
+							RootPanel.get("navigator").clear();
+							Navigation save = new Navigation(n);  
+							RootPanel.get("navigator").add(save);
 							RootPanel.get("content").add(new KontaktlisteForm(selectedKontaktliste));
-							Window.Location.reload();
+
 
 						}
 

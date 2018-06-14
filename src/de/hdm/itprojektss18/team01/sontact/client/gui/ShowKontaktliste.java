@@ -4,8 +4,6 @@ import java.util.Vector;
 
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -15,10 +13,8 @@ import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -33,7 +29,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * Die Klasse zeigt die Kontakte einer Spezifischen Kontaktliste in einer CellTabel da.
+ * Die Klasse ShowKontaktliste zeigt die Kontakte einer spezifischen Kontaktliste in einer CellTabel an.
  * 
  * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
  *
@@ -65,7 +61,7 @@ public class ShowKontaktliste extends VerticalPanel {
 
 	}
 	/**
-	 * Diese Methode wird durch den Konstruktor der Klasse aufgerufen.
+	 * Die Methode onLoac wird durch den Konstruktor der Klasse ShowKontaktliste aufgerufen.
 	 * 
 	 * @param n der Nutzer der übergeben wird
 	 * @param k der Kontakt der übergeben wird

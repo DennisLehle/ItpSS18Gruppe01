@@ -2,13 +2,10 @@ package de.hdm.itprojektss18.team01.sontact.client.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -50,7 +47,6 @@ public class Navigation extends VerticalPanel {
 
 		neueKontaktlisteBtn.addClickHandler(new ClickHandler() {
 
-
 			@Override
 			public void onClick(ClickEvent event) {
 				//Wird instanziiert wenn eine neue Kontaktliste erstellt werden soll.
@@ -61,14 +57,12 @@ public class Navigation extends VerticalPanel {
 		});
 		
 		neuerKontaktBtn.addClickHandler(new ClickHandler() {
-
-			
+	
 			@Override
 			public void onClick(ClickEvent event) {
 				RootPanel.get("content").clear();
 				RootPanel.get("content").add(new KontaktForm(nutzer));
-				
-				
+			
 			}
 		});
 		

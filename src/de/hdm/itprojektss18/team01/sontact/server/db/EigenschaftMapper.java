@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 
@@ -218,7 +219,7 @@ public Eigenschaft insert(Eigenschaft e){
 		Connection con = null; 
 		PreparedStatement stmt = null; 
 		
-		String selectByAuswahl = "SELECT * FROM eigenschaft WHERE id BETWEEN 1 AND 17";
+		String selectByAuswahl = "SELECT * FROM eigenschaft WHERE id BETWEEN 1 AND 19";
 		
 		//Vector erzeugen, der die Eigenschaftsdatensätze mit ID 1-17 aufnehmen kann
 		Vector <Eigenschaft> result = new Vector<Eigenschaft>();
@@ -295,61 +296,52 @@ public Eigenschaft insert(Eigenschaft e){
 		return null; 
 	}
 	
-	
+/** Suche nach der bezeichnung einer Eigenschaft f�r die Ausgabe der Eigenschaft innerhalb des Reports  
+	 * @param wert
+	 * @return
+	 */
 
-	public Vector<Kontakt> findEigenschaftByBezeichnung(String bezeichnung){
+	public Vector<Eigenschaft> findEigenschaftByBezeichnung(String bezeichnung){
 		
-		Connection con = null; 
-		PreparedStatement stmt = null; 
+		Connection con = null;
+		PreparedStatement stmt = null;
 		
-		String selectByKey = "SELECT * FROM eigenschaft"
-				+ "JOIN auspraegung ON eigenschaft.id = auspraegung.eigenschaftid "
-				+ "JOIN kontakt ON auspraegung.kontaktid = kontakt.id" 
-				+ "WHERE bezeichnung=? " ;
-		
-		//Vector erzeugen, der die Eigenschaftsdatensaetze aufnehmen kann
-		Vector<Kontakt> result = new Vector<Kontakt>();
-		
-		try {
-			
+		Vector<Eigenschaft> result = new Vector<Eigenschaft>();
+			try {			
 			con = DBConnection.connection();
-			stmt = con.prepareStatement(selectByKey);
-			stmt.setString(1, bezeichnung);		
+			stmt = con.prepareStatement(
+					 "SELECT * FROM eigenschaft"
+								+ "JOIN auspraegung ON eigenschaft.id = auspraegung.eigenschaftid "
+								+ "JOIN kontakt ON auspraegung.kontaktid = kontakt.id" 
+								+ "WHERE bezeichnung like '%" + bezeichnung + "%'"  );
+		
+					
+				ResultSet rs = stmt.executeQuery();
+				
+				while (rs.next()) {
+					
+					// Ergebnis-Tupel in Objekt umwandeln
+					Eigenschaft e = new Eigenschaft();
 
-			
-			ResultSet rs = stmt.executeQuery();
-			
-			//Fuer jeden Eintrag im Suchergebnis wird nun ein Objekt erstellt
-		    Eigenschaft e = new Eigenschaft();
-		    e.setBezeichnung("bezeichnung");
-			
-			//While Schleife für das Durchlaufen vieler Zeilen
-			//Schreiben der Objekt-Attribute aus ResultSet
-			while (rs.next()) {
+					// Setzen der Attribute den Datens�tzen aus der DB entsprechend
+					e.setId(rs.getInt("id"));
+					e.setBezeichnung(rs.getString("bezeichnung"));
+
+					// Hinzuf�gen des neuen Objekts zum Ergebnisvektor
+					result.addElement(e);
+					
+				}
+				return result;
+				}
 				
-				Kontakt k = new Kontakt();
-				k.setId(rs.getInt("id"));
-			    k.setVorname(rs.getString("vorname"));
-			    k.setNachname(rs.getString("nachname"));
-			    k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
-			    k.setModDat(rs.getTimestamp("modifikationsdatum"));
-			    k.setOwnerId(rs.getInt("ownerid"));
+				catch (SQLException e2) {
+					e2.printStackTrace();
+				}
 				
-				//Statt return wird hier der Vektor erweitert
-				result.addElement(k);
-				
+				return null;
 			}
+		
 			
-			return result;
-		}
-		
-		catch (SQLException e2) {
-			e2.printStackTrace();
-		}
-		
-		return null;
-	}
-	
 	/**
 	 * Eine Eigenschaft anhand der Bezeichnung auslesen
 	 * @param Bezeichnung der Eigenschaft

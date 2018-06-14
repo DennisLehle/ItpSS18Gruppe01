@@ -21,7 +21,7 @@ public interface ReportGeneratorAsync {
 	void createAuspraegungReport(String listboxwert, String eingabe, Nutzer n,
 			AsyncCallback<AlleKontakteNachEigenschaftenReport> callback);
 
-	void createAlleGeteilteReport(int receiverId, Nutzer n,String eigenschaft, String auspraegung,
+	void createAlleGeteilteReport(String email, Nutzer n,
 			AsyncCallback<AlleGeteiltenKontakteReport> callback);
 	
 	

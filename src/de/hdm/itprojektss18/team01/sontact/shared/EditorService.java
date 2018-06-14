@@ -393,6 +393,12 @@ public interface EditorService extends RemoteService {
 	public Vector<Nutzer> sharedWith(int objectId, char type, Nutzer n)
 			throws IllegalArgumentException;
 
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
+	 * 		#sharedWithEmail(Nutzer n);
+	 */
+	public Vector<Nutzer> sharedWithEmail(Nutzer n)
+			throws IllegalArgumentException;
 	
  /* ********************************************************************** *
   * ABSCHNITT: ABRUF DER GETEILTEN OBJEKTE			     				   *
@@ -462,6 +468,24 @@ public interface EditorService extends RemoteService {
 	 */
 	public Vector<Kontakt> getKontakteByEigenschaft(String bezeichnung, Nutzer n) 
 			throws IllegalArgumentException;
+	
+/* ********************************************************************** *
+ * ABSCHNITT: REPORT								     				  *
+ * ********************************************************************** */
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
+	 * 		#getEigenschaftByBezeichnung(String bezeichnung);
+	 */
+	public Vector<Eigenschaft> getEigenschaftByBezeichnung(String bezeichnung)
+			throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
+	 * 		#getAuspraegungByWert(String wert);
+	 */
+	public Vector<Auspraegung> getAuspraegungByWert(String wert)
+			throws IllegalArgumentException;	
 	
 	
  /* ********************************************************************** *

@@ -1,19 +1,15 @@
 package de.hdm.itprojektss18.team01.sontact.client.gui;
 
 import com.google.gwt.cell.client.AbstractCell;
-import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 
 /**
  * Stellt die Zelle einer Kontaktliste dar.
- * WIrd für das TreeViewModel benötigt.
+ * Wird für das TreeViewModel benötigt.
  * 
  * @author dennislehle
  *

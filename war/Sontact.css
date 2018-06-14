@@ -93,6 +93,10 @@
 	color: #ffffff;
 	border-left: 1px solid #666;
 }
+
+.deleteNutzer{
+	float: right;
+}
 /*
  * Ende des Headers
  */
@@ -229,11 +233,7 @@ h5 {
  
  
  
- ##################################################
- 
-.deleteNutzer{
-	float: right;
-}
+ /* #################### */
 
 .sendButton {
 	display: block;

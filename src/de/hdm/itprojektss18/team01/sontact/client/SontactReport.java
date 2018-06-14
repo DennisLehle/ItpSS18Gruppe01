@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import de.hdm.itprojektss18.team01.sontact.client.gui.MessageBox;
 import de.hdm.itprojektss18.team01.sontact.client.gui.NavigationReport;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.LoginServiceAsync;
@@ -86,8 +87,14 @@ public class SontactReport implements EntryPoint {
 	}
 
 	private void loadReport(final Nutzer n) {
+		MessageBox.alertWidget("Willkommen", "Hier können Sie ihren gewünschten Report generieren. ");
 		RootPanel.get("navigatorR").add(new NavigationReport(n));
-
+		
+		HTML willkommen = new HTML("<div align=\"center\"> <h2> &nbsp; &nbsp; Willkommen beim Report Generator &nbsp; &nbsp;</h2> </div>");
+		
+		RootPanel.get("contentR").add(willkommen);
+		RootPanel.get("contentR").add(new HTML("<div align=\"center\"> <image src='/images/ReportStart.png' width='350px' height='450px' align='center' /></div>"));
+		
 		HorizontalPanel footer = new HorizontalPanel();
 		Anchor startseite = new Anchor("Startseite", "SontactReport.html");
 		HTML copyrightText1 = new HTML(" | ");

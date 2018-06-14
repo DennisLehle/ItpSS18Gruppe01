@@ -42,7 +42,7 @@ public class NavigationReport extends VerticalPanel {
 	 */
 	final Button showAllKontakteReport = new Button("Alle Kontakte");
 	final Button showAllKontakteNachBestimmtenAusp = new Button("Alle Kontakte nach Eigenschaften");
-	final Button showAlleGeteiltenKontakteReport = new Button("Alle geteilten Kontakte");
+	final Button showAlleGeteiltenKontakteReport = new Button("Alle geteilten Kontakte nach Teilhabern");
 	Nutzer nutzer = new Nutzer();
 	VerticalPanel contentPanel = new VerticalPanel();
 	Kontakt k = new Kontakt();
@@ -69,8 +69,9 @@ public class NavigationReport extends VerticalPanel {
 
 		RootPanel.get("navigatorR").add(vp);
 
+
 		/**
-		 * ClickHandler für den "Meine Kontaktliste" Button.
+		 * ClickHandler für den Report um "Alle Kontakte" zu erstellen.
 		 */
 		showAllKontakteReport.addClickHandler(new ClickHandler() {
 			/**
@@ -80,24 +81,24 @@ public class NavigationReport extends VerticalPanel {
 			 */
 			public void onClick(ClickEvent event) {
 				final HTMLReportWriter writer = new HTMLReportWriter();
-				// final PlainTextReportWriter write3r = new PlainTextReportWriter();
+				
 				ClientsideSettings.getReportGeneratorService().createAlleKontakteReport(n,
 						new AsyncCallback<AlleKontakteReport>() {
 
 							@Override
 							public void onFailure(Throwable caught) {
-								// TODO Auto-generated method stub
+								caught.getMessage().toString();
 
 							}
 
 							@Override
 							public void onSuccess(AlleKontakteReport result) {
-
-								RootPanel.get("contentR").clear();
-								// write3r.process(result);
+								MessageBox.alertWidget("Hinweis", "In diesem Report finden Sie eine Übersicht all Ihrer Kontakte. "
+										+ "Dies beinhaltet alle Ihre Kontakte und alle Kontakte die mit Ihnen geteilt wurden.");
+								RootPanel.get("contentR").clear();							
 								writer.process(result);
 
-								RootPanel.get("contentR").add(new HTML(writer.getReportText()));
+								RootPanel.get("contentR").add(new HTML("<div align=\"center\">"+ writer.getReportText() + "</div>"));
 
 							}
 
@@ -107,7 +108,7 @@ public class NavigationReport extends VerticalPanel {
 		});
 
 		/**
-		 * ClickHandler für den "Meine Kontaktliste" Button.
+		 * ClickHandler für den Report um "Bestimmte Eigenschaften" zu erstellen.
 		 */
 		showAllKontakteNachBestimmtenAusp.addClickHandler(new ClickHandler() {
 			/**
@@ -124,8 +125,12 @@ public class NavigationReport extends VerticalPanel {
 				auswahl.addItem("");
 				auswahl.addItem("Eigenschaft");
 				auswahl.addItem("Auspraegung");
-
-				RootPanel.get("contentR").add(new HTML(" Bitte bestimmen Sie eine Eigenschaft oder Ausprägung."));
+				
+				eingabe.setStyleName("contentR");
+				auswahl.setStyleName("contentR");
+				btn.setStyleName("contentR");
+				RootPanel.get("contentR").add(new HTML("<div align=\"center\"> <h2>Alle Kontakte nach Eigenschaften</h2></div>"));
+				RootPanel.get("contentR").add(new HTML("<div align=\"center\"> Bitte bestimmen Sie eine Eigenschaft oder Ausprägung.</div>"));
 
 				hp.add(auswahl);
 				hp.add(eingabe);
@@ -141,9 +146,6 @@ public class NavigationReport extends VerticalPanel {
 						} else if (auswahl.getSelectedItemText() == "Eigenschaft" && eingabe.getValue() != "") {
 
 							final HTMLReportWriter writer = new HTMLReportWriter();
-
-							// final PlainTextReportWriter writer = new PlainTextReportWriter();
-
 							ClientsideSettings.getReportGeneratorService().createAuspraegungReport(null,
 									eingabe.getValue(), n, new AsyncCallback<AlleKontakteNachEigenschaftenReport>() {
 
@@ -159,7 +161,7 @@ public class NavigationReport extends VerticalPanel {
 											RootPanel.get("contentR").clear();
 											writer.process(result);
 
-											RootPanel.get("contentR").add(new HTML(writer.getReportText()));
+											RootPanel.get("contentR").add(new HTML("<div align=\"center\">"+ writer.getReportText() + "</div>"));
 
 										}
 
@@ -189,7 +191,7 @@ public class NavigationReport extends VerticalPanel {
 											RootPanel.get("contentR").clear();
 											writer.process(result);
 
-											RootPanel.get("contentR").add(new HTML(writer.getReportText()));
+											RootPanel.get("contentR").add(new HTML("<div align=\"center\">"+ writer.getReportText() + "</div>"));
 
 										}
 
@@ -220,9 +222,9 @@ public class NavigationReport extends VerticalPanel {
 				ListBox emailGeteiltenutzer = new ListBox();
 
 				Button btn = new Button("Report starten !");
-				RootPanel.get("contentR").add(new HTML(" Bitte bestimmen Sie den teilhabenden Nutzer."));
+				RootPanel.get("contentR").add(new HTML("<div align=\"center\"> <h2>Alle geteilten Kontakte nach Teilhabern</h2></div>"));
+				RootPanel.get("contentR").add(new HTML(" <div align=\"center\"> Bitte bestimmen Sie den teilhabenden Nutzer. </div>"));
 
-				// hp.add(contentPanel);
 				hp.add(emailGeteiltenutzer);
 				hp.add(btn);
 
@@ -291,14 +293,12 @@ public class NavigationReport extends VerticalPanel {
 												RootPanel.get("contentR").clear();
 												writer.process(result);
 
-												RootPanel.get("contentR").add(new HTML(writer.getReportText()));
+												RootPanel.get("contentR").add(new HTML("<div align=\"center\">"+ writer.getReportText() + "</div>"));
 
 											}
 
 										});
 
-								
-								
 								
 							}
 

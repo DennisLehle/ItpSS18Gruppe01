@@ -131,19 +131,17 @@ h2{
 }
 
 #contentR {
-	width: 77%;
-	min-height: 500px;
-	float: right;
-	padding-left: 0px;
-	padding-top: 25px;
+	margin: 0px auto;
+    width: 100%;
+    padding: 10px;
+     text-align: center;
 }
 
 #navigatorR {
 	float: left;
 	background-size: cover;	
 	background: #cfcfcf;
-	width: 23%;
-	min-height: 500px
+	min-height: 1000px;
 }
 
 #footerR {

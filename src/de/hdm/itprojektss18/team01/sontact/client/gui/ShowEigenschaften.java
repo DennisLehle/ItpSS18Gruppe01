@@ -53,6 +53,7 @@ public class ShowEigenschaften extends VerticalPanel {
 	Vector<Relatable> statusObjects = new Vector<Relatable>();
 
 	private Button shareKontakt;
+	boolean sharedStatus = false;
 
 	HorizontalPanel hp3 = new HorizontalPanel();
 	HorizontalPanel head = new HorizontalPanel();
@@ -98,51 +99,11 @@ public class ShowEigenschaften extends VerticalPanel {
 				}
 
 				/**
-				 * Aufruf aller Kontaktlisten die der Nutzer erstellt hat und bei denen der als
+				 * Aufruf aller Ausprägungen die der Nutzer erstellt hat und bei denen der als
 				 * Owner hinterlegt ist.
 				 */
 				public void onSuccess(Vector<Relatable> result) {
 					statusObjects.addAll(result);
-					status.add(new HTML("<h6>Geteilte Eigenschaften:</h6>"));
-					for (int i = 0; i < statusObjects.size(); i++) {
-						// Leere String Vektoren erstellen um geteilte Eigenschaften hinzuzufügen.
-						Vector<String> bezeichnung = new Vector<String>();
-						Vector<String> wert = new Vector<String>();
-						
-
-						// Hinzufügen der Eigenschaften zu den davor erstellten String Vektoren.
-						bezeichnung.addElement(statusObjects.elementAt(i).getBezeichnung());
-						wert.addElement(statusObjects.elementAt(i).getWert());
-
-						/*
-						 * Prüfen ob eine Teilung vorhanden ist. Bei true wird eine HTML erstellt und
-						 * die Eigenschaften mitdem Teilungssymbol hinzugefügt.
-						 */
-						ev.getStatusForObject(statusObjects.elementAt(i).getId(), 'a', new AsyncCallback<Boolean>() {
-
-							@Override
-							public void onFailure(Throwable caught) {
-								caught.getMessage().toString();
-
-							}
-
-							@Override
-							public void onSuccess(Boolean bo) {
-								/*
-								 * Prüfung ob die Serverantwort geteilte Eigenschaften enthält in Form eines
-								 * booleans der dann "true" ergebit.
-								 */
-								if (bo == true) {
-									
-									HTML eigenschaft = new HTML(bezeichnung + " - " + wert
-											+ " <image src='/images/share.png' width='15px' height='15px' align='center' />");
-									status.add(eigenschaft);
-								}
-
-							}
-
-						});
-					}
 
 					if (result.size() == 0) {
 
@@ -176,6 +137,7 @@ public class ShowEigenschaften extends VerticalPanel {
 
 				@Override
 				public void onSuccess(Vector<Relatable> result) {
+					statusObjects.addAll(result);
 					if (result.size() == 0) {
 
 						eigenschaftAuspraegungTable.setVisible(false);
@@ -257,23 +219,54 @@ public class ShowEigenschaften extends VerticalPanel {
 		// ClickHandler zum teilen von Kontakten mit ausgewählten Ausprägungen.
 		Button shareKontakt = new Button(
 				"<image src='/images/share.png' width='30px' height='30px' align='center' /> teilen");
+
 		// Zum löschen einer Auspraegung aus dem Kontakt.
 		Button deleteAuspraegung = new Button(
 				"<image src='/images/user.png' width='20px' height='20px' align='center' />"
 						+ "<image src='/images/info.png' width='10px' height='10px' align='center' /> löschen");
+		// Zum löschen einer Auspraegung aus dem Kontakt.
+		Button status = new Button("Teilungsstatus");
 
 		// Größe des ScrollPanels bestimmen plus in das ScrollPanel die CellTable
 		// hinzufügen.
 		sp.setSize("900px", "400px");
 		sp.add(eigenschaftAuspraegungTable);
-		this.add(status);
 		hp3.add(shareKontakt);
 		hp3.add(deleteAuspraegung);
+		
+		this.status.add(status);
+		RootPanel.get("content").add(this.status);
+
 		this.add(sp);
 		this.add(hp3);
-		
 
-		// gewählteAuspraegung.addAll(selectionModel.getSelectedSet());
+		status.addClickHandler(new ClickHandler() {
+			Vector<Berechtigung> b = new Vector<Berechtigung>();
+
+			@Override
+			public void onClick(ClickEvent event) {
+				ev.getAllBerechtigungenByOwner(n.getId(), new AsyncCallback<Vector<Berechtigung>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onSuccess(Vector<Berechtigung> result) {
+						b.addAll(result);
+						MessageBox.statusAuspraegungTeilung(" Geteilte Eigenschaften ",
+								"Hier sehen Sie alle Eigenschaften mit ihren Auspraegungen die geteilt wurden. ",
+								statusObjects, b, k);
+
+					}
+
+				});
+
+			}
+
+		});
 
 		// ClickHandler für die persönliche suche von anderen Kontakten.
 		shareKontakt.addClickHandler(new ClickHandler() {
@@ -417,6 +410,27 @@ public class ShowEigenschaften extends VerticalPanel {
 		} else {
 			return null;
 		}
+	}
+
+	public Vector<Berechtigung> berechtigungen(Nutzer n) {
+		Vector<Berechtigung> b = new Vector<Berechtigung>();
+		ev.getAllBerechtigungenByReceiver(n.getId(), new AsyncCallback<Vector<Berechtigung>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.getMessage().toString();
+
+			}
+
+			@Override
+			public void onSuccess(Vector<Berechtigung> result) {
+				b.addAll(result);
+
+			}
+
+		});
+		return b;
+
 	}
 
 }

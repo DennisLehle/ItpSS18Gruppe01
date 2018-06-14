@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -209,7 +210,6 @@ public class MessageBox {
 		final VerticalPanel panel = new VerticalPanel();
 		final HorizontalPanel hp = new HorizontalPanel();
 
-
 		box.setText(header);
 		box.setGlassEnabled(true);
 		panel.add(new HTML(content));
@@ -307,15 +307,19 @@ public class MessageBox {
 	}
 
 	/**
-	 * Methode für die Löschung einer Teilhaberschaft einer Kontaktliste oder eines Kontaktes.
-	 * Diese Teilhaberschaftsauflösung wird vom Nutzer (Owner) initiiert, wenn er einem oder
-	 * mehreren Nutzern die Teilhaberschaft entziehen will.
+	 * Methode für die Löschung einer Teilhaberschaft einer Kontaktliste oder eines
+	 * Kontaktes. Diese Teilhaberschaftsauflösung wird vom Nutzer (Owner) initiiert,
+	 * wenn er einem oder mehreren Nutzern die Teilhaberschaft entziehen will.
 	 * 
-	 * @param header Überschift des MessageBox.
-	 * @param content Erklärung für den Nutzer.
-	 * @param kl das Object Kontaktliste.
-	 * @param k das Object Kontakt.
-	 * @return 
+	 * @param header
+	 *            Überschift des MessageBox.
+	 * @param content
+	 *            Erklärung für den Nutzer.
+	 * @param kl
+	 *            das Object Kontaktliste.
+	 * @param k
+	 *            das Object Kontakt.
+	 * @return
 	 */
 	public static DialogBox deleteTeilhaber(final String header, final String content, Kontaktliste kl, Kontakt k) {
 		final DialogBox box = new DialogBox();
@@ -325,13 +329,11 @@ public class MessageBox {
 		CellTable<Nutzer> nutzerTable;
 		Vector<Nutzer> nutzer = new Vector<Nutzer>();
 		final MultiSelectionModel<Nutzer> selectionModel = new MultiSelectionModel<Nutzer>(getKeyProvider());
-		
-		// Nutzer Cookies holen.
-				Nutzer n = new Nutzer();
-				n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
-				n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
-		
+		// Nutzer Cookies holen.
+		Nutzer n = new Nutzer();
+		n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+		n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
 		nutzerTable = new CellTable<Nutzer>();
 		nutzerTable.setWidth("10");
@@ -346,10 +348,8 @@ public class MessageBox {
 		final Button buttonDeleteK = new Button(
 				"<image src='/images/share.png' width='30px' height='30px' align='center' />"
 						+ "<image src='/images/trash.png' width='20px' height='20px' align='center' /> löschen");
-		
-		
-		
-		//Button zum beenden fals nichts gemacht werden soll.
+
+		// Button zum beenden fals nichts gemacht werden soll.
 		buttonClose.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -358,15 +358,15 @@ public class MessageBox {
 
 			}
 		});
-		
-		//Button zum löschen der Teilhaberschaft an einem Kontakt.
+
+		// Button zum löschen der Teilhaberschaft an einem Kontakt.
 		buttonDeleteK.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 
 				/*
-				 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und 
+				 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und
 				 * wenn es eine Übereinstimmung gibt wird die Berechtigung entfernt.
 				 */
 				ev.getAllBerechtigungenByOwner(n.getId(), new AsyncCallback<Vector<Berechtigung>>() {
@@ -377,12 +377,12 @@ public class MessageBox {
 					}
 
 					@Override
-					public void onSuccess(Vector<Berechtigung> result) {		
-					
-						
+					public void onSuccess(Vector<Berechtigung> result) {
+
 						for (int i = 0; i < selectionModel.getSelectedSet().size(); i++) {
-							
-							if(result.elementAt(i).getObjectId() == k.getId() && result.elementAt(i).getType() == k.getType()){
+
+							if (result.elementAt(i).getObjectId() == k.getId()
+									&& result.elementAt(i).getType() == k.getType()) {
 								Berechtigung b = new Berechtigung();
 								b.setObjectId(k.getId());
 								b.setOwnerId(n.getId());
@@ -398,30 +398,31 @@ public class MessageBox {
 
 									@Override
 									public void onSuccess(Void result) {
-										Window.alert("Die Teilhaberschaft an dem Kontakt " + k.getVorname() + k.getNachname() + " wurde erfolgreich gelöscht.");
-										
+										Window.alert("Die Teilhaberschaft an dem Kontakt " + k.getVorname()
+												+ k.getNachname() + " wurde erfolgreich gelöscht.");
+
 									}
 								});
-								
+
 							}
-							
+
 						}
 
 					}
 
 				});
 			}
-					
+
 		});
-		
-		//Button zum löschen der Teilhaberschaft an einer Kontaktliste
+
+		// Button zum löschen der Teilhaberschaft an einer Kontaktliste
 		buttonDeleteKl.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				
+
 				/*
-				 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und 
+				 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und
 				 * wenn es eine Übereinstimmung gibt wird die Berechtigung entfernt.
 				 */
 				ev.getAllBerechtigungenByOwner(n.getId(), new AsyncCallback<Vector<Berechtigung>>() {
@@ -433,101 +434,59 @@ public class MessageBox {
 
 					@Override
 					public void onSuccess(Vector<Berechtigung> result) {
-						
-						
-						
-						
+
 						for (int i = 0; i <= selectionModel.getSelectedSet().size(); i++) {
 							for (int j = 0; j <= nutzer.size(); j++) {
-								
-							
-							if(result.elementAt(i).getOwnerId() == n.getId()){
-								Berechtigung b = new Berechtigung();
-								b.setObjectId(kl.getId());
-								b.setOwnerId(n.getId());
-								b.setReceiverId(nutzer.elementAt(j).getId());
-								b.setType(kl.getType());
 
-								ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
-									@Override
-									public void onFailure(Throwable caught) {
-										caught.getMessage().toString();
+								if (result.elementAt(i).getOwnerId() == n.getId()) {
+									Berechtigung b = new Berechtigung();
+									b.setObjectId(kl.getId());
+									b.setOwnerId(n.getId());
+									b.setReceiverId(nutzer.elementAt(j).getId());
+									b.setType(kl.getType());
 
-									}
+									ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
+										@Override
+										public void onFailure(Throwable caught) {
+											caught.getMessage().toString();
 
-									@Override
-									public void onSuccess(Void result) {
-										Window.alert("Die Teilhaberschaft an der Kontaktliste " + kl.getTitel() + " wurde erfolgreich gelöscht.");
-										
-									}
-								});
-								
-							} else {
-								Window.alert("Uppppppps");
+										}
+
+										@Override
+										public void onSuccess(Void result) {
+											Window.alert("Die Teilhaberschaft an der Kontaktliste " + kl.getTitel()
+													+ " wurde erfolgreich gelöscht.");
+
+										}
+									});
+
+								} else {
+									Window.alert("Uppppppps");
+								}
 							}
-						}
-							
+
 						}
 
 					}
 
 				});
-			
+
 			}
 		});
-		
-		//////////////////Table-von-Email-Adressen//////////////////////////
-		
+
+		////////////////// Table-von-Email-Adressen//////////////////////////
+
 		/*
 		 * Prüfen ob es sich um eine Kontaktliste handelt.
 		 */
-		if(kl != null) {
+		if (kl != null) {
 
-		ev.sharedWith(kl.getId(), kl.getType(), n, new AsyncCallback <Vector<Nutzer>>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				caught.getMessage().toString();
-				
-			}
-
-			@Override
-			public void onSuccess(Vector<Nutzer> result) {
-				if (result.size() == 0) {
-
-					nutzerTable.setVisible(false);
-					Window.alert("Die Kontaktliste "+ kl.getTitel() + " hat noch keine Teilhaber.");
-					box.hide();
-
-				} else {
-					nutzerTable.setVisible(true);
-					sp.setVisible(true);
-					
-
-				}
-				nutzerTable.setRowCount(result.size(), true);
-				nutzerTable.setVisibleRange(0, 10);
-				nutzerTable.setRowData(result);
-				
-				//Gefundene Nutzer alle dem Vector hinzufügen für spätere Bearbeitung
-				nutzer.removeAllElements();
-				nutzer.addAll(result);
-				
-				
-			}
-			
-		});
-		
-		/*
-		 * Prüfen ob es sich um einen Kontakt handelt.
-		 */
-		} else if(k != null) {
-			ev.sharedWith(k.getId(), k.getType(), n, new AsyncCallback <Vector<Nutzer>>() {
+			ev.sharedWith(kl.getId(), kl.getType(), n, new AsyncCallback<Vector<Nutzer>>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
 					caught.getMessage().toString();
-					
+
 				}
 
 				@Override
@@ -535,23 +494,60 @@ public class MessageBox {
 					if (result.size() == 0) {
 
 						nutzerTable.setVisible(false);
-						Window.alert("Der Kontakt "+ k.getVorname()+ " " + k.getNachname()+ " hat noch keine Teilhaber.");
+						Window.alert("Die Kontaktliste " + kl.getTitel() + " hat noch keine Teilhaber.");
 						box.hide();
+
 					} else {
 						nutzerTable.setVisible(true);
 						sp.setVisible(true);
-						
 
 					}
 					nutzerTable.setRowCount(result.size(), true);
 					nutzerTable.setVisibleRange(0, 10);
 					nutzerTable.setRowData(result);
-					
+
+					// Gefundene Nutzer alle dem Vector hinzufügen für spätere Bearbeitung
+					nutzer.removeAllElements();
+					nutzer.addAll(result);
+
 				}
-				
+
+			});
+
+			/*
+			 * Prüfen ob es sich um einen Kontakt handelt.
+			 */
+		} else if (k != null) {
+			ev.sharedWith(k.getId(), k.getType(), n, new AsyncCallback<Vector<Nutzer>>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					caught.getMessage().toString();
+
+				}
+
+				@Override
+				public void onSuccess(Vector<Nutzer> result) {
+					if (result.size() == 0) {
+
+						nutzerTable.setVisible(false);
+						Window.alert(
+								"Der Kontakt " + k.getVorname() + " " + k.getNachname() + " hat noch keine Teilhaber.");
+						box.hide();
+					} else {
+						nutzerTable.setVisible(true);
+						sp.setVisible(true);
+
+					}
+					nutzerTable.setRowCount(result.size(), true);
+					nutzerTable.setVisibleRange(0, 10);
+					nutzerTable.setRowData(result);
+
+				}
+
 			});
 		}
-		
+
 		/**
 		 * Tabelle Befüllen mit den aus der DB abgerufenen Nutzer Informationen.
 		 */
@@ -563,8 +559,7 @@ public class MessageBox {
 				return (String) nutzer.getEmailAddress();
 			}
 		};
-		
-		
+
 		/**
 		 * Implementierung der Checkbox fürs auswählen von einem oder mehrere
 		 * Eigenschafen mit Ausprägungen.
@@ -582,8 +577,6 @@ public class MessageBox {
 		nutzerTable.addColumn(nutzerColumn, "EMail Adresse: ");
 		nutzerColumn.setSortable(true);
 
-
-		
 		nutzerTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		nutzerTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
 		nutzerTable.setWidth("50%", true);
@@ -594,28 +587,24 @@ public class MessageBox {
 		ListHandler<Nutzer> sort = new ListHandler<Nutzer>(dataProvider.getList());
 		dataProvider.addDataDisplay(nutzerTable);
 		nutzerTable.addColumnSortHandler(sort);
-		nutzerTable.setSelectionModel(selectionModel,
-				DefaultSelectionEventManager.<Nutzer>createCheckboxManager());
-		
-		
-		
+		nutzerTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Nutzer>createCheckboxManager());
+
 		//////////////////////////////////////////
-	
-		
+
 		final Label emptyLabel = new Label("");
 		emptyLabel.setSize("auto", "25px");
 		panel.add(emptyLabel);
 		panel.add(emptyLabel);
-		
+
 		buttonClose.setWidth("80px");
 		buttonClose.setHeight("60px");
 		sp.add(hp);
 		hp.add(nutzerTable);
 		/*
-		 * Prüfung um welches Objekt es sich handelt.
-		 * Jenachdem werden die lösch Buttons ausgeblendet.
+		 * Prüfung um welches Objekt es sich handelt. Jenachdem werden die lösch Buttons
+		 * ausgeblendet.
 		 */
-		if(k == null) {
+		if (k == null) {
 			buttonDeleteK.setVisible(false);
 			buttonDeleteKl.setWidth("80px");
 			buttonDeleteKl.setHeight("60px");
@@ -637,7 +626,127 @@ public class MessageBox {
 		box.show();
 		return box;
 	}
-	
+
+	/**
+	 * Überprüfung bei Teilungsstatusabfrage von geteilten Ausprägungen/
+	 * Eigenschaften. Es werden die Sichten des Owners oder Receivers überprüft, da
+	 * der Receiver geteilte Ausprägungen/ Eigenschaften ebenso weiter teilen kann.
+	 * 
+	 * @param header
+	 *            Info für den Nutzer
+	 * @param content
+	 *            Aktionsbeschreibung für den Nutzer
+	 * @param sharedAus
+	 *            Vektor der geteilten Auspraegungen
+	 * @param b
+	 *            Vektor der Berechtigungen des aktuellen Nutzers.
+	 * @param k
+	 *            Kontakt in dem man den Status abgefragt hat
+	 * @return
+	 */
+	public static DialogBox statusAuspraegungTeilung(final String header, final String content,
+			Vector<Relatable> sharedAus, Vector<Berechtigung> b, Kontakt k) {
+		final DialogBox box = new DialogBox();
+		final VerticalPanel panel = new VerticalPanel();
+
+		box.setText(header);
+		box.setGlassEnabled(true);
+		panel.add(new HTML(content));
+
+		final Button buttonClose = new Button(
+				"<image src='/images/ok.png' width='30px' height='30px' align='center' />");
+
+		// Nutzer Cookies holen.
+		Nutzer n = new Nutzer();
+		n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+		n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
+
+		buttonClose.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				box.hide();
+
+			}
+		});
+		// Prüfung ob es sich um den Owner handelt.
+		if (n.getId() == k.getOwnerId()) {
+			for (int i = 0; i < sharedAus.size(); i++) {
+				// Leere String Vektoren erstellen um geteilte Eigenschaften hinzuzufügen.
+				Vector<String> bezeichnung = new Vector<String>();
+				Vector<String> wert = new Vector<String>();
+
+				// Hinzufügen der Eigenschaften zu den davor erstellten String Vektoren.
+				bezeichnung.addElement(sharedAus.elementAt(i).getBezeichnung());
+				wert.addElement(sharedAus.elementAt(i).getWert());
+
+				/*
+				 * Prüfen ob eine Teilung vorhanden ist. Bei true wird eine HTML erstellt und
+				 * die Eigenschaften mitdem Teilungssymbol hinzugefügt.
+				 */
+				ev.getStatusForObject(sharedAus.elementAt(i).getId(), 'a', new AsyncCallback<Boolean>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.getMessage().toString();
+
+					}
+
+					@Override
+					public void onSuccess(Boolean bo) {
+
+						/*
+						 * Prüfung ob die Serverantwort geteilte Eigenschaften enthält in Form eines
+						 * booleans der dann "true" ergebit.
+						 */
+						if (bo == true) {
+
+							HTML eigenschaft = new HTML(bezeichnung + " - " + wert
+									+ " <image src='/images/share.png' width='15px' height='15px' align='center' />");
+							panel.add(eigenschaft);
+						}
+					}
+
+				});
+
+			}
+			// Wenn man nicht der Owner ist.
+		} else {
+
+			for (int j = 0; j < b.size(); j++) {
+				for (int i = 0; i < sharedAus.size(); i++) {
+					// Leere String Vektoren erstellen um geteilte Eigenschaften hinzuzufügen.
+					Vector<String> bezeichnung = new Vector<String>();
+					Vector<String> wert = new Vector<String>();
+
+					// Hinzufügen der Eigenschaften zu den davor erstellten String Vektoren.
+					if (b.elementAt(j).getObjectId() == sharedAus.elementAt(i).getId()
+							&& b.elementAt(j).getOwnerId() == n.getId() && b.elementAt(j).getType() == 'a') {
+
+						bezeichnung.addElement(sharedAus.elementAt(i).getBezeichnung());
+						wert.addElement(sharedAus.elementAt(i).getWert());
+						HTML eigenschaft = new HTML(bezeichnung + " - " + wert
+								+ " <image src='/images/share.png' width='15px' height='15px' align='center' />");
+						panel.add(eigenschaft);
+
+					}
+				}
+			}
+
+		}
+
+		final Label emptyLabel = new Label("");
+		emptyLabel.setSize("auto", "25px");
+		panel.add(emptyLabel);
+		panel.add(emptyLabel);
+		buttonClose.setWidth("90px");
+		panel.add(buttonClose);
+		panel.setCellHorizontalAlignment(buttonClose, HasAlignment.ALIGN_RIGHT);
+		box.add(panel);
+		box.center();
+		box.show();
+		return box;
+	}
 
 	/**
 	 * KeyProvider für Identifizierung eines Nutzer-Objekts.
@@ -662,6 +771,5 @@ public class MessageBox {
 			return null;
 		}
 	}
-
 
 }

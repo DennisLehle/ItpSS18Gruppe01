@@ -63,7 +63,6 @@ public class ShowKontakte extends VerticalPanel {
 	private Button addKontaktToKontaktliste;
 	private Button deleteKontaktFromKontaktliste;
 	private Button showKontaktFromKontaktliste;
-	private Button addKontakt;
 	private Button search;
 
 	/**
@@ -99,7 +98,7 @@ public class ShowKontakte extends VerticalPanel {
 		// Methode die beim Start dieser Klasse aufgerufen wird.
 		showAllKontakte(kl);
 
-		hp.add(addKontakt);
+	
 
 	}
 
@@ -762,8 +761,7 @@ public class ShowKontakte extends VerticalPanel {
 		ListHandler<Kontakt> sort = new ListHandler<Kontakt>(dataProvider.getList());
 		dataProvider.addDataDisplay(kontaktTable);
 		kontaktTable.addColumnSortHandler(sort);
-		this.addKontakt = new Button(
-				"<image src='/images/user.png' width='25px' height='25px' align='center' /> hinzufügen");
+	
 		this.add(kontaktTable);
 
 		/**
@@ -776,38 +774,31 @@ public class ShowKontakte extends VerticalPanel {
 		this.add(sp);
 		this.add(hp);
 
-		/**
-		 * Button ClickHandler zum hinzufügen der bereits ausgewählten Kontaktliste.
-		 */
-		addKontakt.addClickHandler(new ClickHandler() {
+		//Lässt Kontakte mit einem Doppel Klick anzeigen.
+		kontaktTable.addDomHandler(new DoubleClickHandler() {
 
-			public void onClick(ClickEvent event) {
+					@Override
+					public void onDoubleClick(DoubleClickEvent event) {
+						//RootPanel.get("content").clear();
+						ev.getKontaktById(selectionModel.getSelectedObject().getId(), new AsyncCallback<Kontakt>() {
+							@Override
+							public void onFailure(Throwable caught) {
+								Window.alert("Der ausgewählte Kontakt konnte nicht angezeigt werden.");
 
-				// Selektierte Kontaktliste
-				Kontakt k = selectionModel.getSelectedObject();
-				// Sicherheitsabfrage ob selektierter Kontakt null ist.
-				if (k == null) {
-					Window.alert("Bitte wähle einen Kontakt aus.");
-				} else {
-					// Es wird die selektierte Kontaktliste übergeben und der Kontakt der zuvor
-					// ausgewählt wurde. (Kostruktor übergabe)
-					ev.addKontaktToKontaktliste(kl, k, new AsyncCallback<Void>() {
+							}
 
-						@Override
-						public void onFailure(Throwable caught) {
-							Window.alert("Hoppala" + caught.toString());
+							@Override
+							public void onSuccess(Kontakt result) {
+								RootPanel.get("content").add(new KontaktForm(result));
+							}
+						});
+							
 						}
+						
+					
+			    }, DoubleClickEvent.getType());
+		
 
-						@Override
-						public void onSuccess(Void result) {
-							Window.Location.reload();
-
-						}
-					});
-				}
-			}
-
-		});
 
 	}
 	

@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 

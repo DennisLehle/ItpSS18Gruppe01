@@ -39,56 +39,50 @@ public class EigenschaftMapper {
 	 * @param e
 	 * @return e
 	 */
-public Eigenschaft insert(Eigenschaft e){
+public Eigenschaft insert (Eigenschaft e) {
 		
-		Connection con = null;
-		PreparedStatement stmt = null;
-		
-		
-		//Query f�r die Abfrage der hoechsten ID (Prim�rschl�ssel) in der Datenbank
-		String maxIdSQL = "SELECT MAX(id) AS maxid FROM eigenschaft";
-		
-		
-		//Query f�r den Insert
-		String insertSQL = "INSERT INTO eigenschaft (id, bezeichnung) VALUES (?,?)";		
-		
-		
+		/**
+		 * Verbindung zur DB Connection aufbauen
+		 */	
+		Connection con = DBConnection.connection();
 		
 		try {
+			Statement stmt = con.createStatement();
 			
-			con = DBConnection.connection(); 
-			stmt = con.prepareStatement(maxIdSQL);
+			/**
+			 * Prüfen, welches der momentan höchste Primärschlüsselwert ist
+			 */	
+			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid "
+					+ "FROM eigenschaft ");
 			
-
-			//MAX ID Query ausfuehren
-			ResultSet rs = stmt.executeQuery();
-			
-			
-			//...um diese dann um 1 inkrementiert der ID des BO zuzuweisen
-		    if(rs.next()){
-		    	e.setId(rs.getInt("maxId")+1);
-		    }	   
-		    
-		    	
-			//Jetzt erfolgt der Insert
-		    stmt = con.prepareStatement(insertSQL);
-		    
-
-		    //Setzen der ? Platzhalter als Values
-		    stmt.setInt(1, e.getId());
-		    stmt.setString(2, e.getBezeichnung());
-		   
-		    
-		    //INSERT-Query ausf�hren
-		    stmt.executeUpdate();
-		    
-		    
-		} catch (SQLException e2) {
+			if(rs.next()) {
+				
+				/**
+				 * Die Variable erhält den höchsten Primärschlüssel, um 1 inkrementiert
+				 */
+				e.setId(rs.getInt("maxid")+1);
+				
+				/**
+				 * Durchführung der Update-Operation via Prepared Statement
+				 */
+				PreparedStatement stmt1 = con.prepareStatement(
+						"INSERT INTO eigenschaft(id, bezeichnung)" 
+						+ " VALUES(?,?) ",
+						
+				Statement.RETURN_GENERATED_KEYS);
+				stmt1.setInt(1,  e.getId());
+				stmt1.setString(2, e.getBezeichnung());
+				
+				System.out.println(stmt);
+				stmt1.executeUpdate();
+			}
+		}
+		catch(SQLException e2){
 			e2.printStackTrace();
-			}			
-		
-		return e;
-	}	
+		}
+	
+		return e;	
+}
 
 	
 	/**
@@ -296,7 +290,7 @@ public Eigenschaft insert(Eigenschaft e){
 		return null; 
 	}
 	
-/** Suche nach der bezeichnung einer Eigenschaft f�r die Ausgabe der Eigenschaft innerhalb des Reports  
+/** Suche nach der bezeichnung einer Eigenschaft f�r die Ausgabe der Eigenschaft innerhalb des Reports  
 	 * @param wert
 	 * @return
 	 */

@@ -53,16 +53,14 @@ public class KontaktForm extends VerticalPanel {
 	Vector<Eigenschaft> kontakteigenschaften = new Vector<>();
 	Vector<Auspraegung> kontaktauspraegungen = new Vector<>();
 	ListBox auswahlEigenschaftenListBox1 = new ListBox();
-	ListBox auswahlEigenschaftenListBox2 = new ListBox();
-	ListBox auswahlEigenschaftenListBox3 = new ListBox();
+	
 
 	SontactTreeViewModel sontactTree = null;
 
 	TextBox vornameTxtBox = new TextBox();
 	TextBox nachnameTxtBox = new TextBox();
 	TextBox auspraegungTxtBx1 = new TextBox();
-	TextBox auspraegungTxtBx2 = new TextBox();
-	TextBox auspraegungTxtBx3 = new TextBox();
+
 
 	Label erstellungsdatum = new Label();
 	Label modifikationsdatum = new Label();
@@ -286,8 +284,7 @@ public class KontaktForm extends VerticalPanel {
 				 */
 				for (int i = 0; i < kontakteigenschaften.size(); i++) {
 					auswahlEigenschaftenListBox1.addItem(kontakteigenschaften.elementAt(i).getBezeichnung());
-					auswahlEigenschaftenListBox2.addItem(kontakteigenschaften.elementAt(i).getBezeichnung());
-					auswahlEigenschaftenListBox3.addItem(kontakteigenschaften.elementAt(i).getBezeichnung());
+				
 				}
 
 			}
@@ -330,10 +327,8 @@ public class KontaktForm extends VerticalPanel {
 		kontaktInfoTable.setWidget(1, 1, nachnameTxtBox);
 		kontaktInfoTable.setWidget(2, 0, auswahlEigenschaftenListBox1);
 		kontaktInfoTable.setWidget(2, 1, auspraegungTxtBx1);
-		kontaktInfoTable.setWidget(3, 0, auswahlEigenschaftenListBox2);
-		kontaktInfoTable.setWidget(3, 1, auspraegungTxtBx2);
-		kontaktInfoTable.setWidget(4, 0, auswahlEigenschaftenListBox3);
-		kontaktInfoTable.setWidget(4, 1, auspraegungTxtBx3);
+
+		
 		kontaktInfoTable.setCellPadding(35);
 
 		vp.add(btnPanelTop);

@@ -49,7 +49,7 @@ public class ShowEigenschaften extends VerticalPanel {
 	private CellTable<Relatable> eigenschaftAuspraegungTable;
 	final MultiSelectionModel<Relatable> selectionModel = new MultiSelectionModel<Relatable>(getKeyProvider());
 	final ListDataProvider<Relatable> dataProvider = new ListDataProvider<Relatable>();
-	Vector<Relatable> gewählteAuspraegung = new Vector<Relatable>();
+	Vector<Relatable> gewaehlteAuspraegung = new Vector<Relatable>();
 	Vector<Relatable> statusObjects = new Vector<Relatable>();
 
 	private Button shareKontakt;
@@ -275,11 +275,11 @@ public class ShowEigenschaften extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				// Vector alle selektierten Eigenschaften/Ausprägungen mitgeben aber davor erst
 				// leeren.
-				gewählteAuspraegung.removeAll(gewählteAuspraegung);
-				gewählteAuspraegung.addAll(selectionModel.getSelectedSet());
+				gewaehlteAuspraegung.removeAll(gewaehlteAuspraegung);
+				gewaehlteAuspraegung.addAll(selectionModel.getSelectedSet());
 
 				MessageBox.shareAlertKontakt("Geben Sie die Email des Empfängers an", "Email: ", k,
-						gewählteAuspraegung);
+						gewaehlteAuspraegung);
 
 				Nutzer nutzer = new Nutzer();
 				nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
@@ -296,16 +296,16 @@ public class ShowEigenschaften extends VerticalPanel {
 				// Vector alle selektierten Eigenschaften/Ausprägungen mitgeben aber davor erst
 				// leeren.
 
-				gewählteAuspraegung.removeAll(gewählteAuspraegung);
-				gewählteAuspraegung.addAll(selectionModel.getSelectedSet());
+				gewaehlteAuspraegung.removeAll(gewaehlteAuspraegung);
+				gewaehlteAuspraegung.addAll(selectionModel.getSelectedSet());
 
 				// Abfrage ob der Nutzer der Owner ist oder nicht.
 				if (n.getId() == k.getOwnerId()) {
 
 					// Geht die ausgewählten Auspraegungen durch und übergibt jede einzelne für die
 					// Löschung davon.
-					for (int i = 0; i <= gewählteAuspraegung.size(); i++) {
-						ev.deleteAuspraegungById(gewählteAuspraegung.elementAt(i).getId(), new AsyncCallback<Void>() {
+					for (int i = 0; i <= gewaehlteAuspraegung.size(); i++) {
+						ev.deleteAuspraegungById(gewaehlteAuspraegung.elementAt(i).getId(), new AsyncCallback<Void>() {
 
 							@Override
 							public void onFailure(Throwable caught) {
@@ -340,9 +340,9 @@ public class ShowEigenschaften extends VerticalPanel {
 
 				} else {
 					// Wenn man nicht der Owner ist springt man in die else Anweisung hinein.
-					for (int i = 0; i <= gewählteAuspraegung.size(); i++) {
+					for (int i = 0; i <= gewaehlteAuspraegung.size(); i++) {
 						Berechtigung b = new Berechtigung();
-						b.setObjectId(gewählteAuspraegung.elementAt(i).getId());
+						b.setObjectId(gewaehlteAuspraegung.elementAt(i).getId());
 						b.setOwnerId(k.getOwnerId());
 						b.setReceiverId(n.getId());
 						// Typ ist hier nicht Verfügbar daher wird dies hier direkt eingetrage

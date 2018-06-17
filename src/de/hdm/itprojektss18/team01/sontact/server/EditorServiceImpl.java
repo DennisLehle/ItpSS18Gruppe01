@@ -663,6 +663,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		Eigenschaft e = new Eigenschaft();
 		e.setBezeichnung(bezeichnung);
+		//e.setId(1);
 		return this.eMapper.insert(e);
 	}
 	
@@ -740,6 +741,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		a.setWert(wert);
 		a.setEigenschaftId(eigenschaftId);
 		a.setKontaktId(kontaktId);
+	//a.setId(1);
 
 
 		// Anpassung des Modifikationsdatums des Kontakt Objektes
@@ -1397,7 +1399,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	
 	/**
-	 *  Durchsucht den angesprochenen Kontakt nach einem bestimmten übergebenen Bezeichnung
+	 *  Durchsucht den angesprochenen Kontakt nach einem bestimmten ï¿½bergebenen Bezeichnung
 	 * der Eigenschaft und gibt diesen zurueck. Hierbei wird die Eigenschaft mit der
 	 * dazugehoerigen Auspraegung dem Kontakt zurueckgegeben.
 	 * 
@@ -1412,7 +1414,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 	
 	/**
-	 * Durchsucht den angesprochenen Kontakt nach einem bestimmten übergebenen Wert
+	 * Durchsucht den angesprochenen Kontakt nach einem bestimmten ï¿½bergebenen Wert
 	 * der Auspraegung und gibt diesen zurueck. Hierbei wird die Auspraegung mit der
 	 * dazugehoerigen Eigenschaft dem Kontakt zurueckgegeben.
 	 * 

@@ -54,48 +54,52 @@ public class AuspraegungMapper {
 	 * @return das bereits �bergebene Objekt, jedoch mit ggf. korrigierter
 	 *         <code>id</code>.
 	 */
-
-	public Auspraegung insert(Auspraegung aus) {
+public Auspraegung insert (Auspraegung aus) {
+		
 		/**
-		 * Aufbau der DB Connection
-		 */
+		 * Verbindung zur DB Connection aufbauen
+		 */	
 		Connection con = DBConnection.connection();
-		/**
-		 * Try und Catch gehören zum Exception Handling Try = Versuch erst dies Catch =
-		 * Wenn Try nicht geht versuch es so ..
-		 */
+		
 		try {
-			// Statement stmt = con.createStatement();
+			Statement stmt = con.createStatement();
+			
 			/**
-			 * Was ist der momentan höchste Primärschlüssel
-			 */
-			// ResultSet rs = stmt.executeQuery(null);
-
-			// if (rs.next()) {
-			/**
-			 * Varaible merk erhält den höchsten Primärschlüssel inkrementiert um 1
-			 */
-			// aus.setId(rs.getInt("maxid") + 1);
-			/**
-			 * Durchführen der Einfüge Operation via Prepared Statement
-			 */
-			PreparedStatement stmt1 = con.prepareStatement(
-					"INSERT INTO `auspraegung` (id, wert, eigenschaftid, kontaktid) " + "VALUES (?,?,?,?)",
-					Statement.RETURN_GENERATED_KEYS);
-			stmt1.setInt(1, aus.getId());
-			stmt1.setString(2, aus.getWert());
-			stmt1.setInt(3, aus.getEigenschaftId());
-			stmt1.setInt(4, aus.getKontaktId());
-
-			stmt1.executeUpdate();
-			// }
-
-		} catch (SQLException e2) {
+			 * Prüfen, welches der momentan höchste Primärschlüsselwert ist
+			 */	
+			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid "
+					+ "FROM auspraegung ");
+			
+			if(rs.next()) {
+				
+				/**
+				 * Die Variable erhält den höchsten Primärschlüssel, um 1 inkrementiert
+				 */
+				aus.setId(rs.getInt("maxid")+1);
+				
+				/**
+				 * Durchführung der Update-Operation via Prepared Statement
+				 */
+				PreparedStatement stmt1 = con.prepareStatement(
+						"INSERT INTO auspraegung(id, wert, eigenschaftid, kontaktid)" 
+						+ " VALUES(?,?,?,?) ",
+						
+				Statement.RETURN_GENERATED_KEYS);
+				stmt1.setInt(1,  aus.getId());
+				stmt1.setString(2, aus.getWert());
+				stmt1.setInt(3, aus.getEigenschaftId());
+				stmt1.setInt(4, aus.getKontaktId());
+				
+				System.out.println(stmt);
+				stmt1.executeUpdate();
+		}
+		}
+		catch(SQLException e2){
 			e2.printStackTrace();
 		}
-		return aus;
-
-	}
+	
+		return aus;	
+}
 
 	/**
 	 * Aktualisierung eines Auspraegung-Objekts in der Datenbank.
@@ -426,7 +430,7 @@ public class AuspraegungMapper {
 		return result;
 	}
 	
-	/** Suche nach dem wert einer Auspraegung f�r die Ausgabe der Auspraegung innerhalb des Reports  
+	/** Suche nach dem wert einer Auspraegung f�r die Ausgabe der Auspraegung innerhalb des Reports  
 	 * @param wert
 	 * @return
 	 */

@@ -265,7 +265,7 @@ public interface EditorService extends RemoteService {
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
 	 * 		#findEigenschaftByBezeichnung(String bezeichnung);
 	 */
-	public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung)
+	public Eigenschaft getEigenschaftByBezeichnung(String bezeichnung)
 			throws IllegalArgumentException;
 //	-> ?	
 	
@@ -472,13 +472,6 @@ public interface EditorService extends RemoteService {
 /* ********************************************************************** *
  * ABSCHNITT: REPORT								     				  *
  * ********************************************************************** */
-	
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
-	 * 		#getEigenschaftByBezeichnung(String bezeichnung);
-	 */
-	public Vector<Eigenschaft> getEigenschaftByBezeichnung(String bezeichnung)
-			throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl

@@ -81,13 +81,6 @@ public class AuspraegungMapper {
 			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		} catch (SQLException e2) {
 			e2.printStackTrace();
-		} finally {
-			if (con != null)
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
 		}
 		return a;
 	}

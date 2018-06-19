@@ -83,14 +83,6 @@ public class EigenschaftMapper {
 			e2.printStackTrace();
 		}
 
-		finally {
-			if (con != null)
-				try {
-					con.close();
-				} catch (SQLException e2) {
-					e2.printStackTrace();
-				}
-		}
 		return e;
 	}
 

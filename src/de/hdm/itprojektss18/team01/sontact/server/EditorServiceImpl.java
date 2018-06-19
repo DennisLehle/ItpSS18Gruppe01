@@ -663,7 +663,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		Eigenschaft e = new Eigenschaft();
 		e.setBezeichnung(bezeichnung);
-		//e.setId(1);
+		e.setId(1);
 		return this.eMapper.insert(e);
 	}
 	
@@ -717,7 +717,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Auslesen einer Eigenschaft anhand der uebergebener Bezeichnung.
 	 */
-	public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung)
+	public Eigenschaft getEigenschaftByBezeichnung(String bezeichnung)
 			throws IllegalArgumentException {
 		
 		return this.eMapper.findEigenschaft(bezeichnung);
@@ -741,7 +741,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		a.setWert(wert);
 		a.setEigenschaftId(eigenschaftId);
 		a.setKontaktId(kontaktId);
-	//a.setId(1);
+	a.setId(1);
 
 
 		// Anpassung des Modifikationsdatums des Kontakt Objektes
@@ -763,7 +763,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public void createAuspraegungForNewEigenschaft(String bezeichnung, String wert, Kontakt k)
 			throws IllegalArgumentException {
-		createAuspraegung(wert, createEigenschaft(bezeichnung).getId(), k.getId());
+		
+		this.createAuspraegung(wert, createEigenschaft(bezeichnung).getId(), k.getId());
 	}
 	
 	
@@ -1394,25 +1395,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	/*
 	 * *********************************************************************************
-	 * ABSCHNITT ANFANG: REPORT 
+	 * ABSCHNITT ANFANG: HILFSMETHODEN 
 	 * *********************************************************************************
 	 */
 	
-	/**
-	 *  Durchsucht den angesprochenen Kontakt nach einem bestimmten �bergebenen Bezeichnung
-	 * der Eigenschaft und gibt diesen zurueck. Hierbei wird die Eigenschaft mit der
-	 * dazugehoerigen Auspraegung dem Kontakt zurueckgegeben.
-	 * 
-	 * @param bezeichnung, vom Nutzer uebergebener String
-	 * @return Vector<Eigenschaft>
-	 * @throws IllegalArgumentException
-	 */
-	public Vector<Eigenschaft> getEigenschaftByBezeichnung(String bezeichnung)
-			throws IllegalArgumentException {
-		
-		return this.eMapper.findEigenschaftByBezeichnung(bezeichnung);
-	}
-	
+
 	/**
 	 * Durchsucht den angesprochenen Kontakt nach einem bestimmten �bergebenen Wert
 	 * der Auspraegung und gibt diesen zurueck. Hierbei wird die Auspraegung mit der

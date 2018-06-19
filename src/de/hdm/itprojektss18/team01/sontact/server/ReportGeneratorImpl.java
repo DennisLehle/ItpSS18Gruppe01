@@ -139,12 +139,16 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		if (this.getEditorService() == null) {
 			return null;
 		}
-		
+
 		// Die Erstellung einer Instanz dieses Reports
 		AlleKontakteNachEigenschaftenReport report = new AlleKontakteNachEigenschaftenReport();
 
 		// Festlegung des Titels und des Generierungsdatums dieses Reports
-		report.setTitle("Alle Kontakte nach bestimmten Eigenschaften und Auspraegungen");
+		if (auspraegung != null) {
+			report.setTitle("Alle Kontakte nach" + " " + auspraegung + " ");
+		} else if (eigenschaft != null) {
+			report.setTitle("Alle Kontakte nach" + " " + eigenschaft + " ");
+		}
 		report.setCreated(new Date());
 
 		// Kopfzeile der Reporttabelle; mit den Ueberschriften der einzelnen Spalten
@@ -157,13 +161,18 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		// Spalte zur Darstellung des Eigentuemer eines Kontaktes
 		head.addColumn(new Column("Kontakteigentuemer"));
 
+		// Uebergebener Inhalt
+		// head.addColumn(new Column("Eigenschaft"));
+		// head.addColumn(new Column("Auspraegung"));
+
 		// Kopfzeile dem Report hinzufuegen
 		report.addRow(head);
 
 		// Angeforderte Kontaktdaten in den Vektor laden und dem Report hinzufuegen
 		Vector<Kontakt> kontakt = new Vector<Kontakt>();
 
-		// Pruefung des uebergebenen Parameters, dieses durch die Suche den Report ausgibt
+		// Pruefung des uebergebenen Parameters, dieses durch die Suche den Report
+		// ausgibt
 		if (eigenschaft != null) {
 			kontakt.addAll(this.getEditorService().getKontakteByEigenschaft(eigenschaft, n));
 
@@ -173,24 +182,43 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		}
 		// Die Kontakte des gespeicherten Vectors, pro Zeile der Reporttabelle
 		// hinzufuegen
+
+		// Vector<Relatable> relatable = new Vector<Relatable>();
+		
 		for (int i = 0; i < kontakt.size(); i++) {
+			Vector<Relatable> auspraegungen = getEditorService()
+					.getAllAuspraegungenByKontaktRelatable(kontakt.elementAt(i).getId());
+			// relatable.addAll(auspraegungen);
 
 			Row kon = new Row();
+
 			kon.addColumn(new Column(kontakt.elementAt(i).getVorname()));
 			kon.addColumn(new Column(kontakt.elementAt(i).getNachname()));
 			kon.addColumn(new Column(kontakt.elementAt(i).getErstellDat().toString()));
 			kon.addColumn(new Column(kontakt.elementAt(i).getModDat().toString()));
-			kon.addColumn(new Column(getEditorService().getNutzerById(kontakt.elementAt(i).getOwnerId()).getEmailAddress()));
-			
-			// Einzelne Zeile dem Report hinzufuegen
-			report.addRow(kon);
+			kon.addColumn(
+					new Column(getEditorService().getNutzerById(kontakt.elementAt(i).getOwnerId()).getEmailAddress()));
 
-		}
+			 head.addColumn(new Column("Eigenschaft"));
+			 head.addColumn(new Column("Auspraegung"));
+
+			for (int j = 0; j < auspraegungen.size(); j++) {
+//			head.addColumn(new Column("Eigenschaft"));
+//			head.addColumn(new Column("Auspraegung"));
+			
+			kon.addColumn(new Column(auspraegungen.elementAt(j).getBezeichnung()));
+			kon.addColumn(new Column(auspraegungen.elementAt(j).getWert()));
+				
+				}
+			// Einzelne Zeile dem Report hinzufuegen
+		report.addRow(kon);
+	}
 
 		// Rueckgabe der Reportausgabe
 		return report;
 
 	}
+
 
 	/**
 	 * Report der alle Kontakte nach Eigenschaften mit ihrer Auspraegung ausgibt.

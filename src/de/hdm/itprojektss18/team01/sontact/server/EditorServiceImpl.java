@@ -741,7 +741,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		a.setWert(wert);
 		a.setEigenschaftId(eigenschaftId);
 		a.setKontaktId(kontaktId);
-	//a.setId(1);
+	    a.setId(1);
 
 
 		// Anpassung des Modifikationsdatums des Kontakt Objektes
@@ -935,11 +935,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 				// Schleife welche alle selektierten/ zu teilenden Aauspraegungsobjekte des Kontaktes k durchgeht
 				for (int as = 0; as < avshare.size(); as++) {
 					
+		
 					// Abgleich der zwei Vektoren mit ihren Auspraegungsobjekten bzw. ihren ids
 					if (avshare != null && av.elementAt(a).getId() == avshare.elementAt(as).getId()) {
 						// Eintrag der Berechtigung f�r das zu teilende Auspraegungsobjekt
 						this.createBerechtigung(ownerId, receiverId, av.elementAt(a).getId(),
 								av.elementAt(a).getType());
+						//Setzen eines Statuses für die Ausprägung.
+						if(avshare.elementAt(as).getStatus() == false) {
+							this.aMapper.setStatusTeilung(avshare.elementAt(as));
+						}
 					}
 				}
 			}
@@ -1462,7 +1467,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		return false;
 	}
-
+	
+	
 
 	/**
 	 * Aktualisierung des Modifikationsdatums.

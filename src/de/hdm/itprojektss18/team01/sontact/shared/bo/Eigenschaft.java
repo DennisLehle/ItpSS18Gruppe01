@@ -39,4 +39,10 @@ public class Eigenschaft extends BusinessObject implements Relatable  {
 		return null;
 	}
 
+	@Override
+	public boolean getStatus() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

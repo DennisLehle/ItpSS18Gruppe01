@@ -54,52 +54,50 @@ public class AuspraegungMapper {
 	 * @return das bereits �bergebene Objekt, jedoch mit ggf. korrigierter
 	 *         <code>id</code>.
 	 */
-public Auspraegung insert (Auspraegung aus) {
-		
+	public Auspraegung insert(Auspraegung aus) {
+
 		/**
 		 * Verbindung zur DB Connection aufbauen
-		 */	
+		 */
 		Connection con = DBConnection.connection();
-		
+
 		try {
 			Statement stmt = con.createStatement();
-			
+
 			/**
 			 * Prüfen, welches der momentan höchste Primärschlüsselwert ist
-			 */	
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid "
-					+ "FROM auspraegung ");
-			
-			if(rs.next()) {
-				
+			 */
+			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM auspraegung ");
+
+			if (rs.next()) {
+
 				/**
 				 * Die Variable erhält den höchsten Primärschlüssel, um 1 inkrementiert
 				 */
 				aus.setId(rs.getInt("maxid")+1);
-				
+
 				/**
 				 * Durchführung der Update-Operation via Prepared Statement
 				 */
 				PreparedStatement stmt1 = con.prepareStatement(
-						"INSERT INTO auspraegung(id, wert, eigenschaftid, kontaktid)" 
-						+ " VALUES(?,?,?,?) ",
-						
-				Statement.RETURN_GENERATED_KEYS);
-				stmt1.setInt(1,  aus.getId());
+						"INSERT INTO auspraegung(id, wert, eigenschaftid, kontaktid, status)" + " VALUES(?,?,?,?,?) ",
+
+						Statement.RETURN_GENERATED_KEYS);
+				stmt1.setInt(1, aus.getId());
 				stmt1.setString(2, aus.getWert());
 				stmt1.setInt(3, aus.getEigenschaftId());
 				stmt1.setInt(4, aus.getKontaktId());
-				
+				stmt1.setBoolean(5, aus.getStatus());
+
 				System.out.println(stmt);
 				stmt1.executeUpdate();
-		}
-		}
-		catch(SQLException e2){
+			}
+		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
-	
-		return aus;	
-}
+
+		return aus;
+	}
 
 	/**
 	 * Aktualisierung eines Auspraegung-Objekts in der Datenbank.
@@ -114,7 +112,7 @@ public Auspraegung insert (Auspraegung aus) {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String updateSQL = "UPDATE auspraegung SET wert=?, eigenschaftid=?, kontaktid=? WHERE id=?";
+		String updateSQL = "UPDATE auspraegung SET wert=?, eigenschaftid=?, kontaktid=?, status=? WHERE id=?";
 
 		// Query f�r die Aktualisierung des Modifikationsdatums von dem dazugeh�rigen
 		// Kontakt
@@ -129,6 +127,7 @@ public Auspraegung insert (Auspraegung aus) {
 			stmt.setInt(2, a.getEigenschaftId());
 			stmt.setInt(3, a.getKontaktId());
 			stmt.setInt(4, a.getId());
+			stmt.setBoolean(5, a.getStatus());
 
 			stmt.executeUpdate();
 
@@ -200,6 +199,7 @@ public Auspraegung insert (Auspraegung aus) {
 
 	/**
 	 * Löscht eine Ausprägung anhand der übergebenen Id des selectionModels.
+	 * 
 	 * @param a
 	 */
 	public void deleteById(int auspraegungId) {
@@ -226,7 +226,6 @@ public Auspraegung insert (Auspraegung aus) {
 		}
 	}
 
-	
 	/**
 	 * Auspraegung anhand der eindeutig bestimmtbaren ID finden
 	 */
@@ -257,6 +256,7 @@ public Auspraegung insert (Auspraegung aus) {
 				a.setWert(rs.getString("wert"));
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
 				a.setKontaktId(rs.getInt("kontaktid"));
+				a.setStatus(rs.getBoolean("status"));
 
 				return a;
 			}
@@ -309,6 +309,7 @@ public Auspraegung insert (Auspraegung aus) {
 				a.setWert(rs.getString("wert"));
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
 				a.setKontaktId(rs.getInt("kontaktid"));
+				a.setStatus(rs.getBoolean("status"));
 
 				// Hinzuf�gen des neuen Objekts zum Ergebnisvektor
 				result.addElement(a);
@@ -335,7 +336,7 @@ public Auspraegung insert (Auspraegung aus) {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String selectByKey = "SELECT auspraegung.id, auspraegung.wert, auspraegung.eigenschaftid, auspraegung.kontaktid, eigenschaft.bezeichnung\r\n"
+		String selectByKey = "SELECT auspraegung.id, auspraegung.wert, auspraegung.eigenschaftid, auspraegung.kontaktid, auspraegung.status, eigenschaft.bezeichnung\r\n"
 				+ "FROM auspraegung\r\n" + "INNER JOIN eigenschaft \r\n"
 				+ "ON auspraegung.eigenschaftid = eigenschaft.id \r\n" + "WHERE auspraegung.kontaktid=?";
 
@@ -363,6 +364,7 @@ public Auspraegung insert (Auspraegung aus) {
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
 				a.setKontaktId(rs.getInt("kontaktid"));
 				a.setBezeichnung(rs.getString("bezeichnung"));
+				a.setStatus(rs.getBoolean("status"));
 
 				// Hinzuf�gen des neuen Objekts zum Ergebnisvektor
 				result.addElement(a);
@@ -415,6 +417,7 @@ public Auspraegung insert (Auspraegung aus) {
 				a.setWert(rs.getString("wert"));
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
 				a.setKontaktId(rs.getInt("kontaktid"));
+				a.setStatus(rs.getBoolean("status"));
 
 				// Hinzuf�gen des neuen Objekts zum Ergebnisvektor
 				result.addElement(a);
@@ -429,51 +432,84 @@ public Auspraegung insert (Auspraegung aus) {
 
 		return result;
 	}
-	
-	/** Suche nach dem wert einer Auspraegung f�r die Ausgabe der Auspraegung innerhalb des Reports  
+
+	/**
+	 * Suche nach dem wert einer Auspraegung f�r die Ausgabe der Auspraegung
+	 * innerhalb des Reports
+	 * 
 	 * @param wert
 	 * @return
 	 */
-	
-public Vector<Auspraegung> findAuspraegungByWert(String wert){
-	Connection con = null;
-	PreparedStatement stmt = null;
-	
-	Vector<Auspraegung> result = new Vector<Auspraegung>();
-		try {			
-		con = DBConnection.connection();
-		stmt = con.prepareStatement(
-				"SELECT * FROM auspraegung"
-						+ "JOIN eigenschaft ON auspraegung.eigenschaftid = eigenschaft.id "
-						+ "JOIN kontakt ON auspraegung.kontaktid = kontakt.id" 
-						+ "WHERE wert like '%" + wert + "%'" );
-		
 
-		ResultSet rs = stmt.executeQuery();
-		
-		while (rs.next()) {
-			
-			// Ergebnis-Tupel in Objekt umwandeln
-			Auspraegung a = new Auspraegung();
+	public Vector<Auspraegung> findAuspraegungByWert(String wert) {
+		Connection con = null;
+		PreparedStatement stmt = null;
 
-			// Setzen der Attribute den Datens�tzen aus der DB entsprechend
-			a.setId(rs.getInt("id"));
-			a.setWert(rs.getString("wert"));
-			a.setEigenschaftId(rs.getInt("eigenschaftid"));
-			a.setKontaktId(rs.getInt("kontaktid"));
+		Vector<Auspraegung> result = new Vector<Auspraegung>();
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement("SELECT * FROM auspraegung"
+					+ "JOIN eigenschaft ON auspraegung.eigenschaftid = eigenschaft.id "
+					+ "JOIN kontakt ON auspraegung.kontaktid = kontakt.id" + "WHERE wert like '%" + wert + "%'");
 
-			// Hinzuf�gen des neuen Objekts zum Ergebnisvektor
-			result.addElement(a);
-			
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				// Ergebnis-Tupel in Objekt umwandeln
+				Auspraegung a = new Auspraegung();
+
+				// Setzen der Attribute den Datens�tzen aus der DB entsprechend
+				a.setId(rs.getInt("id"));
+				a.setWert(rs.getString("wert"));
+				a.setEigenschaftId(rs.getInt("eigenschaftid"));
+				a.setKontaktId(rs.getInt("kontaktid"));
+				a.setStatus(rs.getBoolean("status"));
+
+				// Hinzuf�gen des neuen Objekts zum Ergebnisvektor
+				result.addElement(a);
+
+			}
+			return result;
 		}
-		return result;
-		}
-		
+
 		catch (SQLException e2) {
 			e2.printStackTrace();
 		}
-		
+
 		return null;
+	}
+	/**
+	 * Methode zum Updaten des Statuses, wenn eine Auspraegnung mit seiner Eigenschaft 
+	 * geteilt worden sind.
+	 * 
+	 * @param a das <code>Relatable</code>-Objekt welches geteilt wurde.
+	 */
+	public void setStatusTeilung(Relatable a) {
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		String updateSQL = "UPDATE auspraegung SET status=true, id=? WHERE id=?";
+
+		try {
+
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(updateSQL);
+
+			stmt.setBoolean(1, a.getStatus());
+			stmt.setInt(2, a.getId());
+
+			stmt.executeUpdate();
+
+
+		}
+
+		catch (SQLException e2) {
+			e2.printStackTrace();
+
+		}
+
 	}
 
 	// public void deleteAllByOwner(Nutzer n) {

@@ -13,7 +13,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * Navigation der GUI f�r einezlnen Sektionen Kontakt, Kontaktliste etc.
+ * Diese Klasse stellt das Herzstück der GUI dar.
+ * 
+ * Hier wird die <code>SontactTreeViewModel</code>-Klasse 
+ * eingebunden und die Buttons für die Erstellung von neunen
+ * <code>Kontakt</code> oder <code>Kontaktliste</code>-Objekten
+ * realsiert.
  * 
  * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
  *
@@ -23,7 +28,6 @@ public class Navigation extends VerticalPanel {
 	
 	HorizontalPanel hp = new HorizontalPanel();
 	Button neueKontaktlisteBtn = new Button("<image src='/images/kontaktliste.png' width='25px' height='25px' align='center'/>" + "<image src='/images/plus.png' width=22px' height='22px' align='center' />");
-	
 	Button neuerKontaktBtn = new Button("<image src='/images/user.png' width='25px' height='25px' align='center' />"+ "<image src='/images/plus.png' width=22px' height='22px' align='center' />");
 	
 	/**
@@ -39,12 +43,13 @@ public class Navigation extends VerticalPanel {
 		sc.setVerticalScrollPosition(10);
 		
 		
-		/**
-		 * Anlegen des Baumes für die Navigation in Kontaktlisten.
-		 */
+		
+		 //Anlegen des Baumes für die Navigation in Kontaktlisten.
 		SontactTreeViewModel navTreeModel = new SontactTreeViewModel(nutzer);
+	
 		CellTree navTree = new CellTree(navTreeModel, null);
 
+		//ClickHandler für das erstellen neuer Kontaktlisten.
 		neueKontaktlisteBtn.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -56,6 +61,7 @@ public class Navigation extends VerticalPanel {
 
 		});
 		
+		//ClickHandler für das erstellen neuen Kontakten.
 		neuerKontaktBtn.addClickHandler(new ClickHandler() {
 	
 			@Override
@@ -71,10 +77,14 @@ public class Navigation extends VerticalPanel {
 		
 		//Größe der Buttons setzen
 		neueKontaktlisteBtn.setPixelSize(100, 60); 
-		neueKontaktlisteBtn.setStyleName("Button");
-		hp.add(neueKontaktlisteBtn);
+		neueKontaktlisteBtn.setStyleName("button1");
+		neueKontaktlisteBtn.setTitle("Neue Kontaktliste erstellen");
+	
 		neuerKontaktBtn.setPixelSize(100, 60);
-		neuerKontaktBtn.setStyleName("Button");
+		neuerKontaktBtn.setStyleName("button1");
+		neuerKontaktBtn.setTitle("Neuen Kontakt erstellen");
+		
+		hp.add(neueKontaktlisteBtn);
 		hp.add(neuerKontaktBtn);
 		this.add(hp);
 		

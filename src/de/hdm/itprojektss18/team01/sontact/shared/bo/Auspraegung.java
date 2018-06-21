@@ -14,6 +14,7 @@ public class Auspraegung extends BusinessObject implements Participation, Relata
 	private String wert;
 	private int eigenschaftId;
 	private int kontaktId;
+	private boolean status;
 	private Berechtigung berechtigung;
 	private Eigenschaft eigenschaft = new Eigenschaft();
 	/**
@@ -70,6 +71,14 @@ public class Auspraegung extends BusinessObject implements Participation, Relata
 	@Override
 	public String getBezeichnung() {
 		return this.eigenschaft.getBezeichnung();
+	}
+
+	public boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 	
 }

@@ -8,6 +8,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -69,6 +71,7 @@ public class ShowKontakte extends VerticalPanel {
 	 * Label für den Titel deklarieren.
 	 */
 	private Label titel = new Label();
+	Label erleuterung = new Label();
 
 	/**
 	 * Panels die genutzt werden deklarieren.
@@ -134,6 +137,7 @@ public class ShowKontakte extends VerticalPanel {
 
 		// Methode die beim Start dieser Klasse aufgerufen wird.
 		showKontakteOfKontaktliste(n, kl);
+		
 		hp.add(deleteKontaktFromKontaktliste);
 	
 
@@ -148,13 +152,12 @@ public class ShowKontakte extends VerticalPanel {
 	protected void onLoad(final Nutzer n) {
 		kontaktTable = new CellTable<Kontakt>();
 
+
 		this.search = new Button(
 				"<image src='/images/search.png' width='15px' height='15px' align='center' />  Start");
 
-		
-		auswahl.setPixelSize(130, 35);
-		eingabe.setPixelSize(125, 25);
-		search.setPixelSize(125, 25);
+		search.setStylePrimaryName("searchListBStyle");
+		search.setTitle("Suchen Sie nach Kontakten anhand von Namen, Eigenschaften oder Ausprägungen");
 		
 		// ListBox mit Auswahlen befüllen.
 		auswahl.addItem("Name");
@@ -167,6 +170,7 @@ public class ShowKontakte extends VerticalPanel {
 		searchbar.add(search);
 		searchbar.add(auswahl);
 		searchbar.add(eingabe);
+		
 		this.add(searchbar);
 		
 		allKontakte();
@@ -234,11 +238,11 @@ public class ShowKontakte extends VerticalPanel {
 		 */
 		this.deleteKontakt = new Button(
 				"<image src='/images/user.png' width='20px' height='20px' align='center' /> löschen");
-		
+		//deleteKontakt.setStylePrimaryName("deleteKlButton");
 		this.addKontaktToKontaktliste = new Button(
 				"<image src='/images/kontaktliste.png' width='20px' height='20px' align='center' /> hinzufügen");
-
-		sp.setSize("900px", "400px");
+	//	deleteKontaktFromKontaktliste.setStylePrimaryName("deleteKontaktButton");
+		sp.setSize("900px", "300px");
 		sp.add(kontaktTable);
 		this.add(sp);
 		this.add(hp);
@@ -326,7 +330,7 @@ public class ShowKontakte extends VerticalPanel {
 										@Override
 										public void onSuccess(Void result) {
 											Window.alert("Die Teilhaberschaft wurde aufgelöst.");
-
+												
 										}
 									});
 
@@ -415,8 +419,10 @@ public class ShowKontakte extends VerticalPanel {
 				}
 				}
 		});
-
+	
 	}
+	
+	
 
 	// Wird aufgerufen wenn man Kontakte einer speziellen Kontaktliste anzeigen
 	// lassen will.
@@ -525,14 +531,16 @@ public class ShowKontakte extends VerticalPanel {
 		sp.add(kontaktListenTable);
 
 		// Größse des ScrollPanels bestimmen.
-		sp.setSize("900px", "400px");
+		sp.setSize("800px", "400px");
 
 		this.add(sp);
 		this.add(hp);
 
 		this.deleteKontaktFromKontaktliste = new Button(
 				"<image src='/images/user.png' width='20px' height='20px' align='center' /> löschen");
-
+		deleteKontaktFromKontaktliste.setStylePrimaryName("deleteKontaktButton");
+		deleteKontaktFromKontaktliste.setTitle("EInen Kontakt aus der Kontaktliste löschen");
+		
 		/**
 		 * Button ClickHandler um eine Teilungen zu entfernen und Kontakt zu löschen
 		 * Hier wird unterschieden zwischen Owner und Receiver. Ist man Owner kann man

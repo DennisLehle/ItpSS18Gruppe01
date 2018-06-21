@@ -39,6 +39,7 @@ public class KontaktlisteForm extends VerticalPanel {
 	SontactTreeViewModel sontactTree = null;
 
 	TextBox txtBox = new TextBox();
+	Label infolb = new Label();
 
 	/**
 	 * Konstruktor der zum Einsatz kommt, wenn eine Kontaktliste bereits vorhanden
@@ -69,16 +70,17 @@ public class KontaktlisteForm extends VerticalPanel {
 
 				HorizontalPanel headerPanel = new HorizontalPanel();
 				HorizontalPanel BtnPanel = new HorizontalPanel();
-				HorizontalPanel deltePanel = new HorizontalPanel();
 				VerticalPanel vp = new VerticalPanel();
 				Label ownerLb = new Label();
 				
-				headerPanel.add(new HTML("<h2>Kontaktliste: <em>" + selectedKontaktliste.getTitel() + "</em></h2>"));
-
+				
+				headerPanel.add(new HTML(selectedKontaktliste.getTitel()));
+				
 				// Update-Button intanziieren und dem Panel zuweisen
 				Button editKontaktlisteBtn = new Button(
 						"<image src='/images/edit.png' width='20px' height='20px' align='center' /> bearbeiten");
-
+				editKontaktlisteBtn.setStylePrimaryName("bearbeitenKlButton");
+				editKontaktlisteBtn.setTitle("Bearbeitung der Kontaktliste");
 				// ClickHandler f�r das Updaten einer Kontaktliste
 				editKontaktlisteBtn.addClickHandler(new updateKontaktlisteClickHandler());
 				BtnPanel.add(editKontaktlisteBtn);
@@ -87,29 +89,36 @@ public class KontaktlisteForm extends VerticalPanel {
 				Button deleteKlBtn = new Button(
 						"<image src='/images/trash.png' width='20px' height='20px' align='center' />  löschen");
 				BtnPanel.add(deleteKlBtn);
-
 				// ClickHandler f�r das L�schen einer Kontaktliste
 				deleteKlBtn.addClickHandler(new deleteClickHandler());
+				deleteKlBtn.setStylePrimaryName("deleteKlButton");	
+				deleteKlBtn.setTitle("Löschen der Kontaktliste");
 				BtnPanel.add(deleteKlBtn);
 
 				Button addKontaktBtn = new Button(
 						"<image src='/images/user.png' width='20px' height='20px' align='center' /> hinzufügen");
-
+				addKontaktBtn.setStylePrimaryName("addKontaktToKlButton");
 				addKontaktBtn.addClickHandler(new addKontaktClickHandler());
+				addKontaktBtn.setTitle("Hinzufügen eines Kontakts zu Kontaktliste");
 				BtnPanel.add(addKontaktBtn);
 				
 				//ClickHandler zum teilen von Kontaktlisten.
 				Button shareBtn = new Button(
 						"<image src='/images/share.png' width='20px' height='20px' align='center' /> teilen");
-
+				shareBtn.setStylePrimaryName("teilunsKlButton");
 				shareBtn.addClickHandler(new shareKontaktlisteClickHandler());
+				shareBtn.setTitle("Kontaktliste mit anderen Nutzern teilen");
 				BtnPanel.add(shareBtn);
 				
+				infolb.setText("Kontaktlisten Interaktion");
+				infolb.setStylePrimaryName("infoLabel");
+				vp.add(infolb);
 				
 				//ClickHandler zum Löschen von Kontaktlisten-Teilhaberschaften.
 				Button deleteTeilhaber = new Button("<image src='/images/share.png' width='20px' height='20px' align='center' /> löschen");
-
+				deleteTeilhaber.setStylePrimaryName("teilunsDeleteKlButton");
 				deleteTeilhaber.addClickHandler(new deleteTeilhaberClickHandler());
+				deleteTeilhaber.setTitle("Löschen einer Teilhaberschaft an der Kontaktliste");
 				BtnPanel.add(deleteTeilhaber);
 							
 				//Abfrage wer der Owner der Liste ist.
@@ -143,16 +152,19 @@ public class KontaktlisteForm extends VerticalPanel {
 					@Override
 					public void onSuccess(Boolean result) {
 						if(result ==true) {
-							HTML shared = new HTML("<image src='/images/share.png' width='15px' height='15px' align='center' />");
-							headerPanel.add(shared);
+							HTML shared = new HTML("<image src='/images/share.png' width='15px' height='15px' />");
+							shared.setTitle("Geteilte Kontaktliste");
+							RootPanel.get("contentHeader").add(shared);
+//							
 						}
 					}
 					
 				});
 				
-				vp.add(headerPanel);
+				
 				vp.add(ownerLb);
 				vp.add(BtnPanel);
+				RootPanel.get("contentHeader").add(headerPanel);
 				RootPanel.get("content").add(vp);
 				RootPanel.get("content").add(new ShowKontakte(n, result));
 
@@ -203,9 +215,6 @@ public class KontaktlisteForm extends VerticalPanel {
 		vp.add(txtBox);
 		vp.add(BtnPanel);
 
-		vp.setSpacing(20);
-		BtnPanel.setSpacing(20);
-
 		RootPanel.get("content").add(vp);
 
 	}
@@ -222,7 +231,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-
+			
 			Window.confirm("Sind Sie sicher die Kontaktliste " + selectedKontaktliste.getTitel() + " löschen zu wollen?");
 			
 			// Nutzer Cookies setzen und dann per Nutzer holen.
@@ -414,15 +423,17 @@ public class KontaktlisteForm extends VerticalPanel {
 			HorizontalPanel BtnPanel = new HorizontalPanel();
 			HorizontalPanel headerPanel = new HorizontalPanel();
 			headerPanel.add(
-					new HTML("<h2>Kontaktliste:  <em>" + selectedKontaktliste.getTitel() + "</em> bearbeiten</h2>"));
+					new HTML(selectedKontaktliste.getTitel() + " bearbeiten....</h2>"));
 
 			Button cancelBtn = new Button("abbrechen");
-
+			cancelBtn.setTitle("Abbrechen der Bearbeitung");
+			
 			cancelBtn.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
 					RootPanel.get("content").clear();
-					RootPanel.get("content").add(new KontaktlisteForm(selectedKontaktliste));
+					RootPanel.get("contentHeader").clear();
+					RootPanel.get("contentHeader").add(new KontaktlisteForm(selectedKontaktliste));
 				}
 			});
 
@@ -430,6 +441,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 			// Instanziierung Button zum Speichern der Aenderungen an der selektierten Kontaktliste
 			Button saveBtn = new Button("speichern");
+			saveBtn.setTitle("Speichern der Änderung");
 			
 			// ClickHandler fuer das Speichern
 			saveBtn.addClickHandler(new ClickHandler() {
@@ -477,9 +489,6 @@ public class KontaktlisteForm extends VerticalPanel {
 			vp.add(BtnPanel);
 			RootPanel.get("content").add(vp);
 			selectedKontaktliste.setTitel(txtBox.getText());
-
-			BtnPanel.setSpacing(20);
-			vp.setSpacing(20);
 
 		}
 

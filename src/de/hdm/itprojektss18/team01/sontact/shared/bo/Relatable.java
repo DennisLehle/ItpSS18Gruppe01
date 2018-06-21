@@ -17,6 +17,8 @@ public interface Relatable extends Serializable {
 	String getBezeichnung();
 	//Gibt die Ausprägung einer Eigenschaft zurück.
 	String getWert();
+	//Gibt den Status einer Auspraegung zurcueck ob geteilt wurde.
+	boolean getStatus();
 	
 	
 	

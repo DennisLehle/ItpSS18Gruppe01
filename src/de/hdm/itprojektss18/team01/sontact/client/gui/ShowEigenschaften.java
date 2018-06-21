@@ -3,9 +3,12 @@ package de.hdm.itprojektss18.team01.sontact.client.gui;
 import java.util.Vector;
 
 import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.cell.client.ImageResourceCell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -17,7 +20,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -25,15 +27,10 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
-import com.google.gwt.view.client.SingleSelectionModel;
-
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
@@ -52,8 +49,8 @@ public class ShowEigenschaften extends VerticalPanel {
 	Vector<Relatable> gewaehlteAuspraegung = new Vector<Relatable>();
 	Vector<Relatable> statusObjects = new Vector<Relatable>();
 
-	private Button shareKontakt;
 	boolean sharedStatus = false;
+
 
 	HorizontalPanel hp3 = new HorizontalPanel();
 	HorizontalPanel head = new HorizontalPanel();
@@ -66,7 +63,7 @@ public class ShowEigenschaften extends VerticalPanel {
 	 */
 	public ShowEigenschaften(final Nutzer n, Kontakt k) {
 
-		head.add(new HTML("<h4>Kontaktinformationen: </h4>"));
+		head.add(new HTML("<h5>Kontaktinformationen </h5>"));
 		RootPanel.get("content").add(head);
 		// Methode die beim Start dieser Klasse aufgerufen wird.
 		onLoad(n, k);
@@ -109,8 +106,7 @@ public class ShowEigenschaften extends VerticalPanel {
 
 						eigenschaftAuspraegungTable.setVisible(false);
 
-						hp3.add(new HTML("<img src= images/sad.png />"));
-
+			
 					} else {
 						eigenschaftAuspraegungTable.setVisible(true);
 						sp.setVisible(true);
@@ -141,8 +137,6 @@ public class ShowEigenschaften extends VerticalPanel {
 					if (result.size() == 0) {
 
 						eigenschaftAuspraegungTable.setVisible(false);
-
-						hp3.add(new HTML("<img src= images/sad.png />"));
 
 					} else {
 						eigenschaftAuspraegungTable.setVisible(true);
@@ -180,6 +174,21 @@ public class ShowEigenschaften extends VerticalPanel {
 			}
 		};
 
+		Resources resources = GWT.create(Resources.class);
+
+		Column<Relatable, ImageResource> imageColumn = new Column<Relatable, ImageResource>(new ImageResourceCell()) {
+
+			@Override
+			public ImageResource getValue(Relatable object) {
+				if (object.getStatus() == true) {
+					return resources.getImageResource();
+				} else {
+					return null;
+				}
+
+			}
+		};
+
 		/**
 		 * Implementierung der Checkbox fürs auswählen von einem oder mehrere
 		 * Eigenschafen mit Ausprägungen.
@@ -194,18 +203,21 @@ public class ShowEigenschaften extends VerticalPanel {
 		/**
 		 * Hinzufügen der Columns für die Darstellung der Kontaktlisten.
 		 */
-		eigenschaftAuspraegungTable.addColumn(eigenschaftColumn, "Eigenschaft: ");
+		eigenschaftAuspraegungTable.addColumn(eigenschaftColumn, "Eigenschaft ");
 		eigenschaftColumn.setSortable(true);
 
-		eigenschaftAuspraegungTable.addColumn(auspraegnungColumn, "Ausprägung: ");
+		eigenschaftAuspraegungTable.addColumn(auspraegnungColumn, "Ausprägung ");
 		auspraegnungColumn.setSortable(true);
+
+		eigenschaftAuspraegungTable.addColumn(imageColumn, "Teilungsstatus: ");
+		imageColumn.setSortable(true);
 
 		eigenschaftAuspraegungTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		eigenschaftAuspraegungTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
 		eigenschaftAuspraegungTable.setWidth("80%", true);
-		eigenschaftAuspraegungTable.setColumnWidth(eigenschaftColumn, "100px");
-		eigenschaftAuspraegungTable.setColumnWidth(auspraegnungColumn, "100px");
-
+		eigenschaftAuspraegungTable.setColumnWidth(eigenschaftColumn, "60px");
+		eigenschaftAuspraegungTable.setColumnWidth(auspraegnungColumn, "60px");
+		eigenschaftAuspraegungTable.setColumnWidth(imageColumn, "20px");
 		ListDataProvider<Relatable> dataProvider = new ListDataProvider<Relatable>();
 
 		ListHandler<Relatable> sort = new ListHandler<Relatable>(dataProvider.getList());
@@ -218,55 +230,29 @@ public class ShowEigenschaften extends VerticalPanel {
 
 		// ClickHandler zum teilen von Kontakten mit ausgewählten Ausprägungen.
 		Button shareKontakt = new Button(
-				"<image src='/images/share.png' width='30px' height='30px' align='center' /> teilen");
+				"<image src='/images/share.png' width='20px' height='20px' align='center' /> teilen");
+		shareKontakt.setStylePrimaryName("teilunsButtons");
+		shareKontakt.setTitle("Kontakt teilen");
 
 		// Zum löschen einer Auspraegung aus dem Kontakt.
 		Button deleteAuspraegung = new Button(
 				"<image src='/images/user.png' width='20px' height='20px' align='center' />"
 						+ "<image src='/images/info.png' width='10px' height='10px' align='center' /> löschen");
-		// Zum löschen einer Auspraegung aus dem Kontakt.
-		Button status = new Button("Teilungsstatus");
+		deleteAuspraegung.setStyleName("infoloeschenButton");
+		deleteAuspraegung.setTitle("Löschen einer Eigenschaft mit seiner Ausprägung");
 
 		// Größe des ScrollPanels bestimmen plus in das ScrollPanel die CellTable
 		// hinzufügen.
+
 		sp.setSize("900px", "400px");
 		sp.add(eigenschaftAuspraegungTable);
 		hp3.add(shareKontakt);
 		hp3.add(deleteAuspraegung);
-		
-		this.status.add(status);
+
 		RootPanel.get("content").add(this.status);
 
 		this.add(sp);
 		this.add(hp3);
-
-		status.addClickHandler(new ClickHandler() {
-			Vector<Berechtigung> b = new Vector<Berechtigung>();
-
-			@Override
-			public void onClick(ClickEvent event) {
-				ev.getAllBerechtigungenByOwner(n.getId(), new AsyncCallback<Vector<Berechtigung>>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void onSuccess(Vector<Berechtigung> result) {
-						b.addAll(result);
-						MessageBox.statusAuspraegungTeilung(" Geteilte Eigenschaften ",
-								"Hier sehen Sie alle Eigenschaften mit ihren Auspraegungen die geteilt wurden. ",
-								statusObjects, b, k);
-
-					}
-
-				});
-
-			}
-
-		});
 
 		// ClickHandler für die persönliche suche von anderen Kontakten.
 		shareKontakt.addClickHandler(new ClickHandler() {

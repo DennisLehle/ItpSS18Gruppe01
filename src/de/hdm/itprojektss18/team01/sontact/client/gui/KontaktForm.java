@@ -64,6 +64,7 @@ public class KontaktForm extends VerticalPanel {
 
 	Label erstellungsdatum = new Label();
 	Label modifikationsdatum = new Label();
+	Label infoLb = new Label();
 
 	// Flextables welche f�r das Anlegen eines neuen Kontakts ben�tigt werden
 	FlexTable kontaktInfoTable = new FlexTable();
@@ -115,29 +116,36 @@ public class KontaktForm extends VerticalPanel {
 				selectedKontakt = result;
 
 				HorizontalPanel headerPanel = new HorizontalPanel();
-				headerPanel.setWidth("70%");
+			
 				HorizontalPanel BtnPanel = new HorizontalPanel();
-				BtnPanel.getElement().getStyle().setDisplay(Display.BLOCK);
 				VerticalPanel vp = new VerticalPanel();
 				Label ownerLb = new Label();
 
-				headerPanel.add(new HTML("<h2>Kontakt: <em>" + selectedKontakt.getVorname() + " "
-						+ selectedKontakt.getNachname() + "</em></h2>"));
+				RootPanel.get("contentHeader").add(new HTML(selectedKontakt.getVorname() + " "
+						+ selectedKontakt.getNachname()));
 
 				// Update-Button intanziieren und dem Panel zuweisen
 				Button editKontaktBtn = new Button(
 						"<image src='/images/user.png' width='20px' height='20px' align='center' /> bearbeiten");
-
+				editKontaktBtn.setStylePrimaryName("bearbeitenButton");
+				editKontaktBtn.setTitle("Kontakt Name oder Eigenschaften bearbeiten");
+				
 				// ClickHandler f�r das Updaten eines Kontakts
 				editKontaktBtn.addClickHandler(new updateKontaktClickHandler());
 				BtnPanel.add(editKontaktBtn);
 
 				// ClickHandler zum teilen von Kontakten
 				Button sharedeleteBtn = new Button(
-						"<image src='/images/share.png' width='30px' height='30px' align='center' /> löschen");
+						"<image src='/images/share.png' width='20px' height='20px' align='center' /> löschen");
+				sharedeleteBtn.setStylePrimaryName("teilunsDeleteButton");
+				sharedeleteBtn.setTitle("Löschen von Teilhaberschaften an einen Kontakt");
 
 				sharedeleteBtn.addClickHandler(new shareKontaktlisteClickHandler());
 				BtnPanel.add(sharedeleteBtn);
+				
+				infoLb.setText("Kontakt Interaktion");
+				infoLb.setStylePrimaryName("infoLabel");
+				BtnPanel.add(infoLb);
 
 
 				// Abfrage wer der Owner des Kontaktes ist.
@@ -161,7 +169,7 @@ public class KontaktForm extends VerticalPanel {
 
 				// Panel fuer das Erstellungs- und Modifikationsdatum
 				VerticalPanel datePanel = new VerticalPanel();
-				datePanel.setSpacing(20);
+				
 
 				DateTimeFormat dateFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM);
 				erstellungsdatum.setText("Erstellungsdatum : " + dateFormat.format(selectedKontakt.getErstellDat()));
@@ -182,9 +190,11 @@ public class KontaktForm extends VerticalPanel {
 					@Override
 					public void onSuccess(Boolean result) {
 						if (result == true) {
-							HTML shared = new HTML(
-									"<image src='/images/share.png' width='15px' height='15px' align='center' />");
-							headerPanel.add(shared);
+							
+							HTML shared = new HTML("<image src='/images/share.png' width='15px' height='15px' />");
+							shared.setTitle("Geteilter Kontakt");
+							RootPanel.get("contentHeader").add(shared);
+						
 						}
 					}
 
@@ -239,6 +249,8 @@ public class KontaktForm extends VerticalPanel {
 
 			}
 		});
+		
+	
 	}
 
 	/**
@@ -247,12 +259,6 @@ public class KontaktForm extends VerticalPanel {
 	public KontaktForm(final Nutzer n) {
 		RootPanel.get("contentHeader").clear();
 		RootPanel.get("contentHeader").add(new HTML("Kontakt anlegen"));
-
-		btnPanelBottom.setSpacing(15);
-		btnPanelTop.setSpacing(15);
-
-		FlexTablePanel.setSpacing(25);
-		kontaktInfoTable.setCellPadding(20);
 		eigeneEigenschaftenTable.setCellPadding(20);
 
 		flexPanelKontaktInfo.add(kontaktInfoTable);
@@ -301,6 +307,7 @@ public class KontaktForm extends VerticalPanel {
 
 		// Button für den Abbruch der Erstellung.
 		Button quitBtn = new Button("Abbrechen");
+		//quitBtn.setStyleName("gwt-Button");
 		quitBtn.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -328,14 +335,12 @@ public class KontaktForm extends VerticalPanel {
 		kontaktInfoTable.setWidget(2, 0, auswahlEigenschaftenListBox1);
 		kontaktInfoTable.setWidget(2, 1, auspraegungTxtBx1);
 
-		
-		kontaktInfoTable.setCellPadding(35);
+	
 
 		vp.add(btnPanelTop);
 		vp.add(sp);
 		vp.add(btnPanelBottom);
-		vp.setSpacing(20);
-
+	
 		this.add(vp);
 
 	}
@@ -645,8 +650,7 @@ public class KontaktForm extends VerticalPanel {
 			HorizontalPanel BtnPanel = new HorizontalPanel();
 			HorizontalPanel headerPanel = new HorizontalPanel();
 			HorizontalPanel InfoPanel = new HorizontalPanel();
-			headerPanel.add(new HTML("<h2>Kontakt:  <em>" + selectedKontakt.getVorname() + " "
-					+ selectedKontakt.getNachname() + "</em> bearbeiten</h2>"));
+			headerPanel.add(new HTML("<h2bearbeiten.........</h2>"));
 			InfoPanel.add(new HTML("<h4>Kontaktinformationen:</h4>"));
 
 			Button cancelBtn = new Button("abbrechen");
@@ -760,11 +764,8 @@ public class KontaktForm extends VerticalPanel {
 			vp.add(kontaktInfoTable);
 			vp.add(BtnPanel);
 
-			BtnPanel.setSpacing(20);
-			vp.setSpacing(20);
-
 			RootPanel.get("content").add(vp);
-
+			
 		}
 
 	}

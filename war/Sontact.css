@@ -1,11 +1,25 @@
 /** Add css rules here for your application. */
 /** Example rules used by the template application (remove for your app) */
 
+html, body, {
+    width: 100%;
+    height: 100%
+}
 
-
+div {
+	resize: both;
+}
+	
 /*
  * Beginn des Logins
  */
+ .eigenschaftRowStyle{
+  border: 1px solid silver;
+  padding: 2px;
+  margin-bottom:6px;
+ }
+ 
+ 
 .login {
     top: 0px;
     left: 0px;
@@ -106,19 +120,14 @@
  * Beginn des Navigators
  */
 #navigator {
+
+	height: 100%;
 	float: left;
 	background: #eeeeee;
-	background-size: cover;
 	color: black;
+	
 }
 
-#navigator button {
-	text-align: center;
-	font-size: 100%;
-	postion: absolute;
-	align: center;
-	padding-left: 10px;
-}
 /*
  * Ende des Navigators
  */
@@ -133,6 +142,8 @@
 	float: right;
 	padding-left: 100px;
 	padding-top: 20px;
+	background: url(/images/sontactbackground.png) no-repeat left 93%;
+	
 }
 
 /** Der contentHeader ist für die Überschriften innerhalb des Contents zuständig */
@@ -164,10 +175,11 @@
 	display: flex;
 	justify-content: center;
 	background: #999 url('http://mindchamps-medical.com/wp-content/uploads/2015/04/Abstract-Background-White.jpg') no-repeat left 50%;
+	
 }
 
 #footer .gwt-HTML {
-	margin: 0px 5px;
+	margin: 5px;
 	color: #666666
 }
 
@@ -175,6 +187,8 @@
 	color: #1c9cd8;
 	text-decoration: none;
 }
+
+
 /*
  * Ende des Footers
  */
@@ -258,6 +272,17 @@ h5 {
 	margin: 15px 6px 6px;
 }
 
+.ueberschriftKlk{
+	font: 'Gotham';
+	font-weight: lighter !important;
+	font-variant: small-caps;
+	letter-spacing: 4px;
+	display: flex;
+	align-items: left;
+	justify-content: left;
+	padding-bottom: 30px;
+}
+
 .box {
 	float: left;
 	width: 30%;
@@ -304,18 +329,163 @@ h5 {
 	float: middle;
 }
 
-.gwt-Button {
-	font-size: 150%;
-	font-weight: bold;
-	width: 100px;
-	height: 50px;
+
+
+.button1:hover {
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    margin: 5px;
+    
+}
+
+.button1{
+	 background-color: #e7efea;
+    color: black;
+    border: 2px solid #008CBA; /* Green */
+    order-radius: 12px;
+}
+.button1{
+
+    order-radius: 12px;
+}
+
+/*ButtonStyling - Anfang*/
+
+.teilunsButtons{
+	position: absolute;
+    right: 18px;
+    bottom: 537px;
+    padding: 7px 31px;
+    color: black;
+  
+	
+}
+.teilunsDeleteButton{
+	position: absolute;
+    right: 18px;
+    bottom: 496px;
+     padding: 7px 24.5px;
+	color: black;
+  
+}
+
+.bearbeitenButton{
+	position: absolute;
+	right: 18px;
+    bottom: 620px;
+    padding: 7px 16px;
+    color: black; 
+}
+
+.infoloeschenButton{
+	position: absolute;
+	right: 18px;
+    bottom: 578px;
+    padding: 7px 19.5px;
+    color: black;
+ 
+}
+
+.searchListBStyle{
+     padding: 7px 20px;
+  
+}
+
+.bearbeitenKlButton{
+	position: absolute;
+	right: 18px;
+    bottom: 620px;
+    padding: 7px 16px;
+    color: black; 
+}
+
+.addKontaktKlButton{
+	position: absolute;
+	right: 10px;
+    bottom: 490px;
+    padding: 7px 16px;
+    color: black; 
+}
+
+.teilunsKlButton{
+	position: absolute;
+    right: 18px;
+    bottom: 536px;
+     padding: 7px 30px;
+	color: black; 
+}
+
+.teilunsDeleteKlButton{
+	position: absolute;
+    right: 18px;
+    bottom: 495px;
+     padding: 7px 24px;
+	color: black; 
+}
+
+.addKontaktToKlButton{
+	position: absolute;
+    right: 18px;
+    bottom: 453px;
+     padding: 7px 14px;
+	color: black; 
+}
+
+.deleteKontaktButton{
+	position: absolute;
+    right: 18px;
+    bottom: 411px;
+     padding: 7px 24px;
+	color: black; 
+}
+
+.deleteKlButton{
+	position: absolute;
+    right: 18px;
+    bottom: 578px;
+     padding: 7px 24px;
+	color: black; 
+}
+
+.regButton{
+	position: absolute;
+    left: 400px;
+    bottom: 20px;
+     padding: 7px 40px;
+}
+
+.infoLabel{
+	position: absolute;
+    right: 6px;
+    bottom: 660px;
+     padding: 7px 24px;
+}
+/*Bild position*/
+
+.sadPic{
+	position: absolute;
+	right: 500px;
+    bottom: 100px;
+
+}
+
+.infoTable{
+	margin: 30px 10px
+	
+}
+
+.label{
+	margin: 5px;
+	font-size: 20px;
+	
+}
+
+.tbRundung{
+	border-radius: 15px;
 }
 
 
-.gwt-Big-Text {
-	font-size: 150%;
-}
 
-.gwt-Small-Text {
-	font-size: 75%;
-}
+
+
+

@@ -1,9 +1,10 @@
 package de.hdm.itprojektss18.team01.sontact.client.gui;
 
-import java.util.Vector;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -11,12 +12,12 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.DateBox;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
@@ -26,411 +27,343 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * Wird aufgerufen wenn Nutzer noch kein eigenen Kontakt (Kontakt des Nutzers)
- * im System angelegt hat.
+ * RegistrierungsFormular Klasse die beim Login aufgerufen wird, wenn der Nutzer
+ * noch keinen Kontakt in der Datenbank gespeichert hat.
  * 
- * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
- *
+ * 
+ * @author Dennis Lehle
  */
-
 public class RegistrierungsForm extends VerticalPanel {
 
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
-
-	Kontakt k = new Kontakt();
-	Eigenschaft e = new Eigenschaft();
-
-	Auspraegung a = new Auspraegung();
-	Auspraegung a2 = new Auspraegung();
-
-	Nutzer n = new Nutzer();
-
-	/*
-	 * Datenstruktur welche die Auswahleigenschaften beinhaltet Um diese nicht
-	 * erneut über einen zusätzlichen RPC Aufruf bereitzustellen
-	 */
-	Vector<Eigenschaft> eigenschaften = new Vector<>();
 
 	// TextBoxen
 	TextBox vornameTxtBox = new TextBox();
 	TextBox nachnameTxtBox = new TextBox();
 	TextBox gmailTb = new TextBox();
+	DateBox geburtsdatum = new DateBox();
+	TextBox plz = new TextBox();
+	TextBox wohnort = new TextBox();
+	TextBox emailadresse = new TextBox();
 
 	// Labels
-	Label gmail = new Label("Gmail-Adresse:");
-	Label vorname = new Label("Vorname:");
-	Label nachname = new Label("Nachname:");
+	Label gmail = new Label("G-Mail");
+	Label vorname = new Label("Vorname");
+	Label nachname = new Label("Nachname");
+	Label geburtsdatumlb = new Label("Geburtsdatum");
+	Label plzlb = new Label("Postleitzahl");
+	Label wohnortlb = new Label("Wohnort");
+	Label emailadresselb = new Label("Email");
 
-	// Panel welches die Labels und die TextBoxen beinhaltet
-	VerticalPanel vp = new VerticalPanel();
+	Label auswahleigenschaften = new Label("Auswahleigenschaft");
+	Label freitexteigenschaften = new Label("Freitexteigenschaft");
+
+	Button speichern = new Button(
+			"<image src='/images/user.png' width='20px' height='20px' align='center' /> Jetzt registrieren");
+
+	HorizontalPanel hp = new HorizontalPanel();
+	HorizontalPanel hp2 = new HorizontalPanel();
 
 	// Hauptpanel fuer die Ansicht der Kontakterstellung
 	VerticalPanel hauptPanel = new VerticalPanel();
-	//// Hauptpanel fuer die Ansicht der Kontakteigenschaftsangaben
+	// Hauptpanel fuer die Ansicht der Kontakteigenschaftsangaben
 	VerticalPanel hauptPanel2 = new VerticalPanel();
-	// ButtonPanel beinhaltet die Buttons bei der Kontakterstellungs-Ansicht
-	HorizontalPanel BtnPanel = new HorizontalPanel();
 
-	// Panels fuer die Anordnung der zwei FlexTables
-	HorizontalPanel FlexTablePanel = new HorizontalPanel();
-	VerticalPanel FlexPanelAusw = new VerticalPanel();
-	VerticalPanel FlexPanelEigene = new VerticalPanel();
+	FlexTable kontaktTable = new FlexTable();
+	FlexTable infoTable = new FlexTable();
 
-	// FlexTables
-	FlexTable KontaktinfoTable = new FlexTable();
-	FlexTable auswahlEigenschaftenTable = new FlexTable();
-	FlexTable eigeneEigenschaftenTable = new FlexTable();
-
-	// Buttons welche bei der Kontakterstellungs-Ansicht angezeigt werden
-	// Diese sind dem obigen BtnPanel zugeordnet
-	Button quitBtn = new Button("Abbrechen");
-	Button weiterBtn = new Button("Weiter");
-
-	// ScrollPanel fuer die die Ansicht der Kontakteigenschaftsangaben
-	// Beinhaltet die zwei Flextables
-	ScrollPanel sp = new ScrollPanel();
-
-	/**
-	 * Konstruktor
-	 * 
-	 */
-	public RegistrierungsForm(Nutzer nutzer) {
-		n = nutzer;
+	public RegistrierungsForm(Nutzer n) {
 
 		// RootPanel leeren damit neuer Content geladen werden kann.
 		RootPanel.get("content").clear();
+		RootPanel.get("contentHeader").clear();
 		// Ueberschrift anzeigen
-		RootPanel.get("contentHeader").add(new HTML("Kontakt erstellen"));
+		RootPanel.get("contentHeader").add(new HTML("Kontakt Registrierung"));
+		this.add(speichern);
 
-		// Je FlexTable wird ihrem eigenen VerticalPanel zugeordnet
-		FlexPanelAusw.add(auswahlEigenschaftenTable);
-		FlexPanelEigene.add(eigeneEigenschaftenTable);
-		// Beide VerticalPanels werden einem HorizontalPanel zugeordnet
-		FlexTablePanel.add(FlexPanelAusw);
-		FlexTablePanel.add(FlexPanelEigene);
-		
-		FlexTablePanel.setSpacing(30);
-		// Dieses VerticalPanel wird dem ScrollPanel zugeordnet
-		sp.add(FlexTablePanel);
+		onLoad(n);
 
-		// Groesse des ScrollPanels anpassen
-		sp.setSize("900px", "400px");
+	}
 
-		BtnPanel.setSpacing(20);
+	protected void onLoad(Nutzer n) {
 
-		// TextBoxen fuer die Anzeige der Gmail Adresse welche beim Login angegeben wurde
-		gmailTb.setText(nutzer.getEmailAddress());
+		DateTimeFormat dateFormat = DateTimeFormat.getFormat(PredefinedFormat.DATE_LONG);
+		geburtsdatum.setFormat(new DateBox.DefaultFormat(dateFormat));
+
+		speichern.setStylePrimaryName("regButton");
+
+		gmailTb.setText(n.getEmailAddress());
 		gmailTb.setEnabled(false);
+
+		gmail.setStylePrimaryName("label");
+		vorname.setStylePrimaryName("label");
+		nachname.setStylePrimaryName("label");
+		geburtsdatumlb.setStylePrimaryName("label");
+		plzlb.setStylePrimaryName("label");
+		wohnortlb.setStylePrimaryName("label");
+		emailadresselb.setStylePrimaryName("label");
+
+		gmailTb.setStylePrimaryName("tbRundung");
+		vornameTxtBox.setStylePrimaryName("tbRundung");
+		nachnameTxtBox.setStylePrimaryName("tbRundung");
+		geburtsdatum.setStylePrimaryName("tbRundung");
+		plz.setStylePrimaryName("tbRundung");
+		wohnort.setStylePrimaryName("tbRundung");
+		emailadresse.setStylePrimaryName("tbRundung");
+
+		kontaktTable.setWidget(1, 0, vorname);
+		kontaktTable.setWidget(1, 1, vornameTxtBox);
+		kontaktTable.setWidget(2, 0, nachname);
+		kontaktTable.setWidget(2, 1, nachnameTxtBox);
+		kontaktTable.setWidget(3, 0, gmail);
+		kontaktTable.setWidget(3, 1, gmailTb);
+
+		infoTable.setWidget(1, 0, geburtsdatumlb);
+		infoTable.setWidget(1, 1, geburtsdatum);
+		infoTable.setWidget(2, 0, plzlb);
+		infoTable.setWidget(2, 1, plz);
+		infoTable.setWidget(3, 0, wohnortlb);
+		infoTable.setWidget(3, 1, wohnort);
+		infoTable.setWidget(4, 0, emailadresselb);
+		infoTable.setWidget(4, 1, emailadresse);
+
+		kontaktTable.setStylePrimaryName("infoTable");
+		infoTable.setStylePrimaryName("infoTable");
+
+		hauptPanel.add(kontaktTable);
+		hauptPanel2.add(infoTable);
+		hauptPanel2.add(speichern);
 
 		vornameTxtBox.getElement().setPropertyString("placeholder", "Vorname des Kontakts");
 		nachnameTxtBox.getElement().setPropertyString("placeholder", "Nachname des Kontakts");
+		geburtsdatum.getElement().setPropertyString("placeholder", "Geburtsdatum des Kontakts");
+		plz.getElement().setPropertyString("placeholder", "Postleitzahl des Kontakts");
+		wohnort.getElement().setPropertyString("placeholder", "Wohnort des Kontakts");
+		emailadresse.getElement().setPropertyString("placeholder", "Email des Kontakts");
 
-		// Abbruch Button wird der Kontakterstellungs-Ansicht hinzugefuegt
-		BtnPanel.add(quitBtn);
-		// ClickHandler fuer den Abbruch-Button
-		quitBtn.addClickHandler(new ClickHandler() {
+		RootPanel.get("content").add(hauptPanel);
+		RootPanel.get("content").add(hauptPanel2);
+
+		// Speichern des zu registrierenden Kontakts und seinen AusprÃ¤gungen
+		speichern.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// Methode zum Refresh der aktuellen Anzeige im Browser aufrufen
-				Window.Location.reload();
 
-			}
-		});
-
-		// Weiter-Button wird der Kontakterstellungs-Ansicht hinzugefuegt
-		// Dient zur Weiterleitung in die Kontakteigenschafts-Ansicht, hier werden die
-		// Eigenschaften fuer den erstellen Kontakt dann angegeben
-		BtnPanel.add(weiterBtn);
-		// ClickHandler der die "Weiterleitung" zur Kontakteigenschaftsansicht durchfï¿½hrt
-		weiterBtn.addClickHandler(new KontaktErstellenClickHandler());
-
-		auswahlEigenschaftenTable.setCellPadding(35);
-		eigeneEigenschaftenTable.setCellPadding(35);
-
-		KontaktinfoTable.setWidget(0, 0, gmail);
-		KontaktinfoTable.setWidget(0, 1, gmailTb);
-		KontaktinfoTable.setWidget(1, 0, vorname);
-		KontaktinfoTable.setWidget(1, 1, vornameTxtBox);
-		KontaktinfoTable.setWidget(2, 0, nachname);
-		KontaktinfoTable.setWidget(2, 1, nachnameTxtBox);
-		KontaktinfoTable.setCellPadding(35);
-
-		// Hauptpanel mit dem ButtonPanel verknï¿½pfen (Kontakterstellungs-Ansicht)
-		hauptPanel.add(BtnPanel);
-		hauptPanel.add(KontaktinfoTable);
-		hauptPanel.setSpacing(20);
-		this.add(hauptPanel);
-
-	}
-
-	/**
-	 * ClickHandler zum Speichern der Kontakteigenschaften
-	 */
-
-	private class EigenschaftenSpeichern implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-
-			/**
-			 * Speichern der selbst definierten Eigenschafte und Auspraegungen
-			 */
-			for (int i = 0; i < eigeneEigenschaftenTable.getRowCount(); i++) {
-
-				Widget w = eigeneEigenschaftenTable.getWidget(i, 0);
-
-				if (w instanceof TextBox) {
-					String bez = ((TextBox) w).getText();
-
-					Widget v = eigeneEigenschaftenTable.getWidget(i, 1);
-					if (v instanceof TextBox) {
-						if (!((TextBox) v).getValue().isEmpty()) {
-							a2.setWert(((TextBox) v).getValue());
-
-							ev.createAuspraegungForNewEigenschaft(bez, a2.getWert(), k, new AsyncCallback<Void>() {
+				if (vornameTxtBox.getValue() != "" && nachnameTxtBox.getValue() != "") {
+					ev.createKontaktRegistrierung(vornameTxtBox.getValue(), nachnameTxtBox.getValue(), n,
+							new AsyncCallback<Kontakt>() {
 
 								@Override
 								public void onFailure(Throwable caught) {
-									// Nothing to do here..
+									caught.getMessage().toString();
 
 								}
 
 								@Override
-								public void onSuccess(Void result) {
-									Window.alert("Succeed");
+								public void onSuccess(Kontakt result2) {
+
+									if (geburtsdatumlb.getText() != "") {
+										ev.findEigenschaftByBezeichnung(geburtsdatumlb.getText(),
+												new AsyncCallback<Eigenschaft>() {
+
+													@Override
+													public void onFailure(Throwable caught) {
+														caught.getMessage().toString();
+
+													}
+
+													@Override
+													public void onSuccess(Eigenschaft result) {
+														ev.createAuspraegung(geburtsdatum.getValue().toString(),
+																result.getId(), result2.getId(),
+																new AsyncCallback<Auspraegung>() {
+
+																	@Override
+																	public void onFailure(Throwable caught) {
+																		caught.getMessage().toString();
+
+																	}
+
+																	@Override
+																	public void onSuccess(Auspraegung result) {
+																		Window.Location.reload();
+																	}
+
+																});
+													}
+												});
+									}
+
+									if (plzlb.getText() != "") {
+										ev.findEigenschaftByBezeichnung(plzlb.getText(),
+												new AsyncCallback<Eigenschaft>() {
+
+													@Override
+													public void onFailure(Throwable caught) {
+														caught.getMessage().toString();
+
+													}
+
+													@Override
+													public void onSuccess(Eigenschaft result) {
+														ev.createAuspraegung(plz.getText(), result.getId(),
+																result2.getId(), new AsyncCallback<Auspraegung>() {
+
+																	@Override
+																	public void onFailure(Throwable caught) {
+																		caught.getMessage().toString();
+
+																	}
+
+																	@Override
+																	public void onSuccess(Auspraegung result) {
+																		Window.Location.reload();
+																	}
+
+																});
+													}
+												});
+									}
+
+									if (wohnortlb.getText() != "") {
+										ev.findEigenschaftByBezeichnung(wohnortlb.getText(),
+												new AsyncCallback<Eigenschaft>() {
+
+													@Override
+													public void onFailure(Throwable caught) {
+														caught.getMessage().toString();
+
+													}
+
+													@Override
+													public void onSuccess(Eigenschaft result) {
+														ev.createAuspraegung(wohnort.getText(), result.getId(),
+																result2.getId(), new AsyncCallback<Auspraegung>() {
+
+																	@Override
+																	public void onFailure(Throwable caught) {
+																		caught.getMessage().toString();
+
+																	}
+
+																	@Override
+																	public void onSuccess(Auspraegung result) {
+																		Window.Location.reload();
+																	}
+																});
+
+													}
+												});
+									}
+
+									if (emailadresselb.getText() != "") {
+										ev.findEigenschaftByBezeichnung(emailadresselb.getText(),
+												new AsyncCallback<Eigenschaft>() {
+
+													@Override
+													public void onFailure(Throwable caught) {
+														caught.getMessage().toString();
+
+													}
+
+													@Override
+													public void onSuccess(Eigenschaft result) {
+														ev.createAuspraegung(emailadresse.getText(), result.getId(),
+																result2.getId(), new AsyncCallback<Auspraegung>() {
+
+																	@Override
+																	public void onFailure(Throwable caught) {
+																		caught.getMessage().toString();
+
+																	}
+
+																	@Override
+																	public void onSuccess(Auspraegung result) {
+																		Window.Location.reload();
+
+																	}
+
+																});
+													}
+												});
+									}
 
 								}
-
 							});
 
-						}
+				} else {
+					MessageBox.alertWidget("Hinweis ", "Bitte fÃ¼llen Sie die markierten Pflichtfelder aus.");
+					vornameTxtBox.getElement().getStyle().setBorderColor("red");
+					nachnameTxtBox.getElement().getStyle().setBorderColor("red");
 
-					}
 				}
 
 			}
 
-			/**
-			 * Speichern der Auswahleigenschaften die der Nutzer beliebig oft genereien bwz.
-			 * auswï¿½hlen und befï¿½llen kann
-			 */
+		});
 
-			for (int i = 0; i <= auswahlEigenschaftenTable.getRowCount(); i++) {
+		/// ---------Abschnitt-fÃ¼r-KeyDownHandler-derTextBoxen-----------------///
 
-				Widget w = auswahlEigenschaftenTable.getWidget(i, 0);
-				if (w instanceof ListBox) {
-					if (!((ListBox) w).getSelectedItemText().isEmpty()) {
-						String bez = ((ListBox) w).getSelectedItemText();
+		vornameTxtBox.addKeyDownHandler(new KeyDownHandler() {
 
-						Widget v = auswahlEigenschaftenTable.getWidget(i, 1);
-						if (v instanceof TextBox) {
-							if (!((TextBox) v).getValue().isEmpty()) {
-								a.setWert(((TextBox) v).getValue());
-
-								for (int j = 0; j < eigenschaften.size(); j++) {
-									if (eigenschaften.elementAt(j).getBezeichnung() == bez) {
-										e = eigenschaften.elementAt(j);
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					speichern.click();
 
 				}
-
-				ev.createAuspraegung(a.getWert(), e.getId(), k.getId(), new AsyncCallback<Auspraegung>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert(caught.getMessage());
-
-					}
-
-					@Override
-					public void onSuccess(Auspraegung result) {
-						// Nothing to do here...
-
-					}
-				});
-				Window.Location.reload();
 			}
 
-		}
-	}
+		});
 
-	/**
-	 * ClickHandler zum Generieren von weiteren Auswahleigenschaften.
-	 */
+		nachnameTxtBox.addKeyDownHandler(new KeyDownHandler() {
 
-	private class AuswahleigenschaftClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-
-			ListBox eigenschaftBox = new ListBox();
-			TextBox wertBox = new TextBox();
-
-			ev.getEigenschaftAuswahl(new AsyncCallback<Vector<Eigenschaft>>() {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					caught.getMessage();
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					speichern.click();
 
 				}
-
-				@Override
-				public void onSuccess(Vector<Eigenschaft> result) {
-					if (result != null) {
-
-						for (int i = 0; i < result.size(); i++) {
-							eigenschaftBox.addItem(result.elementAt(i).getBezeichnung());
-
-						}
-
-					}
-
-				}
-			});
-
-			int count = auswahlEigenschaftenTable.getRowCount();
-			auswahlEigenschaftenTable.setWidget(count, 0, eigenschaftBox);
-			auswahlEigenschaftenTable.setWidget(count, 1, wertBox);
-			count++;
-
-		}
-
-	}
-
-	/**
-	 * ClickHandler zum Erzeugen von neuen Eigenschafts-Angaben
-	 */
-	private class EigeneEigenschaftClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			TextBox bezTb = new TextBox();
-			TextBox wertTb = new TextBox();
-
-			bezTb.getElement().setPropertyString("placeholder", "Eingabe...");
-			wertTb.getElement().setPropertyString("placeholder", "Eingabe...");
-
-			int count = eigeneEigenschaftenTable.getRowCount();
-			eigeneEigenschaftenTable.setWidget(count, 0, bezTb);
-			eigeneEigenschaftenTable.setWidget(count, 1, wertTb);
-			count++;
-
-		}
-
-	}
-
-	/**
-	 * ClickHandler zum Erstellen eines neu angelegten Kontakts
-	 */
-	public class KontaktErstellenClickHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-
-			if (vornameTxtBox.getText().isEmpty() || nachnameTxtBox.getText().isEmpty()) {
-				MessageBox.alertWidget("Benachrichtigung", "Bitte mindestens Vor- und Nachname angeben");
-			} else {
-				ev.createKontaktRegistrierung(vornameTxtBox.getText(), nachnameTxtBox.getText(), n,
-						new AsyncCallback<Kontakt>() {
-
-							@Override
-							public void onFailure(Throwable caught) {
-								caught.getMessage().toString();
-
-							}
-
-							@Override
-							public void onSuccess(Kontakt result) {
-								k = result;
-								RootPanel.get("content").clear();
-								
-								RootPanel.get("contentHeader").clear();
-								RootPanel.get("contentHeader").add(new HTML("Kontakteigenschaften angeben"));
-
-								HorizontalPanel BtnPanel = new HorizontalPanel();
-								Button addEigenschaftBtn = new Button("Weitere Auswahleigenschaften");
-
-								Button speichernBtn = new Button("speichern");
-								Button createEigenschaftBtn = new Button("Eigenschaft erstellen");
-								createEigenschaftBtn.setTitle("Eigene Eigenschaft definieren");
-								BtnPanel.add(addEigenschaftBtn);
-								BtnPanel.add(createEigenschaftBtn);
-								BtnPanel.add(speichernBtn);
-								addEigenschaftBtn.setTitle("Weitere Auswahl hinzufügen");
-								addEigenschaftBtn.addClickHandler(new AuswahleigenschaftClickHandler());
-								createEigenschaftBtn.addClickHandler(new EigeneEigenschaftClickHandler());
-								speichernBtn.addClickHandler(new EigenschaftenSpeichern());
-
-								BtnPanel.setSpacing(25);
-								hauptPanel2.add(BtnPanel);
-								hauptPanel2.add(sp);
-								hauptPanel2.setSpacing(35);
-								
-								RootPanel.get("content").add(hauptPanel2);
-
-								ev.getEigenschaftAuswahl(new AsyncCallback<Vector<Eigenschaft>>() {
-
-									@Override
-									public void onFailure(Throwable caught) {
-										caught.getMessage();
-
-									}
-
-									@Override
-									public void onSuccess(Vector<Eigenschaft> result) {
-
-										eigenschaften = result;
-
-										if (result != null) {
-
-											ListBox eigenschaftListBox1 = new ListBox();
-											ListBox eigenschaftListBox2 = new ListBox();
-											ListBox eigenschaftListBox3 = new ListBox();
-
-											for (int i = 0; i < result.size(); i++) {
-												eigenschaftListBox1.addItem(result.elementAt(i).getBezeichnung());
-												eigenschaftListBox2.addItem(result.elementAt(i).getBezeichnung());
-												eigenschaftListBox3.addItem(result.elementAt(i).getBezeichnung());
-
-												TextBox wert1 = new TextBox();
-												TextBox wert2 = new TextBox();
-												TextBox wert3 = new TextBox();
-
-												wert1.getElement().setPropertyString("placeholder", "Eingabe...");
-												wert2.getElement().setPropertyString("placeholder", "Eingabe...");
-												wert3.getElement().setPropertyString("placeholder", "Eingabe...");
-
-												auswahlEigenschaftenTable.setWidget(0, 0, eigenschaftListBox1);
-												auswahlEigenschaftenTable.setWidget(0, 1, wert1);
-												auswahlEigenschaftenTable.setWidget(1, 0, eigenschaftListBox2);
-												auswahlEigenschaftenTable.setWidget(1, 1, wert2);
-												auswahlEigenschaftenTable.setWidget(2, 0, eigenschaftListBox3);
-												auswahlEigenschaftenTable.setWidget(2, 1, wert3);
-
-											}
-
-										}
-
-									}
-								});
-
-							}
-
-						});
-
 			}
 
-		}
-	}
+		});
 
+		plz.addKeyDownHandler(new KeyDownHandler() {
+
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					speichern.click();
+
+				}
+			}
+
+		});
+
+		wohnort.addKeyDownHandler(new KeyDownHandler() {
+
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					speichern.click();
+
+				}
+			}
+
+		});
+
+		emailadresse.addKeyDownHandler(new KeyDownHandler() {
+
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					speichern.click();
+
+				}
+			}
+
+		});
+
+	}
 }

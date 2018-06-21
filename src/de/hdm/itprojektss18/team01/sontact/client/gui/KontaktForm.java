@@ -30,8 +30,8 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
  * Klasse welche Formulare f�r Kontaktd darstellt, diese erlauben
- * Interaktionsm�glichkeiten um Kontakte Anzuzeigen, zu Bearbeiten, zu
- * L�schen oder Neuanzulegen.
+ * Interaktionsm�glichkeiten um Kontakte Anzuzeigen, zu Bearbeiten, zu L�schen
+ * oder Neuanzulegen.
  * 
  * @author Kevin Batista, Dennis Lehle, Ugur Bayrak
  */
@@ -52,15 +52,24 @@ public class KontaktForm extends VerticalPanel {
 	Kontakt selectedKontakt = null;
 	Vector<Eigenschaft> kontakteigenschaften = new Vector<>();
 	Vector<Auspraegung> kontaktauspraegungen = new Vector<>();
+
+	// Freie Eigenschaft
+	Vector<String> eig = new Vector<String>();
+	// Auswahl Eigenschaft
+	Vector<String> auswahl = new Vector<String>();
+
+	// Vector für freie Eigenschaft
+	Vector<String> aus = new Vector<String>();
+	// Vector für auswahl Eigenschaft
+	Vector<String> aus1 = new Vector<String>();
+
 	ListBox auswahlEigenschaftenListBox1 = new ListBox();
-	
 
 	SontactTreeViewModel sontactTree = null;
 
 	TextBox vornameTxtBox = new TextBox();
 	TextBox nachnameTxtBox = new TextBox();
 	TextBox auspraegungTxtBx1 = new TextBox();
-
 
 	Label erstellungsdatum = new Label();
 	Label modifikationsdatum = new Label();
@@ -146,7 +155,6 @@ public class KontaktForm extends VerticalPanel {
 				infoLb.setText("Kontakt Interaktion");
 				infoLb.setStylePrimaryName("infoLabel");
 				BtnPanel.add(infoLb);
-
 
 				// Abfrage wer der Owner des Kontaktes ist.
 				if (k.getOwnerId() != n.getId()) {
@@ -290,7 +298,7 @@ public class KontaktForm extends VerticalPanel {
 				 */
 				for (int i = 0; i < kontakteigenschaften.size(); i++) {
 					auswahlEigenschaftenListBox1.addItem(kontakteigenschaften.elementAt(i).getBezeichnung());
-				
+
 				}
 
 			}
@@ -334,8 +342,6 @@ public class KontaktForm extends VerticalPanel {
 		kontaktInfoTable.setWidget(1, 1, nachnameTxtBox);
 		kontaktInfoTable.setWidget(2, 0, auswahlEigenschaftenListBox1);
 		kontaktInfoTable.setWidget(2, 1, auspraegungTxtBx1);
-
-	
 
 		vp.add(btnPanelTop);
 		vp.add(sp);
@@ -437,118 +443,48 @@ public class KontaktForm extends VerticalPanel {
 
 					@Override
 					public void onSuccess(Kontakt result) {
-						Window.alert("Kontakt angelegt, beginn speichern der Auswahleigenschaften");
 						k = result;
 
-						if (kontaktInfoTable.isCellPresent(0, 0)) {
+						// Angegebene Eigenschaften werden dem String-Vector hinzugefuegt
+						for (int i = 0; i < eigeneEigenschaftenTable.getRowCount(); i++) {
 
-							/*
-							 * Nun speichern wir die Auswahleigenschaften und die vom Nutzer angegebenen
-							 * Auspraegungen
-							 */
-							for (int i = 2; i < kontaktInfoTable.getRowCount(); i++) {
-								Widget w = kontaktInfoTable.getWidget(i, 0);
-								if (w instanceof ListBox) {
-									if (!((ListBox) w).getSelectedItemText().isEmpty()) {
-										String bez = ((ListBox) w).getSelectedItemText();
+							Widget v = eigeneEigenschaftenTable.getWidget(i, 0);
+							if (v instanceof TextBox) {
+								if (!((TextBox) v).getValue().isEmpty()) {
+									String bez = (((TextBox) v).getText());
 
-										Widget v = kontaktInfoTable.getWidget(i, 1);
-										if (v instanceof TextBox) {
-											if (!((TextBox) v).getValue().isEmpty()) {
-												a.setWert(((TextBox) v).getText());
+									eig.add(bez);
+								}
 
-												for (int j = 0; j < kontakteigenschaften.size(); j++) {
-													if (kontakteigenschaften.elementAt(j).getBezeichnung() == bez) {
-														e = kontakteigenschaften.elementAt(j);
+							}
+						}
+						// Angegebene Auspraegungen werden dem String-Vector hinzugefuegt
+						for (int j = 0; j < eigeneEigenschaftenTable.getRowCount(); j++) {
 
-													}
+							Widget v = eigeneEigenschaftenTable.getWidget(j, 1);
+							if (v instanceof TextBox) {
+								if (!((TextBox) v).getValue().isEmpty()) {
+									String wert = (((TextBox) v).getText());
 
-												}
-
-											}
-
-										}
-
-									}
+									aus.add(wert);
 
 								}
 
-								ev.createAuspraegung(a.getWert(), e.getId(), k.getId(),
-										new AsyncCallback<Auspraegung>() {
+							}
+						}
 
-											@Override
-											public void onFailure(Throwable caught) {
-												Window.alert(caught.getMessage());
+						ev.createAuspraegungForNewEigenschaft(eig, aus, k, new AsyncCallback<Void>() {
 
-											}
-
-											@Override
-											public void onSuccess(Auspraegung result) {
-												Window.alert("Auspraegung zur Auwahleigenshaft gespeichert "
-														+ "beginn speichern der selbst definierten Eigenschaften "
-														+ "und Auspraegungen");
-												// RootPanel.get("content").clear();
-												// RootPanel.get("content").add(new ShowKontakte(n));
-												// Window.Location.reload();
-
-												if (eigeneEigenschaftenTable.isCellPresent(0, 0)) {
-													/**
-													 * Speichern der selbst definierten Eigenschafte und Auspraegungen
-													 */
-													for (int i = 0; i < eigeneEigenschaftenTable.getRowCount(); i++) {
-
-														Widget w = eigeneEigenschaftenTable.getWidget(i, 0);
-														if (w instanceof TextBox) {
-															String bez = ((TextBox) w).getText();
-
-															Widget v = eigeneEigenschaftenTable.getWidget(i, 1);
-															if (v instanceof TextBox) {
-																if (!((TextBox) v).getValue().isEmpty()) {
-																	a2.setWert(((TextBox) v).getText());
-
-																	ev.createAuspraegungForNewEigenschaft(bez,
-																			a2.getWert(), k, new AsyncCallback<Void>() {
-
-																				@Override
-																				public void onFailure(
-																						Throwable caught) {
-																					// Nothing to do here
-
-																				}
-
-																				@Override
-																				public void onSuccess(Void result) {
-																					Window.alert(
-																							"Neue Auspraegung und Eigenschaft gespeichert");
-
-																				}
-
-																			});
-
-																}
-
-															}
-														}
-
-													}
-												} else {
-
-													RootPanel.get("content").clear();
-													RootPanel.get("content").add(new ShowKontakte(n));
-													Window.Location.reload();
-
-												}
-
-											}
-										});
-
+							@Override
+							public void onFailure(Throwable error) {
+								error.getMessage().toString();
 							}
 
-						}
-						RootPanel.get("content").clear();
-						RootPanel.get("content").add(new ShowKontakte(n));
-						Window.Location.reload();
+							@Override
+							public void onSuccess(Void result) {
 
+							}
+						});
 					}
 				});
 
@@ -567,8 +503,7 @@ public class KontaktForm extends VerticalPanel {
 		public void onClick(ClickEvent event) {
 
 			MessageBox.deleteTeilhaber("Teilhaberschaft entfernen",
-					"Wählen sie für die Löschung einer Teilhaberschaft eine EMail Adresse aus.", null,
-					selectedKontakt);
+					"Wählen sie für die Löschung einer Teilhaberschaft eine EMail Adresse aus.", null, selectedKontakt);
 
 		}
 

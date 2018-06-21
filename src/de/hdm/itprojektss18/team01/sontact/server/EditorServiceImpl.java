@@ -658,13 +658,31 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param String bezeichnung
 	 * @return Eigenschaft
 	 */
+	
 	public Eigenschaft createEigenschaft(String bezeichnung)
 			throws IllegalArgumentException {
-
+		init();
 		Eigenschaft e = new Eigenschaft();
 		e.setBezeichnung(bezeichnung);
-		//e.setId(1);
+		e.setId(1);
 		return this.eMapper.insert(e);
+	}
+	
+	public Vector<Eigenschaft> createEigenschaftV(Vector<String> bezeichnung)
+			throws IllegalArgumentException {
+		
+		Vector<Eigenschaft> eigen = new Vector<Eigenschaft>();
+		
+		for (int i = 0; i < bezeichnung.size(); i++) {
+	
+		Eigenschaft e = new Eigenschaft();
+		e.setBezeichnung(bezeichnung.elementAt(i));
+		e.setId(1);
+		
+		eigen.add(this.eMapper.insert(e)); 
+		}
+		
+		return eigen;
 	}
 	
 	
@@ -717,7 +735,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Auslesen einer Eigenschaft anhand der uebergebener Bezeichnung.
 	 */
-	public Eigenschaft findEigenschaftByBezeichnung(String bezeichnung)
+	public Eigenschaft getEigenschaftByBezeichnung(String bezeichnung)
 			throws IllegalArgumentException {
 		
 		return this.eMapper.findEigenschaft(bezeichnung);
@@ -743,7 +761,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		a.setKontaktId(kontaktId);
 	    a.setId(1);
 
-
 		// Anpassung des Modifikationsdatums des Kontakt Objektes
 		saveModifikationsdatum(a.getKontaktId());
 
@@ -761,11 +778,32 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param String bezeichnung, String wert, Kontakt k
 	 * @return void
 	 */
-	public void createAuspraegungForNewEigenschaft(String bezeichnung, String wert, Kontakt k)
+	public void createAuspraegungForNewEigenschaft(Vector<String> bezeichnung, Vector <String> wert, Kontakt k)
 			throws IllegalArgumentException {
-		createAuspraegung(wert, createEigenschaft(bezeichnung).getId(), k.getId());
+		
+		// Erzeugung von leeren Vectoren
+		Vector<Eigenschaft> eigene = new Vector<Eigenschaft>();
+		Vector<Integer> id = new Vector<Integer>();
+		
+		// Erstellung der Eigenschaften, Hinzufuegen zum Eigenschaftsvector
+		for (int i = 0; i < bezeichnung.size(); i++) {
+			Eigenschaft e = new Eigenschaft();			
+			e.setBezeichnung(bezeichnung.elementAt(i));
+			e.setId(1);
+			
+			eigene.add(this.eMapper.insert(e));
+		}
+		
+		// Eigenschaft-Id´s werden dem Integer-Vector hinzugefuegt
+		for (int i = 0; i < eigene.size(); i++) {
+			id.add(eigene.elementAt(i).getId());
+		}
+		
+		// Erstellung der Auspreagung zur erstellten Eigenschaft
+		for (int j = 0; j < wert.size(); j++) {
+			this.createAuspraegung(wert.elementAt(j), id.elementAt(j), k.getId());
+		}	
 	}
-	
 	
 	/**
 	 * Modifikation einer Auspraegung.
@@ -1399,25 +1437,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	/*
 	 * *********************************************************************************
-	 * ABSCHNITT ANFANG: REPORT 
+	 * ABSCHNITT ANFANG: HILFSMETHODEN 
 	 * *********************************************************************************
 	 */
 	
-	/**
-	 *  Durchsucht den angesprochenen Kontakt nach einem bestimmten �bergebenen Bezeichnung
-	 * der Eigenschaft und gibt diesen zurueck. Hierbei wird die Eigenschaft mit der
-	 * dazugehoerigen Auspraegung dem Kontakt zurueckgegeben.
-	 * 
-	 * @param bezeichnung, vom Nutzer uebergebener String
-	 * @return Vector<Eigenschaft>
-	 * @throws IllegalArgumentException
-	 */
-	public Vector<Eigenschaft> getEigenschaftByBezeichnung(String bezeichnung)
-			throws IllegalArgumentException {
-		
-		return this.eMapper.findEigenschaftByBezeichnung(bezeichnung);
-	}
-	
+
 	/**
 	 * Durchsucht den angesprochenen Kontakt nach einem bestimmten �bergebenen Wert
 	 * der Auspraegung und gibt diesen zurueck. Hierbei wird die Auspraegung mit der

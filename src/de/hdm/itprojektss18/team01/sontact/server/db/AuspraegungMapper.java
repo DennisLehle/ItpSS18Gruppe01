@@ -14,7 +14,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
 /**
  * Die Klasse <code>AuspraegungMapper</code> mappt auf der Datenbank alle
- * Auspraegungen einer Eigenschaft. F�r weitere Informationen:
+ * Auspraegungen einer Eigenschaft. Fuer weitere Informationen:
  * 
  * @see NutzerMapper
  * @author Kevin Batista
@@ -25,17 +25,18 @@ public class AuspraegungMapper {
 	private static AuspraegungMapper auspraegungMapper = null;
 
 	/**
-	 * Gesch�tzter Konstruktor
+	 * Geschuetzter Konstruktor - verhindert die Moeglichkeit, mit <new> neue
+	 * Instanzen dieser Klasse zu erzeugen.
 	 */
 	protected AuspraegungMapper() {
 
 	}
 
 	/**
-	 * statische Methode zur Erzeugung von Instanzen, stellt die
-	 * Singleton-Eingeschaft sicher.
+	 * Pruefung ob diese Klasse schon existiert. Und Methoden dieser Klasse sollen
+	 * nur ueber diese statische Methode aufgerufen werden
+	 * 
 	 */
-
 	public static AuspraegungMapper auspraegungMapper() {
 
 		if (auspraegungMapper == null) {
@@ -45,6 +46,7 @@ public class AuspraegungMapper {
 		return auspraegungMapper;
 
 	}
+
 
 	/**
 	 * Einf�gen eines Auspraegung-Objekts in die Datenbank.
@@ -59,27 +61,23 @@ public class AuspraegungMapper {
 		/**
 		 * Verbindung zur DB Connection aufbauen
 		 */
+
 		Connection con = DBConnection.connection();
 
 		try {
 			Statement stmt = con.createStatement();
 
-			/**
-			 * Prüfen, welches der momentan höchste Primärschlüsselwert ist
-			 */
+
+			// Query fuer die Abfrage der hoechsten ID (Primaerschluessel) in der Datenbank
 			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM auspraegung ");
 
 			if (rs.next()) {
 
-				/**
-				 * Die Variable erhält den höchsten Primärschlüssel, um 1 inkrementiert
-				 */
+				// Damit dieser daraufhin um 1 inkrementiert der ID des BO zugewiesen wird
 				aus.setId(rs.getInt("maxid")+1);
 
-				/**
-				 * Durchführung der Update-Operation via Prepared Statement
-				 */
 				PreparedStatement stmt1 = con.prepareStatement(
+
 						"INSERT INTO auspraegung(id, wert, eigenschaftid, kontaktid, status)" + " VALUES(?,?,?,?,?) ",
 
 						Statement.RETURN_GENERATED_KEYS);
@@ -90,21 +88,30 @@ public class AuspraegungMapper {
 				stmt1.setBoolean(5, aus.getStatus());
 
 				System.out.println(stmt);
+
+				// Ausfuehren des SQL-Statements
 				stmt1.executeUpdate();
 			}
+
+			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
+
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
 
+
 		return aus;
 	}
+
+
+
 
 	/**
 	 * Aktualisierung eines Auspraegung-Objekts in der Datenbank.
 	 * 
 	 * @param a
 	 *            das Objekt, das in die DB geschrieben werden soll
-	 * @return das als Parameter �bergebene Objekt
+	 * @return das als Parameter uebergebene Objekt
 	 */
 
 	public Auspraegung update(Auspraegung a) {
@@ -112,14 +119,12 @@ public class AuspraegungMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
+		// SQL-Anweisung zum Einfuegen des neuen Nutzertupels in die DB
 		String updateSQL = "UPDATE auspraegung SET wert=?, eigenschaftid=?, kontaktid=?, status=? WHERE id=?";
-
-		// Query f�r die Aktualisierung des Modifikationsdatums von dem dazugeh�rigen
-		// Kontakt
-		// String sqlDat = "UPDATE kontakt SET modifikationsdatum=? WHERE id=?";
 
 		try {
 
+			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(updateSQL);
 
@@ -129,22 +134,14 @@ public class AuspraegungMapper {
 			stmt.setInt(4, a.getId());
 			stmt.setBoolean(5, a.getStatus());
 
+			// Ausfuehren des SQL Statement
 			stmt.executeUpdate();
 
 			System.out.println("Updated");
 
-			// UPDATE-Statement des Modifikationsdatums setzen
-			// stmt = con.prepareStatement(sqlDat);
-
-			// Setzen der ? Platzhalter als VALUES
-			// stmt.setTimestamp(1, new Timestamp (System.currentTimeMillis()));
-			// stmt.setInt(2, a.getKontaktId());
-
-			// UPDATE-Query ausfuehren
-			// stmt.executeUpdate();
-
 		}
 
+		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		catch (SQLException e2) {
 			e2.printStackTrace();
 
@@ -154,29 +151,32 @@ public class AuspraegungMapper {
 	}
 
 	/**
-	 * L�schen eines Auspraegung-Objekts aus der Datenbank.
+	 * Loeschen eines Auspraegung-Objekts aus der Datenbank.
 	 * 
 	 * @param a
 	 */
-
 	public void delete(Auspraegung a) {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
 
+		// SQL-Anweisung zum Einfuegen des neuen Nutzertupels in die DB
 		String deleteSQL = "DELETE FROM auspraegung WHERE id=?";
 
-		// Query f�r die Aktualisierung des Modifikationsdatums von dem dazugeh�rigen
+		// Query f�r die Aktualisierung des Modifikationsdatums von dem
+		// dazugeh�rigen
 		// Kontakt
 		// String sqlDat = "UPDATE kontakt SET modifikationsdatum=? WHERE id=?";
 
 		try {
 
+			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 
 			stmt = con.prepareStatement(deleteSQL);
 			stmt.setInt(1, a.getId());
 
+			// SQL-Statement ausfuehren
 			stmt.executeUpdate();
 
 			// UPDATE-Statement des Modifikationsdatums setzen
@@ -188,17 +188,17 @@ public class AuspraegungMapper {
 
 			// UPDATE-Query ausfuehren
 			// stmt.executeUpdate();
-
 		}
 
+		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		catch (SQLException e2) {
 			e2.printStackTrace();
 
 		}
 	}
 
-	/**
-	 * Löscht eine Ausprägung anhand der übergebenen Id des selectionModels.
+	/*
+	 * Loescht eine Auspraegung anhand der uebergebenen Id aus dem Selectionmodel.
 	 * 
 	 * @param a
 	 */
@@ -207,19 +207,22 @@ public class AuspraegungMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
+		// SQL-Anweisung zum Loeschen des neuen Nutzertupels in die DB
 		String deleteSQL = "DELETE FROM auspraegung WHERE id=?";
 
 		try {
 
+			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 
 			stmt = con.prepareStatement(deleteSQL);
 			stmt.setInt(1, auspraegungId);
 
+			// SQL-Statement ausfuehren
 			stmt.executeUpdate();
 
 		}
-
+		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		catch (SQLException e2) {
 			e2.printStackTrace();
 
@@ -227,23 +230,26 @@ public class AuspraegungMapper {
 	}
 
 	/**
-	 * Auspraegung anhand der eindeutig bestimmtbaren ID finden
+	 * Sucht eine Auspraegung anhand der uebergebenen Id.
+	 * 
+	 * @param a
 	 */
-
 	public Auspraegung findAuspraegungById(int id) {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
 
+		// SQL-Anweisung zum Loeschen des neuen Nutzertupels in die DB
 		String selectByKey = "SELECT * FROM auspraegung WHERE id=? ORDER BY id";
 
 		try {
 
+			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
 			stmt.setInt(1, id);
 
-			// Execute SQL Statement
+			// Ausfuehren des SQL Statements
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
@@ -251,7 +257,7 @@ public class AuspraegungMapper {
 				// Ergebnis-Tupel in Objekt umwandeln
 				Auspraegung a = new Auspraegung();
 
-				// Setzen der Attribute den Datens�tzen aus der DB entsprechend
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				a.setId(rs.getInt("id"));
 				a.setWert(rs.getString("wert"));
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
@@ -263,7 +269,7 @@ public class AuspraegungMapper {
 		}
 
 		catch (SQLException e2) {
-
+			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 			e2.printStackTrace();
 			return null;
 		}
@@ -284,6 +290,7 @@ public class AuspraegungMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
+		// SQL-Anweisung zum Loeschen des neuen Nutzertupels in die DB
 		String selectByKey = "SELECT * FROM auspraegung WHERE eigenschaftid=? AND kontaktid=?";
 
 		// Erstellung des Ergebnisvektors
@@ -291,12 +298,13 @@ public class AuspraegungMapper {
 
 		try {
 
+			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
 			stmt.setInt(1, e.getId());
 			stmt.setInt(2, k.getId());
 
-			// Execute SQL Statement
+			// Ausfuehren des SQL Statements
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
@@ -304,20 +312,20 @@ public class AuspraegungMapper {
 				// Ergebnis-Tupel in Objekt umwandeln
 				Auspraegung a = new Auspraegung();
 
-				// Setzen der Attribute den Datens�tzen aus der DB entsprechend
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				a.setId(rs.getInt("id"));
 				a.setWert(rs.getString("wert"));
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
 				a.setKontaktId(rs.getInt("kontaktid"));
 				a.setStatus(rs.getBoolean("status"));
 
-				// Hinzuf�gen des neuen Objekts zum Ergebnisvektor
+				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				result.addElement(a);
 			}
 		}
 
 		catch (SQLException e2) {
-
+			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 			e2.printStackTrace();
 			return null;
 		}
@@ -326,7 +334,7 @@ public class AuspraegungMapper {
 	}
 
 	/**
-	 * Mapper aufruf um Ausprägungen eines Kontaktes herauszlesen.
+	 * Auspraegungen eines uebergebenen Kontaktes herauszlesen.
 	 * 
 	 * @param kontaktId
 	 * @return
@@ -336,6 +344,7 @@ public class AuspraegungMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
+		// SQL-Anweisung zum Auslesen des Tupels aus der DB
 		String selectByKey = "SELECT auspraegung.id, auspraegung.wert, auspraegung.eigenschaftid, auspraegung.kontaktid, auspraegung.status, eigenschaft.bezeichnung\r\n"
 				+ "FROM auspraegung\r\n" + "INNER JOIN eigenschaft \r\n"
 				+ "ON auspraegung.eigenschaftid = eigenschaft.id \r\n" + "WHERE auspraegung.kontaktid=?";
@@ -344,12 +353,12 @@ public class AuspraegungMapper {
 		Vector<Relatable> result = new Vector<Relatable>();
 
 		try {
-
+			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
 			stmt.setInt(1, kontaktId);
 
-			// Execute SQL Statement
+			// Ausfuehren des SQL Statements
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
@@ -357,8 +366,7 @@ public class AuspraegungMapper {
 				// Ergebnis-Tupel in Objekt umwandeln
 				Auspraegung a = new Auspraegung();
 
-				// Setzen der Attribute den Datens�tzen aus der DB entsprechend
-
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				a.setId(rs.getInt("id"));
 				a.setWert(rs.getString("wert"));
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
@@ -366,7 +374,7 @@ public class AuspraegungMapper {
 				a.setBezeichnung(rs.getString("bezeichnung"));
 				a.setStatus(rs.getBoolean("status"));
 
-				// Hinzuf�gen des neuen Objekts zum Ergebnisvektor
+				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				result.addElement(a);
 
 			}
@@ -374,7 +382,7 @@ public class AuspraegungMapper {
 		}
 
 		catch (SQLException e2) {
-
+			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 			e2.printStackTrace();
 			return null;
 		}
@@ -383,7 +391,7 @@ public class AuspraegungMapper {
 	}
 
 	/**
-	 * Ausprägungen eines Kontaktes herauslesen.
+	 * Auspraegungen eines Kontaktes herauslesen.
 	 * 
 	 * @param kontaktId
 	 * @return
@@ -393,13 +401,14 @@ public class AuspraegungMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
+		// SQL-Anweisung zum Auslesen des Tupels aus der DB
 		String selectByKey = "SELECT * FROM auspraegung WHERE kontaktid=?";
 
 		// Erstellung des Ergebnisvektors
 		Vector<Auspraegung> result = new Vector<Auspraegung>();
 
 		try {
-
+			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
 			stmt.setInt(1, kontaktId);
@@ -412,20 +421,20 @@ public class AuspraegungMapper {
 				// Ergebnis-Tupel in Objekt umwandeln
 				Auspraegung a = new Auspraegung();
 
-				// Setzen der Attribute den Datens�tzen aus der DB entsprechend
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				a.setId(rs.getInt("id"));
 				a.setWert(rs.getString("wert"));
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
 				a.setKontaktId(rs.getInt("kontaktid"));
 				a.setStatus(rs.getBoolean("status"));
 
-				// Hinzuf�gen des neuen Objekts zum Ergebnisvektor
+				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				result.addElement(a);
 			}
 		}
 
 		catch (SQLException e2) {
-
+			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 			e2.printStackTrace();
 			return null;
 		}
@@ -433,8 +442,8 @@ public class AuspraegungMapper {
 		return result;
 	}
 
-	/**
-	 * Suche nach dem wert einer Auspraegung f�r die Ausgabe der Auspraegung
+	/*
+	 * Suche nach dem Wert einer Auspraegung fuer die Ausgabe der Auspraegung
 	 * innerhalb des Reports
 	 * 
 	 * @param wert
@@ -447,7 +456,11 @@ public class AuspraegungMapper {
 
 		Vector<Auspraegung> result = new Vector<Auspraegung>();
 		try {
+
+			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
+			
+			// SQL-Anweisung zum Auslesen des Tupels aus der DB
 			stmt = con.prepareStatement("SELECT * FROM auspraegung"
 					+ "JOIN eigenschaft ON auspraegung.eigenschaftid = eigenschaft.id "
 					+ "JOIN kontakt ON auspraegung.kontaktid = kontakt.id" + "WHERE wert like '%" + wert + "%'");
@@ -466,7 +479,6 @@ public class AuspraegungMapper {
 				a.setKontaktId(rs.getInt("kontaktid"));
 				a.setStatus(rs.getBoolean("status"));
 
-				// Hinzuf�gen des neuen Objekts zum Ergebnisvektor
 				result.addElement(a);
 
 			}
@@ -511,27 +523,5 @@ public class AuspraegungMapper {
 		}
 
 	}
-
-	// public void deleteAllByOwner(Nutzer n) {
-	//
-	// Connection con = null;
-	// PreparedStatement stmt = null;
-	//
-	// String selectByKey = "DELETE FROM Auspraegung WHERE ownerid=?";
-	//
-	// try {
-	//
-	// con = DBConnection.connection();
-	//
-	// stmt = con.prepareStatement(selectByKey);
-	// stmt.setInt(1, n.getId());
-	//
-	// stmt.executeUpdate();
-	// }
-	//
-	// catch (SQLException e2){
-	// e2.printStackTrace();
-	// }
-	// }
 
 }

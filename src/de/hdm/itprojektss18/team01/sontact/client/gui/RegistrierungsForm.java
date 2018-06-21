@@ -164,7 +164,7 @@ public class RegistrierungsForm extends VerticalPanel {
 								public void onSuccess(Kontakt result2) {
 
 									if (geburtsdatumlb.getText() != "") {
-										ev.findEigenschaftByBezeichnung(geburtsdatumlb.getText(),
+										ev.getEigenschaftByBezeichnung(geburtsdatumlb.getText(),
 												new AsyncCallback<Eigenschaft>() {
 
 													@Override
@@ -196,7 +196,7 @@ public class RegistrierungsForm extends VerticalPanel {
 									}
 
 									if (plzlb.getText() != "") {
-										ev.findEigenschaftByBezeichnung(plzlb.getText(),
+										ev.getEigenschaftByBezeichnung(plzlb.getText(),
 												new AsyncCallback<Eigenschaft>() {
 
 													@Override
@@ -227,7 +227,7 @@ public class RegistrierungsForm extends VerticalPanel {
 									}
 
 									if (wohnortlb.getText() != "") {
-										ev.findEigenschaftByBezeichnung(wohnortlb.getText(),
+										ev.getEigenschaftByBezeichnung(wohnortlb.getText(),
 												new AsyncCallback<Eigenschaft>() {
 
 													@Override
@@ -258,7 +258,7 @@ public class RegistrierungsForm extends VerticalPanel {
 									}
 
 									if (emailadresselb.getText() != "") {
-										ev.findEigenschaftByBezeichnung(emailadresselb.getText(),
+										ev.getEigenschaftByBezeichnung(emailadresselb.getText(),
 												new AsyncCallback<Eigenschaft>() {
 
 													@Override

@@ -11,10 +11,10 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
  * Die Klasse <code>KontaklistenMapper</code> mappt auf der Datenbank alle
- * Kontaktlisten eines Nutzers. F�r weitere Informationen:
+ * Kontaktlisten eines Nutzers. Fuer weitere Informationen:
  * 
  * @see NutzerMapper
- * @author Ugur
+ * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
  */
 
 public class KontaktlistenMapper {
@@ -32,7 +32,7 @@ public class KontaktlistenMapper {
 	}
 
 	/**
-	 * Einf�gen eines Kontaktlisten-Objekts in die Datenbank.
+	 * Einfuegen eines Kontaktlisten-Objekts in die Datenbank.
 	 * 
 	 * @param kontaktliste
 	 * @return Kontaktliste
@@ -43,14 +43,13 @@ public class KontaktlistenMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		// Query f�r die Abfrage der hoechsten ID (Prim�rschl�ssel) in der Datenbank
+		// Query fuer die Abfrage der hoechsten ID (Primaerschluessel) in der Datenbank
 		String maxIdSQL = "SELECT MAX(id) AS maxid FROM kontaktliste";
 
-		// Query f�r den Insert
-		String insertSQL = "INSERT INTO Kontaktliste (id, titel, ownerid) VALUES (?,?,?)";
+		// Query fuer den Insert
+		String insertSQL = "INSERT INTO kontaktliste (id, titel, ownerid) VALUES (?,?,?)";
 
 		try {
-
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(maxIdSQL);
 
@@ -59,7 +58,7 @@ public class KontaktlistenMapper {
 
 			// ...um diese dann um 1 inkrementiert der ID des BO zuzuweisen
 			if (rs.next()) {
-				kl.setId(rs.getInt("maxId") + 1);
+				kl.setId(rs.getInt("maxid") + 1);
 			}
 
 			// Jetzt erfolgt der Insert
@@ -70,7 +69,7 @@ public class KontaktlistenMapper {
 			stmt.setString(2, kl.getTitel());
 			stmt.setInt(3, kl.getOwnerId());
 
-			// INSERT-Query ausf�hren
+			// INSERT-Query ausfuehren
 			stmt.executeUpdate();
 
 		} catch (SQLException e2) {
@@ -84,6 +83,7 @@ public class KontaktlistenMapper {
 	 * Aktualisierung eines Kontaktlisten-Objekts in der Datenbank.
 	 * 
 	 * @param kontaktliste
+	 * 
 	 * @return Kontaktliste
 	 */
 
@@ -92,16 +92,17 @@ public class KontaktlistenMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String updateSQL = "UPDATE Kontaktliste SET titel=? WHERE id=?";
+		// Query fuer den Update
+		String updateSQL = "UPDATE kontaktliste SET titel=? WHERE id=?";
 
 		try {
-
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(updateSQL);
 
 			stmt.setString(1, kl.getTitel());
 			stmt.setInt(2, kl.getId());
 
+			// UPDATE-Query ausfuehren
 			stmt.executeUpdate();
 
 			System.out.println("Updated");
@@ -117,7 +118,7 @@ public class KontaktlistenMapper {
 	}
 
 	/**
-	 * L�schen eines Kontaktlisten-Objekts aus der Datenbank.
+	 * Loeschen eines Kontaktlisten-Objekts aus der Datenbank.
 	 * 
 	 * @param kontaktliste
 	 * @return void
@@ -128,6 +129,7 @@ public class KontaktlistenMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
+		// Query fuer den Delete
 		String deleteSQL = "DELETE FROM kontaktliste WHERE id=?";
 
 		try {
@@ -137,6 +139,7 @@ public class KontaktlistenMapper {
 			stmt = con.prepareStatement(deleteSQL);
 			stmt.setInt(1, kl.getId());
 
+			// DELETE-Query ausfuehren
 			stmt.executeUpdate();
 		}
 
@@ -151,6 +154,7 @@ public class KontaktlistenMapper {
 	 * <code>Owner</code> zugewiesen sind.
 	 * 
 	 * @param ownerId
+	 * 
 	 * @return void
 	 */
 
@@ -159,15 +163,16 @@ public class KontaktlistenMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
+		// Query fuer den Delete
 		String deleteSQL = "DELETE FROM kontaktliste WHERE ownerid=?";
 
 		try {
 
 			con = DBConnection.connection();
-
 			stmt = con.prepareStatement(deleteSQL);
 			stmt.setInt(1, n.getId());
 
+			// DELETE-Query ausfuehren
 			stmt.executeUpdate();
 		}
 
@@ -178,18 +183,19 @@ public class KontaktlistenMapper {
 	}
 
 	/**
-	 * Findet Kontaktlisten-Objekte eines Owners die er erstellt hat. 
+	 * Die Methode findKontaklistenByOwner findet alle Kontaktlisten-Objekte eines
+	 * Owners die er selbst erstellt hat.
 	 * 
-	 * @param kontaktliste
-	 * @return
-	 * @return
-	 * @return void
+	 * @param ownerid
+	 * 
+	 * @return Vector von <code>Kontaktliste</code>-Objekten.
 	 */
 	public Vector<Kontaktliste> findKontaktlistenByOwner(int ownerId) {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
 
+		// Query fuer den Select
 		String selectByKey = "SELECT * FROM kontaktliste WHERE ownerid=?";
 
 		// Erstellung des Ergebnisvektors
@@ -209,12 +215,12 @@ public class KontaktlistenMapper {
 				// Ergebnis-Tupel in Objekt umwandeln
 				Kontaktliste kl = new Kontaktliste();
 
-				// Setzen der Attribute den Datens�tzen aus der DB entsprechend
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				kl.setId(rs.getInt("id"));
 				kl.setTitel(rs.getString("titel"));
 				kl.setOwnerId(rs.getInt("ownerid"));
 
-				// Hinzuf�gen des neuen Objekts zum Ergebnisvektor
+				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				result.addElement(kl);
 			}
 			return result;
@@ -229,13 +235,13 @@ public class KontaktlistenMapper {
 	}
 
 	/**
-	 * Findet ein Default Kontaktlisten-Objekt eines Nutzers. Diese Default
+	 * Findet eine Default Kontaktlisten-Objekt eines Nutzers. Diese Default
 	 * Kontaktliste wird beim registrieren erzeugt um Kontakte speichern zu können.
 	 * 
-	 * @param ownerId
-	 * @return
+	 * @param nutzerId
 	 * 
-	 * 		Kommentar Melanie: Brauchen wir die?
+	 * @return code>Kontaktliste</code>-Objekt des Nutzers.
+	 * 
 	 */
 
 	public Kontaktliste findOwnersDefaultKontaktliste(int nutzerId) {
@@ -243,6 +249,7 @@ public class KontaktlistenMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
+		// Query fuer den Select
 		String selectByKey = "SELECT * FROM kontaktliste WHERE ownerid=? AND titel = 'Meine Kontakte'";
 
 		try {
@@ -275,11 +282,11 @@ public class KontaktlistenMapper {
 	}
 
 	/**
-	 * Ruft alle Kontaktlisten auf die in der Db gespeichert sind.
+	 * Die Methode findAll ruft alle Kontaktlisten auf die in der DB gespeichert
+	 * sind.
 	 * 
-	 * @return Kontaktliste
+	 * @return Vector von <code>Kontaktliste</code>-Objekten.
 	 * 
-	 *         Kommentar Melanie: Brauchen wir die?
 	 */
 
 	public Vector<Kontaktliste> findAll() {
@@ -287,6 +294,7 @@ public class KontaktlistenMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
+		// Query fuer den Select
 		String selectByKey = "SELECT * FROM kontaktliste ORDER BY titel";
 
 		// Erstellung des Ergebnisvektors
@@ -305,12 +313,12 @@ public class KontaktlistenMapper {
 				// Ergebnis-Tupel in Objekt umwandeln
 				Kontaktliste kl = new Kontaktliste();
 
-				// Setzen der Attribute den Datens�tzen aus der DB entsprechend
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				kl.setId(rs.getInt("id"));
 				kl.setTitel(rs.getString("titel"));
 				kl.setOwnerId(rs.getInt("ownerid"));
 
-				// Hinzuf�gen des neuen Objekts zum Ergebnisvektor
+				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				result.addElement(kl);
 			}
 			return result;
@@ -323,10 +331,11 @@ public class KontaktlistenMapper {
 	}
 
 	/**
-	 * Findet ein bestimmtes Kontaktlisten-Objekt aus der Datenbank.
+	 * Findet ein bestimmtes Kontaktlisten-Objekt anhand der ID aus der Datenbank.
 	 * 
-	 * @param kontaktliste
-	 * @return void
+	 * @param id
+	 * 
+	 * @return Kontaktliste
 	 */
 
 	public Kontaktliste findById(int id) {
@@ -334,6 +343,7 @@ public class KontaktlistenMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
+		// Query fuer den Select
 		String selectByKey = "SELECT * FROM kontaktliste WHERE id=? ORDER BY id";
 
 		try {
@@ -350,7 +360,7 @@ public class KontaktlistenMapper {
 				// Ergebnis-Tupel in Objekt umwandeln
 				Kontaktliste kl = new Kontaktliste();
 
-				// Setzen der Attribute den Datens�tzen aus der DB entsprechend
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				kl.setId(rs.getInt("id"));
 				kl.setTitel(rs.getString("titel"));
 				kl.setOwnerId(rs.getInt("ownerid"));
@@ -367,35 +377,16 @@ public class KontaktlistenMapper {
 	}
 
 	/**
-	 * Diese Erweiterungs Methode filtert Kontakte für eine Kontaktliste heraus.
-	 * Diese können für eine spezifische Kontaktliste
-	 * <code>findOwnersKontaktliste()</code> oder auch für die Default Kontaktliste
-	 * <code>findOwnersDefaultKontaktliste()</code> genutzt werden. Das Ergebnis ist
-	 * ein Vektor von Kontakten für eine Kontaktliste.
+	 * Findet ein <code>Kontaktliste</code>-Objekt anahnd seines Titels in der DB.
 	 * 
-	 * @see findOwnersKontaktliste(), findOwnersDefaultKontaktliste()
-	 * @param kl
-	 * @return
+	 * @param n
+	 *            das <code>Nutzer</code>-Objekt von dem die Kontaktliste gfunden
+	 *            werden soll.
 	 * 
-	 * 		public Vector<Kontakt> getKontakteByKontaktliste(Kontaktliste kl) {
-	 *         /* Wir spechen hier den KontaktMapper an um darüber für die
-	 *         Kontaktliste die ausgewähöt wurde die passenden Kontakte
-	 *         herauszufiltern. Dies wird für die Default Kontaktliste und für die
-	 *         angelegte Kontaktliste benötigt.
-	 *
-	 *         return
-	 *         KontaktMapper.kontaktMapper().findAllKontakteByKontaktliste(kl.getId());
-	 **/
-
-	/**
-	 * Diese Methode gibt eine Kontaktliste anahnd des Titels für den Nutzer heraus.
-	 * Der Titel lautet hier "Meine Kontakte" da diese für jeden einzelnen Kontakt
-	 * angelegt wird. Kontakte werden immer bei Add dieser Default Kontaktliste
-	 * hinzugefügt.
-	 * 
-	 * @see findById
 	 * @param titel
-	 * @return Kontaktliste
+	 *            des zu suchenden <code>Kontaktliste</code>-Objekts.
+	 * 
+	 * @return das gefundene <code>Kontaktliste</code>-Objekt.
 	 */
 
 	public Kontaktliste findByTitel(Nutzer n, String titel) {
@@ -403,6 +394,7 @@ public class KontaktlistenMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
+		// Query fuer den Select
 		String selectByKey = "SELECT * FROM kontaktliste WHERE ownerid=? AND titel=?";
 
 		try {
@@ -420,7 +412,7 @@ public class KontaktlistenMapper {
 				// Ergebnis-Tupel in Objekt umwandeln
 				Kontaktliste kl = new Kontaktliste();
 
-				// Setzen der Attribute den Datens�tzen aus der DB entsprechend
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				kl.setId(rs.getInt("id"));
 				kl.setTitel(rs.getString("titel"));
 				kl.setOwnerId(rs.getInt("ownerid"));
@@ -435,39 +427,5 @@ public class KontaktlistenMapper {
 
 		return null;
 	}
-	// public Kontaktliste findByTitel(Nutzer n, String titel) {
-	//
-	// // DBConnection herstellen
-	// Connection con = DBConnection.connection();
-	//
-	// try {
-	//
-	//
-	// // SQL-Statement anlegen
-	// PreparedStatement prestmt = con.prepareStatement(
-	// "SELECT * FROM `kontaktliste` WHERE `ownerid` ="+n.getId() + " AND `titel` =
-	// \"Meine Kontakte\" ");
-	//
-	//
-	// // SQL Statement wird als Query an die DB geschickt und
-	// //in die R�ckgabe von rs gespeichert
-	// ResultSet rs = prestmt.executeQuery();
-	//
-	//
-	// // Ergebnis-Tupel in Objekt umwandeln
-	// Kontaktliste kl = new Kontaktliste();
-	// if (rs.next()) {
-	// kl.setId(rs.getInt("id"));
-	// kl.setTitel(rs.getString("titel"));
-	// kl.setOwnerId(rs.getInt("ownerid"));
-	// }
-	//
-	// return kl;
-	// }
-	//
-	// catch (SQLException e2) {
-	// e2.printStackTrace();
-	// }
-	// return null;
-	// }
+
 }

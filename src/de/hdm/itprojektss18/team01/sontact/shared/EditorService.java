@@ -226,6 +226,9 @@ public interface EditorService extends RemoteService {
 	 */
 	public Eigenschaft createEigenschaft(String bezeichnung)
 			throws IllegalArgumentException;
+	
+	public Vector<Eigenschaft> createEigenschaftV(Vector<String> bezeichnung)
+			throws IllegalArgumentException;
 
 	
 	/**
@@ -282,7 +285,7 @@ public interface EditorService extends RemoteService {
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
 	 * #deleteEigenschaftcreateAuspraegungForNewEigenschaft(String bezeichnung, String wert, Kontakt k);
 	 */
-	public void createAuspraegungForNewEigenschaft(String bezeichnung, String wert, Kontakt k)
+	public void createAuspraegungForNewEigenschaft(Vector<String> bezeichnung, Vector<String> wert, Kontakt k)
 			throws IllegalArgumentException;
 
 	/**

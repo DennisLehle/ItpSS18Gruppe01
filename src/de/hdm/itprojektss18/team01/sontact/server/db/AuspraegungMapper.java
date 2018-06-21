@@ -61,17 +61,17 @@ public class AuspraegungMapper {
 			if (rs.next()) {
 
 				// Damit dieser daraufhin um 1 inkrementiert der ID des BO zugewiesen wird
-				a.setId(rs.getInt("maxid") + 1);
+				a.setId(rs.getInt("maxid")+1);
 
 				// SQL-Anweisung zum Einfuegen des Tupels in die DB
 				PreparedStatement stmt1 = con.prepareStatement(
-						"INSERT INTO auspraegung (id, wert, kontaktid, eigenschaftid)" + "VALUES (?, ?, ?, ?)",
+						"INSERT INTO auspraegung (id, wert, eigenschaftid, kontaktid)" + "VALUES (?, ?, ?, ?)",
 
 						Statement.RETURN_GENERATED_KEYS);
 				stmt1.setInt(1, a.getId());
 				stmt1.setString(2, a.getWert());
-				stmt1.setInt(3, a.getKontaktId());
-				stmt1.setInt(4, a.getEigenschaftId());
+				stmt1.setInt(3, a.getEigenschaftId());
+				stmt1.setInt(4, a.getKontaktId());
 
 				System.out.println(stmt);
 

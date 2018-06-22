@@ -162,8 +162,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		head.addColumn(new Column("Kontakteigentuemer"));
 
 		// Uebergebener Inhalt
-		// head.addColumn(new Column("Eigenschaft"));
-		// head.addColumn(new Column("Auspraegung"));
+//		head.addColumn(new Column("Eigenschaft"));
+//		head.addColumn(new Column("Auspraegung"));
 
 		// Kopfzeile dem Report hinzufuegen
 		report.addRow(head);
@@ -196,22 +196,62 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			kon.addColumn(new Column(kontakt.elementAt(i).getNachname()));
 			kon.addColumn(new Column(kontakt.elementAt(i).getErstellDat().toString()));
 			kon.addColumn(new Column(kontakt.elementAt(i).getModDat().toString()));
-			kon.addColumn(
-					new Column(getEditorService().getNutzerById(kontakt.elementAt(i).getOwnerId()).getEmailAddress()));
+			kon.addColumn(new Column(getEditorService().getNutzerById(kontakt.elementAt(i).getOwnerId()).getEmailAddress()));
+			kon.addColumn(new Column(""));
+			
+			
+			report.addRow(kon);
+			
+			Row zwischen = new Row();
 
-			 head.addColumn(new Column("Eigenschaft"));
-			 head.addColumn(new Column("Auspraegung"));
+			zwischen.addColumn(new Column("Eigenschaft:"));
+			zwischen.addColumn(new Column("Auspraegung:"));
+			
+			report.addRow(zwischen);
+
 
 			for (int j = 0; j < auspraegungen.size(); j++) {
-//			head.addColumn(new Column("Eigenschaft"));
-//			head.addColumn(new Column("Auspraegung"));
-			
-			kon.addColumn(new Column(auspraegungen.elementAt(j).getBezeichnung()));
-			kon.addColumn(new Column(auspraegungen.elementAt(j).getWert()));
 				
-				}
+				Row e = new Row();
+				
+				e.addColumn(new Column(auspraegungen.elementAt(j).getBezeichnung()));
+				e.addColumn(new Column(auspraegungen.elementAt(j).getWert()));
+				e.addColumn(new Column(""));
+				e.addColumn(new Column(""));
+				e.addColumn(new Column(""));
+				
+//				e.getNumColumns(); --> 0 bis 6 == (int 7);
+				
+				
+
+//				e.addColumn(e.getColumns().elementAt(5)) new Column(auspraegungen.elementAt(j).getBezeichnung());
+//				e.addColumn(e.getColumns().elementAt(6));new Column(auspraegungen.elementAt(j).getWert());
+
+				
+				
+//				e.getColumnAt(5 >= 0);
+//				e.addColumn(new Column(auspraegungen.elementAt(j).getBezeichnung()));
+//				e.getColumnAt(6);
+//				e.addColumn(new Column(auspraegungen.elementAt(j).getWert()));
+
+
+//				e.addColumn(e.getColumnAt(5)(new Column(auspraegungen.elementAt(j).getBezeichnung()))));
+				
+				
+				
+//				if(e.getColumnAt(5) != null) {
+//					e.addColumn(new Column(auspraegungen.elementAt(j).getBezeichnung()));
+//				} else if (e.getColumnAt(6) != null) {
+//					e.addColumn(new Column(auspraegungen.elementAt(j).getWert()));
+//				}
+				
+				
+				report.addRow(e);
+
+					
+			}
 			// Einzelne Zeile dem Report hinzufuegen
-		report.addRow(kon);
+		
 	}
 
 		// Rueckgabe der Reportausgabe

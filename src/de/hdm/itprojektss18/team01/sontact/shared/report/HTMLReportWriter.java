@@ -1,6 +1,7 @@
 package de.hdm.itprojektss18.team01.sontact.shared.report;
 
 import java.util.Vector;
+
 import de.hdm.itprojektss18.team01.sontact.shared.report.CompositeReport;
 
 
@@ -184,25 +185,42 @@ public class HTMLReportWriter extends ReportWriter {
 	    result.append("<table style=\"width:400px\">");
 
 	    for (int i = 0; i < rows.size(); i++) {
-	      Row row = rows.elementAt(i);
-	      result.append("<tr>");
-	      for (int k = 0; k < row.getNumColumns(); k++) {
-	        if (i == 0) {
-	          result.append("<td style=\"background:silver;font-weight:bold\">" + row.getColumnAt(k)
-	              + "</td>");
-	        }
-	        else {
-	          if (i > 1) {
-	            result.append("<td style=\"border-top:1px solid silver\">"
-	                + row.getColumnAt(k) + "</td>");
-	          }
-	          else {
-	            result.append("<td valign=\"top\">" + row.getColumnAt(k) + "</td>");
-	          }
-	        }
-	      }
-	      result.append("</tr>");
-	    }
+		      Row row = rows.elementAt(i);
+		      result.append("<tr>");
+		      for (int k = 0; k < row.getNumColumns(); k++) {
+		        if (i == 0) {
+		          result.append("<td style=\"background:silver;font-weight:bold\">" + row.getColumnAt(k)
+		              + "</td>");
+		        }
+		        
+		        else if (row.getNumColumns() == 2) {
+		        	result.append("<td style=\"background:#E6E6E6\">" + row.getColumnAt(k)
+		              + "</td>");
+		        }
+		        
+		        else if (row.getNumColumns() == 6) {
+		        	result.append("<td style=\"border-top:1px double silver\">" + "<i>"
+			                + row.getColumnAt(k) + "</i></td>");
+		        }
+		        	
+		        else {
+		          if (i > 1) {
+		            result.append("<td style=\"border-top:1px solid silver\">"
+		                + row.getColumnAt(k) + "</td>");
+			        	
+			     }
+		          
+		          else {
+		        		  result.append("<td valign=\"top\">" + row.getColumnAt(k) + "</td>");
+		        		  }
+		        }
+
+		      }
+		      
+		      result.append("</tr>");
+		   
+	    
+	     }
 
 	    result.append("</table>");
 

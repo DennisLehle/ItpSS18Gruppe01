@@ -40,7 +40,6 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 public class KontaktForm extends VerticalPanel {
 
 	EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
-	ClientsideSettings cs = new ClientsideSettings();
 
 	Kontakt k = new Kontakt();
 	Auspraegung a = new Auspraegung();
@@ -698,7 +697,6 @@ public class KontaktForm extends VerticalPanel {
 								}
 							}
 							
-//							Window.alert(aus.toString());
 
 							Vector<Auspraegung> neueAuspraegungen = new Vector<>();
 							for (int i = 0; i < kontaktauspraegungen.size(); i++) {
@@ -711,7 +709,6 @@ public class KontaktForm extends VerticalPanel {
 
 
 							}
-//								Window.alert(neueAuspraegungen.toString());
 								
 						
 								ev.saveAuspraegung(neueAuspraegungen, new AsyncCallback<Void>() {
@@ -730,21 +727,6 @@ public class KontaktForm extends VerticalPanel {
 									}
 
 								});
-
-							
-							// for (int k = 0; k < kontaktauspraegungen.size(); k++) {
-							// if (kontaktauspraegungen.elementAt(k).getBezeichnung() == eigenschaft) {
-							// Auspraegung a = new Auspraegung();
-							// a = (Auspraegung) kontaktauspraegungen.elementAt(k);
-							// /*
-							// * Nun wird die alte Auspraegung mit der vom Nutzer neu angegeben
-							// * Auspraegung überschrieben
-							// */
-							// a.setWert(neuerwert);
-							//
-							//
-							// }
-							// }
 
 						}
 					});

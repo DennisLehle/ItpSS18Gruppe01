@@ -292,7 +292,7 @@ public interface EditorService extends RemoteService {
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
 	 * 		#saveAuspraegung(Auspraegung a);
 	 */
-	public Auspraegung saveAuspraegung(Auspraegung a)
+	public void saveAuspraegung(Vector<Auspraegung> a)
 			throws IllegalArgumentException;
 
 	

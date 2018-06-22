@@ -27,6 +27,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
 /**
  * Klasse welche Formulare f�r Kontaktd darstellt, diese erlauben
@@ -51,7 +52,7 @@ public class KontaktForm extends VerticalPanel {
 
 	Kontakt selectedKontakt = null;
 	Vector<Eigenschaft> kontakteigenschaften = new Vector<>();
-	Vector<Auspraegung> kontaktauspraegungen = new Vector<>();
+	Vector<Relatable> kontaktauspraegungen = new Vector<>();
 
 	// Freie Eigenschaft
 	Vector<String> eig = new Vector<String>();
@@ -78,10 +79,10 @@ public class KontaktForm extends VerticalPanel {
 	// Flextables welche f�r das Anlegen eines neuen Kontakts ben�tigt werden
 	FlexTable kontaktInfoTable = new FlexTable();
 	FlexTable eigeneEigenschaftenTable = new FlexTable();
-	
-	// Flextables welche fuer das Bearbeiten eines  Kontakts benoetigt werden
-	FlexTable eigeneEigenschaftBearbeitungTable = new FlexTable();
 
+	// Flextables welche fuer das Bearbeiten eines Kontakts benoetigt werden
+	FlexTable eigeneEigenschaftBearbeitungTable = new FlexTable();
+	FlexTable vorhandeneAuspraegungenTable = new FlexTable();
 
 	// Panels fuer die Anordnung der zwei FlexTables
 	HorizontalPanel FlexTablePanel = new HorizontalPanel();
@@ -129,20 +130,20 @@ public class KontaktForm extends VerticalPanel {
 				selectedKontakt = result;
 
 				HorizontalPanel headerPanel = new HorizontalPanel();
-			
+
 				HorizontalPanel BtnPanel = new HorizontalPanel();
 				VerticalPanel vp = new VerticalPanel();
 				Label ownerLb = new Label();
 
-				RootPanel.get("contentHeader").add(new HTML(selectedKontakt.getVorname() + " "
-						+ selectedKontakt.getNachname()));
+				RootPanel.get("contentHeader")
+						.add(new HTML(selectedKontakt.getVorname() + " " + selectedKontakt.getNachname()));
 
 				// Update-Button intanziieren und dem Panel zuweisen
 				Button editKontaktBtn = new Button(
 						"<image src='/images/user.png' width='20px' height='20px' align='center' /> bearbeiten");
 				editKontaktBtn.setStylePrimaryName("bearbeitenButton");
 				editKontaktBtn.setTitle("Kontakt Name oder Eigenschaften bearbeiten");
-				
+
 				// ClickHandler f�r das Updaten eines Kontakts
 				editKontaktBtn.addClickHandler(new updateKontaktClickHandler());
 				BtnPanel.add(editKontaktBtn);
@@ -155,7 +156,7 @@ public class KontaktForm extends VerticalPanel {
 
 				sharedeleteBtn.addClickHandler(new shareKontaktlisteClickHandler());
 				BtnPanel.add(sharedeleteBtn);
-				
+
 				infoLb.setText("Kontakt Interaktion");
 				infoLb.setStylePrimaryName("infoLabel");
 				BtnPanel.add(infoLb);
@@ -181,7 +182,6 @@ public class KontaktForm extends VerticalPanel {
 
 				// Panel fuer das Erstellungs- und Modifikationsdatum
 				VerticalPanel datePanel = new VerticalPanel();
-				
 
 				DateTimeFormat dateFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM);
 				erstellungsdatum.setText("Erstellungsdatum : " + dateFormat.format(selectedKontakt.getErstellDat()));
@@ -202,11 +202,11 @@ public class KontaktForm extends VerticalPanel {
 					@Override
 					public void onSuccess(Boolean result) {
 						if (result == true) {
-							
+
 							HTML shared = new HTML("<image src='/images/share.png' width='15px' height='15px' />");
 							shared.setTitle("Geteilter Kontakt");
 							RootPanel.get("contentHeader").add(shared);
-						
+
 						}
 					}
 
@@ -261,8 +261,7 @@ public class KontaktForm extends VerticalPanel {
 
 			}
 		});
-		
-	
+
 	}
 
 	/**
@@ -319,7 +318,7 @@ public class KontaktForm extends VerticalPanel {
 
 		// Button für den Abbruch der Erstellung.
 		Button quitBtn = new Button("Abbrechen");
-		//quitBtn.setStyleName("gwt-Button");
+		// quitBtn.setStyleName("gwt-Button");
 		quitBtn.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -350,7 +349,7 @@ public class KontaktForm extends VerticalPanel {
 		vp.add(btnPanelTop);
 		vp.add(sp);
 		vp.add(btnPanelBottom);
-	
+
 		this.add(vp);
 
 	}
@@ -526,7 +525,7 @@ public class KontaktForm extends VerticalPanel {
 			RootPanel.get("content").clear();
 
 			/*
-			 * Tabelle f�r das Editieren vorbereiten
+			 * Tabelle fuer das Editieren vorbereiten
 			 */
 			vornameTxtBox.setText(selectedKontakt.getVorname());
 			nachnameTxtBox.setText(selectedKontakt.getNachname());
@@ -539,7 +538,7 @@ public class KontaktForm extends VerticalPanel {
 			 * Tabelle mit den Eigenschaften und den Auspraegungen des Nutzers befuellen
 			 */
 			// Holen der Auspraegungen des selektierten Kontakts
-			ev.getAllAuspraegungenByKontakt(selectedKontakt.getId(), new AsyncCallback<Vector<Auspraegung>>() {
+			ev.getAllAuspraegungenByKontaktRelatable(selectedKontakt.getId(), new AsyncCallback<Vector<Relatable>>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -548,36 +547,21 @@ public class KontaktForm extends VerticalPanel {
 				}
 
 				@Override
-				public void onSuccess(Vector<Auspraegung> result) {
+				public void onSuccess(Vector<Relatable> result) {
 					kontaktauspraegungen = result;
+
 					for (int i = 0; i < kontaktauspraegungen.size(); i++) {
 
 						TextBox auspraegung = new TextBox();
 						auspraegung.setText(kontaktauspraegungen.elementAt(i).getWert());
 
-						ev.getEigenschaftForAuspraegung(kontaktauspraegungen.elementAt(i).getEigenschaftId(),
-								new AsyncCallback<Eigenschaft>() {
-
-									@Override
-									public void onFailure(Throwable caught) {
-										caught.getMessage().toString();
-
-									}
-
-									@Override
-									public void onSuccess(Eigenschaft result) {
-
-										Label eigenschaftLabel = new Label();
-										eigenschaftLabel.setText(result.getBezeichnung());
-										int count = kontaktInfoTable.getRowCount();
-										kontaktInfoTable.setWidget(count, 0, eigenschaftLabel);
-										kontaktInfoTable.setWidget(count, 1, auspraegung);
-										int count2 = kontaktInfoTable.getRowCount();
-										count = count2 + 1;
-
-									}
-								});
-
+						Label eigenschaftLabel = new Label();
+						eigenschaftLabel.setText(kontaktauspraegungen.elementAt(i).getBezeichnung());
+						int count = vorhandeneAuspraegungenTable.getRowCount();
+						vorhandeneAuspraegungenTable.setWidget(count, 0, eigenschaftLabel);
+						vorhandeneAuspraegungenTable.setWidget(count, 1, auspraegung);
+						int count2 = vorhandeneAuspraegungenTable.getRowCount();
+						count = count2 + 1;
 					}
 
 				}
@@ -603,9 +587,9 @@ public class KontaktForm extends VerticalPanel {
 			});
 
 			BtnPanel.add(cancelBtn);
-			
+
 			Button freieEigenschaft = new Button("Eigene Eigenschaft definieren");
-			
+
 			freieEigenschaft.addClickHandler(new ClickHandler() {
 
 				@Override
@@ -622,9 +606,9 @@ public class KontaktForm extends VerticalPanel {
 					count++;
 
 				}
-				
+
 			});
-			
+
 			BtnPanel.add(freieEigenschaft);
 
 			// Instanziierung Button zum Speichern der Aenderungen an dem selektierten
@@ -656,7 +640,7 @@ public class KontaktForm extends VerticalPanel {
 						public void onSuccess(Kontakt result) {
 							eig.removeAllElements();
 							aus.removeAllElements();
-							
+
 							// Angegebene Eigenschaften werden dem String-Vector hinzugefuegt
 							for (int i = 0; i < eigeneEigenschaftBearbeitungTable.getRowCount(); i++) {
 
@@ -698,6 +682,70 @@ public class KontaktForm extends VerticalPanel {
 								}
 							});
 
+							// Updaten der vorhandenen Auspraegungen
+							aus.removeAllElements();
+							for (int j = 0; j < vorhandeneAuspraegungenTable.getRowCount(); j++) {
+
+								Widget v = vorhandeneAuspraegungenTable.getWidget(j, 1);
+								if (v instanceof TextBox) {
+									if (!((TextBox) v).getValue().isEmpty()) {
+										String wert = (((TextBox) v).getText());
+										aus.add(wert);
+										
+
+									}
+
+								}
+							}
+							
+//							Window.alert(aus.toString());
+
+							Vector<Auspraegung> neueAuspraegungen = new Vector<>();
+							for (int i = 0; i < kontaktauspraegungen.size(); i++) {
+								
+								Auspraegung a = new Auspraegung();
+								a.setWert(aus.elementAt(i));
+								a.setId(kontaktauspraegungen.elementAt(i).getId());
+								neueAuspraegungen.add(a);
+								
+
+
+							}
+//								Window.alert(neueAuspraegungen.toString());
+								
+						
+								ev.saveAuspraegung(neueAuspraegungen, new AsyncCallback<Void>() {
+
+									@Override
+									public void onFailure(Throwable caught) {
+										// TODO Auto-generated method stub
+
+									}
+
+									@Override
+									public void onSuccess(Void result) {
+										Window.alert("Update feste Eigenschaften " + neueAuspraegungen.toString());
+									
+
+									}
+
+								});
+
+							
+							// for (int k = 0; k < kontaktauspraegungen.size(); k++) {
+							// if (kontaktauspraegungen.elementAt(k).getBezeichnung() == eigenschaft) {
+							// Auspraegung a = new Auspraegung();
+							// a = (Auspraegung) kontaktauspraegungen.elementAt(k);
+							// /*
+							// * Nun wird die alte Auspraegung mit der vom Nutzer neu angegeben
+							// * Auspraegung überschrieben
+							// */
+							// a.setWert(neuerwert);
+							//
+							//
+							// }
+							// }
+
 						}
 					});
 
@@ -709,11 +757,12 @@ public class KontaktForm extends VerticalPanel {
 			vp.add(headerPanel);
 			vp.add(InfoPanel);
 			vp.add(kontaktInfoTable);
+			vp.add(vorhandeneAuspraegungenTable);
 			vp.add(eigeneEigenschaftBearbeitungTable);
 			vp.add(BtnPanel);
 
 			RootPanel.get("content").add(vp);
-			
+
 		}
 
 	}

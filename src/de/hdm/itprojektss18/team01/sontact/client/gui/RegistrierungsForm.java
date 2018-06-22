@@ -31,7 +31,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  * noch keinen Kontakt in der Datenbank gespeichert hat.
  * 
  * 
- * @author Dennis Lehle
+ * @author Kevin Batista, Dennis Lehle, Ugur Bayrak
  */
 public class RegistrierungsForm extends VerticalPanel {
 

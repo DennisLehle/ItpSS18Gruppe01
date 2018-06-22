@@ -15,34 +15,35 @@ import de.hdm.itprojektss18.team01.sontact.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * Die Klasse ClientsideSettings beinhaltet Eigenschaften und Dienste,
- * die für alle Client-seitigen Klassen relevant sind.
+ * Die Klasse ClientsideSettings beinhaltet Eigenschaften und Dienste, die für
+ * alle Client-seitigen Klassen relevant sind.
  * 
  * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
+ * @author Peter Thies
  */
 
 public class ClientsideSettings extends CommonSettings {
-	
+
 	/**
 	 * Anlegen eines leeren Nutzers zur Speicherung des aktuellen Nutzers.
 	 */
 	public Nutzer nutzer = null;
-	
+
 	/**
-	 * Remote Service Proxy zur Verbindungsaufnahme mit dem Server-seitgen
-	 * Dienst namens <code>EditorService</code>.
+	 * Remote Service Proxy zur Verbindungsaufnahme mit dem Server-seitigen Dienst
+	 * namens <code>EditorService</code>.
 	 */
 	private static EditorServiceAsync editorVerwaltung = null;
-	
+
 	/**
-	 * Remote Service Proxy zur Verbindungsaufnahme mit dem Server-seitgen
-	 * Dienst namens <code>LoginService</code>.
+	 * Remote Service Proxy zur Verbindungsaufnahme mit dem Server-seitigen Dienst
+	 * namens <code>LoginService</code>.
 	 */
 	private static LoginServiceAsync loginService = null;
 
 	/**
-	 * Remote Service Proxy zur Verbindungsaufnahme mit dem Server-seitgen
-	 * Dienst namens <code>ReportGenerator</code>.
+	 * Remote Service Proxy zur Verbindungsaufnahme mit dem Server-seitigen Dienst
+	 * namens <code>ReportGenerator</code>.
 	 */
 	private static ReportGeneratorAsync reportGeneratorVerwaltung = null;
 
@@ -61,47 +62,9 @@ public class ClientsideSettings extends CommonSettings {
 	 * Auslesen des applikationsweiten (Client-seitig!) zentralen Loggers.
 	 * </p>
 	 * 
-	 * <h2>Anwendungsbeispiel:</h2> Zugriff auf den Logger herstellen durch:
-	 * 
-	 * <pre>
-	 * Logger logger = ClientSideSettings.getLogger();
-	 * </pre>
-	 * 
-	 * und dann Nachrichten schreiben etwa mittels
-	 * 
-	 * <pre>
-	 * logger.severe(&quot;Sie sind nicht berechtigt, ...&quot;);
-	 * </pre>
-	 * 
-	 * oder
-	 * 
-	 * <pre>
-	 * logger.info(&quot;Lege neuen Kunden an.&quot;);
-	 * </pre>
-	 * 
-	 * <p>
-	 * Bitte auf <em>angemessene Log Levels</em> achten! Severe und info sind
-	 * nur Beispiele.
-	 * </p>
-	 * 
-	 * <h2>HINWEIS:</h2>
-	 * <p>
-	 * Beachten Sie, dass Sie den auszugebenden Log nun nicht mehr durch
-	 * bedarfsweise Einfügen und Auskommentieren etwa von
-	 * <code>System.out.println(...);</code> steuern. Sie belassen künftig
-	 * sämtliches Logging im Code und können ohne abermaliges Kompilieren den
-	 * Log Level "von außen" durch die Datei <code>logging.properties</code>
-	 * steuern. Sie finden diese Datei in Ihrem <code>war/WEB-INF</code>-Ordner.
-	 * Der dort standardmäßig vorgegebene Log Level ist <code>WARN</code>.
-	 * Dies würde bedeuten, dass Sie keine <code>INFO</code>-Meldungen wohl
-	 * aber <code>WARN</code>- und <code>SEVERE</code>-Meldungen erhielten. Wenn
-	 * Sie also auch Log des Levels <code>INFO</code> wollten, müssten Sie in
-	 * dieser Datei <code>.level = INFO</code> setzen.
-	 * </p>
-	 * 
 	 * Weitere Infos siehe Dokumentation zu Java Logging.
 	 * 
-	 * @return die Logger-Instanz für die Server-Seite
+	 * @return die Logger-Instanz für die Server-Seite.
 	 */
 	public static Logger getLogger() {
 		return log;
@@ -126,15 +89,18 @@ public class ClientsideSettings extends CommonSettings {
 	 * @since 28.02.2012
 	 */
 	public static EditorServiceAsync getEditorVerwaltung() {
+
 		/**
-		 * Gab es bislang noch keine Verwaltung-Instanz, wird einer erstellt.
+		 * Gab es bislang noch keine Verwaltung-Instanz, wird eine erstellt.
 		 */
 		if (editorVerwaltung == null) {
+
 			/**
-			 * Instantiieren des EditorService's.
+			 * Instanziieren des EditorService's.
 			 */
 			editorVerwaltung = GWT.create(EditorService.class);
 		}
+
 		/**
 		 * Rückgabe des EditorService's.
 		 */
@@ -158,27 +124,30 @@ public class ClientsideSettings extends CommonSettings {
 	 */
 
 	public static LoginServiceAsync getLoginService() {
+		
 		/**
 		 * Gab es bislang noch keine Verwaltung-Instanz, wird einer erstellt.
 		 */
 		if (loginService == null) {
+			
 			/**
 			 * Instantiieren des EditorService's.
 			 */
 			loginService = GWT.create(LoginService.class);
 		}
+		
 		/**
-		 * R�ckgabe des EditorService's.
+		 * Rueckgabe des EditorService's.
 		 */
 		return loginService;
 	}
 
 	/**
 	 * <p>
-	 * Anlegen und Auslesen des applikationsweit eindeutigen ReportGenerators.
-	 * Diese Methode erstellt den ReportGenerator, sofern dieser noch nicht
-	 * existiert. Bei wiederholtem Aufruf dieser Methode wird stets das bereits
-	 * zuvor angelegte Objekt zurückgegeben.
+	 * Anlegen und Auslesen des applikationsweit eindeutigen ReportGenerators. Diese
+	 * Methode erstellt den ReportGenerator, sofern dieser noch nicht existiert. Bei
+	 * wiederholtem Aufruf dieser Methode wird stets das bereits zuvor angelegte
+	 * Objekt zurückgegeben.
 	 * </p>
 	 * 
 	 * <p>
@@ -187,20 +156,21 @@ public class ClientsideSettings extends CommonSettings {
 	 * .
 	 * </p>
 	 * 
-	 * @return eindeutige Instanz des Typs
-	 *         <code>ReportGeneratorServiceAsync</code>
+	 * @return eindeutige Instanz des Typs <code>ReportGeneratorServiceAsync</code>
 	 * @author Peter Thies
 	 * @since 28.02.2012
 	 */
 	public static ReportGeneratorAsync getReportGeneratorService() {
+
 		/**
-		 * Gab es bislang noch keine ReportGenerator-Instanz, wird eine neue
-		 * erstellt. Auch ein sogenannter <Singleton>
+		 * Gab es bislang noch keine ReportGenerator-Instanz, wird eine neue erstellt.
+		 * Auch ein sogenannter <Singleton>
 		 */
 		if (reportGeneratorVerwaltung == null) {
 
 			reportGeneratorVerwaltung = GWT.create(ReportGenerator.class);
 			final AsyncCallback<Void> initReportGeneratorServiceCallback = new AsyncCallback<Void>() {
+
 				@Override
 				public void onFailure(Throwable caught) {
 					ClientsideSettings.getLogger().severe("Der ReportGenerator konnte nicht initialisiert werden!");
@@ -211,21 +181,23 @@ public class ClientsideSettings extends CommonSettings {
 					ClientsideSettings.getLogger().info("Der ReportGenerator wurde initialisiert.");
 				}
 			};
+
 			reportGeneratorVerwaltung.init(initReportGeneratorServiceCallback);
 		}
+
 		/**
 		 * Rückgabe des ReportGeneratorService's.
 		 */
 		return reportGeneratorVerwaltung;
 	}
-	
+
 	/**
 	 * Setzen eines Nutzers für die Bearbeitung in der Sontact Verwaltung
 	 */
 	public final void setCurrentNutzer(Nutzer n) {
 		this.nutzer = n;
 	}
-	
+
 	/**
 	 * Auslesen eines Nutzers für die Bearbeitung in der Sontact Verwaltung
 	 */

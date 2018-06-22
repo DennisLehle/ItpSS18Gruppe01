@@ -808,11 +808,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Modifikation einer Auspraegung.
 	 */
-	public Auspraegung saveAuspraegung(Auspraegung a)
+	public void saveAuspraegung(Vector<Auspraegung> a)
 			throws IllegalArgumentException {
 		
-		this.saveModifikationsdatum(a.getKontaktId());
-		return aMapper.update(a);
+	//	this.saveModifikationsdatum(a.getKontaktId());
+		
+		for (int i = 0; i < a.size(); i++) {
+			this.aMapper.update(a.elementAt(i));
+		}
+	
 	}
 
 	

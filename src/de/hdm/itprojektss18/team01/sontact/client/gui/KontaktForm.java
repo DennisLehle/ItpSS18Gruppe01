@@ -78,6 +78,10 @@ public class KontaktForm extends VerticalPanel {
 	// Flextables welche f�r das Anlegen eines neuen Kontakts ben�tigt werden
 	FlexTable kontaktInfoTable = new FlexTable();
 	FlexTable eigeneEigenschaftenTable = new FlexTable();
+	
+	// Flextables welche fuer das Bearbeiten eines  Kontakts benoetigt werden
+	FlexTable eigeneEigenschaftBearbeitungTable = new FlexTable();
+
 
 	// Panels fuer die Anordnung der zwei FlexTables
 	HorizontalPanel FlexTablePanel = new HorizontalPanel();
@@ -510,7 +514,7 @@ public class KontaktForm extends VerticalPanel {
 	}
 
 	/**
-	 * ClickHandler f�r das Updaten eines Kontakts
+	 * ClickHandler fuer das Updaten eines Kontakts
 	 * 
 	 * @author Batista
 	 *
@@ -599,13 +603,36 @@ public class KontaktForm extends VerticalPanel {
 			});
 
 			BtnPanel.add(cancelBtn);
+			
+			Button freieEigenschaft = new Button("Eigene Eigenschaft definieren");
+			
+			freieEigenschaft.addClickHandler(new ClickHandler() {
+
+				@Override
+				public void onClick(ClickEvent event) {
+					TextBox bezTb = new TextBox();
+					TextBox wertTb = new TextBox();
+
+					bezTb.getElement().setPropertyString("placeholder", "Eingabe...");
+					wertTb.getElement().setPropertyString("placeholder", "Eingabe...");
+
+					int count = eigeneEigenschaftBearbeitungTable.getRowCount();
+					eigeneEigenschaftBearbeitungTable.setWidget(count, 0, bezTb);
+					eigeneEigenschaftBearbeitungTable.setWidget(count, 1, wertTb);
+					count++;
+
+				}
+				
+			});
+			
+			BtnPanel.add(freieEigenschaft);
 
 			// Instanziierung Button zum Speichern der Aenderungen an dem selektierten
 			// Kontakts
 			Button saveBtn = new Button("speichern");
 
 			/*
-			 * Nun werden die Aenderungen �bernommen bzw. gespeichert
+			 * Nun werden die Aenderungen uebernommen bzw. gespeichert
 			 */
 			saveBtn.addClickHandler(new ClickHandler() {
 
@@ -627,64 +654,49 @@ public class KontaktForm extends VerticalPanel {
 
 						@Override
 						public void onSuccess(Kontakt result) {
-							Window.alert("Kontakt erfolgreich upgedated, beginn update Auspraegungen");
+							eig.removeAllElements();
+							aus.removeAllElements();
+							
+							// Angegebene Eigenschaften werden dem String-Vector hinzugefuegt
+							for (int i = 0; i < eigeneEigenschaftBearbeitungTable.getRowCount(); i++) {
 
-							for (int i = 2; i < kontaktInfoTable.getRowCount(); i++) {
-								Widget w = kontaktInfoTable.getWidget(i, 1);
-								if (w instanceof TextBox) {
-									/*
-									 * Der neue Wert den der Nutzer als Auspraegung angebenen hat zum Zeitpunkt als
-									 * er auf "speichern" geklickt hat.
-									 */
-									String neuerwert = ((TextBox) w).getText();
+								Widget v = eigeneEigenschaftBearbeitungTable.getWidget(i, 0);
+								if (v instanceof TextBox) {
+									if (!((TextBox) v).getValue().isEmpty()) {
+										String bez = (((TextBox) v).getText());
 
-									for (int j = 0; j < kontaktInfoTable.getRowCount(); j++) {
-										Widget v = kontaktInfoTable.getWidget(i, 0);
-										/*
-										 * Die Eigenschaft welche links von der Tabelle steht
-										 */
-										String eigenschaft = ((TextBox) v).getText();
-										/*
-										 * Durchsuchen der Auspraegungen fuer den Kontakt welcher upgedated werden soll,
-										 * um die "alte" Auspraegung zu der Eigenschaft zu holen
-										 */
-										for (int k = 0; k < kontaktauspraegungen.size(); k++) {
-											if (kontaktauspraegungen.elementAt(k).getBezeichnung() == eigenschaft) {
-												Auspraegung a = new Auspraegung();
-												a = kontaktauspraegungen.elementAt(k);
-												/*
-												 * Nun wird die alte Auspraegung mit der vom Nutzer neu angegeben
-												 * Auspraegung �berschrieben
-												 */
-												a.setWert(neuerwert);
-												/*
-												 * Das Auspraegungsobjekt wird nun mit dem neuen Wert an den Server
-												 * �bergeben und letzendlich die Auspraegung geupdated
-												 */
-												ev.saveAuspraegung(a, new AsyncCallback<Auspraegung>() {
+										eig.add(bez);
+									}
 
-													@Override
-													public void onFailure(Throwable caught) {
-														Window.alert(caught.toString());
+								}
+							}
+							// Angegebene Auspraegungen werden dem String-Vector hinzugefuegt
+							for (int j = 0; j < eigeneEigenschaftBearbeitungTable.getRowCount(); j++) {
 
-													}
+								Widget v = eigeneEigenschaftBearbeitungTable.getWidget(j, 1);
+								if (v instanceof TextBox) {
+									if (!((TextBox) v).getValue().isEmpty()) {
+										String wert = (((TextBox) v).getText());
 
-													@Override
-													public void onSuccess(Auspraegung result) {
-														Window.alert("Auspraegungen aktualisiert");
-														Window.Location.reload();
-
-													}
-												});
-											}
-
-										}
+										aus.add(wert);
 
 									}
 
 								}
-
 							}
+
+							ev.createAuspraegungForNewEigenschaft(eig, aus, result, new AsyncCallback<Void>() {
+
+								@Override
+								public void onFailure(Throwable error) {
+									error.getMessage().toString();
+								}
+
+								@Override
+								public void onSuccess(Void result) {
+
+								}
+							});
 
 						}
 					});
@@ -697,6 +709,7 @@ public class KontaktForm extends VerticalPanel {
 			vp.add(headerPanel);
 			vp.add(InfoPanel);
 			vp.add(kontaktInfoTable);
+			vp.add(eigeneEigenschaftBearbeitungTable);
 			vp.add(BtnPanel);
 
 			RootPanel.get("content").add(vp);

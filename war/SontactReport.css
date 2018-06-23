@@ -54,7 +54,7 @@ html,body {
 	border-left: 1px solid #666;
 }
 
-h1 {
+h4 {
 	background:  url(/images/sontact2.png) no-repeat left 150%;
 	font-size: 20px;
 	width: 85%;
@@ -79,14 +79,48 @@ h1 a {
 	padding: 20px 0px 20px 30px;
 }
 
-h2{
+h1 {
+	font-weight: 400;
+	font-size: 21px;
+	width: 33%;
+	background: url(/images/sontact2.png) no-repeat left 80%;
+	background-size: contain;
+	margin-left: 20px;
+	color: white;
 	font: 'Gotham';
-	color: #191970; 
 	font-weight: lighter !important;
 	font-variant: small-caps;
-	letter-spacing: 7px;
+	letter-spacing: 3px;
 }
 
+h3 {
+	
+	width: 40%;
+	background: url(/images/sontact2.png) no-repeat left 80%;
+	background-size: contain;
+
+	color: black;
+
+	font-weight: lighter !important;
+	font-variant: small-caps;
+	letter-spacing: 2px;
+	margin: 7px
+}
+
+h8 {
+	font-weight: 400;
+	font-size: 22px;
+	width: 19%;
+	background: url(/images/sontact2.png) no-repeat left 80%;
+	background-size: contain;
+
+	color: black;
+	font: 'Gotham';
+	font-weight: lighter !important;
+	font-variant: small-caps;
+	letter-spacing: 4px;
+	margin: 7px
+}
 .sendButton {
 	display: block;
 	font-size: 16pt;

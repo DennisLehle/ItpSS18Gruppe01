@@ -41,8 +41,8 @@ public class NavigationReport extends VerticalPanel {
 	 * Buttons der Navigation. final, damit Callbacks sie verändern können.
 	 */
 	final Button showAllKontakteReport = new Button("Alle Kontakte");
-	final Button showAllKontakteNachBestimmtenAusp = new Button("Alle Kontakte nach Eigenschaften");
-	final Button showAlleGeteiltenKontakteReport = new Button("Alle geteilten Kontakte nach Teilhabern");
+	final Button showAllKontakteNachBestimmtenAusp = new Button("Alle Kontakte nach bestimmten Eigenschaften");
+	final Button showAlleGeteiltenKontakteReport = new Button("Alle geteilten Kontakte nach bestimmten Teilhabern");
 	Nutzer nutzer = new Nutzer();
 	VerticalPanel contentPanel = new VerticalPanel();
 	Kontakt k = new Kontakt();
@@ -56,9 +56,9 @@ public class NavigationReport extends VerticalPanel {
 		showAllKontakteNachBestimmtenAusp.setStyleName("ButtonStyle");
 		showAlleGeteiltenKontakteReport.setStyleName("ButtonStyle");
 
-		showAllKontakteReport.setPixelSize(150, 40);
-		showAllKontakteNachBestimmtenAusp.setPixelSize(150, 40);
-		showAlleGeteiltenKontakteReport.setPixelSize(150, 40);
+		showAllKontakteReport.setPixelSize(160, 60);
+		showAllKontakteNachBestimmtenAusp.setPixelSize(160, 60);
+		showAlleGeteiltenKontakteReport.setPixelSize(160, 60);
 
 		/**
 		 * Button zur Anzeige der Navigation anheften
@@ -93,8 +93,8 @@ public class NavigationReport extends VerticalPanel {
 
 							@Override
 							public void onSuccess(AlleKontakteReport result) {
-								MessageBox.alertWidget("Hinweis", "In diesem Report finden Sie eine Übersicht all Ihrer Kontakte. "
-										+ "Dies beinhaltet alle Ihre Kontakte und alle Kontakte die mit Ihnen geteilt wurden.");
+//								MessageBox.alertWidget("Hinweis", "In diesem Report finden Sie eine �bersicht all Ihrer Kontakte. "
+//										+ "Dies beinhaltet alle Ihre Kontakte und alle Kontakte die mit Ihnen geteilt wurden.");
 								RootPanel.get("contentR").clear();							
 								writer.process(result);
 
@@ -121,7 +121,7 @@ public class NavigationReport extends VerticalPanel {
 				HorizontalPanel hp = new HorizontalPanel();
 				TextBox eingabe = new TextBox();
 				ListBox auswahl = new ListBox();
-				Button btn = new Button("Report starten !");
+				Button btn = new Button("Report generieren");
 				auswahl.addItem("");
 				auswahl.addItem("Eigenschaft");
 				auswahl.addItem("Auspraegung");
@@ -129,8 +129,9 @@ public class NavigationReport extends VerticalPanel {
 				eingabe.setStyleName("contentR");
 				auswahl.setStyleName("contentR");
 				btn.setStyleName("contentR");
-				RootPanel.get("contentR").add(new HTML("<div align=\"center\"> <h2>Alle Kontakte nach Eigenschaften</h2></div>"));
-				RootPanel.get("contentR").add(new HTML("<div align=\"center\"> Bitte bestimmen Sie eine Eigenschaft oder Ausprägung.</div>"));
+				RootPanel.get("contentR").add(new HTML("<div align=\"center\"> <H3>Alle Kontakte nach bestimmten Eigenschaften</H3></div>"));
+				RootPanel.get("contentR").add(new HTML("<div align=\"center\"> Bitte legen Sie anhand der Auswahl, "
+						+ "die Kontakteigenschaften Ihrer Kontakte fest, wonach der Report generiert wird. </div>"));
 
 				hp.add(auswahl);
 				hp.add(eingabe);
@@ -186,7 +187,7 @@ public class NavigationReport extends VerticalPanel {
 										public void onSuccess(AlleKontakteNachEigenschaftenReport result) {
 
 											if (result == null) {
-												Window.alert(" Es existieren keine Kontakte mit diesen Ausprägungen");
+												Window.alert(" Es existieren keine Kontakte mit diesen Auspraegungen");
 											}
 											RootPanel.get("contentR").clear();
 											writer.process(result);
@@ -221,9 +222,10 @@ public class NavigationReport extends VerticalPanel {
 				HorizontalPanel hp = new HorizontalPanel();
 				ListBox emailGeteiltenutzer = new ListBox();
 
-				Button btn = new Button("Report starten !");
-				RootPanel.get("contentR").add(new HTML("<div align=\"center\"> <h2>Alle geteilten Kontakte nach Teilhabern</h2></div>"));
-				RootPanel.get("contentR").add(new HTML(" <div align=\"center\"> Bitte bestimmen Sie den teilhabenden Nutzer. </div>"));
+				Button btn = new Button("Report generieren");
+				RootPanel.get("contentR").add(new HTML("<div align=\"center\"> <H3> Alle geteilten Kontakte nach Teilhabern </H3> </div>"));
+				RootPanel.get("contentR").add(new HTML(" <div align=\"center\"> </tr><tr><td> Bitte bestimmen Sie den teilhabenden Nutzer, "
+						+ "wonach der Report generiert wird. </tr><tr><td> </div>"));
 
 				hp.add(emailGeteiltenutzer);
 				hp.add(btn);

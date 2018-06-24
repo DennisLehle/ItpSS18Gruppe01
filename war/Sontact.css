@@ -454,6 +454,41 @@ h5 {
      padding: 7px 40px;
 }
 
+.eigeneEigButton{
+	position: absolute;
+    right: 18px;
+    bottom: 581px;
+     padding: 7px 15px;
+}
+
+.eigeneEigEntfernenButton{
+	position: absolute;
+    right: 18px;
+    bottom: 540px;
+     padding: 7px 33px;
+}
+
+.bearbeitungKSave{
+	position: absolute;
+    right: 18px;
+    bottom: 620px;
+     padding: 7px 40px;
+}
+
+.bearbeitungK{
+	position: absolute;
+    left: 400px;
+    bottom: 20px;
+     padding: 7px 40px;
+}
+
+.cancelKButton{
+	position: absolute;
+    right: 18px;
+    bottom: 500px;
+     padding: 7px 36px;
+}
+
 .infoLabel{
 	position: absolute;
     right: 6px;
@@ -470,8 +505,14 @@ h5 {
 }
 
 .infoTable{
-	margin: 30px 10px
+	margin: 30px 10px;
 	
+}
+
+.eigeneEigTable{
+	margin: 15px;
+	right: 10px;
+	bottom: 100px;
 }
 
 .label{
@@ -482,6 +523,12 @@ h5 {
 
 .tbRundung{
 	border-radius: 15px;
+}
+
+.tbRundung2{
+	border-radius: 15px;
+	margin: 15px;
+	bottom: 20px;
 }
 
 

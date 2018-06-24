@@ -161,6 +161,7 @@ public class Sontact implements EntryPoint {
 				ownProfil = result;
 				//Label wird mit dem Vor-, und Nachnamen des Nutzers befült der sich Eingeloggt hat.
 				profilLb.setText(result.getVorname() +" "+ result.getNachname());
+				profilLb.setTitle("Dein eigener Kontakt");
 				//Label wird mit ClickHandler versehen um aufs eigene Profil zu gelangen.
 				profilLb.addClickHandler(new ownProfilClickHandler());
 				profilLb.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);

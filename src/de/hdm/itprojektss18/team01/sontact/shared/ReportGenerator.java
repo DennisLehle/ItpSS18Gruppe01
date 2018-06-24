@@ -4,8 +4,9 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-import de.hdm.itprojektss18.team01.sontact.shared.report.AlleGeteiltenKontakteReport;
+import de.hdm.itprojektss18.team01.sontact.shared.report.AlleKontakteNachTeilhabernReport;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.*;
+import de.hdm.itprojektss18.team01.sontact.shared.report.AlleGeteiltenKontakteReport;
 import de.hdm.itprojektss18.team01.sontact.shared.report.AlleKontakteNachEigenschaftenReport;
 import de.hdm.itprojektss18.team01.sontact.shared.report.AlleKontakteReport;
 
@@ -22,7 +23,10 @@ public interface ReportGenerator extends RemoteService{
 	public AlleKontakteReport createAlleKontakteReport(Nutzer n) 
 			throws IllegalArgumentException;
 	
-	public AlleGeteiltenKontakteReport createAlleGeteilteReport(String email, Nutzer n) 
+	public AlleKontakteNachTeilhabernReport createNachTeilhabernReport(String email, Nutzer n) 
+			throws IllegalArgumentException;
+	
+	public AlleGeteiltenKontakteReport createAlleGeteiltenReport(Nutzer n) 
 			throws IllegalArgumentException;
 
 	

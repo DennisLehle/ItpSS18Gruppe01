@@ -120,7 +120,7 @@ public class AuspraegungMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum Einfuegen des neuen Nutzertupels in die DB
-		String updateSQL = "UPDATE auspraegung SET wert=?, eigenschaftid=?, kontaktid=?, status=? WHERE id=?";
+		String updateSQL = "UPDATE auspraegung SET wert=? WHERE id=?";
 
 		try {
 
@@ -128,11 +128,8 @@ public class AuspraegungMapper {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(updateSQL);
 
-			stmt.setString(1, a.getWert());
-			stmt.setInt(2, a.getEigenschaftId());
-			stmt.setInt(3, a.getKontaktId());
-			stmt.setInt(4, a.getId());
-			stmt.setBoolean(5, a.getStatus());
+			stmt.setString(1, a.getWert());		
+			stmt.setInt(2, a.getId());
 
 			// Ausfuehren des SQL Statement
 			stmt.executeUpdate();

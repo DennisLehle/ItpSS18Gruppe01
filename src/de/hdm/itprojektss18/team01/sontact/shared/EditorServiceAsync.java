@@ -68,7 +68,7 @@ public interface EditorServiceAsync {
 
 	void createAuspraegung(String wert, int eigenschaftId, int kontaktId, AsyncCallback<Auspraegung> callback);
 
-	void saveAuspraegung(Auspraegung a, AsyncCallback<Auspraegung> callback);
+	void saveAuspraegung(Vector<Auspraegung> a, AsyncCallback<Void> callback);
 
 	void deleteAuspraegung(Auspraegung a, AsyncCallback<Void> callback);
 

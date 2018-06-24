@@ -38,12 +38,22 @@ public abstract class ReportWriter {
   
   
   	/**
-  	 * Uebersetzen eines <code>AlleGeteiltenKontakteReport</code> in das
+  	 * Uebersetzen eines <code>AlleKontakteNachTeilhabernReport</code> in das
   	 * Zielformat.
   	 * 
   	 * @param r der zu uebersetzende Report
   	 */
-  public abstract void process(AlleGeteiltenKontakteReport r);
+  public abstract void process(AlleKontakteNachTeilhabernReport r);
+
+
+	/**
+	 * Uebersetzen eines <code>AlleGeteiltenKontakteReport</code> in das
+	 * Zielformat.
+	 * 
+	 * @param r der zu uebersetzende Report
+	 */
+public abstract void process(AlleGeteiltenKontakteReport r);
+
 
 
 }

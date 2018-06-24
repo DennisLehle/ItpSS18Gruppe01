@@ -437,13 +437,6 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		Vector<Kontakt> kontakt = new Vector<Kontakt>();
 		Vector<Kontakt> receiv = new Vector<Kontakt>();
 		Vector<Berechtigung> b = new Vector<Berechtigung>();
-	
-
-//		// Der zu ubergebene Teilhaber in Form eines Nutzer wird instantitiert
-	
-//
-//		// Dem Nutzer wird die entsprechende Emailadresse zugewiesen
-	//	receiver = this.editorService.getUserByGMail(bb.getReceiverId(n.getEmailAddress()));
 
 		// Alle geteilten Kontakte des eingeloggten Nutzers aufrufen
 		kontakt.addAll(this.getEditorService().getAllSharedKontakteByOwner(n.getId()));
@@ -455,22 +448,19 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 			for (int j = 0; j < b.size(); j++) {
 
-				// Pruefung und Vergleich des Kontakt- Objekts mit dem zugehörigen
-				// Berechtigung-Objekt
-				// die sich auf den Receiver beziehen, der als Nutzer eingetragen ist
 				if (kontakt.elementAt(i).getId() == b.elementAt(j).getObjectId()
 						&& n.getId() == b.elementAt(j).getOwnerId())
-								 {
-						
+
 				{
 
 					Kontakt k = new Kontakt();
 					k = this.editorService.getKontaktById(b.elementAt(j).getObjectId());
 					receiv.add(k);
-				}
-			}
 
-		}}
+				}
+
+			}
+		}
 
 		// Die Berechtigungen des gespeicherten Vectors, werden pro Zeile der
 		// Reporttabelle
@@ -484,7 +474,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			kon.addColumn(new Column(receiv.elementAt(i).getNachname()));
 			kon.addColumn(new Column(receiv.elementAt(i).getErstellDat().toString()));
 			kon.addColumn(new Column(receiv.elementAt(i).getModDat().toString()));
-			//kon.addColumn(new Column(this.getEditorService().getAllBerechtigungenByReceiver(receiv.elementAt(i).getOwnerId())));
+			kon.addColumn(new Column(
+					getEditorService().sharedWith(receiv.elementAt(i).getId(), 'k', n).get(i).getEmailAddress()));
 			kon.addColumn(new Column(""));
 
 			report.addRow(kon);

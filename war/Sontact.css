@@ -21,14 +21,14 @@ div {
  
  
 .login {
+    position: absolute;
     top: 0px;
     left: 0px;
     bottom: 0px;
     right: 0px;
-    position: absolute;
     background: url('http://hintergrundbild.org/wallpaper/full/a/d/2/41863-vertical-blau-hintergrundbilder-1920x1200.jpg');
     display: block;
-    padding: 200px 30% 0px 30%;
+    padding: 200px 26% 20px 30%;
 }
 
 .login tbody {
@@ -36,25 +36,32 @@ div {
     padding: 40px;
     display: block;
     box-shadow: 0px 0px 8px #999;
+    
 }
 
-.login h1 {
-	padding: 20px 0px 20px 30px;
-	margin-left: 0px;
-    margin-bottom: 20px;
-    width: 100%;
-	background-position: 50%;
+.login h7 {
+	padding: 150px 60% 30px 20px;
 }
 
 .login a {
     margin: 30px 40px 0px 40px;
     padding: 10px 20px;
-    background: #c0c0c0;
+    background: #1c9cd8;
     display: block;
     color: #fff;
     text-decoration: none;
-    text-align: center;    
+    text-align: center;
 }
+
+.login a:focus,
+.login a:hover {
+	background: #005f9d;
+}
+
+.login h8 {
+		padding: 150px 60% 30px 20px;
+		padding-left: 1%;
+		}
 /*
  * Ende des Logins
  */
@@ -239,6 +246,29 @@ h3 {
 h5 {
 	font: roboto;
 	font-weight: bold;
+}
+
+/** Logo für den Login */
+h7 {
+	background: url(/images/sontact2.png) no-repeat;
+
+}
+
+h7 a {
+	color: rgba(255,255,255,0.0);
+	padding: 20px 0px 20px 30px;
+}
+
+h8 {
+	font-family: gotham;
+	color: black;
+	letter-spacing: 5px;
+	font-size: 34px;
+}
+
+h8 a {
+	color: rgba(255,255,255,0.0);
+	padding: 20px 0px 20px 30px;
 }
 /*
  * Ende der Überschriften

@@ -38,7 +38,9 @@ public class Sontact implements EntryPoint {
 	private LoginInfo loginInfo = null;
 	private Kontakt ownProfil = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
-	private Label loginLabel = new Label("Nur ein Schritt trennt Sie noch von der Kontaktverwaltung. Melden Sie sich jetzt mit einem Google-Konto an, um Sontact nutzen zu können.");
+	private Label loginLabel = new Label("Herzlich Wilkommen auf Sontact. Um die Kontaktverwaltung nutzen zu können melden Sie sich bitte mit einem Google-Konto an, um fortfahren zu können.");
+	HTML loginHTML = new HTML("<h7></h7>");
+	HTML sontactHTML = new HTML("<h8>SONTACT</h8>");
 	private Anchor signInLink = new Anchor("Mit Google anmelden");
 
 	LoginServiceAsync loginService = GWT.create(LoginService.class);
@@ -202,14 +204,17 @@ public class Sontact implements EntryPoint {
 
 	}
 	
-	void loadLogin() {		
+	void loadLogin() {	
+		
 		signInLink.setHref(loginInfo.getLoginUrl());
+		loginPanel.add(loginHTML);
+		loginPanel.add(sontactHTML);
 		loginPanel.add(loginLabel);
 		loginPanel.add(signInLink);
 		loginPanel.addStyleName("login");
 		
+		RootPanel.get("footer").clear();
 		RootPanel.get("content").add(loginPanel);			
-
 	}
 
 	/**

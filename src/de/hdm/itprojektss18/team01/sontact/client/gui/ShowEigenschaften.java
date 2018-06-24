@@ -62,7 +62,10 @@ public class ShowEigenschaften extends VerticalPanel {
 	 * Eigenschaften mit ihren Ausprägung anzeigen zu lassen.
 	 */
 	public ShowEigenschaften(final Nutzer n, Kontakt k) {
-
+	
+		RootPanel.get("content").clear();
+		RootPanel.get("contentHeader").clear();
+		
 		head.add(new HTML("<h5>Kontaktinformationen </h5>"));
 		RootPanel.get("content").add(head);
 		// Methode die beim Start dieser Klasse aufgerufen wird.
@@ -79,7 +82,10 @@ public class ShowEigenschaften extends VerticalPanel {
 	 *            der Kontakt der übergeben wird
 	 */
 	protected void onLoad(final Nutzer n, Kontakt k) {
-
+		
+		
+		
+		RootPanel.get("contentHeader").add(new HTML(k.getVorname() + " " + k.getNachname()));
 		/**
 		 * Initialisierung des Labels und eines CellTabels für die Kontakte
 		 */
@@ -105,6 +111,7 @@ public class ShowEigenschaften extends VerticalPanel {
 					if (result.size() == 0) {
 
 						eigenschaftAuspraegungTable.setVisible(false);
+						MessageBox.alertWidget("Hinweis", "Dieser Kontakt besitzt noch keine Eigenschaften.");
 
 			
 					} else {
@@ -137,6 +144,7 @@ public class ShowEigenschaften extends VerticalPanel {
 					if (result.size() == 0) {
 
 						eigenschaftAuspraegungTable.setVisible(false);
+						MessageBox.alertWidget("Hinweis", "Dieser Kontakt besitzt noch keine Eigenschaften.");
 
 					} else {
 						eigenschaftAuspraegungTable.setVisible(true);
@@ -217,7 +225,7 @@ public class ShowEigenschaften extends VerticalPanel {
 		eigenschaftAuspraegungTable.setWidth("80%", true);
 		eigenschaftAuspraegungTable.setColumnWidth(eigenschaftColumn, "60px");
 		eigenschaftAuspraegungTable.setColumnWidth(auspraegnungColumn, "60px");
-		eigenschaftAuspraegungTable.setColumnWidth(imageColumn, "20px");
+		eigenschaftAuspraegungTable.setColumnWidth(imageColumn, "45px");
 		ListDataProvider<Relatable> dataProvider = new ListDataProvider<Relatable>();
 
 		ListHandler<Relatable> sort = new ListHandler<Relatable>(dataProvider.getList());
@@ -281,7 +289,7 @@ public class ShowEigenschaften extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				// Vector alle selektierten Eigenschaften/Ausprägungen mitgeben aber davor erst
 				// leeren.
-
+			
 				gewaehlteAuspraegung.removeAll(gewaehlteAuspraegung);
 				gewaehlteAuspraegung.addAll(selectionModel.getSelectedSet());
 
@@ -291,6 +299,7 @@ public class ShowEigenschaften extends VerticalPanel {
 					// Geht die ausgewählten Auspraegungen durch und übergibt jede einzelne für die
 					// Löschung davon.
 					for (int i = 0; i <= gewaehlteAuspraegung.size(); i++) {
+						
 						ev.deleteAuspraegungById(gewaehlteAuspraegung.elementAt(i).getId(), new AsyncCallback<Void>() {
 
 							@Override
@@ -312,8 +321,14 @@ public class ShowEigenschaften extends VerticalPanel {
 
 									@Override
 									public void onSuccess(Void result) {
-										Window.alert("Sie haben die Eigenschaft/n erfolgreich gelöscht.");
+										RootPanel.get("content").clear();
+										RootPanel.get("contentHeader").clear();
+										RootPanel.get("content").add(new KontaktForm(k));
+									
+										RootPanel.get("contentHeader").clear();
 
+											
+										
 									}
 
 								});
@@ -321,9 +336,11 @@ public class ShowEigenschaften extends VerticalPanel {
 							}
 
 						});
+						
 
 					}
 
+					
 				} else {
 					// Wenn man nicht der Owner ist springt man in die else Anweisung hinein.
 					for (int i = 0; i <= gewaehlteAuspraegung.size(); i++) {
@@ -355,7 +372,6 @@ public class ShowEigenschaften extends VerticalPanel {
 
 									@Override
 									public void onSuccess(Void result) {
-										Window.alert("Sie haben die Eigenschaft/n erfolgreich gelöscht.");
 
 									}
 
@@ -370,6 +386,8 @@ public class ShowEigenschaften extends VerticalPanel {
 				}
 
 			}
+			
+			
 		});
 
 	}

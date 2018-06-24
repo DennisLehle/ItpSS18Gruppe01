@@ -130,7 +130,7 @@ public void process(AlleKontakteNachEigenschaftenReport r) {
 	  }
 			
 
-public void process (AlleGeteiltenKontakteReport r) {
+public void process (AlleKontakteNachTeilhabernReport r) {
 	
 	  // Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
     this.resetReportText();
@@ -173,5 +173,11 @@ public void process (AlleGeteiltenKontakteReport r) {
   public String getReportText() {
     return this.getHeader() + this.reportText + this.getTrailer();
   }
+
+@Override
+public void process(AlleGeteiltenKontakteReport r) {
+	// TODO Auto-generated method stub
+	
+}
 
 }

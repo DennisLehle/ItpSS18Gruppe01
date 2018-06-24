@@ -240,7 +240,7 @@ public class HTMLReportWriter extends ReportWriter {
 	}
 
 	@Override
-	public void process(AlleGeteiltenKontakteReport r) {
+	public void process(AlleKontakteNachTeilhabernReport r) {
 		// Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
 		this.resetReportText();
 
@@ -304,7 +304,74 @@ public class HTMLReportWriter extends ReportWriter {
 		 */
 		this.reportText = result.toString();
 	}
+	
+@Override
+	public void process(AlleGeteiltenKontakteReport r) {
+	// Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
+			this.resetReportText();
 
+			/*
+			 * In diesen Buffer schreiben wir waehrend der Prozessierung sukzessiv unsere
+			 * Ergebnisse.
+			 */
+			StringBuffer result = new StringBuffer();
+
+			/*
+			 * Nun werden Schritt fuer Schritt die einzelnen Bestandteile des Reports
+			 * ausgelesen und in HTML-Form uebersetzt.
+			 */
+			result.append("<H3>" + r.getTitle() + "</H3>");
+			result.append("<table style=\"width:500px;border:1px solid #e6e6e6\"><tr>");
+			result.append("</tr><tr><td>" + " Erstellungsdatum des Reports|" + r.created().toString() + "</td></tr>");
+
+			Vector<Row> rows = r.getRows();
+			result.append("<table style=\"width:900px\">");
+
+			for (int i = 0; i < rows.size(); i++) {
+				Row row = rows.elementAt(i);
+				result.append("</td></tr>");
+				for (int k = 0; k < row.getNumColumns(); k++) {
+					if (i == 0) {
+						result.append("<td style=\"background:silver;font-weight:bold\">" + row.getColumnAt(k) + "</td>");
+					}
+
+					else if (row.getNumColumns() == 2) {
+						result.append("<td style=\"background:#E6E6E6\">" + row.getColumnAt(k) + "</td>");
+					}
+
+					else if (row.getNumColumns() == 6) {
+						result.append(
+								"<td style=\"border-top: 4px solid #5669b1\">" + "<b>" + row.getColumnAt(k) + "</b></td>");
+					}
+
+					else {
+						if (i > 1) {
+							result.append("<td style=\"border-top: 1px solid #e6e6e6\">" + row.getColumnAt(k) + "</td>");
+
+						}
+
+						else {
+							result.append("<td valign=\"top\">" + row.getColumnAt(k) + "</td>");
+						}
+					}
+
+				}
+
+				result.append("</tr>");
+
+			}
+
+			result.append("</table>");
+
+			/*
+			 * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
+			 * reportText-Variable zugewiesen. Dadurch wird es möglich, anschließend das
+			 * Ergebnis mittels getReportText() auszulesen.
+			 */
+			this.reportText = result.toString();
+		}
+		
+	
 	/**
 	 * Auslesen des Ergebnisses der zuletzt aufgerufenen Prozessierungsmethode.
 	 * 
@@ -313,5 +380,7 @@ public class HTMLReportWriter extends ReportWriter {
 	public String getReportText() {
 		return this.getHeader() + this.reportText + this.getTrailer();
 	}
+
+	
 
 }

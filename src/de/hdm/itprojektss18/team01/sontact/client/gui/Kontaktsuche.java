@@ -110,7 +110,7 @@ public class Kontaktsuche extends VerticalPanel {
 				public void onSuccess(Vector<Kontakt> result) {
 					if (result.size() == 0) {
 						showKontaktButtonPanel.setVisible(false);
-						Window.alert("Für den gesuchten Kontakt " + eingabe + " gabe es keine treffer");
+						Window.alert("Fuer den gesuchten Kontakt " + eingabe + " gabe es keine treffer");
 						
 					} else {
 						searchTable.setVisible(true);

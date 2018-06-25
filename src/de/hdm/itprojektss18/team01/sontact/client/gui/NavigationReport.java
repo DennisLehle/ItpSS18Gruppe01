@@ -117,12 +117,14 @@ public class NavigationReport extends VerticalPanel {
 								// wurden.");
 								RootPanel.get("contentR").clear();
 								writer.process(result);
-
-								// sc.add();
-
-								RootPanel.get("contentR")
-										.add(new HTML("<div align=\"center\">" + writer.getReportText() + "</div>"));
-
+								
+								HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</div>");
+								ScrollPanel sc = new ScrollPanel(html);
+								
+								sc.setSize("950px", "470px");
+								sc.setVerticalScrollPosition(10);
+								RootPanel.get("contentR").add(sc);
+								
 							}
 
 						});
@@ -221,9 +223,13 @@ public class NavigationReport extends VerticalPanel {
 											RootPanel.get("contentR").clear();
 											writer.process(result);
 
-											RootPanel.get("contentR").add(new HTML(
-													"<div align=\"center\">" + writer.getReportText() + "</div>"));
 
+											HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</div>");
+											ScrollPanel sc = new ScrollPanel(html);
+											
+											sc.setSize("950px", "470px");
+											sc.setVerticalScrollPosition(10);
+											RootPanel.get("contentR").add(sc);
 										}
 
 									});
@@ -300,12 +306,14 @@ public class NavigationReport extends VerticalPanel {
 								// wurden.");
 								RootPanel.get("contentR").clear();
 								writer.process(result);
-
-								// sc.add();
-
-								RootPanel.get("contentR")
-										.add(new HTML("<div align=\"center\">" + writer.getReportText() + "</div>"));
-
+								
+								
+								HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</div>");
+								ScrollPanel sc = new ScrollPanel(html);
+								
+								sc.setSize("950px", "470px");
+								sc.setVerticalScrollPosition(10);
+								RootPanel.get("contentR").add(sc);
 							}
 
 						});
@@ -408,8 +416,12 @@ public class NavigationReport extends VerticalPanel {
 												RootPanel.get("contentR").clear();
 												writer.process(result);
 
-												RootPanel.get("contentR").add(new HTML(
-														"<div align=\"center\">" + writer.getReportText() + "</div>"));
+												HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</div>");
+												ScrollPanel sc = new ScrollPanel(html);
+												
+												sc.setSize("950px", "470px");
+												sc.setVerticalScrollPosition(10);
+												RootPanel.get("contentR").add(sc);
 
 											}
 

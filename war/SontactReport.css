@@ -67,7 +67,6 @@ h4 {
 	letter-spacing: 2px;
 	height:auto;
 	
-	
 }
 
 
@@ -87,7 +86,7 @@ h1 {
 	background-size: contain;
 	margin-left: 20px;
 	color: white;
-	font: 'Gotham';
+	font: 'Gotham'
 	font-weight: lighter !important;
 	font-variant: small-caps;
 	letter-spacing: 3px;
@@ -104,7 +103,8 @@ h3 {
 	font-weight: lighter !important;
 	font-variant: small-caps;
 	letter-spacing: 2px;
-	margin: 7px
+	margin: 7px;
+	font-family:sans-serif;
 }
 
 h8 {
@@ -115,7 +115,7 @@ h8 {
 	background-size: contain;
 
 	color: black;
-	font: 'Gotham';
+	font:'Gotham';
 	font-weight: lighter !important;
 	font-variant: small-caps;
 	letter-spacing: 4px;
@@ -153,6 +153,7 @@ h8 {
 	float: left;
 	padding-top: 10px;
 	padding-bottom: 20px;
+	font-family:sans-serif;
 }
 
 .box {
@@ -169,6 +170,7 @@ h8 {
     width: 100%;
     padding: 10px;
      text-align: center;
+     font-family:sans-serif;
 }
 
 #navigatorR {
@@ -187,6 +189,7 @@ h8 {
    	display: flex;
    	justify-content: center;
     background: #999 url('http://mindchamps-medical.com/wp-content/uploads/2015/04/Abstract-Background-White.jpg') no-repeat left 50%;
+	font-family:sans-serif;
 }
 
 #footerR .gwt-HTML {
@@ -196,6 +199,7 @@ h8 {
 #footerR a {
     color: #1c9cd8;
     text-decoration: none;
+
 }
 	
 }

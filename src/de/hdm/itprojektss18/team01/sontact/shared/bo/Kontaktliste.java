@@ -4,7 +4,7 @@ package de.hdm.itprojektss18.team01.sontact.shared.bo;
  * Realisierung einer exemplarischen Kontaktlistenklasse. 
  */
 
-public class Kontaktliste extends BusinessObject implements Participation {
+public class Kontaktliste extends BusinessObject {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -13,7 +13,7 @@ public class Kontaktliste extends BusinessObject implements Participation {
 	 */
 	private String titel;
 	private int ownerId;
-	private Berechtigung berechtigung;
+	private char type = 'l';
 
 	/**
 	 * Getter- und Setter-Methoden zum Setzen und Auslesen der Werte
@@ -36,21 +36,10 @@ public class Kontaktliste extends BusinessObject implements Participation {
 	public int getId() {
 		return this.id;
 	}
-	@Override
+
 	public char getType() {
-		return 'l';
+		return type;
 	}
-	@Override
-	public Berechtigung getBerechtigung() {
-		return berechtigung;
-	}
-	
-	public void setBerechtigung(Berechtigung berechtigung) {
-		this.berechtigung = berechtigung;
-	}
-	@Override
-	public int getOwner() {
-		return ownerId;
-	}
+
 
 }

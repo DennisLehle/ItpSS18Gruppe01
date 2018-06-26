@@ -10,6 +10,7 @@
 * {
 	margin: 0;
 	padding: 0;
+	font-family:sans-serif;
 }
 
 html,body {
@@ -84,12 +85,13 @@ h1 {
 	width: 33%;
 	background: url(/images/sontact2.png) no-repeat left 80%;
 	background-size: contain;
-	margin-left: 20px;
+	margin-left: 15px;
 	color: white;
-	font: 'Gotham'
+	font:'Gotham';
 	font-weight: lighter !important;
 	font-variant: small-caps;
 	letter-spacing: 3px;
+	padding-left: 64px;
 }
 
 h3 {

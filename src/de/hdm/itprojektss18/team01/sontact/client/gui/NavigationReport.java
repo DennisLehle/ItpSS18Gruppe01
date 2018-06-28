@@ -71,10 +71,10 @@ public class NavigationReport extends VerticalPanel {
 		showAllGeteiltenKontakteReport.setStyleName("ButtonStyle");
 		showAllKontakteNachTeilhabendernReport.setStyleName("ButtonStyle");
 
-		showAllKontakteReport.setPixelSize(160, 80);
-		showAllKontakteNachBestimmtenAusp.setPixelSize(160, 80);
-		showAllGeteiltenKontakteReport.setPixelSize(160, 80);
-		showAllKontakteNachTeilhabendernReport.setPixelSize(160, 80);
+		showAllKontakteReport.setPixelSize(200, 80);
+		showAllKontakteNachBestimmtenAusp.setPixelSize(200, 80);
+		showAllGeteiltenKontakteReport.setPixelSize(200, 80);
+		showAllKontakteNachTeilhabendernReport.setPixelSize(200, 80);
 
 		/**
 		 * Buttons werden der Anzeige innerhalb der Navigation angeheftet.

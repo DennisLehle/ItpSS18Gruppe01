@@ -146,22 +146,20 @@ public class NavigationReport extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				RootPanel.get("contentR").clear();
 				HorizontalPanel hp = new HorizontalPanel();
+				
+				// Filterung nach Eigenschaft
 				TextBox eingabe = new TextBox();
 				ListBox auswahl = new ListBox();
-				Button btn = new Button("Report generieren");
-//				auswahl.addItem("");
 				auswahl.addItem("Eigenschaft");
-//				auswahl.addItem("Auspraegung");
-//				auswahl.addItem("Test Eig+Aus");
 				
-				//Test Melanie
+				// Filterung nach Auspraegung
 				TextBox eingabe1 = new TextBox();
 				ListBox auswahl1 = new ListBox();
-//				Button btn1 = new Button("Report generieren");
-//				auswahl1.addItem("");
-//				auswahl1.addItem("Eigenschaft");
 				auswahl1.addItem("Auspraegung");
-//				auswahl.addItem("Test Eig+Aus");
+				
+				// Erstellung des Buttons				
+				Button btn = new Button("Report generieren");
+
 
 				eingabe.setStyleName("contentR");
 				auswahl.setStyleName("contentR");
@@ -169,33 +167,22 @@ public class NavigationReport extends VerticalPanel {
 				
 				eingabe1.setStyleName("contentR");
 				auswahl1.setStyleName("contentR");
+				eingabe1.setStyleName("contentR");
+				auswahl1.setStyleName("contentR");
+				btn.setStyleName("contentR");
 				
 				RootPanel.get("contentR").add(new HTML(
 						"<div align=\"center\"> <H3>Saemtliche Kontakte nach bestimmten Eigenschaften</H3></div>"));
 				RootPanel.get("contentR").add(new HTML("<div align=\"center\"> Bitte legen Sie anhand der Auswahl, "
 						+ "die Kontakteigenschaften Ihrer Kontakte fest, wonach sich der Report generieren soll. </div>"));
 
+				// Dem Horizontal Panel werden die definierten Elemente hinzugefügt
 				hp.add(auswahl);
 				hp.add(eingabe);
-				//Test Melanie
-				hp.add(auswahl1);
-				hp.add(eingabe1);
-//				hp.add(btn);
-				
-//				// Test Melanie 
-				eingabe1.setStyleName("contentR");
-				auswahl1.setStyleName("contentR");
-				btn.setStyleName("contentR");
-//				RootPanel.get("contentR").add(new HTML(
-//						"<div align=\"center\"> <H3>Saemtliche Kontakte nach bestimmten Eigenschaften</H3></div>"));
-//				RootPanel.get("contentR").add(new HTML("<div align=\"center\"> Bitte legen Sie anhand der Auswahl, "
-//						+ "die Kontakteigenschaften Ihrer Kontakte fest, wonach sich der Report generieren soll. </div>"));
-//
 				hp.add(auswahl1);
 				hp.add(eingabe1);
 				hp.add(btn);
-				
-				// Bestehend
+
 
 				RootPanel.get("contentR").add(hp);
 				btn.addClickHandler(new ClickHandler() {
@@ -204,8 +191,7 @@ public class NavigationReport extends VerticalPanel {
 					public void onClick(ClickEvent event) {
 						if (eingabe.getValue() == "" && eingabe1.getValue() == "") {
 							Window.alert("Bitte geben sie etwas in das Textfeld ein.");
-						} else if (auswahl.getSelectedItemText() == "Eigenschaft" && eingabe.getValue() != "" &&
-								auswahl1.getSelectedItemText() == "Auspraegung" && eingabe1.getValue() != "") {
+						} else if (auswahl.getSelectedItemText() == "Eigenschaft" && eingabe.getValue() != "") {
 
 							final HTMLReportWriter writer = new HTMLReportWriter();
 							ClientsideSettings.getReportGeneratorService().createAuspraegungReport(eingabe.getValue(),
@@ -234,39 +220,36 @@ public class NavigationReport extends VerticalPanel {
 
 									});
 
+						} else if (auswahl1.getSelectedItemText() == "Auspraegung" && eingabe1.getValue() != "") {
+
+							final HTMLReportWriter writer = new HTMLReportWriter();
+							ClientsideSettings.getReportGeneratorService().createAuspraegungReport(eingabe.getValue(),
+									eingabe1.getValue(), n, new AsyncCallback<AlleKontakteNachEigenschaftenReport>() {
+
+										@Override
+										public void onFailure(Throwable caught) {
+											caught.getMessage().toString();
+
+										}
+
+										@Override
+										public void onSuccess(AlleKontakteNachEigenschaftenReport result) {
+
+											RootPanel.get("contentR").clear();
+											writer.process(result);
+
+
+											HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</div>");
+											ScrollPanel sc = new ScrollPanel(html);
+											
+											sc.setSize("950px", "470px");
+											sc.setVerticalScrollPosition(10);
+											RootPanel.get("contentR").add(sc);
+										}
+
+									});
 						}
 
-//						else if (auswahl.getSelectedItemText() == "Eigenschaft" && eingabe.getValue() != "" && 
-//								auswahl1.getSelectedItemText() == "Auspraegung" && eingabe1.getValue() != "") {
-//
-//							final HTMLReportWriter writer = new HTMLReportWriter();
-//
-//							ClientsideSettings.getReportGeneratorService().createAuspraegungReport(eingabe.getValue(), eingabe1.getValue(),
-//									n, new AsyncCallback<AlleKontakteNachEigenschaftenReport>() {
-//
-//										@Override
-//										public void onFailure(Throwable caught) {
-//											caught.getMessage().toString();
-//
-//										}
-//
-//										@Override
-//										public void onSuccess(AlleKontakteNachEigenschaftenReport result) {
-//
-//											if (result == null) {
-//												Window.alert(" Es existieren keine Kontakte mit diesen Auspraegungen");
-//											}
-//											RootPanel.get("contentR").clear();
-//											writer.process(result);
-//
-//											RootPanel.get("contentR").add(new HTML(
-//													"<div align=\"center\">" + writer.getReportText() + "</div>"));
-//
-//										}
-//
-//									});
-//
-//						}
 					}
 
 				});

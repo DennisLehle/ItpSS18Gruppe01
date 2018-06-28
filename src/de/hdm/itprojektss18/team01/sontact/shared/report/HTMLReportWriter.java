@@ -114,34 +114,34 @@ public class HTMLReportWriter extends ReportWriter {
 		 * ausgelesen und in HTML-Form uebersetzt.
 		 */
 		result.append("<H3 style=\"font-family:sans-serif;\">" + r.getTitle() + "</H3>");
-		result.append("<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif;\"><tr>");
-		result.append("</tr><td>" + " Erstellungsdatum des Reports|" + r.created().toString() + "</td></tr>");
+		result.append("<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif;\"></br><tr>");
+		result.append("<tr><td>" + " Erstellungsdatum des Reports | " + r.created().toString() + "</td></tr>");
 		// result.append("<td valign=\"top\"><b>" + paragraph2HTML(r.getHeaderData())
 		// + "</b></td></table>");
 
 		Vector<Row> rows = r.getRows();
-		result.append("<table style=\"width:70%\">");
+		result.append("<table style=\"width:100%\">");
 
 		for (int i = 0; i < rows.size(); i++) {
 			Row row = rows.elementAt(i);
 			result.append("</td></tr>");
 			for (int k = 0; k < row.getNumColumns(); k++) {
 				if (i == 0) {
-					result.append("<td style=\"background:silver;font-weight:bold; font-size: larger; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
+					result.append("<td style=\"background:lightsteelblue;font-weight:bold; font-size: larger; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
 				}
 
 				else if (row.getNumColumns() == 2) {
-					result.append("<td style=\"background:#E6E6E6; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
+					result.append("<td height=\"25\"; style=\"background:lightsteelblue; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
 				}
 
 				else if (row.getNumColumns() == 6) {
 					result.append(
-							"<td style=\"border-top: 4px solid #5669b1\">" + "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
+							"<td height=\"50\"; style=\"border-top: 3px solid #5669b1\">" + "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
 				}
 
 				else {
 					if (i > 1) {
-						result.append("<td style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
+						result.append("<td height=\"25\"; style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
 
 					}
 
@@ -190,31 +190,31 @@ public class HTMLReportWriter extends ReportWriter {
 		 */
 		result.append("<H3 style=\"font-family:sans-serif;\">" + r.getTitle() + "</H3>");
 		result.append("<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif;\"><tr>");
-		result.append("</tr><tr><td>" + " Erstellungsdatum des Reports|" + r.created().toString() + "</td></tr>");
+		result.append("</tr><tr><td>" + " Erstellungsdatum des Reports|" + r.created().toString() + "</td></br></tr>");
 
 		Vector<Row> rows = r.getRows();
-		result.append("<table style=\"width:70%\">");
+		result.append("<table style=\"width:100%\">");
 
 		for (int i = 0; i < rows.size(); i++) {
 			Row row = rows.elementAt(i);
 			result.append("</td></tr>");
 			for (int k = 0; k < row.getNumColumns(); k++) {
 				if (i == 0) {
-					result.append("<td style=\"background:silver;font-weight:bold; font-size: larger; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
+					result.append("<td style=\"background:lightsteelblue;font-weight:bold; font-size: larger; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
 				}
 
 				else if (row.getNumColumns() == 2) {
-					result.append("<td style=\"background:#E6E6E6; font-family: sans-serif\">" + row.getColumnAt(k) + "</td>");
+					result.append("<td height=\"25\"; style=\"background:lightsteelblue; font-family: sans-serif\">" + row.getColumnAt(k) + "</td>");
 				}
 
 				else if (row.getNumColumns() == 6) {
 					result.append(
-							"<td style=\"border-top: 4px solid #5669b1; font-family: sans-serif\">" + "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
+							"<td height=\"50\"; style=\"border-top: 3px solid #5669b1; font-family: sans-serif\">" + "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
 				}
 
 				else {
 					if (i > 1) {
-						result.append("<td style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif\">" + row.getColumnAt(k) + "</td>");
+						result.append("<td height=\"25\"; style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif\">" + row.getColumnAt(k) + "</td>");
 
 					}
 
@@ -256,31 +256,31 @@ public class HTMLReportWriter extends ReportWriter {
 		 */
 		result.append("<H3 style=\"font-family:sans-serif;\">" + r.getTitle() + "</H3>");
 		result.append("<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif;\"><tr>");
-		result.append("</tr><tr><td>" + " Erstellungsdatum des Reports|" + r.created().toString() + "</td></tr>");
+		result.append("</tr><tr><td>" + " Erstellungsdatum des Reports|" + r.created().toString() + "</td></br></tr>");
 
 		Vector<Row> rows = r.getRows();
-		result.append("<table style=\"width:70%\">");
+		result.append("<table style=\"width:100%\">");
 
 		for (int i = 0; i < rows.size(); i++) {
 			Row row = rows.elementAt(i);
 			result.append("</td></tr>");
 			for (int k = 0; k < row.getNumColumns(); k++) {
 				if (i == 0) {
-					result.append("<td style=\"background:silver;font-weight:bold; font-size: larger; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
+					result.append("<td style=\"background:lightsteelblue;font-weight:bold; font-size: larger; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
 				}
 
 				else if (row.getNumColumns() == 2) {
-					result.append("<td style=\"background:#E6E6E6; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
+					result.append("<td height=\"25\"; style=\"background:lightsteelblue; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
 				}
 
 				else if (row.getNumColumns() == 6) {
 					result.append(
-							"<td style=\"border-top: 4px solid #5669b1\">" + "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
+							"<td height=\"50\"; style=\"border-top: 3px solid #5669b1\">" + "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
 				}
 
 				else {
 					if (i > 1) {
-						result.append("<td style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
+						result.append("<td height=\"25\";style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
 
 					}
 
@@ -322,31 +322,31 @@ public class HTMLReportWriter extends ReportWriter {
 			 */
 			result.append("<H3 style=\"font-family:sans-serif;\">" + r.getTitle() + "</H3>");
 			result.append("<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif;\"><tr>");
-			result.append("</tr><tr><td>" + " Erstellungsdatum des Reports|" + r.created().toString() + "</td></tr>");
+			result.append("</tr><tr><td>" + " Erstellungsdatum des Reports|" + r.created().toString() + "</td></br></tr>");
 
 			Vector<Row> rows = r.getRows();
-			result.append("<table style=\"width:70%\">");
+			result.append("<table style=\"width:100%\">");
 
 			for (int i = 0; i < rows.size(); i++) {
 				Row row = rows.elementAt(i);
 				result.append("</td></tr>");
 				for (int k = 0; k < row.getNumColumns(); k++) {
 					if (i == 0) {
-						result.append("<td style=\"background:silver;font-weight:bold; font-size:larger; font-family:sans-serif;\">" + row.getColumnAt(k) + "</td>");
+						result.append("<td style=\"background:lightsteelblue;font-weight:bold; font-size:larger; font-family:sans-serif;\">" + row.getColumnAt(k) + "</td>");
 					}
 
 					else if (row.getNumColumns() == 2) {
-						result.append("<td style=\"background:#E6E6E6; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
+						result.append("<td height=\"25\"; style=\"background:lightsteelblue; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
 					}
 
 					else if (row.getNumColumns() == 6) {
 						result.append(
-								"<td style=\"border-top: 4px solid #5669b1\">" + "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
+								"<td height=\"50\"; style=\"border-top: 3px solid #5669b1\">" + "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
 					}
 
 					else {
 						if (i > 1) {
-							result.append("<td style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
+							result.append("<td height=\"25\"; style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
 
 						}
 

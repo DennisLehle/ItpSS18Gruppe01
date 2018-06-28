@@ -119,10 +119,10 @@ public class NavigationReport extends VerticalPanel {
 								RootPanel.get("contentR").clear();
 								writer.process(result);
 								
-								HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</div>");
+								HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</br></div>");
 								ScrollPanel sc = new ScrollPanel(html);
 								
-								sc.setSize("950px", "470px");
+								sc.setSize("950px", "550px");
 								sc.setVerticalScrollPosition(10);
 								RootPanel.get("contentR").add(sc);
 								
@@ -214,7 +214,7 @@ public class NavigationReport extends VerticalPanel {
 											writer.process(result);
 
 
-											HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</div>");
+											HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</br></div>");
 											ScrollPanel sc = new ScrollPanel(html);
 											
 											sc.setSize("950px", "470px");
@@ -295,7 +295,7 @@ public class NavigationReport extends VerticalPanel {
 								writer.process(result);
 								
 								
-								HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</div>");
+								HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</br></div>");
 								ScrollPanel sc = new ScrollPanel(html);
 								
 								sc.setSize("950px", "470px");
@@ -329,8 +329,11 @@ public class NavigationReport extends VerticalPanel {
 				RootPanel.get("contentR")
 						.add(new HTML("<div align=\"center\"> <H3> Saemtliche Kontakte nach Teilhabern </H3> </div>"));
 				RootPanel.get("contentR").add(
-						new HTML(" <div align=\"center\"> </tr><tr><td> Bitte bestimmen Sie einen teilhabenden Nutzer, "
-								+ "wonach sich der Report generieren soll. </tr><tr><td> </div>"));
+						new HTML(" <div align=\"center\"> </tr><tr><td> Bitte waehlen Sie einen Nutzer, um die mit "
+								+ "ihm geteilten Kontakte zu erhalten. </tr><tr><td> </div>"));
+				RootPanel.get("contentR").add(new HTML ("</br>"));
+				RootPanel.get("contentR").add(new HTML ("</br>"));
+				RootPanel.get("contentR").add(new HTML ("</br>"));
 
 				hp.add(emailGeteiltenutzer);
 				hp.add(btn);
@@ -403,7 +406,7 @@ public class NavigationReport extends VerticalPanel {
 												RootPanel.get("contentR").clear();
 												writer.process(result);
 
-												HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</div>");
+												HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</br></div>");
 												ScrollPanel sc = new ScrollPanel(html);
 												
 												sc.setSize("950px", "470px");

@@ -121,13 +121,16 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			report.addRow(kon);
 
 			Row zwischen = new Row();
-
-			zwischen.addColumn(new Column("Eigenschaft:"));
-			zwischen.addColumn(new Column("Auspraegung:"));
-
-			report.addRow(zwischen);
-
+			
+			if (auspraegungen.size() != 0) {
+				
+				zwischen.addColumn(new Column("Eigenschaft:"));
+				zwischen.addColumn(new Column("Auspraegung:"));
+				report.addRow(zwischen);
+			}
+			
 			for (int j = 0; j < auspraegungen.size(); j++) {
+			
 
 				Row e = new Row();
 
@@ -383,6 +386,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		for (int i = 0; i < receiv.size(); i++) {
 			Vector<Relatable> auspraegungen = getEditorService()
 					.getAllAuspraegungenByKontaktRelatable(receiv.elementAt(i).getId());
+			
 
 			Row kon = new Row();
 			kon.addColumn(new Column(receiv.elementAt(i).getVorname()));
@@ -396,10 +400,12 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 			Row zwischen = new Row();
 
-			zwischen.addColumn(new Column("Eigenschaft:"));
-			zwischen.addColumn(new Column("Auspraegung:"));
-
-			report.addRow(zwischen);
+			if (auspraegungen.size() != 0) {
+				
+				zwischen.addColumn(new Column("Eigenschaft:"));
+				zwischen.addColumn(new Column("Auspraegung:"));
+				report.addRow(zwischen);
+			}
 
 			for (int j = 0; j < auspraegungen.size(); j++) {
 
@@ -505,10 +511,12 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 			Row zwischen = new Row();
 
-			zwischen.addColumn(new Column("Eigenschaft:"));
-			zwischen.addColumn(new Column("Auspraegung:"));
-
-			report.addRow(zwischen);
+			if (auspraegungen.size() != 0) {
+				
+				zwischen.addColumn(new Column("Eigenschaft:"));
+				zwischen.addColumn(new Column("Auspraegung:"));
+				report.addRow(zwischen);
+			}
 
 			for (int j = 0; j < auspraegungen.size(); j++) {
 

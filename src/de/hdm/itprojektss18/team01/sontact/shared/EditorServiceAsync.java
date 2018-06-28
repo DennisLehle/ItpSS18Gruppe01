@@ -135,4 +135,6 @@ public interface EditorServiceAsync {
 
 	void createEigenschaftV(Vector<String> bezeichnung, AsyncCallback<Vector<Eigenschaft>> callback);
 
+	void getKontaktByAusEig(String bezeichnung, String wert, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
+
 }

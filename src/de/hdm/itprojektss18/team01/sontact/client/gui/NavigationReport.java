@@ -60,8 +60,8 @@ public class NavigationReport extends VerticalPanel {
 	public NavigationReport(final Nutzer n) {
 		VerticalPanel vp = new VerticalPanel();
 
-		sc.setSize("200px", "550px");
-		sc.setVerticalScrollPosition(10);
+//		sc.setSize("200px", "550px");
+//		sc.setVerticalScrollPosition(10);
 
 		/**
 		 * Styling und Festlegung der Buttons.
@@ -75,6 +75,7 @@ public class NavigationReport extends VerticalPanel {
 		showAllKontakteNachBestimmtenAusp.setPixelSize(200, 80);
 		showAllGeteiltenKontakteReport.setPixelSize(200, 80);
 		showAllKontakteNachTeilhabendernReport.setPixelSize(200, 80);
+		
 
 		/**
 		 * Buttons werden der Anzeige innerhalb der Navigation angeheftet.
@@ -172,9 +173,12 @@ public class NavigationReport extends VerticalPanel {
 				btn.setStyleName("contentR");
 				
 				RootPanel.get("contentR").add(new HTML(
-						"<div align=\"center\"> <H3>Saemtliche Kontakte nach bestimmten Eigenschaften</H3></div>"));
-				RootPanel.get("contentR").add(new HTML("<div align=\"center\"> Bitte legen Sie anhand der Auswahl, "
-						+ "die Kontakteigenschaften Ihrer Kontakte fest, wonach sich der Report generieren soll. </div>"));
+						"<div align=\"center\"> <H3>Kontakte nach Eigenschaften und Auspraegungen</H3></br></div>"));
+				RootPanel.get("contentR").add(new HTML("<div align=\"center\"> Bitte geben Sie mindestens eine Eigenschaft "
+						+ "oder eine Auspraegung an.</div>"));
+				RootPanel.get("contentR").add(new HTML ("</br>"));
+				RootPanel.get("contentR").add(new HTML ("</br>"));
+				RootPanel.get("contentR").add(new HTML ("</br>"));
 
 				// Dem Horizontal Panel werden die definierten Elemente hinzugefügt
 				hp.add(auswahl);

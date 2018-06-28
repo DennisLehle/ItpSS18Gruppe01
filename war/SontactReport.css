@@ -148,7 +148,7 @@ h1 {
 
 h3 {
 	
-	width: 40%;
+	width: 55%;
 	background: url(/images/sontact2.png) no-repeat left 80%;
 	background-size: contain;
 
@@ -157,7 +157,8 @@ h3 {
 	font-weight: lighter !important;
 	font-variant: small-caps;
 	letter-spacing: 2px;
-	margin: 7px;
+	margin: 15px;
+	margin-top: 15px;
 	font-family:sans-serif;
 }
 
@@ -257,15 +258,18 @@ h9 a {
 }
 
 #navigatorR {
-	float: left;
-	background-size: cover;	
-	background: #eeeeee;
-	min-height: 1000px;
-	overflow: auto;
+    float: left;
+    background-size: cover;
+    background: white;
+    min-height: 1000px;
+    overflow: auto;
     position: relative;
     zoom: 1;
-    width: 200px;
-    height: 550px
+    width: 223px;
+    height: 550px;
+    margin-top: 5px;
+    margin-top: 5px;
+    margin-left: 8px;
 }
 
 #footerR {
@@ -278,6 +282,9 @@ h9 a {
    	justify-content: center;
     background: #999 url('http://mindchamps-medical.com/wp-content/uploads/2015/04/Abstract-Background-White.jpg') no-repeat left 50%;
 	font-family:sans-serif;
+	position: fixed;
+	left: 0px;
+  	bottom: 0px;
 }
 
 #footerR .gwt-HTML {
@@ -289,15 +296,14 @@ h9 a {
     text-decoration: none;
 
 }
-	
-}
+
 
 .ButtonStyle {
-	color: #125485;
-	text-align: center;
-	border-radius: 10px;
-	margin: 3px;
-	text-align: center;
+    color: darkslateblue;
+    border-radius: 10px;
+    margin: 3px;
+    text-align: center;
+    background: whitesmoke;
 }
 
 .ButtonStyleSuche {
@@ -322,6 +328,7 @@ h9 a {
 
 .reportgenerator td {
 	padding: 10px;
+	
 }
 
 .reportgenerator table {

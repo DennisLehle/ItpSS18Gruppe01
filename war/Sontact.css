@@ -212,12 +212,14 @@ h1 {
 	width: 33%;
 	background: url(/images/sontact2.png) no-repeat left 80%;
 	background-size: contain;
-	margin-left: 20px;
+	background-position-y: 4px;
+	margin-left: 15px;
 	color: white;
-	font: 'Gotham';
+	font-family: sans-serif;
 	font-weight: lighter !important;
 	font-variant: small-caps;
-	letter-spacing: 7px;
+	letter-spacing: 3px;
+	padding-left: 64px;
 }
 
 h1 a {
@@ -232,14 +234,15 @@ h2 {
 
 /** Hier wird der Text SHARE YOUR CONTACTS im Header gestylt */
 h3 {
-	font-family: 'Gotham';
+	font-family: 'monospace';
 	font-weight: 100;
 	text-align: center;
-	letter-spacing: 7px;
-	font-size: 18px;
+	letter-spacing: 3px;
+	font-size: 25px;
 	font-style: oblique;
 	border: 10px;
 	padding-top: 20px;
+	padding-left: 190px;
 }
 
 /** Hier wird der Text "Meine Kontaktlisten in der Navigation gestylt" */

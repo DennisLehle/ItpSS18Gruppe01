@@ -9,6 +9,7 @@
 
 * {
 	margin: 0;
+	margin-right: 15px;
 	padding: 0;
 	font-family:sans-serif;
 }
@@ -70,18 +71,21 @@ html,body {
 	cursor: default;
 	display: flex;
 	width: 100%;
+	height: 12%;
 	flex: 0 1 auto;
 	justify-content: space-between;
 	padding-right: 30px;
 	box-sizing: border-box;
 	background: #999 url('https://i.pinimg.com/originals/df/c3/09/dfc309dd3b5d8971c5425ea1f8a28f3d.jpg') no-repeat left 50%;
-	background-size: cover;	color: white;
+	background-size: cover;	
+	color: white;
 }
 
 #nutzermenuR {
 	display: flex;
 	width: 30%;
 	justify-content: flex-end;
+	
 }
 
 #nutzermenuR .gwt-HTML {
@@ -128,18 +132,18 @@ h1 a {
 }
 
 h1 {
-	font-weight: 400;
 	font-size: 21px;
-	width: 33%;
-	background: url(/images/sontact2.png) no-repeat left 80%;
-	background-size: contain;
-	margin-left: 15px;
-	color: white;
-	font:'Gotham';
-	font-weight: lighter !important;
-	font-variant: small-caps;
-	letter-spacing: 3px;
-	padding-left: 64px;
+    width: 33%;
+    background: url(/images/sontact2.png) no-repeat left 80%;
+    background-size: 10%;
+    margin-left: 15px;
+    color: white;
+    font: 'Gotham';
+    font-weight: lighter !important;
+    font-variant: small-caps;
+    letter-spacing: 3px;
+    padding-left: 59px;
+    padding-top: 12px;
 }
 
 h3 {
@@ -240,18 +244,28 @@ h9 a {
 }
 
 #contentR {
-	margin: 0px auto;
-    width: 100%;
+    margin: 0px auto;
+    width: 77%;
     padding: 10px;
-     text-align: center;
-     font-family:sans-serif;
+    padding-left: 100px;
+    padding-top: 20px;
+    text-align: center;
+    font-family: sans-serif;
+    min-height: 550px;
+    float: right;
+    font-family:sans-serif;
 }
 
 #navigatorR {
 	float: left;
 	background-size: cover;	
-	background: #cfcfcf;
+	background: #eeeeee;
 	min-height: 1000px;
+	overflow: auto;
+    position: relative;
+    zoom: 1;
+    width: 200px;
+    height: 550px
 }
 
 #footerR {

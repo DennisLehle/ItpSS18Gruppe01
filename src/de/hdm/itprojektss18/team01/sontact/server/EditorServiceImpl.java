@@ -136,6 +136,13 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Speichern und Eintragen des erstellten Nutzers in der DB.
 		return this.nMapper.insert(nutzer);
 	}
+	
+	/**
+	 * Gibt alle Nutzer des Systems zurück.
+	 */
+	public Vector<Nutzer> findAllNutzer (){
+		return this.nMapper.findAll();
+	}
 
 	/**
 	 * Anhand der identifizierenden Emailaddresse wird ueberprueft, ob diese als
@@ -532,7 +539,36 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		return this.klMapper.insert(kl);
 	}
+	
+	
+	/**
+	 * Prüfung ob ein Kontakt in einer Kontaktliste bereits vorhanden ist.
+	 * Ist dieser schon vorhanden wird true zurcükgegeben.
+	 * 
+	 * @param kontaktlisteId der Kontaktliste die überprüft wird.
+	 * @param k Vector von Kontakten die mit der Kontaktliste abgeglichen werden.
+	 * @return check 
+	 */
+	public boolean checkKontaktliste(int kontaktlisteId, Vector<Kontakt> k) {
+		Boolean check = false;
+		//Leeren Vector erstellen
+		Vector<Kontakt> kontakte = new Vector<Kontakt>();
+		//Alle gefundenen Kontakte der Kontaktliste dem Vector hinzufügen.
+		kontakte.addAll(this.getKontakteByKontaktliste(kontaktlisteId));
+		
 
+			for (int j = 0; j <= k.size(); j++) {
+				if(kontakte.contains(k.elementAt(j))){
+					check = true;
+				} else {
+					check = false;
+				}
+			}
+		
+		return check;
+			
+		}
+		
 	/**
 	 * Speichern einer modifizierten Kontaktliste
 	 * 
@@ -730,7 +766,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 *            wert, int eigenschaftId, int kontaktId
 	 * @return Auspraegung
 	 */
-	public Auspraegung createAuspraegung(String wert, int eigenschaftId, int kontaktId)
+	public Auspraegung createAuspraegung(String wert, int eigenschaftId, int kontaktId, int ownerId)
 			throws IllegalArgumentException {
 
 		// Erstellen eines Auspraegung Objektes
@@ -738,6 +774,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		a.setWert(wert);
 		a.setEigenschaftId(eigenschaftId);
 		a.setKontaktId(kontaktId);
+		a.setOwnerId(ownerId);
 		a.setId(1);
 
 		// Anpassung des Modifikationsdatums des Kontakt Objektes
@@ -757,7 +794,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 *            bezeichnung, String wert, Kontakt k
 	 * @return void
 	 */
-	public void createAuspraegungForNewEigenschaft(Vector<String> bezeichnung, Vector<String> wert, Kontakt k)
+	public void createAuspraegungForNewEigenschaft(Vector<String> bezeichnung, Vector<String> wert, Kontakt k, int ownerId)
 			throws IllegalArgumentException {
 
 		// Erzeugung von leeren Vectoren
@@ -780,7 +817,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		// Erstellung der Auspreagung zur erstellten Eigenschaft
 		for (int j = 0; j < wert.size(); j++) {
-			this.createAuspraegung(wert.elementAt(j), id.elementAt(j), k.getId());
+			this.createAuspraegung(wert.elementAt(j), id.elementAt(j), k.getId(), ownerId);
 		}
 	}
 
@@ -928,6 +965,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 							// Eintrag der Berechtigung fuer das Auspraegungsobjekt (ObjectId)
 							this.createBerechtigung(ownerId, receiverId, av.elementAt(a).getId(),
 									av.elementAt(a).getType());
+							
+							if (av.elementAt(a).getStatus() == false) {
+								this.aMapper.setStatusTeilung(av.elementAt(a));
+							}
 						}
 					}
 				}
@@ -943,15 +984,29 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			Nutzer n = this.getNutzerById(receiverId);
 			Kontakt k = this.getKontaktById(objectId);
 			this.addKontaktToKontaktliste(this.findKontaktlisteByTitel(n, "Mit mir geteilte Kontakte"), k);
-
-			// Vektor welcher alle Auspraegungsobjekte des Kontaktes k enthaelt
+			
 			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(objectId);
+	
+			if(avshare.isEmpty()) {
+				for (int as = 0; as < av.size(); as++) {
+
+					// Eintrag der Berechtigung f�r das zu teilende Auspraegungsobjekt
+					this.createBerechtigung(ownerId, receiverId, av.elementAt(as).getId(),
+							av.elementAt(as).getType());
+					// Setzen eines Statuses für die Ausprägung.
+					if (av.elementAt(as).getStatus() == false) {
+						this.aMapper.setStatusTeilung(av.elementAt(as));
+					}
+				
+			} 
+			} else {
 
 			// Schleife welche alle Aauspraegungsobjekte des Kontaktes k durchgeht
 			for (int a = 0; a < av.size(); a++) {
 
 				// Schleife welche alle selektierten/ zu teilenden Aauspraegungsobjekte des
 				// Kontaktes k durchgeht
+				
 				for (int as = 0; as < avshare.size(); as++) {
 
 					// Abgleich der zwei Vektoren mit ihren Auspraegungsobjekten bzw. ihren ids
@@ -966,7 +1021,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 					}
 				}
 			}
-		} else if (type == 'a') {
+					
+		} }
+		else if (type == 'a') {
 			// Eintrag der Berechtigung fuer ein einzelnes zu teilendes
 			// Auspraegungsobjekt(profilaktisch)
 			this.createBerechtigung(ownerId, receiverId, objectId, type);
@@ -1332,16 +1389,18 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 				 * Berechtigungen b sowie Objekttyp und Nutzer um die Eindeutigkeit
 				 * zugewaehrleisten
 				 */
-				if (a.getId() == b.getObjectId() && b.getReceiverId() == n.getId()) {
+				if (a.getId() == b.getObjectId() && b.getReceiverId() == n.getId() || a.getOwnerId() == n.getId() && k.getId() == b.getObjectId()) {
 
 					// Abruf der Auspraegung
 					this.getAuspraegungById(a.getId());
 
 					// Auspraegung dem Vektor hinzufuegen
 					avshare.addElement(a);
+					
 				}
 			}
 		}
+		
 
 		// Rueckgabe Vektor welcher alle geteilten Auspraegungen des Kontaktes k
 		// enthaelt

@@ -61,12 +61,13 @@ public interface EditorServiceAsync {
 
 	void deleteEigenschaft(Eigenschaft e, AsyncCallback<Void> callback);
 
-	void createAuspraegungForNewEigenschaft(Vector<String> bezeichnung, Vector<String> wert, Kontakt k,
+	void createAuspraegungForNewEigenschaft(Vector<String> bezeichnung, Vector<String> wert, Kontakt k, int ownerId,
 			AsyncCallback<Void> callback);
 
 	void getEigenschaftAuswahl(AsyncCallback<Vector<Eigenschaft>> callback);
 
-	void createAuspraegung(String wert, int eigenschaftId, int kontaktId, AsyncCallback<Auspraegung> callback);
+	void createAuspraegung(String wert, int eigenschaftId, int kontaktId, int ownerId,
+			AsyncCallback<Auspraegung> callback);
 
 	void saveAuspraegung(Vector<Auspraegung> a, AsyncCallback<Void> callback);
 
@@ -84,8 +85,7 @@ public interface EditorServiceAsync {
 
 	void getOwnKontakt(Nutzer n, AsyncCallback<Kontakt> callback);
 
-	void shareObject(int ownerId, int receiverId, int objectId, char type, Vector<Relatable> avhsare,
-			AsyncCallback<Void> callback);
+	void shareObject(int ownerId, int receiverId, int objectId, char type, Vector<Relatable> avhsare, AsyncCallback<Void> callback);
 
 	void createBerechtigung(int ownerId, int receiverId, int objectId, char type, AsyncCallback<Berechtigung> callback);
 
@@ -134,5 +134,9 @@ public interface EditorServiceAsync {
 	void getAuspraegungByWert(String wert, AsyncCallback<Vector<Auspraegung>> callback);
 
 	void createEigenschaftV(Vector<String> bezeichnung, AsyncCallback<Vector<Eigenschaft>> callback);
+
+	void findAllNutzer(AsyncCallback<Vector<Nutzer>> callback);
+
+
 
 }

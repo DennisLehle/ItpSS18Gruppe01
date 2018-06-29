@@ -39,6 +39,12 @@ public interface EditorService extends RemoteService {
 	public Nutzer createNutzer(String emailAddress)
 			throws IllegalArgumentException;
 	
+	/**
+	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
+	 * 		#findAllNutzer();
+	 */
+	public Vector<Nutzer> findAllNutzer ()
+			throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
@@ -167,7 +173,6 @@ public interface EditorService extends RemoteService {
 	public Kontaktliste createKontaktliste(String titel, Nutzer n)
 			throws IllegalArgumentException;
 	
-	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
 	 * 		#saveKontaktliste(Kontaktliste kl);
@@ -277,7 +282,7 @@ public interface EditorService extends RemoteService {
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
 	 * 		#createAuspraegung(String wert, int eigenschaftId, int kontaktId, int ownerId);
 	 */
-	public Auspraegung createAuspraegung(String wert, int eigenschaftId, int kontaktId)
+	public Auspraegung createAuspraegung(String wert, int eigenschaftId, int kontaktId, int ownerId)
 			throws IllegalArgumentException;
 	
 	
@@ -285,7 +290,7 @@ public interface EditorService extends RemoteService {
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
 	 * #deleteEigenschaftcreateAuspraegungForNewEigenschaft(String bezeichnung, String wert, Kontakt k);
 	 */
-	public void createAuspraegungForNewEigenschaft(Vector<String> bezeichnung, Vector<String> wert, Kontakt k)
+	public void createAuspraegungForNewEigenschaft(Vector<String> bezeichnung, Vector<String> wert, Kontakt k, int ownerId)
 			throws IllegalArgumentException;
 
 	/**
@@ -359,12 +364,7 @@ public interface EditorService extends RemoteService {
 	public Berechtigung createBerechtigung(int ownerId, int receiverId, int objectId, char type)
 			throws IllegalArgumentException;
 	
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
-	 *		 #shareObject (int ownerId, int receiverId, int objectId, char type, Vector<Relatable> avhsare);
-	 */	
-	public void shareObject(int ownerId, int receiverId, int objectId, char type, Vector<Relatable> avhsare)
-				throws IllegalArgumentException;
+	void shareObject(int ownerId, int receiverId, int objectId, char type, Vector<Relatable> avhsare);
 	
 	/**
 	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl

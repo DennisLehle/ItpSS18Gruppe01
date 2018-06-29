@@ -45,4 +45,10 @@ public class Eigenschaft extends BusinessObject implements Relatable  {
 		return false;
 	}
 
+	@Override
+	public int getOwnerId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

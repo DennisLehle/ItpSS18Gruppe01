@@ -17,6 +17,7 @@ public class Auspraegung extends BusinessObject implements Participation, Relata
 	private boolean status;
 	private Berechtigung berechtigung;
 	private Eigenschaft eigenschaft = new Eigenschaft();
+	private int ownerId;
 	/**
 	 * Getter- und Setter-Methoden zum Setzen und Auslesen der Werte
 	 */
@@ -80,5 +81,15 @@ public class Auspraegung extends BusinessObject implements Participation, Relata
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
+
+	public int getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(int ownerId) {
+		this.ownerId = ownerId;
+	}
+
+	
 	
 }

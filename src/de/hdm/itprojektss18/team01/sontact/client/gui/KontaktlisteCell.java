@@ -8,8 +8,8 @@ import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 
 /**
- * Stellt die Zelle einer Kontaktliste dar.
- * Wird für das TreeViewModel benötigt.
+ * Die Klasse KontaktlisteCell stellt eine Zelle einer Kontaktliste im
+ * TreeViewModel dar. Diese Klasse wird fuer das TreeViewModel benoetigt.
  * 
  * @author dennislehle
  *
@@ -18,19 +18,17 @@ public class KontaktlisteCell extends AbstractCell<Kontaktliste> {
 
 	EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
 	boolean b = false;
-	
+
 	@Override
 	public void render(Context context, Kontaktliste kl, SafeHtmlBuilder sb) {
-		if(kl == null) {
+		if (kl == null) {
 			return;
 		}
 
-	  sb.appendHtmlConstant("<div>");
-	  sb.appendHtmlConstant("<image src='/images/kontaktliste.png' width='15px' height='15px' align='center' /> ");
-      sb.appendEscaped(kl.getTitel());
-      sb.appendHtmlConstant("</div>");
-      
-      
-	
+		sb.appendHtmlConstant("<div>");
+		sb.appendHtmlConstant("<image src='/images/kontaktliste.png' width='15px' height='15px' align='center' /> ");
+		sb.appendEscaped(kl.getTitel());
+		sb.appendHtmlConstant("</div>");
 
-}}
+	}
+}

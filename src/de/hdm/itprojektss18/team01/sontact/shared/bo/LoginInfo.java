@@ -16,8 +16,8 @@ public class LoginInfo implements IsSerializable {
 	private String emailAddress = "";
 
 	/**
-	 * Gibt TRUE zur�ck, wenn ein Nutzer angemeldet ist andernfalls wird FALSE
-	 * zur�ckgegeben.
+	 * Gibt TRUE zurueck, wenn ein Nutzer angemeldet ist andernfalls wird 
+	 * FALSE zurueckgegeben.
 	 */
 
 	public boolean isLoggedIn() {
@@ -25,7 +25,7 @@ public class LoginInfo implements IsSerializable {
 	}
 
 	/**
-	 * Gibt den Login-Status zurück.
+	 * Gibt den Login-Status zurueck.
 	 * 
 	 * @return loggedIn
 	 */
@@ -45,7 +45,7 @@ public class LoginInfo implements IsSerializable {
 	}
 
 	/**
-	 * Gibt die LoginUrl zurück.
+	 * Gibt die LoginUrl zurueck.
 	 * 
 	 * @return loginUrl
 	 */
@@ -65,7 +65,7 @@ public class LoginInfo implements IsSerializable {
 	}
 
 	/**
-	 * Gibt die Logout zurück.
+	 * Gibt die Logout zurueck.
 	 * 
 	 * @return logoutUrl
 	 */
@@ -85,7 +85,7 @@ public class LoginInfo implements IsSerializable {
 	}
 
 	/**
-	 * Gibt die Email zurück.
+	 * Gibt die Email zurueck.
 	 * 
 	 * @return emailAdress
 	 */

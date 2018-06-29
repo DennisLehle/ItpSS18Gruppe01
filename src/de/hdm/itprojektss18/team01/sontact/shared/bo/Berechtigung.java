@@ -17,8 +17,7 @@ public class Berechtigung extends BusinessObject {
 	private int ownerId;
 	private int receiverId;
 	private int objectId;
-	private char type;
-	//private int berechtigungsstufe;	
+	private char type;	
 
 
 	/**

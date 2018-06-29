@@ -9,7 +9,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
  * Realisierung einer exemplarischen Kontaktklasse.
  */
 
-public class Kontakt extends BusinessObject implements Participation {
+public class Kontakt extends BusinessObject {
 
 	private static final long serialVersionUID = 1L;
 
@@ -23,7 +23,7 @@ public class Kontakt extends BusinessObject implements Participation {
 	private int ownerId;
 	private int kontaktlisteId;
 	private char identifier;
-	private Berechtigung berechtigung;
+	private char type = 'k';
 
 	/**
 	 * Getter- und Setter-Methoden zum Setzen und Auslesen der Werte
@@ -82,24 +82,11 @@ public class Kontakt extends BusinessObject implements Participation {
 		return this.id;
 	}
 
-	@Override
+
 	public char getType() {
-		return 'k';
+		return type;
 	}
 
-	@Override
-	public Berechtigung getBerechtigung() {
-		return berechtigung;
-	}
-
-	public void setBerechtigung(Berechtigung berechtigung) {
-		this.berechtigung = berechtigung;
-	}
-
-	@Override
-	public int getOwner() {
-		return ownerId;
-	}
 
 	public char getIdentifier() {
 		return identifier;

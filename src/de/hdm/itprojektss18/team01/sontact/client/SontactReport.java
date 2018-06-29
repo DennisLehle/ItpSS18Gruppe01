@@ -33,8 +33,12 @@ public class SontactReport implements EntryPoint {
 	LoginInfo loginInfo = new LoginInfo();
 	private VerticalPanel loginPanel = new VerticalPanel();
 	private Label loginLabel = new Label("Bitte Melden Sie sich mit Ihren Google Account, um einen Zugriff auf den ReportGenerator zu bekommen.");
-	private Anchor signInLink = new Anchor("Login");
+	HTML loginHTML = new HTML("<h7></h7>");
+	HTML sontactHTML = new HTML("<h9>SONTACT-REPORT</h9>");
 	public Anchor signOutLink = new Anchor("Logout");
+	private Anchor signInLink = new Anchor("Mit Google anmelden");
+
+	
 	ClientsideSettings clientSettings = new ClientsideSettings();
 
 	LoginServiceAsync loginService = ClientsideSettings.getLoginService();
@@ -78,13 +82,19 @@ public class SontactReport implements EntryPoint {
 		});
 	}
 
-	private void loadLogin() {
-		// Assemble login panel.
+	private void loadLogin() {	
+		
 		signInLink.setHref(loginInfo.getLoginUrl());
+		loginPanel.add(loginHTML);
+		loginPanel.add(sontactHTML);
 		loginPanel.add(loginLabel);
 		loginPanel.add(signInLink);
+		loginPanel.addStyleName("login");
+		
+		RootPanel.get("footerR").clear();
 		RootPanel.get("contentR").add(loginPanel);
 	}
+
 
 	private void loadReport(final Nutzer n) {
 		//MessageBox.alertWidget("Willkommen", "Hier können Sie ihren gewünschten Report generieren. ");

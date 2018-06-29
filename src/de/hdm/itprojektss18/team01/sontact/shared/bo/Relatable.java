@@ -14,11 +14,11 @@ public interface Relatable extends Serializable {
 	
 	//Id des Objektes (Eindeutig)
 	int getId();
-	//Gibt die Bezeichnung einer Eigenschaft zurück.
+	//Gibt die Bezeichnung einer Eigenschaft zurueck.
 	String getBezeichnung();
-	//Gibt die Ausprägung einer Eigenschaft zurück.
+	//Gibt die Auspraegung einer Eigenschaft zurueck.
 	String getWert();
-	//Gibt den Status einer Auspraegung zurcueck ob geteilt wurde.
+	//Gibt den Status der Teilung einer Auspraegung zurueck.
 	boolean getStatus();
 	//Gibt den EIgentümer der AUspraegung/EIgenschaft zurück.
 	int getOwnerId();

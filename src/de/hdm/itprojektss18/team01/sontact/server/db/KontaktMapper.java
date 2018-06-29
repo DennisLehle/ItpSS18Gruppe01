@@ -682,6 +682,72 @@ public class KontaktMapper {
 		return null;
 	}
 
+	/**
+	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach deren
+	 * Eigenschaften und Auspraegungen und gibt diese zurueck. Hierbei wird die
+	 * Auspraegung und die Eigenschaft des Kontaktes mit dem vom Nutzer uebergebenem
+	 * String abgeglichen.
+	 * 
+	 * @param String
+	 *            wert, String eigenschaft, Nutzer n
+	 * 
+	 * @return Vector<Kontakt>
+	 * 
+	 */
+	public Vector<Kontakt> findKontakteByAusEig(String bezeichnung, String wert, Nutzer n) {
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		// Vector erzeugen, der die Kontaktdatensaetze aufnehmen kann
+		Vector<Kontakt> result = new Vector<Kontakt>();
+
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(
+					"SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier FROM eigenschaft "
+							+ "INNER JOIN auspraegung " + "ON auspraegung.eigenschaftid = eigenschaft.id "
+							+ "INNER JOIN kontakt " + "ON kontakt.id = auspraegung.kontaktid "
+							+ "WHERE kontakt.ownerid = " + n.getId() + " AND bezeichnung like '%" + bezeichnung + "%'"
+							+ " AND wert like '%" + wert + "%'" + " UNION "
+							+ "SELECT DISTINCT kontakt.id, kontakt.vorname, kontakt.nachname, kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier "
+							+ "FROM eigenschaft " + "INNER JOIN auspraegung "
+							+ "ON auspraegung.eigenschaftid = eigenschaft.id " + "INNER JOIN kontakt "
+							+ "ON kontakt.id = auspraegung.kontaktid " + "INNER JOIN berechtigung "
+							+ "ON berechtigung.objectid = auspraegung.kontaktid " + "WHERE berechtigung.receiverid = "
+							+ n.getId() + " AND bezeichnung like '%" + bezeichnung + "%'" + " AND wert like '%" + wert
+							+ "%'");
+
+			// Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				// Ergebnis-Tupel in Objekt umwandeln
+				Kontakt k = new Kontakt();
+
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
+				k.setId(rs.getInt("id"));
+				k.setVorname(rs.getString("vorname"));
+				k.setNachname(rs.getString("nachname"));
+				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
+				k.setModDat(rs.getTimestamp("modifikationsdatum"));
+				k.setOwnerId(rs.getInt("ownerid"));
+
+				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
+				result.addElement(k);
+			}
+
+			return result;
+		}
+
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+
+		return null;
+	}
+
 	// Alternative End
 	// ##############################################################################################
 

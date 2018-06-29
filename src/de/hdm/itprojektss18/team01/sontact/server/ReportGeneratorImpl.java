@@ -121,13 +121,16 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			report.addRow(kon);
 
 			Row zwischen = new Row();
-
-			zwischen.addColumn(new Column("Eigenschaft:"));
-			zwischen.addColumn(new Column("Auspraegung:"));
-
-			report.addRow(zwischen);
-
+			
+			if (auspraegungen.size() != 0) {
+				
+				zwischen.addColumn(new Column("Eigenschaft:"));
+				zwischen.addColumn(new Column("Auspraegung:"));
+				report.addRow(zwischen);
+			}
+			
 			for (int j = 0; j < auspraegungen.size(); j++) {
+			
 
 				Row e = new Row();
 
@@ -158,7 +161,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 *            auspraegung, String eigenschaft, Nutzer n
 	 * @return report
 	 */
-	public AlleKontakteNachEigenschaftenReport createAuspraegungReport(String auspraegung, String eigenschaft, Nutzer n)
+	public AlleKontakteNachEigenschaftenReport createAuspraegungReport(String eigenschaft, String auspraegung, Nutzer n)
 			throws IllegalArgumentException {
 
 		if (this.getEditorService() == null) {
@@ -169,11 +172,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		AlleKontakteNachEigenschaftenReport report = new AlleKontakteNachEigenschaftenReport();
 
 		// Festlegung des Titels und des Generierungsdatums dieses Reports
-		if (auspraegung != null) {
-			report.setTitle("Alle Kontakte nach" + "   " + auspraegung + "  ");
-		} else if (eigenschaft != null) {
-			report.setTitle("Alle Kontakte nach" + "  " + eigenschaft + "  ");
-		}
+		report.setTitle("Alle Kontakte nach" + "   " + eigenschaft + " : " + auspraegung);
+
 		report.setCreated(new Date());
 
 		// Dieser Report zeigt Ihnen alle Kontakte an, die innerhalb Ihrer
@@ -200,16 +200,42 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 		// Angeforderte Kontaktdaten in den Vektor laden und dem Report hinzufuegen
 		Vector<Kontakt> kontakt = new Vector<Kontakt>();
+		// kontakt.addAll(this.getEditorService().getAllKontakteByNutzer(n));
 
 		// Pruefung des uebergebenen Parameters, dieses durch die Suche den Report
 		// ausgibt
-		if (eigenschaft != null) {
-			kontakt.addAll(this.getEditorService().getKontakteByEigenschaft(eigenschaft, n));
 
-		} else if (auspraegung != null) {
-			kontakt.addAll(this.getEditorService().getKontakteByAuspraegung(auspraegung, n));
+		if (eigenschaft != null && auspraegung != null) {
 
+			kontakt.addAll(this.getEditorService().getKontaktByAusEig(eigenschaft, auspraegung, n));
 		}
+			
+
+ 
+//		else if (eigenschaft != null && auspraegung == null) {
+//			kontakt.addAll(this.getEditorService().getKontakteByEigenschaft(eigenschaft, n));
+//		} else if (auspraegung != null && eigenschaft == null) {
+//			kontakt.addAll(this.getEditorService().getKontakteByAuspraegung(auspraegung, n));
+//		}
+
+		// for (int i = 0; i < kontakt.size(); i++) {
+		// Vector<Relatable> ausgabe = getEditorService()
+		// .getAllAuspraegungenByKontaktRelatable(kontakt.elementAt(i).getId());
+		//
+		// for (int j = 0; j < ausgabe.size(); j++) {
+		// if (auspraegung != ausgabe.elementAt(j).getWert()) {
+		// kontakt.removeElementAt(i);
+		// } else if (eigenschaft != ausgabe.elementAt(j).getBezeichnung()) {
+		// kontakt.removeElementAt(i);
+		// }
+		// }
+		// }
+
+		// else if (auspraegung != null) {
+		// kontakt.addAll(this.getEditorService().getKontakteByAuspraegung(auspraegung,
+		// n));
+		//
+		// }
 		// Die Kontakte des gespeicherten Vectors, pro Zeile der Reporttabelle
 		// hinzufuegen
 
@@ -360,6 +386,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		for (int i = 0; i < receiv.size(); i++) {
 			Vector<Relatable> auspraegungen = getEditorService()
 					.getAllAuspraegungenByKontaktRelatable(receiv.elementAt(i).getId());
+			
 
 			Row kon = new Row();
 			kon.addColumn(new Column(receiv.elementAt(i).getVorname()));
@@ -373,10 +400,12 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 			Row zwischen = new Row();
 
-			zwischen.addColumn(new Column("Eigenschaft:"));
-			zwischen.addColumn(new Column("Auspraegung:"));
-
-			report.addRow(zwischen);
+			if (auspraegungen.size() != 0) {
+				
+				zwischen.addColumn(new Column("Eigenschaft:"));
+				zwischen.addColumn(new Column("Auspraegung:"));
+				report.addRow(zwischen);
+			}
 
 			for (int j = 0; j < auspraegungen.size(); j++) {
 
@@ -482,10 +511,12 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 			Row zwischen = new Row();
 
-			zwischen.addColumn(new Column("Eigenschaft:"));
-			zwischen.addColumn(new Column("Auspraegung:"));
-
-			report.addRow(zwischen);
+			if (auspraegungen.size() != 0) {
+				
+				zwischen.addColumn(new Column("Eigenschaft:"));
+				zwischen.addColumn(new Column("Auspraegung:"));
+				report.addRow(zwischen);
+			}
 
 			for (int j = 0; j < auspraegungen.size(); j++) {
 

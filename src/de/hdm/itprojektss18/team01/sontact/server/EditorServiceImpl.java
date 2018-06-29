@@ -22,7 +22,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
 /**
- * Implementierung des serverseitigen RPC-Services f�r den Editor.
+ * Implementierung des serverseitigen RPC-Services fuer den Editor.
  */
 public class EditorServiceImpl extends RemoteServiceServlet implements EditorService {
 
@@ -666,7 +666,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * **** ABSCHNITT ENDE: /KONTAKTLISTE
 	 * *****************************************************************************
 	 * ****
-	 */
+	 */ 
 
 	/*
 	 * *****************************************************************************
@@ -1472,6 +1472,21 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return this.kMapper.findKontakteByEigenschaft(bezeichnung, n);
 	}
 
+	/**
+	 * Durchsucht den angesprochenen Kontakt nach einem bestimmten uebergebenen
+	 * Wert der Eigenschaft und Auspraegung und gibt diesen zurueck. Hierbei wird die Auspraegung
+	 * und die Eigenschaft mit der dazugehoerigen Eigenschaft dem Kontakt zurueckgegeben.
+	 * 
+	 * @param wert,bezeichnung
+	 *            vom Nutzer uebergebener String
+	 * @return Vector<Auspraegung>
+	 * @throws IllegalArgumentException
+	 */
+	
+	public Vector<Kontakt> getKontaktByAusEig(String bezeichnung, String wert, Nutzer n) throws IllegalArgumentException {
+		return this.kMapper.findKontakteByAusEig(bezeichnung, wert, n);
+	}
+
 	/*
 	 * *****************************************************************************
 	 * **** ABSCHNITT ENDE: SUCHE
@@ -1500,7 +1515,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		return this.aMapper.findAuspraegungByWert(wert);
 	}
-
+	
+	
 	/*
 	 * *****************************************************************************
 	 * **** ABSCHNITT ENDE: SUCHE

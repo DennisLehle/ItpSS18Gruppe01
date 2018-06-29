@@ -8,7 +8,7 @@ public class Eigenschaft extends BusinessObject implements Relatable  {
 	 * Instanzvariablen
 	 */
 	private String bezeichnung;
-	Auspraegung a;
+	private Auspraegung a;
 	
 
 	/**

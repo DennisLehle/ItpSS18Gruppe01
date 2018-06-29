@@ -17,8 +17,8 @@ public interface ReportGenerator extends RemoteService{
 	
 	void init();
 	
-	public AlleKontakteNachEigenschaftenReport createAuspraegungReport(String listboxwert, String eingabe, Nutzer n) 
-			throws IllegalArgumentException;
+	AlleKontakteNachEigenschaftenReport createAuspraegungReport(String listboxwert, String listboxwert1, 
+			Nutzer n);
 	
 	public AlleKontakteReport createAlleKontakteReport(Nutzer n) 
 			throws IllegalArgumentException;

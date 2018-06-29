@@ -19,7 +19,7 @@ public interface ReportGeneratorAsync {
 
 	void createAlleKontakteReport(Nutzer n, AsyncCallback<AlleKontakteReport> callback);
 
-	void createAuspraegungReport(String listboxwert, String eingabe, Nutzer n,
+	void createAuspraegungReport(String listboxwert, String listboxwert1, Nutzer n,
 			AsyncCallback<AlleKontakteNachEigenschaftenReport> callback);
 
 	void createNachTeilhabernReport(String email, Nutzer n,

@@ -128,14 +128,6 @@ public interface EditorService extends RemoteService {
 	 */
 	public Vector<Kontakt> getAllKontakteByOwner(Nutzer n)
 			throws IllegalArgumentException;
-
-	
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
-	 * 		#getAllKontakteByNutzer(Nutzer n);
-	 */
-	public Vector<Kontakt> getAllKontakteByNutzer(Nutzer n)
-			throws IllegalArgumentException;
 	
 	
 	/** 
@@ -341,16 +333,7 @@ public interface EditorService extends RemoteService {
 	 */
 	public Vector<Relatable> getAllAuspraegungenByKontaktRelatable(int kontaktId)
 			throws IllegalArgumentException;
-	
-		
-//	-> ?	
-	/**
-	 * @see de.hdm.itprojektss18.team01.server.EditorServiceImpl
-	 * 		#getEigenschaftForAuspraegung(int eigenschaftId);
-	 */
-	public Eigenschaft getEigenschaftForAuspraegung(int eigenschaftId)
-			throws IllegalArgumentException;
-//	->			
+			
 	
 		
  /* ********************************************************************** *

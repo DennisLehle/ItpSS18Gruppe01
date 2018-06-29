@@ -3,6 +3,7 @@ package de.hdm.itprojektss18.team01.sontact.client.gui;
 import java.util.Vector;
 
 import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
@@ -29,7 +30,8 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * Die Klasse ShowKontaktliste zeigt die Kontakte einer spezifischen Kontaktliste in einer CellTabel an.
+ * Die Klasse ShowKontaktliste zeigt die Kontakte einer spezifischen
+ * Kontaktliste in einer CellTabel an.
  * 
  * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
  *
@@ -38,6 +40,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 public class ShowKontaktliste extends VerticalPanel {
 
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
+	private CellTable.Resources tableRes = GWT.create(TableResources.class);
 
 	private CellTable<Kontaktliste> kontaktListenTable2;
 	final SingleSelectionModel<Kontaktliste> selectionModel = new SingleSelectionModel<Kontaktliste>();
@@ -46,36 +49,40 @@ public class ShowKontaktliste extends VerticalPanel {
 	HorizontalPanel hp3 = new HorizontalPanel();
 	HorizontalPanel head = new HorizontalPanel();
 	ScrollPanel sp = new ScrollPanel();
-	
 
 	/**
 	 * Konstruktor wird ausgelöst wenn ein Kontakt bereits existiert.
 	 */
-	public ShowKontaktliste(final Nutzer n, Kontakt k) {
+	public ShowKontaktliste(final Nutzer n, Kontakt k, Vector<Kontakt> ko) {
+		RootPanel.get("contentHeader").clear();
 		RootPanel.get("content").clear();
-		head.add(new HTML("<h2>Welcher Kontaktliste soll der Kontakt hinzugefügt werden?</h2>"));
-		RootPanel.get("content").add(head);
+		RootPanel.get("contentHeader")
+				.add(new HTML("<h2>Welcher Kontaktliste soll der Kontakt hinzugefügt werden?</h2>"));
+
 		// Methode die beim Start dieser Klasse aufgerufen wird.
-		onLoad(n, k);
-		
+		onLoad(n, k, ko);
 
 	}
+
 	/**
-	 * Die Methode onLoac wird durch den Konstruktor der Klasse ShowKontaktliste aufgerufen.
+	 * Die Methode onLoac wird durch den Konstruktor der Klasse ShowKontaktliste
+	 * aufgerufen.
 	 * 
-	 * @param n der Nutzer der übergeben wird
-	 * @param k der Kontakt der übergeben wird
+	 * @param n
+	 *            der Nutzer der übergeben wird
+	 * @param k
+	 *            der Kontakt der übergeben wird
 	 */
-	protected void onLoad(final Nutzer n, Kontakt k) {
-			
+	protected void onLoad(final Nutzer n, Kontakt k, Vector<Kontakt> ko) {
+
 		/**
 		 * Initialisierung des Labels und eines CellTabels für die Kontakte
 		 */
-		kontaktListenTable2 = new CellTable<Kontaktliste>();
-	
-		//Auslesen aller Kontaktlisten die der Nutzer aktuell besitzt.
+		kontaktListenTable2 = new CellTable<Kontaktliste>(10, tableRes);
+
+		// Auslesen aller Kontaktlisten die der Nutzer aktuell besitzt.
 		ev.getKontaktlistenByOwner(n, new AsyncCallback<Vector<Kontaktliste>>() {
-			
+
 			@Override
 			public void onFailure(Throwable err) {
 				Window.alert("Fehler beim RPC Call" + err.toString());
@@ -91,7 +98,7 @@ public class ShowKontaktliste extends VerticalPanel {
 					kontaktListenTable2.setVisible(false);
 					hp3.setVisible(false);
 					Window.alert("Leider existieren noch keine Kontakte, füge doch gleich welche hinzu :)");
-					
+
 				} else {
 					kontaktListenTable2.setVisible(true);
 					sp.setVisible(true);
@@ -104,7 +111,6 @@ public class ShowKontaktliste extends VerticalPanel {
 
 			}
 		});
-
 
 		/**
 		 * Tabelle Befüllen mit den aus der DB abgerufenen Kontakt Informationen.
@@ -131,57 +137,88 @@ public class ShowKontaktliste extends VerticalPanel {
 		/**
 		 * Hinzufügen der Columns für die Darstellung der Kontaktlisten.
 		 */
-		kontaktListenTable2.addColumn(NameDerKLColumn, "Kontaktlisten: ");
+		kontaktListenTable2.addColumn(NameDerKLColumn, "Kontaktlisten ");
 		NameDerKLColumn.setSortable(true);
 
 		kontaktListenTable2.setColumnWidth(checkColumn, 40, Unit.PX);
 		kontaktListenTable2.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
-		kontaktListenTable2.setWidth("80%", true);
-		kontaktListenTable2.setColumnWidth(NameDerKLColumn, "100px");
-		kontaktListenTable2.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Kontaktliste>createDefaultManager());
+		kontaktListenTable2.setWidth("100%", true);
+		kontaktListenTable2.setColumnWidth(NameDerKLColumn, "200px");
+		kontaktListenTable2.setSelectionModel(selectionModel,
+				DefaultSelectionEventManager.<Kontaktliste>createDefaultManager());
 
 		ListDataProvider<Kontaktliste> dataProvider = new ListDataProvider<Kontaktliste>();
 
 		ListHandler<Kontaktliste> sort = new ListHandler<Kontaktliste>(dataProvider.getList());
 		dataProvider.addDataDisplay(kontaktListenTable2);
 		kontaktListenTable2.addColumnSortHandler(sort);
-		
+
 		this.add(kontaktListenTable2);
-		
-		//Größe des ScrollPanels bestimmen plus in das ScrollPanel die CellTable hinzufügen.
+
+		// Größe des ScrollPanels bestimmen plus in das ScrollPanel die CellTable
+		// hinzufügen.
 		sp.setSize("900px", "400px");
 		sp.add(kontaktListenTable2);
 		this.add(sp);
 		this.add(hp3);
 
-		//Mit doppel Klick wird der Kontakt einer Kontaktliste hinzugefügt.
+		// Mit doppel Klick wird der Kontakt einer Kontaktliste hinzugefügt.
 		kontaktListenTable2.addDomHandler(new DoubleClickHandler() {
 
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
-				
-				//Es wird die selektierte Kontaktliste übergeben und der Kontakt der zuvor ausgewählt wurde. (Kostruktor übergabe)
-				ev.addKontaktToKontaktliste(selectionModel.getSelectedObject(), k, new AsyncCallback<Void>() {
 
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert("Hoppala" + caught.toString());
-					}
+				ev.getKontakteByKontaktliste(selectionModel.getSelectedObject().getId(),
+						new AsyncCallback<Vector<Kontakt>>() {
 
-					@Override
-					public void onSuccess(Void result) {
-							Window.Location.reload();
-						
-					}
-				});
-				
-					
-				}
-				
-			
-	    }, DoubleClickEvent.getType());
+							@Override
+							public void onFailure(Throwable caught) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void onSuccess(Vector<Kontakt> result) {
+
+								for (int i = 0; i < ko.size(); i++) {
+
+									if (result.contains(ko.elementAt(i))) {
+										MessageBox.alertWidget("Hinweis",
+												"Der Kontakt " + ko.elementAt(i).getVorname()
+														+ ko.elementAt(i).getNachname()
+														+ " existiert bereits in dieser Kontaktliste");
+									} else {
+										// Es wird die selektierte Kontaktliste übergeben und der Kontakt der zuvor
+										// ausgewählt wurde. (Kostruktor übergabe)
+										ev.addKontaktToKontaktliste(selectionModel.getSelectedObject(), ko.elementAt(i),
+												new AsyncCallback<Void>() {
+
+													@Override
+													public void onFailure(Throwable caught) {
+														Window.alert("Hoppala" + caught.toString());
+													}
+
+													@Override
+													public void onSuccess(Void result) {
+
+													}
+												});
+									}
+								}
+
+							}
+
+						});
+				// Div's leeren und Kontaktliste anzeigen bei der die Kontakte hinzugefuegt
+				// wurden.
+				RootPanel.get("content").clear();
+				RootPanel.get("contentHeader").clear();
+				RootPanel.get("content").add(new KontaktlisteForm(selectionModel.getSelectedObject()));
+
+			}
+
+		}, DoubleClickEvent.getType());
 
 	}
 
 }
-

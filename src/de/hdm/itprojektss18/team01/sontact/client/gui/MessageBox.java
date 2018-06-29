@@ -16,7 +16,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.FlexTable;
+
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -54,12 +54,20 @@ public class MessageBox {
 	public static DialogBox alertWidget(final String header, final String content) {
 		final DialogBox box = new DialogBox();
 		final VerticalPanel panel = new VerticalPanel();
+		final Label lb = new Label(content);
+		
+	
+		lb.setStylePrimaryName("label1");
+		
+		
+		box.setStylePrimaryName("standardMessageBox");
 		box.setText(header);
 		box.setGlassEnabled(true);
-		panel.add(new HTML(content));
+		panel.add(new HTML(lb.toString()));
+		
 		final Button buttonClose = new Button(
 				"<image src='/images/ok.png' width='30px' height='30px' align='center' />");
-
+		buttonClose.setStylePrimaryName("messageButtonStandard");
 		buttonClose.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -96,15 +104,29 @@ public class MessageBox {
 	public static DialogBox shareAlert(final String header, final String content, Kontaktliste kl) {
 		final DialogBox box = new DialogBox();
 		TextBox tb = new TextBox();
+		Label lb = new Label(content);
+		lb.setStylePrimaryName("label1");
+		
 		final VerticalPanel panel = new VerticalPanel();
 		final HorizontalPanel hp = new HorizontalPanel();
+		box.setStylePrimaryName("messageBoxKl");
 		box.setText(header);
 		box.setGlassEnabled(true);
-		panel.add(new HTML(content));
+		panel.add(new HTML(lb.toString()));
+		
+		tb.setStylePrimaryName("textbMessage");
+		tb.getElement().setPropertyString("placeholder", "E-Mail des Empfängers...");
+		
 		final Button buttonClose = new Button(
-				"<image src='/images/abbrechen.png' width='30px' height='30px' align='center' /> abbrechen");
+				"<image src='/images/abbrechen.png' width='13px' height='13px' align='center' />");
+		buttonClose.setStylePrimaryName("messageButtonshare");
+		buttonClose.setTitle("Abbrechen");
+		
 		final Button buttonShare = new Button(
-				"<image src='/images/share.png' width='30px' height='30px' align='center' /> teilen");
+				"<image src='/images/share.png' width='20px' height='20px' align='center' /> Teilen");
+		buttonShare.setStylePrimaryName("messageButtonshare1");
+		buttonShare.setTitle("Kontaktliste teilen");
+	
 
 		buttonClose.addClickHandler(new ClickHandler() {
 
@@ -174,17 +196,13 @@ public class MessageBox {
 		panel.add(emptyLabel);
 		panel.add(emptyLabel);
 		panel.add(tb);
-		buttonClose.setWidth("80px");
-		buttonClose.setHeight("60px");
-		buttonShare.setWidth("80px");
-		buttonShare.setHeight("60px");
-		buttonShare.setStyleName("Button");
 
 		hp.add(buttonShare);
 		hp.add(buttonClose);
 
 		panel.add(hp);
 		box.add(panel);
+
 		box.center();
 		box.show();
 		return box;
@@ -205,19 +223,30 @@ public class MessageBox {
 	public static DialogBox shareAlertKontakt(final String header, final String content, Kontakt k,
 			Vector<Relatable> avshare) {
 		final DialogBox box = new DialogBox();
+		
 		TextBox tb = new TextBox();
-		Nutzer n = new Nutzer();
+		Label lb = new Label(content);
+		lb.setStylePrimaryName("label1");
+		
 		final VerticalPanel panel = new VerticalPanel();
 		final HorizontalPanel hp = new HorizontalPanel();
-
+		box.setStylePrimaryName("messageBox");
 		box.setText(header);
 		box.setGlassEnabled(true);
-		panel.add(new HTML(content));
+		panel.add(new HTML(lb.toString()));
+		
+		tb.setStylePrimaryName("textbMessage");
+		tb.getElement().setPropertyString("placeholder", "E-Mail des Empfängers...");
+		
 		final Button buttonClose = new Button(
-				"<image src='/images/abbrechen.png' width='30px' height='30px' align='center' /> abbrechen");
+				"<image src='/images/abbrechen.png' width='13px' height='13px' align='center' />");
+		buttonClose.setStylePrimaryName("messageButtonshare");
+		buttonClose.setTitle("Abbrechen");
+		
 		final Button buttonShare = new Button(
-				"<image src='/images/share.png' width='30px' height='30px' align='center' /> teilen");
-
+				"<image src='/images/share.png' width='20px' height='20px' align='center' /> Teilen");
+		buttonShare.setStylePrimaryName("messageButtonshare1");
+		buttonShare.setTitle("Kontakt teilen");
 		buttonClose.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -268,13 +297,16 @@ public class MessageBox {
 										public void onSuccess(Void result) {
 											Window.alert("Sie haben den Kontakt: " + k.getVorname() + " "
 													+ k.getNachname() + " erfolgreich geteilt.");
+											RootPanel.get("content").clear();
+											RootPanel.get("contentHeader").clear();
+											RootPanel.get("content").add(new KontaktForm(k));
 											box.hide();
 										}
 
 									});
 
 						} else {
-							Window.alert("Es wurde kein Nutzer mit dieser EMail gefunden.");
+							MessageBox.alertWidget("Hinweis", "Es wurde kein Nutzer mit dieser EMail gefunden.");
 						}
 
 					}
@@ -288,12 +320,6 @@ public class MessageBox {
 		panel.add(emptyLabel);
 		panel.add(emptyLabel);
 		panel.add(tb);
-
-		buttonClose.setWidth("80px");
-		buttonClose.setHeight("60px");
-		buttonShare.setWidth("80px");
-		buttonShare.setHeight("60px");
-		buttonShare.setStyleName("Button");
 
 		hp.add(buttonShare);
 		hp.add(buttonClose);
@@ -322,32 +348,49 @@ public class MessageBox {
 	 * @return
 	 */
 	public static DialogBox deleteTeilhaber(final String header, final String content, Kontaktliste kl, Kontakt k) {
+		
 		final DialogBox box = new DialogBox();
 		final VerticalPanel panel = new VerticalPanel();
 		final HorizontalPanel hp = new HorizontalPanel();
 		final ScrollPanel sp = new ScrollPanel();
-		CellTable<Nutzer> nutzerTable;
-		Vector<Nutzer> nutzer = new Vector<Nutzer>();
-		final MultiSelectionModel<Nutzer> selectionModel = new MultiSelectionModel<Nutzer>(getKeyProvider());
-
+		
 		// Nutzer Cookies holen.
 		Nutzer n = new Nutzer();
 		n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 		n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
-		nutzerTable = new CellTable<Nutzer>();
-		nutzerTable.setWidth("10");
+		CellTable<Nutzer> nutzerTable;
+		Vector<Nutzer> nutzer = new Vector<Nutzer>();
+		final MultiSelectionModel<Nutzer> selectionModel = new MultiSelectionModel<Nutzer>(getKeyProvider());
+		
+		//TextBox tb = new TextBox();
+		Label lb = new Label(content);
+		lb.setStylePrimaryName("label1");
+
+		box.setStylePrimaryName("messageBox");
 		box.setText(header);
 		box.setGlassEnabled(true);
-		panel.add(new HTML(content));
+		panel.add(new HTML(lb.toString()));
+
+		nutzerTable = new CellTable<Nutzer>();
+		nutzerTable.setWidth("17px");
+		box.setGlassEnabled(true);
+		
+		//Buttons der MessageBox
 		final Button buttonClose = new Button(
-				"<image src='/images/abbrechen.png' width='30px' height='30px' align='center' /> abbrechen");
+				"<image src='/images/abbrechen.png' width='13px' height='13px' align='center' />");
+		buttonClose.setStylePrimaryName("messageButtonStandard");
+		buttonClose.setTitle("Abbrechen");
+		
 		final Button buttonDeleteKl = new Button(
-				"<image src='/images/share.png' width='30px' height='30px' align='center' />"
-						+ "<image src='/images/trash.png' width='20px' height='20px' align='center' /> löschen");
+				"<image src='/images/share.png' width='30px' height='30px' align='center' /> löschen");
+		buttonDeleteKl.setStylePrimaryName("messageButtonshare1");
+		buttonDeleteKl.setTitle("Teilung der Kontaktliste löschen");
+		
 		final Button buttonDeleteK = new Button(
-				"<image src='/images/share.png' width='30px' height='30px' align='center' />"
-						+ "<image src='/images/trash.png' width='20px' height='20px' align='center' /> löschen");
+				"<image src='/images/share.png' width='30px' height='30px' align='center' /> löschen");
+		buttonDeleteK.setStylePrimaryName("messageButtonshare1");
+		buttonDeleteK.setTitle("Teilung des Kontakts löschen");
 
 		// Button zum beenden fals nichts gemacht werden soll.
 		buttonClose.addClickHandler(new ClickHandler() {
@@ -398,7 +441,7 @@ public class MessageBox {
 
 									@Override
 									public void onSuccess(Void result) {
-										Window.alert("Die Teilhaberschaft an dem Kontakt " + k.getVorname()
+										MessageBox.alertWidget("Hinweis", "Die Teilhaberschaft an dem Kontakt " + k.getVorname()
 												+ k.getNachname() + " wurde erfolgreich gelöscht.");
 
 									}
@@ -494,7 +537,7 @@ public class MessageBox {
 					if (result.size() == 0) {
 
 						nutzerTable.setVisible(false);
-						Window.alert("Die Kontaktliste " + kl.getTitel() + " hat noch keine Teilhaber.");
+						MessageBox.alertWidget("Hinweis", "Die Kontaktliste " + kl.getTitel() + " hat noch keine Teilhaber.");
 						box.hide();
 
 					} else {
@@ -531,7 +574,7 @@ public class MessageBox {
 					if (result.size() == 0) {
 
 						nutzerTable.setVisible(false);
-						Window.alert(
+						MessageBox.alertWidget("Hinweis",
 								"Der Kontakt " + k.getVorname() + " " + k.getNachname() + " hat noch keine Teilhaber.");
 						box.hide();
 					} else {
@@ -596,8 +639,6 @@ public class MessageBox {
 		panel.add(emptyLabel);
 		panel.add(emptyLabel);
 
-		buttonClose.setWidth("80px");
-		buttonClose.setHeight("60px");
 		sp.add(hp);
 		hp.add(nutzerTable);
 		/*
@@ -606,19 +647,14 @@ public class MessageBox {
 		 */
 		if (k == null) {
 			buttonDeleteK.setVisible(false);
-			buttonDeleteKl.setWidth("80px");
-			buttonDeleteKl.setHeight("60px");
-			buttonDeleteKl.setStyleName("Button");
 			hp.add(buttonDeleteKl);
 		} else {
 			buttonDeleteKl.setVisible(false);
-			buttonDeleteK.setWidth("80px");
-			buttonDeleteK.setHeight("60px");
-			buttonDeleteK.setStyleName("Button");
 			hp.add(buttonDeleteK);
 		}
 
 		hp.add(buttonClose);
+
 		panel.add(hp);
 		box.add(panel);
 

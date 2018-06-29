@@ -38,6 +38,7 @@ public class Sontact implements EntryPoint {
 	private LoginInfo loginInfo = null;
 	private Kontakt ownProfil = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
+	Label profilLb = new Label();
 	private Label loginLabel = new Label("Herzlich Wilkommen auf Sontact. Um die Kontaktverwaltung nutzen zu können melden Sie sich bitte mit einem Google-Konto an, um fortfahren zu können.");
 	HTML loginHTML = new HTML("<h7></h7>");
 	HTML sontactHTML = new HTML("<h8>SONTACT</h8>");
@@ -79,6 +80,7 @@ public class Sontact implements EntryPoint {
 							if (nutzer != null) {
 								RootPanel.get("content").clear();
 								start(nutzer);
+								MessageBox.alertWidget("Herzlich Wilkomen", "Wilkommen bei Sontact der Seite im Internet für Teilungen von Kontakten.");
 								
 							} else {
 								RootPanel.get("content").clear();
@@ -132,8 +134,6 @@ public class Sontact implements EntryPoint {
 	 * @param nutzer
 	 */
 	private void start(final Nutzer nutzer) {
-		//Profil Label wird erstellt.
-		Label profilLb = new Label();
 
 		//Logout wird hier schon gesetzt
 		HTML signOutLink = new HTML("<p><a href='" + loginInfo.getLogoutUrl() 
@@ -142,8 +142,7 @@ public class Sontact implements EntryPoint {
 		
 		
 		//Setzen von Cookies für die spätere Identifizierung eines Nutzers.
-		Cookies.setCookie("nutzerGMail", nutzer.getEmailAddress()); 	
-		
+		Cookies.setCookie("nutzerGMail", nutzer.getEmailAddress()); 		
 		//Wenn ein Nutzer vorhanden ist wird die nutzerId noch gesetzt.
 		Cookies.setCookie("nutzerID", String.valueOf(nutzer.getId()));
 		RootPanel.get("navigator").add(new Navigation(nutzer));
@@ -186,7 +185,6 @@ public class Sontact implements EntryPoint {
 		
 		});
 		
-		RootPanel.get("content").add(new ShowKontakte(nutzer));
 		
 		// Setzen der HTMl´s für den Footer
 		HorizontalPanel footer = new HorizontalPanel();
@@ -202,6 +200,7 @@ public class Sontact implements EntryPoint {
 		footer.add(copyrightText2);
 
 		RootPanel.get("footer").add(footer);
+		RootPanel.get("content").add(new ShowKontakte(nutzer));
 
 	}
 	

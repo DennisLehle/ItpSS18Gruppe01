@@ -2,10 +2,12 @@ package de.hdm.itprojektss18.team01.sontact.client.gui;
 
 import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -24,6 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
+import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
@@ -41,6 +44,7 @@ public class KontaktForm extends VerticalPanel {
 
 	EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
 
+
 	Kontakt k = new Kontakt();
 	Auspraegung a = new Auspraegung();
 	Auspraegung a2 = new Auspraegung();
@@ -48,6 +52,7 @@ public class KontaktForm extends VerticalPanel {
 	Eigenschaft e2 = new Eigenschaft();
 	Auspraegung updatedAuspraegung = new Auspraegung();
 	Eigenschaft updatedEigenschaft = new Eigenschaft();
+	Nutzer nutzer = new Nutzer();
 
 	Kontakt selectedKontakt = null;
 	Vector<Eigenschaft> kontakteigenschaften = new Vector<>();
@@ -63,6 +68,7 @@ public class KontaktForm extends VerticalPanel {
 	// Vector für auswahl Eigenschaft
 	Vector<String> aus1 = new Vector<String>();
 	Vector<Eigenschaft> auswahlE = new Vector<Eigenschaft>();
+	Vector<Berechtigung> receiver = new Vector<Berechtigung>();
 	ListBox auswahlEigenschaftenListBox1 = new ListBox();
 
 	SontactTreeViewModel sontactTree = null;
@@ -118,9 +124,9 @@ public class KontaktForm extends VerticalPanel {
 		nachname.setStylePrimaryName("label");
 
 		// Nutzer Cookies holen.
-		Nutzer n = new Nutzer();
-		n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
-		n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
+		
+		nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+		nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
 		
 
@@ -138,7 +144,7 @@ public class KontaktForm extends VerticalPanel {
 
 				HorizontalPanel headerPanel = new HorizontalPanel();
 
-				HorizontalPanel BtnPanel = new HorizontalPanel();
+				HorizontalPanel btnPanel = new HorizontalPanel();
 				VerticalPanel vp = new VerticalPanel();
 				Label ownerLb = new Label();
 
@@ -150,7 +156,7 @@ public class KontaktForm extends VerticalPanel {
 
 				// ClickHandler f�r das Updaten eines Kontakts
 				editKontaktBtn.addClickHandler(new updateKontaktClickHandler());
-				BtnPanel.add(editKontaktBtn);
+				btnPanel.add(editKontaktBtn);
 
 				// ClickHandler zum teilen von Kontakten
 				Button sharedeleteBtn = new Button(
@@ -159,14 +165,14 @@ public class KontaktForm extends VerticalPanel {
 				sharedeleteBtn.setTitle("Löschen von Teilhaberschaften an einen Kontakt");
 
 				sharedeleteBtn.addClickHandler(new shareKontaktlisteClickHandler());
-				BtnPanel.add(sharedeleteBtn);
+				btnPanel.add(sharedeleteBtn);
 
 				infoLb.setText("Kontakt Interaktion");
 				infoLb.setStylePrimaryName("infoLabel");
-				BtnPanel.add(infoLb);
+				btnPanel.add(infoLb);
 
 				// Abfrage wer der Owner des Kontaktes ist.
-				if (k.getOwnerId() != n.getId()) {
+				if (k.getOwnerId() != nutzer.getId()) {
 					ev.getNutzerById(k.getOwnerId(), new AsyncCallback<Nutzer>() {
 
 						@Override
@@ -177,8 +183,9 @@ public class KontaktForm extends VerticalPanel {
 
 						@Override
 						public void onSuccess(Nutzer result) {
-							ownerLb.setStylePrimaryName("label");
+						//	ownerLb.setStylePrimaryName("label");
 							ownerLb.setText("Eigentümer: " + result.getEmailAddress());
+							RootPanel.get("content").add(ownerLb);
 
 						}
 
@@ -208,7 +215,7 @@ public class KontaktForm extends VerticalPanel {
 					public void onSuccess(Boolean result) {
 						if (result == true) {
 
-							HTML shared = new HTML("<image src='/images/share.png' width='15px' height='15px' />");
+							HTML shared = new HTML("<image src='/images/sharecontact.png' width='24px' height='24px' />");
 							shared.setTitle("Geteilter Kontakt");
 							RootPanel.get("contentHeader").add(shared);
 
@@ -219,19 +226,21 @@ public class KontaktForm extends VerticalPanel {
 
 				// Überprüfung ob Kontakt den Nutzer repräsentiert für Löschung aus dem
 				// System.
-				if (k.getOwnerId() == n.getId() && k.getIdentifier() == 'r') {
+				if (k.getOwnerId() == nutzer.getId() && k.getIdentifier() == 'r') {
 
 					// Button für die Löschung erstellen und ClickHandler zuweisen.
 					Button deleteNutzer = new Button(
 							"<image src='/images/trash.png' width='15px' height='15px' align='center' />");
+					deleteNutzer.setStylePrimaryName("deleteNutzer");
 					deleteNutzer.addClickHandler(new ClickHandler() {
 
 						@Override
 						public void onClick(ClickEvent event) {
 							// Abfrage ob Nutzer sich wirklich löschen will.
-							Window.confirm("Wollen Sie sich wirklich unwiderruflich von uns verabschieden?");
-
-							ev.deleteNutzer(n, new AsyncCallback<Void>() {
+							boolean x = Window.confirm("Wollen Sie sich wirklich unwiderruflich von uns verabschieden?");
+						
+							if(x == true) {
+							ev.deleteNutzer(nutzer, new AsyncCallback<Void>() {
 
 								@Override
 								public void onFailure(Throwable caught) {
@@ -243,25 +252,25 @@ public class KontaktForm extends VerticalPanel {
 								public void onSuccess(Void result) {
 									// Nutzer wurde gelöscht und wird auf die Startseite verwiesen.
 									Window.Location.replace("Sontact.html");
+									
 
 								}
 
 							});
-
+							} 
 						}
 					});
-					deleteNutzer.setStyleName("deleteNutzer");
-					RootPanel.get("content").add(deleteNutzer);
-
+					
+					btnPanel.add(deleteNutzer);
 				}
 
 				vp.add(headerPanel);
-				vp.add(ownerLb);
+			
 				
 
 				RootPanel.get("content").add(vp);
-				RootPanel.get("content").add(new ShowEigenschaften(n, k));
-				RootPanel.get("content").add(BtnPanel);
+				RootPanel.get("content").add(new ShowEigenschaften(nutzer, k));
+				RootPanel.get("content").add(btnPanel);
 
 				RootPanel.get("content").add(datePanel);
 
@@ -338,8 +347,10 @@ public class KontaktForm extends VerticalPanel {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// Methode zum Refresh der aktuellen Anzeige im Browser aufrufen
-				Window.Location.reload();
+				//Wenn abgerbochen wird, wird man auf die Startseite weitergeleitet.
+				RootPanel.get("content").clear();
+				RootPanel.get("contentHeader").clear();
+				RootPanel.get("content").add(new ShowKontakte(n));
 
 			}
 		});
@@ -458,18 +469,17 @@ public class KontaktForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			Nutzer n = new Nutzer();
+		
 			// Cookies des Nutzers holen.
-			n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
-			n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
+			nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+			nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
-			if (vornameTxtBox.getText().isEmpty() || nachnameTxtBox.getText().isEmpty()) {
+			if (vornameTxtBox.getText().isEmpty()) {
 				vornameTxtBox.getElement().getStyle().setBorderColor("red");
-				nachnameTxtBox.getElement().getStyle().setBorderColor("red");
-				MessageBox.alertWidget("Benachrichtigung", "Bitte mindestens Vor- und Nachname angeben");
+				MessageBox.alertWidget("Hinweis", "Bitte geben Sie Ihrem Kontakt mindestens einen Vornamen.");
 			} else {
 				// Anlegen des Kontakts mit den Mindestangaben Vor- und Nachname
-				ev.createKontakt(vornameTxtBox.getText(), nachnameTxtBox.getText(), n, new AsyncCallback<Kontakt>() {
+				ev.createKontakt(vornameTxtBox.getText(), nachnameTxtBox.getText(), nutzer, new AsyncCallback<Kontakt>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -509,7 +519,7 @@ public class KontaktForm extends VerticalPanel {
 							}
 						}
 
-						ev.createAuspraegungForNewEigenschaft(eig, aus, k, new AsyncCallback<Void>() {
+						ev.createAuspraegungForNewEigenschaft(eig, aus, k, nutzer.getId(), new AsyncCallback<Void>() {
 
 							@Override
 							public void onFailure(Throwable error) {
@@ -520,7 +530,7 @@ public class KontaktForm extends VerticalPanel {
 							public void onSuccess(Void result) {
 								//Leeren aller divs und dann den erstellten Kontakt einblenden.
 								RootPanel.get("navigator").clear();
-								RootPanel.get("navigator").add(new Navigation(n));
+								RootPanel.get("navigator").add(new Navigation(nutzer));
 								RootPanel.get("content").clear();
 								RootPanel.get("contentHeader").clear();
 								setSontactTreeViewModel(sontactTree);
@@ -581,6 +591,10 @@ public class KontaktForm extends VerticalPanel {
 			RootPanel.get("contentHeader").clear();
 			RootPanel.get("content").clear();
 
+			// Nutzer Cookies holen.
+			
+			nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+			nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 			/*
 			 * Tabelle fuer das Editieren vorbereiten
 			 */
@@ -596,6 +610,7 @@ public class KontaktForm extends VerticalPanel {
 			 * Tabelle mit den Eigenschaften und den Auspraegungen des Nutzers befuellen
 			 */
 			// Holen der Auspraegungen des selektierten Kontakts
+			if(selectedKontakt.getOwnerId() == nutzer.getId()) {
 			ev.getAllAuspraegungenByKontaktRelatable(selectedKontakt.getId(), new AsyncCallback<Vector<Relatable>>() {
 
 				@Override
@@ -608,8 +623,11 @@ public class KontaktForm extends VerticalPanel {
 				public void onSuccess(Vector<Relatable> result) {
 					kontaktauspraegungen = result;
 
+				Window.alert("Hey Eigentümer");
+				
+			
 					for (int i = 0; i < kontaktauspraegungen.size(); i++) {
-
+						
 						TextBox auspraegung = new TextBox();
 						auspraegung.setStylePrimaryName("tbRundung");
 						auspraegung.setText(kontaktauspraegungen.elementAt(i).getWert());
@@ -623,10 +641,64 @@ public class KontaktForm extends VerticalPanel {
 						vorhandeneAuspraegungenTable.setWidget(count, 1, auspraegung);
 						int count2 = vorhandeneAuspraegungenTable.getRowCount();
 						count = count2 + 1;
+						
+						}
+					
+				
+					Window.alert(vorhandeneAuspraegungenTable.toString() + "Vorhandene AUsp");
+				}
+			});
+		}	
+			else {
+			ev.getAllSharedAuspraegungenByKontaktAndNutzer(selectedKontakt, nutzer,  new AsyncCallback<Vector<Relatable>>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert(caught.toString());
+
+				}
+
+				@Override
+				public void onSuccess(Vector<Relatable> result) {
+					
+					Window.alert("Hey Teilhaber");
+				
+					
+					for (int i = 0; i < result.size(); i++) {
+						if(kontaktauspraegungen.contains(result.elementAt(i))) {
+							result.remove(i);
+						} else {
+							kontaktauspraegungen.add(result.elementAt(i));
+						}
 					}
+					Window.alert(kontaktauspraegungen.toString()+ "Kontaktausp");
+					
+					for (int i = 0; i < kontaktauspraegungen.size(); i++) {
+					
+						
+						
+						TextBox auspraegung = new TextBox();
+						auspraegung.setStylePrimaryName("tbRundung");
+						auspraegung.setText(kontaktauspraegungen.elementAt(i).getWert());
+
+						Label eigenschaftLabel = new Label();
+						eigenschaftLabel.setStylePrimaryName("label");
+						
+						eigenschaftLabel.setText(kontaktauspraegungen.elementAt(i).getBezeichnung());
+						int count = vorhandeneAuspraegungenTable.getRowCount();
+						vorhandeneAuspraegungenTable.setWidget(count, 0, eigenschaftLabel);
+						vorhandeneAuspraegungenTable.setWidget(count, 1, auspraegung);
+						int count2 = vorhandeneAuspraegungenTable.getRowCount();
+						count = count2 + 1;
+						}
+					
+						
+					Window.alert(kontaktauspraegungen.toString()+ "Vorhandene Ausp");
+				
 
 				}
 			});
+			}
 
 			/*
 			 * Elemente zum Aufbau der Bearbeitungansicht
@@ -635,7 +707,7 @@ public class KontaktForm extends VerticalPanel {
 			HorizontalPanel headerPanel = new HorizontalPanel();
 			ScrollPanel scc = new ScrollPanel();
 		
-			RootPanel.get("contentHeader").add(new HTML("<h2>Kontaktinformationen bearbeiten....</h2>"));
+			RootPanel.get("contentHeader").add(new HTML("<h2>Kontaktinformationen bearbeiten <image src='/images/edit.png' width='30px' height='30px' align='center'/></h2>"));
 
 			
 			Button cancelBtn = new Button("<image src='/images/abbrechen.png' width='20px' height='20px' align='center'/> Abbrechen");
@@ -713,6 +785,15 @@ public class KontaktForm extends VerticalPanel {
 
 					TextBox txtboxvorname = (TextBox) kontaktInfoTable.getWidget(0, 1);
 					TextBox txtboxnachname = (TextBox) kontaktInfoTable.getWidget(1, 1);
+					
+					nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+					nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
+					
+					
+					if(txtboxvorname.getText() == "") {
+						txtboxvorname.getElement().getStyle().setBorderColor("red");
+						MessageBox.alertWidget("Hinweis", "Bitte geben Sie dem Kontakt mindestens einen Vornamen");
+					} else {
 					selectedKontakt.setVorname(txtboxvorname.getText());
 					selectedKontakt.setNachname(txtboxnachname.getText());
 
@@ -757,7 +838,7 @@ public class KontaktForm extends VerticalPanel {
 								}
 							}
 
-							ev.createAuspraegungForNewEigenschaft(eig, aus, result, new AsyncCallback<Void>() {
+							ev.createAuspraegungForNewEigenschaft(eig, aus, result, nutzer.getId(), new AsyncCallback<Void>() {
 
 								@Override
 								public void onFailure(Throwable error) {
@@ -815,14 +896,14 @@ public class KontaktForm extends VerticalPanel {
 									RootPanel.get("content").clear();
 									RootPanel.get("contentHeader").clear();
 									RootPanel.get("content").add(new KontaktForm(selectedKontakt));
-
+									MessageBox.alertWidget("Hinweis", "Der Kontakt " + selectedKontakt.getVorname() + " " +  selectedKontakt.getNachname() + " wurde erfolgreich aktualisiert." );
 									}
 
 								});
 
 						}
 					});
-					
+					}
 
 				}
 

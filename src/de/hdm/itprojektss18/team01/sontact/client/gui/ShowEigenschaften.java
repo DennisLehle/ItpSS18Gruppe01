@@ -42,13 +42,15 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
  */
 public class ShowEigenschaften extends VerticalPanel {
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
+	private CellTable.Resources tableRes = GWT.create(TableResources.class);
 
 	private CellTable<Relatable> eigenschaftAuspraegungTable;
 	final MultiSelectionModel<Relatable> selectionModel = new MultiSelectionModel<Relatable>(getKeyProvider());
 	final ListDataProvider<Relatable> dataProvider = new ListDataProvider<Relatable>();
+	Vector<Nutzer> allUser = new Vector<Nutzer>();
 	Vector<Relatable> gewaehlteAuspraegung = new Vector<Relatable>();
 	Vector<Relatable> statusObjects = new Vector<Relatable>();
-
+	Vector<Relatable> auspraegungen = new Vector<Relatable>();
 	boolean sharedStatus = false;
 
 
@@ -89,12 +91,32 @@ public class ShowEigenschaften extends VerticalPanel {
 		/**
 		 * Initialisierung des Labels und eines CellTabels für die Kontakte
 		 */
-		eigenschaftAuspraegungTable = new CellTable<Relatable>();
+		eigenschaftAuspraegungTable = new CellTable<Relatable>(10, tableRes);
+	
+		/**
+		 * Alle Nutzer holen für den Abgleich wer Eigentümer/Ersteller einer Eigenschaft ist.
+		 */
+		ev.findAllNutzer(new AsyncCallback<Vector<Nutzer>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.getMessage().toString();
+				
+			}
+
+			@Override
+			public void onSuccess(Vector<Nutzer> result) {
+				//Alle gefundenen Nutzer in dem Vector speichern.
+				allUser.addAll(result);
+				
+			}
+			
+		});
 
 		// Auslesen aller Ausprägungen eines Kontakts. Prüfung ob Nutzer der Owner ist.
 		if (n.getId() == k.getOwnerId()) {
 			ev.getAllAuspraegungenByKontaktRelatable(k.getId(), new AsyncCallback<Vector<Relatable>>() {
-
+				
 				@Override
 				public void onFailure(Throwable err) {
 					Window.alert("Fehler beim RPC Call" + err.toString());
@@ -105,9 +127,11 @@ public class ShowEigenschaften extends VerticalPanel {
 				 * Aufruf aller Ausprägungen die der Nutzer erstellt hat und bei denen der als
 				 * Owner hinterlegt ist.
 				 */
+				
 				public void onSuccess(Vector<Relatable> result) {
 					statusObjects.addAll(result);
-
+					
+				
 					if (result.size() == 0) {
 
 						eigenschaftAuspraegungTable.setVisible(false);
@@ -120,11 +144,21 @@ public class ShowEigenschaften extends VerticalPanel {
 						hp3.setVisible(true);
 
 					}
-					eigenschaftAuspraegungTable.setRowCount(result.size(), true);
+				
+//					for (int i = 0; i < statusObjects.size(); i++) {
+//						
+//						
+//						if(statusObjects.elementAt(i).getOwnerId() == n.getId() ) {
+//							auspraegungen.add(statusObjects.elementAt(i));
+//						}
+//					}
+		
+					eigenschaftAuspraegungTable.setRowCount(statusObjects.size(), true);
 					eigenschaftAuspraegungTable.setVisibleRange(0, 10);
-					eigenschaftAuspraegungTable.setRowData(result);
+					eigenschaftAuspraegungTable.setRowData(statusObjects);
 
 				}
+			
 			});
 		} else {
 
@@ -140,6 +174,8 @@ public class ShowEigenschaften extends VerticalPanel {
 
 				@Override
 				public void onSuccess(Vector<Relatable> result) {
+					Window.alert("teilhaber");
+					
 					statusObjects.addAll(result);
 					if (result.size() == 0) {
 
@@ -152,10 +188,23 @@ public class ShowEigenschaften extends VerticalPanel {
 						hp3.setVisible(true);
 
 					}
-					eigenschaftAuspraegungTable.setRowCount(result.size(), true);
+					
+					for (int i = 0; i < statusObjects.size(); i++) {
+						
+	
+						if(statusObjects.elementAt(i).getOwnerId() == n.getId() || statusObjects.elementAt(i).getStatus() == true) {
+							if(auspraegungen.contains(statusObjects.elementAt(i))) {
+								statusObjects.remove(i);
+							} else {
+								auspraegungen.add(statusObjects.elementAt(i));
+							}
+						}
+					}
+	
+					Window.alert(auspraegungen.toString());
+					eigenschaftAuspraegungTable.setRowCount(auspraegungen.size(), true);
 					eigenschaftAuspraegungTable.setVisibleRange(0, 10);
-					eigenschaftAuspraegungTable.setRowData(result);
-
+					eigenschaftAuspraegungTable.setRowData(auspraegungen);
 				}
 
 			});
@@ -181,6 +230,26 @@ public class ShowEigenschaften extends VerticalPanel {
 				return (String) eigenschaft.getBezeichnung();
 			}
 		};
+		
+		TextColumn<Relatable> erstellerColumn = new TextColumn<Relatable>() {
+
+			@Override
+			public String getValue(Relatable owner) {
+				// TODO Auto-generated method stub
+				Nutzer nn = new Nutzer();
+				
+				if(owner.getOwnerId() != n.getId()) {
+					for (int i = 0; i < allUser.size(); i++) {
+						if(owner.getOwnerId() == allUser.elementAt(i).getId()) {
+							nn.setEmailAddress(allUser.elementAt(i).getEmailAddress());
+						}
+					}
+				}
+				return nn.getEmailAddress();
+				
+			
+			}
+		};
 
 		Resources resources = GWT.create(Resources.class);
 
@@ -188,7 +257,7 @@ public class ShowEigenschaften extends VerticalPanel {
 
 			@Override
 			public ImageResource getValue(Relatable object) {
-				if (object.getStatus() == true) {
+				if (object.getStatus() == true && object.getOwnerId() == n.getId()) {
 					return resources.getImageResource();
 				} else {
 					return null;
@@ -196,6 +265,7 @@ public class ShowEigenschaften extends VerticalPanel {
 
 			}
 		};
+			
 
 		/**
 		 * Implementierung der Checkbox fürs auswählen von einem oder mehrere
@@ -217,15 +287,19 @@ public class ShowEigenschaften extends VerticalPanel {
 		eigenschaftAuspraegungTable.addColumn(auspraegnungColumn, "Ausprägung ");
 		auspraegnungColumn.setSortable(true);
 
-		eigenschaftAuspraegungTable.addColumn(imageColumn, "Teilungsstatus: ");
+		eigenschaftAuspraegungTable.addColumn(imageColumn, "Teilungsstatus ");
+		imageColumn.setSortable(true);
+		
+		eigenschaftAuspraegungTable.addColumn(erstellerColumn, "Ersteller ");
 		imageColumn.setSortable(true);
 
 		eigenschaftAuspraegungTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		eigenschaftAuspraegungTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
-		eigenschaftAuspraegungTable.setWidth("80%", true);
-		eigenschaftAuspraegungTable.setColumnWidth(eigenschaftColumn, "60px");
-		eigenschaftAuspraegungTable.setColumnWidth(auspraegnungColumn, "60px");
+		eigenschaftAuspraegungTable.setWidth("100%", true);
+		eigenschaftAuspraegungTable.setColumnWidth(eigenschaftColumn, "100px");
+		eigenschaftAuspraegungTable.setColumnWidth(auspraegnungColumn, "100px");
 		eigenschaftAuspraegungTable.setColumnWidth(imageColumn, "45px");
+		eigenschaftAuspraegungTable.setColumnWidth(erstellerColumn, "65px");
 		ListDataProvider<Relatable> dataProvider = new ListDataProvider<Relatable>();
 
 		ListHandler<Relatable> sort = new ListHandler<Relatable>(dataProvider.getList());
@@ -289,13 +363,15 @@ public class ShowEigenschaften extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				// Vector alle selektierten Eigenschaften/Ausprägungen mitgeben aber davor erst
 				// leeren.
-			
+				
 				gewaehlteAuspraegung.removeAll(gewaehlteAuspraegung);
 				gewaehlteAuspraegung.addAll(selectionModel.getSelectedSet());
 
 				// Abfrage ob der Nutzer der Owner ist oder nicht.
 				if (n.getId() == k.getOwnerId()) {
-
+					if(gewaehlteAuspraegung == null) {
+						MessageBox.alertWidget("Hinweis", "Wählen sie eine Eigenschaft aus um mit dem löschen Fortfahren zu können.");
+					} else {
 					// Geht die ausgewählten Auspraegungen durch und übergibt jede einzelne für die
 					// Löschung davon.
 					for (int i = 0; i <= gewaehlteAuspraegung.size(); i++) {
@@ -326,6 +402,7 @@ public class ShowEigenschaften extends VerticalPanel {
 										RootPanel.get("content").add(new KontaktForm(k));
 									
 										RootPanel.get("contentHeader").clear();
+										MessageBox.alertWidget("Hinweis", "Sie haben "+ gewaehlteAuspraegung.capacity()+ " Eigenschaften mit den dazugehörigen Ausprägungen erfolgreich gelöscht. ");
 
 											
 										
@@ -340,9 +417,13 @@ public class ShowEigenschaften extends VerticalPanel {
 
 					}
 
+					}
 					
 				} else {
 					// Wenn man nicht der Owner ist springt man in die else Anweisung hinein.
+					if(gewaehlteAuspraegung == null) {
+						MessageBox.alertWidget("Hinweis", "Wählen sie eine Eigenschaft aus um mit dem löschen Fortfahren zu können.");
+					} else {
 					for (int i = 0; i <= gewaehlteAuspraegung.size(); i++) {
 						Berechtigung b = new Berechtigung();
 						b.setObjectId(gewaehlteAuspraegung.elementAt(i).getId());
@@ -382,8 +463,11 @@ public class ShowEigenschaften extends VerticalPanel {
 						});
 
 					}
-
+					
+					}
+					
 				}
+				
 
 			}
 			

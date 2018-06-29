@@ -1,9 +1,9 @@
 /** Add css rules here for your application. */
 /** Example rules used by the template application (remove for your app) */
 
-html, body, {
+html, body {
     width: 100%;
-    height: 100%
+    height: 92%;
 }
 
 div {
@@ -114,10 +114,6 @@ div {
 	color: #ffffff;
 	border-left: 1px solid #666;
 }
-
-.deleteNutzer{
-	float: right;
-}
 /*
  * Ende des Headers
  */
@@ -156,6 +152,18 @@ div {
 /** Der contentHeader ist für die Überschriften innerhalb des Contents zuständig */
 #contentHeader {
 	font: 'Gotham';
+	font-weight: lighter !important;
+	font-variant: small-caps;
+	letter-spacing: 4px;
+	display: flex;
+	align-items: left;
+	justify-content: left;
+	padding-bottom: 30px;
+}
+
+h9 {
+	font: 'Gotham';
+	font-size: 40px;
 	font-weight: lighter !important;
 	font-variant: small-caps;
 	letter-spacing: 4px;
@@ -381,6 +389,14 @@ h8 a {
 
 /*ButtonStyling - Anfang*/
 
+
+.deleteNutzer{
+	position: absolute;
+	right: 18px;
+    bottom: 400px;
+    padding: 7px 9px;
+}
+
 .teilunsButtons{
 	position: absolute;
     right: 18px;
@@ -425,6 +441,14 @@ h8 a {
 	position: absolute;
 	right: 18px;
     bottom: 620px;
+    padding: 7px 16px;
+    color: black; 
+}
+
+.saveKlButton{
+	position: absolute;
+	right: 18px;
+    bottom: 530px;
     padding: 7px 16px;
     color: black; 
 }
@@ -525,6 +549,13 @@ h8 a {
     bottom: 660px;
      padding: 7px 24px;
 }
+
+.cancelKontaktlButton{
+	position: absolute;
+    right: 18px;
+    bottom: 578px;
+     padding: 7px 38px;
+}
 /*Bild position*/
 
 .sadPic{
@@ -559,6 +590,106 @@ h8 a {
 	border-radius: 15px;
 	margin: 15px;
 	bottom: 20px;
+}
+
+.search{
+	border-radius: 15px;
+	padding: 15px;
+	margin-bottom: 19px;
+	margin-left: 35px;
+}
+.searchBtn{
+	border-radius: 15px;
+	margin-right: 4px;
+	margin-bottom: 22px;
+	color: #5997ff;
+	margin-left: 35px;
+}
+
+.searchTb{
+	 width: 400px;
+	 margin-right: 10px;
+	 border-radius: 15px;
+}
+
+.khunzufuegenKl{
+	position: absolute;
+    right: 18px;
+    bottom: 620px;
+     padding: 7px 40px;
+}
+
+.khunzufuegenKlAbbbruch{
+	position: absolute;
+    right: 18px;
+    bottom: 580px;
+     padding: 7px 40.5px;
+}
+
+
+/*Styling MessageBox*/
+
+.messageBox{
+    width: 555px;
+    height: 165px;
+    border: 5px solid blue;
+    padding: 25px;
+    margin: 25px;
+    background: url(/images/sontactmessage2.png) no-repeat left 100%;
+    border-radius: 30px;
+}
+
+.messageBoxKl{
+    width: 555px;
+    height: 165px;
+    border: 5px solid blue;
+    padding: 25px;
+    margin: 25px;
+    background: url(/images/sontactsharekontaktliste.png) no-repeat left 100%;
+    border-radius: 30px;
+}
+.standardMessageBox{
+    width: 555px;
+    height: 165px;
+    border: 5px solid blue;
+    padding: 25px;
+    margin: 25px;
+    background: url(/images/sontactmessage1.png) no-repeat left 100%;
+    border-radius: 30px;
+}
+
+.textbMessage{
+	position: absolute;
+	border-radius: 15px;
+	right: 54px;
+	bottom: 80px;
+}
+
+.messageButtonshare{
+	position: absolute;
+	right: 70px;
+	bottom: 122px;
+    border-radius: 15px;
+}
+
+.messageButtonshare1{
+	position: absolute;
+	right: 120px;
+	bottom: 120px;
+    border-radius: 15px;
+}
+
+.messageButtonStandard{
+	position: absolute;
+	right: 30px;
+	bottom: 110px;
+    border-radius: 15px;
+}
+
+.label1{
+	margin: 5px;
+	font-size: 15px;
+	color: #59c6e4;
 }
 
 

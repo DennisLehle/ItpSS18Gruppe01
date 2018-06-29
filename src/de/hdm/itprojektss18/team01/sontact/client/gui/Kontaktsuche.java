@@ -3,6 +3,7 @@ package de.hdm.itprojektss18.team01.sontact.client.gui;
 import java.util.Vector;
 
 import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -37,16 +38,18 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 public class Kontaktsuche extends VerticalPanel {
 
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
-
+	private CellTable.Resources tableRes = GWT.create(TableResources.class);
+	
 	private CellTable<Kontakt> searchTable;
 	final SingleSelectionModel<Kontakt> selectionModel = new SingleSelectionModel<Kontakt>();
 	final ListDataProvider<Kontakt> dataProvider = new ListDataProvider<Kontakt>();
+	Vector<Kontakt> ko = new Vector<Kontakt>();
 
 	ListBox lb = new ListBox();
 	TextBox tb = new TextBox();
 
 	private Button search;
-	private Button showKontakt;
+	private Button addKontaktToKontaktlisteStart;
 
 	HorizontalPanel hp3 = new HorizontalPanel();
 	HorizontalPanel head = new HorizontalPanel();
@@ -59,13 +62,21 @@ public class Kontaktsuche extends VerticalPanel {
 	 * Eigenschaften mit ihren Ausprägung anzeigen zu lassen.
 	 */
 	public Kontaktsuche(final Nutzer n, String auswahl, String eingabe) {
-
 		RootPanel.get("content").clear();
+		hp3.clear();
+		
+		
+		hp3.add(new HTML("<h9>Ergebnis Ihrer Suche</h9>"));
+		this.add(hp3);
+		//Div's leeren und dem ContentHeader Container den neuen Titel zuweisen.
+//		RootPanel.get("content").clear();
+//		RootPanel.get("contentHeader").clear();
+//		RootPanel.get("contentHeader").add(new HTML("<h3>Ergebnis der Suche </h3>"));
 
-		head.add(new HTML("<h4>Ergebnis der Suche: </h4>"));
-		RootPanel.get("content").add(head);
 		// Methode die beim Start dieser Klasse aufgerufen wird.
 		onLoad(n, auswahl, eingabe);
+		
+		showKontaktButtonPanel.add(addKontaktToKontaktlisteStart);
 
 	}
 
@@ -86,7 +97,8 @@ public class Kontaktsuche extends VerticalPanel {
 		/**
 		 * Initialisierung des Labels und eines CellTabels für die Kontakte
 		 */
-		searchTable = new CellTable<Kontakt>();
+		searchTable = new CellTable<Kontakt>(10, tableRes);
+	
 
 		/**
 		 * Die if-Abfrage untersucht was in der Listbox ausgewähöt wurde und sucht
@@ -95,7 +107,7 @@ public class Kontaktsuche extends VerticalPanel {
 		 * angezeigt.
 		 */
 		if(eingabe == "") {
-			Window.alert("Upps, es wurde keine Eingabe registriert.");
+			MessageBox.alertWidget("Hinweis", "Upps, es wurde keine Eingabe registriert.");
 		}
 		else if (auswahl == "Name") {
 			ev.getKontakteByName(eingabe, n, new AsyncCallback<Vector<Kontakt>>() {
@@ -125,7 +137,7 @@ public class Kontaktsuche extends VerticalPanel {
 
 			});
 			// Kontakte anhand der Ausprägungen suchen.
-		} else if (auswahl == "Auspraegung") {
+		} else if (auswahl == "Auspraegung" ) {
 			ev.getKontakteByAuspraegung(eingabe, n, new AsyncCallback<Vector<Kontakt>>() {
 
 				@Override
@@ -181,7 +193,7 @@ public class Kontaktsuche extends VerticalPanel {
 			});
 
 		} else {
-			Window.alert("Tut uns leid, Sie haben keinen Kontakt mit dieser " + eingabe + " Angabe.");
+			MessageBox.alertWidget("Hinweis", "Tut uns leid, wir konnten keinen Kontakt mit der Eingabe " + eingabe + " finden.");
 		}
 
 		/**
@@ -220,10 +232,10 @@ public class Kontaktsuche extends VerticalPanel {
 		/**
 		 * Hinzufügen der Columns für die Darstellung der Kontakte.
 		 */
-		searchTable.addColumn(vornameColumn, "Vorname: ");
+		searchTable.addColumn(vornameColumn, "Vorname ");
 		vornameColumn.setSortable(true);
 
-		searchTable.addColumn(nachnameColumn, "Nachname: ");
+		searchTable.addColumn(nachnameColumn, "Nachname ");
 		nachnameColumn.setSortable(true);
 		
 		
@@ -241,25 +253,29 @@ public class Kontaktsuche extends VerticalPanel {
 		searchTable.addColumnSortHandler(sort);
 		searchTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Kontakt>createDefaultManager());
 		
-		this.search = new Button("<image src='/images/search.png' width='15px' height='15px' align='center' />  Start");
-		this.showKontakt = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' />  anzeigen");
+		this.search = new Button("<image src='/images/search.png' width='15px' height='15px' align='center' />");
+		search.setStylePrimaryName("searchBtn");
 		
-		// Größe der TextBox/ListBox/Button bestimmen.
-		lb.setPixelSize(130, 35);
-		tb.setPixelSize(125, 25);
-		search.setPixelSize(125, 25);
-
+		this.addKontaktToKontaktlisteStart = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' />" +
+				"<image src='/images/kontaktliste.png' width='20px' height='20px' align='center' /> hinzufügen");
+		addKontaktToKontaktlisteStart.setStylePrimaryName("khunzufuegenKl");
+		addKontaktToKontaktlisteStart.setTitle("Kontakt/e einer Kontaktliste hinzufügen");
+		//this.showKontakt = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' />  anzeigen");
+		
 		// ListBox mit Auswahlen befüllen.
 		lb.addItem("Name");
 		lb.addItem("Auspraegung");
 		lb.addItem("Eigenschaft");
+		lb.setStylePrimaryName("search");
 		tb.getElement().setPropertyString("placeholder", "Name/Ausprägung/Eigenschaft");
+		tb.setStylePrimaryName("searchTb");
 
 		// Der SearchBar den Button, die ListBox und die TextBox hinzufügen.
 		searchbar.add(search);
-		searchbar.add(lb);
 		searchbar.add(tb);
-		showKontaktButtonPanel.add(showKontakt);
+		searchbar.add(lb);
+
+		
 
 		// Tabelle dem Vertical Panel hinzufügen
 		this.add(searchbar);
@@ -272,7 +288,6 @@ public class Kontaktsuche extends VerticalPanel {
 		sp.add(searchTable);
 		
 		this.add(sp);
-		this.add(hp3);
 		this.add(showKontaktButtonPanel);
 		
 		
@@ -287,10 +302,37 @@ public class Kontaktsuche extends VerticalPanel {
 				Nutzer nutzer = new Nutzer();
 				nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 				nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
-
-				RootPanel.get("content").add(new Kontaktsuche(n, lb.getSelectedItemText(), tb.getText()));
+				RootPanel.get("content").clear();
+				sp.clear();
+				showKontaktButtonPanel.clear();
+				searchTable.removeFromParent();
+				searchbar.clear();
+				hp3.add(new ShowKontakte(nutzer));
+				//hp3.add(new Kontaktsuche(nutzer, lb.getSelectedItemText(), tb.getText()));
 			}
 		});
+		
+				// Einen Kontakt einer Kontaktliste hinzufügen
+				// Auswahl eines Kontaktes dann auf Kontakt Kontaktliste hinzufügen klicken
+				// ShowKontaktlisten wird geöffnet und nun kann der Kontakt einer Kontaktliste
+				// hinzugefügt werden.
+				addKontaktToKontaktlisteStart.addClickHandler(new ClickHandler() {
+
+					@Override
+					public void onClick(ClickEvent event) {
+						
+						ko.addAll(selectionModel.getSelectedSet());
+						
+						if(ko.capacity() == 0) {
+							MessageBox.alertWidget("Hinweis", "Bitte wählen Sie mindestens einen Kontakt aus.");
+						} else if(ko.capacity() >= 1){
+//						RootPanel.get("content").clear();
+//						RootPanel.get("contentHeader").clear();
+						RootPanel.get("content").add(new ShowKontaktliste(n, null, ko));
+						}
+		
+					}
+				});
 		
 		
 		//Lässt Kontakte mit einem Doppel Klick anzeigen.

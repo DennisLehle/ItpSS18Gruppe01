@@ -14,4 +14,5 @@ import com.google.gwt.resources.client.ImageResource;
 public interface Resources extends ClientBundle {
 	  @Source("shareAus.png")
 	  ImageResource getImageResource();
+	 
 	}

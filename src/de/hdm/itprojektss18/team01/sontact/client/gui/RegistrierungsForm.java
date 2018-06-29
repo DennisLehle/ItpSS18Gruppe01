@@ -1,5 +1,7 @@
 package de.hdm.itprojektss18.team01.sontact.client.gui;
 
+import java.util.Date;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -32,6 +34,8 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 /**
  * RegistrierungsFormular Klasse die beim Login aufgerufen wird, wenn der Nutzer
  * noch keinen Kontakt in der Datenbank gespeichert hat.
+ * 
+ * 
  * 
  * 
  * @author Kevin Batista, Dennis Lehle, Ugur Bayrak
@@ -143,6 +147,10 @@ public class RegistrierungsForm extends VerticalPanel {
 		hauptPanel.add(kontaktTable);
 		hauptPanel2.add(infoTable);
 		hauptPanel2.add(speichern);
+		
+		
+		
+	
 
 		vornameTxtBox.getElement().setPropertyString("placeholder", "Vorname des Kontakts");
 		nachnameTxtBox.getElement().setPropertyString("placeholder", "Nachname des Kontakts");
@@ -191,9 +199,9 @@ public class RegistrierungsForm extends VerticalPanel {
 													@Override
 													public void onSuccess(Eigenschaft result) {
 													
-														
-														ev.createAuspraegung(geburtsdatum.getValue().toString(),
-																result.getId(), result2.getId(),
+													Date datum = 	DateTimeFormat.getFormat("yyyyMMdd").parse(DateTimeFormat.getFormat("yyyyMMdd").format(geburtsdatum.getValue()));
+														ev.createAuspraegung(datum.toString(),
+																result.getId(), result2.getId(), n.getId(),
 																new AsyncCallback<Auspraegung>() {
 
 																	@Override
@@ -218,7 +226,7 @@ public class RegistrierungsForm extends VerticalPanel {
 																						public void onSuccess(Eigenschaft result) {
 																							
 																							ev.createAuspraegung(plz.getText(), result.getId(),
-																									result2.getId(), new AsyncCallback<Auspraegung>() {
+																									result2.getId(), n.getId(), new AsyncCallback<Auspraegung>() {
 
 																										@Override
 																										public void onFailure(Throwable caught) {
@@ -242,7 +250,7 @@ public class RegistrierungsForm extends VerticalPanel {
 																																public void onSuccess(Eigenschaft result) {
 																														
 																																	ev.createAuspraegung(wohnort.getText(), result.getId(),
-																																			result2.getId(), new AsyncCallback<Auspraegung>() {
+																																			result2.getId(), n.getId(), new AsyncCallback<Auspraegung>() {
 
 																																				@Override
 																																				public void onFailure(Throwable caught) {
@@ -266,7 +274,7 @@ public class RegistrierungsForm extends VerticalPanel {
 																																									public void onSuccess(Eigenschaft result) {
 																																									
 																																										ev.createAuspraegung(anschrift.getText(), result.getId(),
-																																												result2.getId(), new AsyncCallback<Auspraegung>() {
+																																												result2.getId(), n.getId(), new AsyncCallback<Auspraegung>() {
 
 																																													@Override
 																																													public void onFailure(Throwable caught) {
@@ -289,7 +297,7 @@ public class RegistrierungsForm extends VerticalPanel {
 																																															@Override
 																																															public void onSuccess(
 																																																	Eigenschaft result) {
-																																																ev.createAuspraegung(emailadresse.getValue(), result.getId(), result2.getId(), new AsyncCallback<Auspraegung>() {
+																																																ev.createAuspraegung(emailadresse.getValue(), result.getId(), result2.getId(), n.getId(), new AsyncCallback<Auspraegung>() {
 
 																																																	@Override
 																																																	public void onFailure(

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
@@ -221,6 +222,51 @@ public class NutzerMapper {
 		return null;
 	}
 
+	
+	public Vector<Nutzer> findAll() {
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+		Vector<Nutzer> nutzer = new Vector<Nutzer>();
+
+		// SQL-Anweisung zum auslesen des Nutzertupels aus der DB
+		String selectByKey = "SELECT * FROM nutzer ";
+
+		try {
+
+			// Aufbau der DB-Verbindung
+			con = DBConnection.connection();
+
+			// Aufbereitung des vorbereitenden Statements
+			stmt = con.prepareStatement(selectByKey);
+		
+
+			// Ausfuehren des SQL Statement
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				// Ergebnis-Tupel in Objekt umwandeln
+				Nutzer n = new Nutzer();
+
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
+				n.setId(rs.getInt(1));
+				n.setEmailAddress(rs.getString(2));
+
+				nutzer.add(n);
+				
+			}
+		}
+
+		catch (SQLException e2) {
+			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
+			e2.printStackTrace();
+			return null;
+		}
+
+		return nutzer;
+	}
+	
 }
 
 // /**

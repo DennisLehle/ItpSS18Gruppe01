@@ -7,7 +7,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.user.client.Timer;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -20,10 +21,6 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox;
 
-
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
-
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Auspraegung;
@@ -32,19 +29,18 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * RegistrierungsFormular Klasse die beim Login aufgerufen wird, wenn der Nutzer
- * noch keinen Kontakt in der Datenbank gespeichert hat.
- * 
- * 
- * 
+ * Die Klasse RegistrierungsFormular wird beim Login aufgerufen, wenn der Nutzer
+ * noch keinen Kontakt in der Datenbank gespeichert hat, und sich somit zum Ersten Mal in der 
+ * Applikation anmeldet.
  * 
  * @author Kevin Batista, Dennis Lehle, Ugur Bayrak
  */
+
 public class RegistrierungsForm extends VerticalPanel {
 
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
 
-	// TextBoxen
+	// Erstellung der TextBoxen für die Eigenschaften
 	TextBox vornameTxtBox = new TextBox();
 	TextBox nachnameTxtBox = new TextBox();
 	TextBox gmailTb = new TextBox();
@@ -54,7 +50,7 @@ public class RegistrierungsForm extends VerticalPanel {
 	TextBox emailadresse = new TextBox();
 	TextBox anschrift = new TextBox();
 
-	// Labels
+	// Erstellung der Labels für die Eigenschaften
 	Label gmail = new Label("Google-Mail");
 	Label vorname = new Label("Vorname");
 	Label nachname = new Label("Nachname");
@@ -67,9 +63,11 @@ public class RegistrierungsForm extends VerticalPanel {
 	Label auswahleigenschaften = new Label("Auswahleigenschaft");
 	Label freitexteigenschaften = new Label("Freitexteigenschaft");
 
+	// Erstellung der Speichern-Buttons
 	Button speichern = new Button(
 			"<image src='/images/user.png' width='20px' height='20px' align='center' /> Jetzt registrieren");
-
+	
+	// Erstellung der HorizontalPanels
 	HorizontalPanel hp = new HorizontalPanel();
 	HorizontalPanel hp2 = new HorizontalPanel();
 
@@ -78,33 +76,40 @@ public class RegistrierungsForm extends VerticalPanel {
 	// Hauptpanel fuer die Ansicht der Kontakteigenschaftsangaben
 	VerticalPanel hauptPanel2 = new VerticalPanel();
 
+	// Erstellung der FlexTables fuer die Tabellenstruktur
 	FlexTable kontaktTable = new FlexTable();
 	FlexTable infoTable = new FlexTable();
 
-
+	/**
+	 * Konstruktor fuer die RegistrierungsForm-Klasse.
+	 */
 	public RegistrierungsForm(Nutzer n) {
-
+		
 		// RootPanel leeren damit neuer Content geladen werden kann.
 		RootPanel.get("content").clear();
 		RootPanel.get("contentHeader").clear();
-		// Ueberschrift anzeigen
+		
+		// Hinzufuegen der Ueberschrift in den ContentHeader
 		RootPanel.get("contentHeader").add(new HTML("Registrierung"));
+		
+		// Speichern-Button wird dem VerticalPanel hinzugefuegt
 		this.add(speichern);
 
 		onLoad(n);
-
 	}
 
 	protected void onLoad(Nutzer n) {
 
 		DateTimeFormat dateFormat = DateTimeFormat.getFormat(PredefinedFormat.DATE_LONG);
 		geburtsdatum.setFormat(new DateBox.DefaultFormat(dateFormat));
-
+		
+		// Hier wird der Speichern-Button gestylt
 		speichern.setStylePrimaryName("regButton");
 
 		gmailTb.setText(n.getEmailAddress());
 		gmailTb.setEnabled(false);
-
+		
+		// Hier werden die Labels fuer die Registrierung gestylt 
 		gmail.setStylePrimaryName("label");
 		vorname.setStylePrimaryName("label");
 		nachname.setStylePrimaryName("label");
@@ -113,7 +118,8 @@ public class RegistrierungsForm extends VerticalPanel {
 		wohnortlb.setStylePrimaryName("label");
 		emailadresselb.setStylePrimaryName("label");
 		anschriftlb.setStylePrimaryName("label");
-
+		
+		// Hier werden die TextBoxen fuer die Registrierung gestylt
 		gmailTb.setStylePrimaryName("tbRundung");
 		vornameTxtBox.setStylePrimaryName("tbRundung");
 		nachnameTxtBox.setStylePrimaryName("tbRundung");
@@ -122,7 +128,8 @@ public class RegistrierungsForm extends VerticalPanel {
 		wohnort.setStylePrimaryName("tbRundung");
 		emailadresse.setStylePrimaryName("tbRundung");
 		anschrift.setStylePrimaryName("tbRundung");
-
+		
+		// Anordnung der ersten FlexTable
 		kontaktTable.setWidget(1, 0, vorname);
 		kontaktTable.setWidget(1, 1, vornameTxtBox);
 		kontaktTable.setWidget(2, 0, nachname);
@@ -130,6 +137,7 @@ public class RegistrierungsForm extends VerticalPanel {
 		kontaktTable.setWidget(3, 0, gmail);
 		kontaktTable.setWidget(3, 1, gmailTb);
 
+		// Anordnung der zweiten FlexTable
 		infoTable.setWidget(1, 0, geburtsdatumlb);
 		infoTable.setWidget(1, 1, geburtsdatum);
 		infoTable.setWidget(2, 0, plzlb);
@@ -141,6 +149,7 @@ public class RegistrierungsForm extends VerticalPanel {
 		infoTable.setWidget(5, 0, anschriftlb);
 		infoTable.setWidget(5, 1, anschrift);
 
+		// Stylen der FlexTables
 		kontaktTable.setStylePrimaryName("infoTable");
 		infoTable.setStylePrimaryName("infoTable");
 
@@ -148,10 +157,7 @@ public class RegistrierungsForm extends VerticalPanel {
 		hauptPanel2.add(infoTable);
 		hauptPanel2.add(speichern);
 		
-		
-		
-	
-
+		// Hinzufuegen derPlaceholder fuer die TextBoxen 
 		vornameTxtBox.getElement().setPropertyString("placeholder", "Vorname des Kontakts");
 		nachnameTxtBox.getElement().setPropertyString("placeholder", "Nachname des Kontakts");
 		geburtsdatum.getElement().setPropertyString("placeholder", "Geburtsdatum des Kontakts");
@@ -163,46 +169,47 @@ public class RegistrierungsForm extends VerticalPanel {
 		RootPanel.get("content").add(hauptPanel);
 		RootPanel.get("content").add(hauptPanel2);
 
-		// Speichern des zu registrierenden Kontakts und seinen Ausprägungen
+		// Speichern des zu registrierenden Kontakts und seinen Auspraegungen
 		speichern.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 				
-
 				if (vornameTxtBox.getValue() != "" && nachnameTxtBox.getValue() != "" && 
 						geburtsdatum.getValue().toString() != "" && plz.getText() != "" && wohnort.getText() != "" &&
 						anschrift.getText() != "" && emailadresse.getText() != "") {
 					
-					
+					// Erstellung des eigenen Kontakts bei der Registrierung
 					ev.createKontaktRegistrierung(vornameTxtBox.getValue(), nachnameTxtBox.getValue(), n,
 							new AsyncCallback<Kontakt>() {
 
 								@Override
 								public void onFailure(Throwable caught) {
 									caught.getMessage().toString();
-
 								}
 
 								@Override
 								public void onSuccess(Kontakt result2) {
 									
-										ev.getEigenschaftByBezeichnung(geburtsdatumlb.getText(),
-												new AsyncCallback<Eigenschaft>() {
+									// Die Eigenschaften werden per Bezeichnung geholt
+									ev.getEigenschaftByBezeichnung(geburtsdatumlb.getText(),
+											new AsyncCallback<Eigenschaft>() {
 
-													@Override
-													public void onFailure(Throwable caught) {
-														caught.getMessage().toString();
+												@Override
+												public void onFailure(Throwable caught) {
+													caught.getMessage().toString();
 
-													}
+												}
 
-													@Override
-													public void onSuccess(Eigenschaft result) {
+												@Override
+												public void onSuccess(Eigenschaft result) {
 													
-													Date datum = 	DateTimeFormat.getFormat("yyyyMMdd").parse(DateTimeFormat.getFormat("yyyyMMdd").format(geburtsdatum.getValue()));
-														ev.createAuspraegung(datum.toString(),
-																result.getId(), result2.getId(), n.getId(),
-																new AsyncCallback<Auspraegung>() {
+												Date datum = DateTimeFormat.getFormat("yyyyMMdd").parse(DateTimeFormat.getFormat("yyyyMMdd").format(geburtsdatum.getValue()));
+													
+												// Erstellung der Auspraegungen fuer den Kontakt
+												ev.createAuspraegung(datum.toString(),
+															result.getId(), result2.getId(), n.getId(),
+															new AsyncCallback<Auspraegung>() {
 
 																	@Override
 																	public void onFailure(Throwable caught) {
@@ -212,7 +219,8 @@ public class RegistrierungsForm extends VerticalPanel {
 
 																	@Override
 																	public void onSuccess(Auspraegung result) {
-																	
+																		
+																			// Die Eigenschaft Postleizahl wird gelesen
 																			ev.getEigenschaftByBezeichnung(plzlb.getText(),
 																					new AsyncCallback<Eigenschaft>() {
 
@@ -225,6 +233,7 @@ public class RegistrierungsForm extends VerticalPanel {
 																						@Override
 																						public void onSuccess(Eigenschaft result) {
 																							
+																							// Erstellung der Auspraegung (Postleitzahl) fuer den Kontakt
 																							ev.createAuspraegung(plz.getText(), result.getId(),
 																									result2.getId(), n.getId(), new AsyncCallback<Auspraegung>() {
 
@@ -236,7 +245,8 @@ public class RegistrierungsForm extends VerticalPanel {
 
 																										@Override
 																										public void onSuccess(Auspraegung result) {
-																											 
+																											
+																													// Die Eigenschaft Wohnort wird gelesen
 																													ev.getEigenschaftByBezeichnung(wohnortlb.getText(),
 																															new AsyncCallback<Eigenschaft>() {
 
@@ -248,7 +258,8 @@ public class RegistrierungsForm extends VerticalPanel {
 
 																																@Override
 																																public void onSuccess(Eigenschaft result) {
-																														
+																																	
+																																	// Erstellung der Auspraegung (Wohnort) fuer den Kontakt
 																																	ev.createAuspraegung(wohnort.getText(), result.getId(),
 																																			result2.getId(), n.getId(), new AsyncCallback<Auspraegung>() {
 
@@ -260,7 +271,8 @@ public class RegistrierungsForm extends VerticalPanel {
 
 																																				@Override
 																																				public void onSuccess(Auspraegung result) {
-																																					
+																																						
+																																						// Die Eigenschaft Anschrift wird gelesen
 																																						ev.getEigenschaftByBezeichnung(anschriftlb.getText(),
 																																								new AsyncCallback<Eigenschaft>() {
 
@@ -272,7 +284,8 @@ public class RegistrierungsForm extends VerticalPanel {
 
 																																									@Override
 																																									public void onSuccess(Eigenschaft result) {
-																																									
+																																										
+																																										// Erstellung der Auspraegung (Anschrift) fuer den Kontakt
 																																										ev.createAuspraegung(anschrift.getText(), result.getId(),
 																																												result2.getId(), n.getId(), new AsyncCallback<Auspraegung>() {
 
@@ -285,35 +298,37 @@ public class RegistrierungsForm extends VerticalPanel {
 																																													@Override
 																																													public void onSuccess(Auspraegung result) {
 																																														
+																																														// Die Eigenschaft Email-Adresse wird gelesen
 																																														ev.getEigenschaftByBezeichnung(emailadresselb.getText(), new AsyncCallback <Eigenschaft>() {
 
 																																															@Override
-																																															public void onFailure(
-																																																	Throwable caught) {
+																																															public void onFailure(Throwable caught) {
 																																																caught.getMessage().toString();
 																																																
 																																															}
 
 																																															@Override
-																																															public void onSuccess(
-																																																	Eigenschaft result) {
+																																															public void onSuccess(Eigenschaft result) {
+																																																	
+																																																// Erstellung der Auspraegung (Email-Adresse) fuer den Kontakt
 																																																ev.createAuspraegung(emailadresse.getValue(), result.getId(), result2.getId(), n.getId(), new AsyncCallback<Auspraegung>() {
 
 																																																	@Override
-																																																	public void onFailure(
-																																																			Throwable caught) {
+																																																	public void onFailure(Throwable caught) {
 																																																		caught.getMessage().toString();
 																																																		
 																																																	}
 
 																																																	@Override
-																																																	public void onSuccess(
-																																																			Auspraegung result) {
-																																																		// ContentHeader und Content divs leeren und das
-																																																		// Fenster neu laden.
-																																																		// Weiterleitung in die Start Ansicht des Programms.
+																																																	public void onSuccess(Auspraegung result) {
+																																																			
+																																																		
+																																																		// ContentHeader und Content divs werden geleert 
 																																																		RootPanel.get("contentHeader").clear();
 																																																		RootPanel.get("content").clear();
+																																																		
+																																																		// Fenster neu laden.
+																																																		// Weiterleitung in die Start Ansicht des Programms.
 																																																		Window.Location.reload();
 																																																		
 																																																	}
@@ -381,7 +396,7 @@ public class RegistrierungsForm extends VerticalPanel {
 			}
 		});
 
-		/// ---------Abschnitt-für-KeyDownHandler-derTextBoxen-----------------///
+		/// ---------Abschnitt-für-KeyDownHandler-der TextBoxen-----------------///
 
 		vornameTxtBox.addKeyDownHandler(new KeyDownHandler() {
 

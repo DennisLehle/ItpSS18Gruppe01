@@ -35,7 +35,7 @@ public class Navigation extends VerticalPanel {
 	 */
 	public Navigation(final Nutzer nutzer) {
 
-		// Erstellung des ScrollPanel´s.
+		// Erstellung des ScrollPanel´s fuer den Baum
 		ScrollPanel sc = new ScrollPanel();
 		// Groeße des ScrollPanel´s wird angepasst.
 		sc.setSize("200px", "550px");
@@ -47,7 +47,7 @@ public class Navigation extends VerticalPanel {
 		// Anlegung des Baumes mit dem zuvor definierten TreeViewModel.
 		CellTree navTree = new CellTree(navTreeModel, null);
 
-		// ClickHandler fuer das erstellen von neuen Kontaktlisten.
+		// ClickHandler fuer das Erstellen von neuen Kontaktlisten.
 		neueKontaktlisteBtn.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -58,7 +58,7 @@ public class Navigation extends VerticalPanel {
 			}
 		});
 
-		// ClickHandler fuer das erstellen von neuen Kontakten.
+		// ClickHandler fuer das Erstellen von neuen Kontakten.
 		neuerKontaktBtn.addClickHandler(new ClickHandler() {
 
 			@Override

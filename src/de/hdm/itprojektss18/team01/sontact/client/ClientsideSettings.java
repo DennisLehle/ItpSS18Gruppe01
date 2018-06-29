@@ -62,8 +62,6 @@ public class ClientsideSettings extends CommonSettings {
 	 * Auslesen des applikationsweiten (Client-seitig!) zentralen Loggers.
 	 * </p>
 	 * 
-	 * Weitere Infos siehe Dokumentation zu Java Logging.
-	 * 
 	 * @return die Logger-Instanz für die Server-Seite.
 	 */
 	public static Logger getLogger() {
@@ -75,7 +73,7 @@ public class ClientsideSettings extends CommonSettings {
 	 * Anlegen und Auslesen der applikationsweit eindeutigen Verwaltung. Diese
 	 * Methode erstellt die Verwaltung, sofern sie noch nicht existiert. Bei
 	 * wiederholtem Aufruf dieser Methode wird stets das bereits zuvor angelegte
-	 * Objekt zurückgegeben.
+	 * Objekt zurueckgegeben.
 	 * </p>
 	 * 
 	 * <p>
@@ -102,7 +100,7 @@ public class ClientsideSettings extends CommonSettings {
 		}
 
 		/**
-		 * Rückgabe des EditorService's.
+		 * Rueckgabe des EditorService's.
 		 */
 		return editorVerwaltung;
 	}
@@ -111,7 +109,7 @@ public class ClientsideSettings extends CommonSettings {
 	 * Anlegen und Auslesen der applikationsweit eindeutigen Verwaltung. Diese
 	 * Methode erstellt die Verwaltung, sofern sie noch nicht existiert. Bei
 	 * wiederholtem Aufruf dieser Methode wird stets das bereits zuvor angelegte
-	 * Objekt zurückgegeben.
+	 * Objekt zurueckgegeben.
 	 * </p>
 	 * 
 	 * <p>
@@ -122,20 +120,19 @@ public class ClientsideSettings extends CommonSettings {
 	 * 
 	 * @return eindeutige Instanz des Typs <code>LoginServiceAsync</code>
 	 */
-
 	public static LoginServiceAsync getLoginService() {
-		
+
 		/**
-		 * Gab es bislang noch keine Verwaltung-Instanz, wird einer erstellt.
+		 * Gab es bislang noch keine Verwaltung-Instanz, wird eine erstellt.
 		 */
 		if (loginService == null) {
-			
+
 			/**
 			 * Instantiieren des EditorService's.
 			 */
 			loginService = GWT.create(LoginService.class);
 		}
-		
+
 		/**
 		 * Rueckgabe des EditorService's.
 		 */
@@ -147,7 +144,7 @@ public class ClientsideSettings extends CommonSettings {
 	 * Anlegen und Auslesen des applikationsweit eindeutigen ReportGenerators. Diese
 	 * Methode erstellt den ReportGenerator, sofern dieser noch nicht existiert. Bei
 	 * wiederholtem Aufruf dieser Methode wird stets das bereits zuvor angelegte
-	 * Objekt zurückgegeben.
+	 * Objekt zurueckgegeben.
 	 * </p>
 	 * 
 	 * <p>
@@ -186,7 +183,7 @@ public class ClientsideSettings extends CommonSettings {
 		}
 
 		/**
-		 * Rückgabe des ReportGeneratorService's.
+		 * Rueckgabe des ReportGeneratorService's.
 		 */
 		return reportGeneratorVerwaltung;
 	}

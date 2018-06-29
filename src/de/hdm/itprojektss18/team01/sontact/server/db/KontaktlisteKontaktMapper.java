@@ -87,7 +87,7 @@ public class KontaktlisteKontaktMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		// SQL-Anweisung zum löschen des Tupels aus der DB
+		// SQL-Anweisung zum lï¿½schen des Tupels aus der DB
 		String deleteSQL = "DELETE FROM kontaktlistekontakt WHERE kontaktlisteid=? AND kontaktid =?";
 
 		try {
@@ -122,8 +122,8 @@ public class KontaktlisteKontaktMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
-		String selectByKey = "SELECT kontaktlistekontakt.kontaktlisteid, kontaktliste.titel, kontakt.id, kontakt.vorname, kontakt.nachname,"
-				+ "kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid " + "FROM kontaktlistekontakt "
+		String selectByKey = "SELECT kontaktlistekontakt.kontaktlisteid, kontaktliste.titel, kontakt.id, kontakt.vorname, kontakt.nachname, "
+				+ "kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid, kontakt.identifier " + "FROM kontaktlistekontakt "
 				+ "JOIN kontakt " + "ON kontaktlistekontakt.kontaktid = kontakt.id " + "JOIN kontaktliste "
 				+ "ON kontaktlistekontakt.kontaktlisteid = kontaktliste.id "
 				+ "WHERE kontaktlistekontakt.kontaktlisteid= " + kontaktlisteId;
@@ -155,6 +155,7 @@ public class KontaktlisteKontaktMapper {
 				k.setErstellDat(rs.getTimestamp("erstellungsdatum"));
 				k.setModDat(rs.getTimestamp("modifikationsdatum"));
 				k.setOwnerId(rs.getInt("ownerid"));
+				k.setIdentifier(rs.getString("identifier").charAt(0));
 
 				// Statt return wird hier der Vektor erweitert
 				result.addElement(k);

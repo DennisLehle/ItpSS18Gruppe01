@@ -78,7 +78,7 @@ public class AuspraegungMapper {
 
 				PreparedStatement stmt1 = con.prepareStatement(
 
-						"INSERT INTO auspraegung(id, wert, eigenschaftid, kontaktid, status)" + " VALUES(?,?,?,?,?) ",
+						"INSERT INTO auspraegung(id, wert, eigenschaftid, kontaktid, status, ownerid)" + " VALUES(?,?,?,?,?,?) ",
 
 						Statement.RETURN_GENERATED_KEYS);
 				stmt1.setInt(1, aus.getId());
@@ -86,6 +86,7 @@ public class AuspraegungMapper {
 				stmt1.setInt(3, aus.getEigenschaftId());
 				stmt1.setInt(4, aus.getKontaktId());
 				stmt1.setBoolean(5, aus.getStatus());
+				stmt1.setInt(6, aus.getOwnerId());
 
 				System.out.println(stmt);
 
@@ -260,7 +261,8 @@ public class AuspraegungMapper {
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
 				a.setKontaktId(rs.getInt("kontaktid"));
 				a.setStatus(rs.getBoolean("status"));
-
+				a.setOwnerId(rs.getInt("ownerid"));
+				
 				return a;
 			}
 		}
@@ -315,6 +317,7 @@ public class AuspraegungMapper {
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
 				a.setKontaktId(rs.getInt("kontaktid"));
 				a.setStatus(rs.getBoolean("status"));
+				a.setOwnerId(rs.getInt("ownerid"));
 
 				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				result.addElement(a);
@@ -342,7 +345,7 @@ public class AuspraegungMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum Auslesen des Tupels aus der DB
-		String selectByKey = "SELECT auspraegung.id, auspraegung.wert, auspraegung.eigenschaftid, auspraegung.kontaktid, auspraegung.status, eigenschaft.bezeichnung\r\n"
+		String selectByKey = "SELECT auspraegung.id, auspraegung.wert, auspraegung.eigenschaftid, auspraegung.kontaktid, auspraegung.status, auspraegung.ownerid, eigenschaft.bezeichnung\r\n"
 				+ "FROM auspraegung\r\n" + "INNER JOIN eigenschaft \r\n"
 				+ "ON auspraegung.eigenschaftid = eigenschaft.id \r\n" + "WHERE auspraegung.kontaktid=?";
 
@@ -368,9 +371,10 @@ public class AuspraegungMapper {
 				a.setWert(rs.getString("wert"));
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
 				a.setKontaktId(rs.getInt("kontaktid"));
-				a.setBezeichnung(rs.getString("bezeichnung"));
 				a.setStatus(rs.getBoolean("status"));
-
+				a.setBezeichnung(rs.getString("bezeichnung"));
+				a.setOwnerId(rs.getInt("ownerid"));
+			
 				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				result.addElement(a);
 
@@ -424,6 +428,7 @@ public class AuspraegungMapper {
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
 				a.setKontaktId(rs.getInt("kontaktid"));
 				a.setStatus(rs.getBoolean("status"));
+				a.setOwnerId(rs.getInt("ownerid"));
 
 				// Hinzufuegen des neuen Objekts zum Ergebnisvektor
 				result.addElement(a);
@@ -475,6 +480,7 @@ public class AuspraegungMapper {
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
 				a.setKontaktId(rs.getInt("kontaktid"));
 				a.setStatus(rs.getBoolean("status"));
+				a.setOwnerId(rs.getInt("ownerid"));
 
 				result.addElement(a);
 
@@ -499,15 +505,13 @@ public class AuspraegungMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String updateSQL = "UPDATE auspraegung SET status=true, id=? WHERE id=?";
+		String updateSQL = "UPDATE auspraegung SET status=true WHERE id=?";
 
 		try {
 
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(updateSQL);
-
-			stmt.setBoolean(1, a.getStatus());
-			stmt.setInt(2, a.getId());
+			stmt.setInt(1, a.getId());
 
 			stmt.executeUpdate();
 

@@ -29,28 +29,38 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
  * Die Klasse EntryPoint beinhaltet die Methode <code>onModuleLoad()</code>
- * welche beim Starten der Applikation aufgerufen wird.
+ * welche beim Starten der Applikation aufgerufen wird. Diese wird implementiert
+ * damit eine Klasse als Moduleingangspunkt fungieren kann.
  * 
  * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
  */
+
 public class Sontact implements EntryPoint {
 
 	private LoginInfo loginInfo = null;
 	private Kontakt ownProfil = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
+	private Label loginLabel = new Label(
+			"Herzlich Wilkommen auf Sontact. Um die Kontaktverwaltung nutzen zu können melden Sie sich bitte mit einem Google-Konto an, um fortfahren zu können.");
+	private Anchor signInLink = new Anchor("Mit Google anmelden");
 	Label profilLb = new Label();
-	private Label loginLabel = new Label("Herzlich Wilkommen auf Sontact. Um die Kontaktverwaltung nutzen zu können melden Sie sich bitte mit einem Google-Konto an, um fortfahren zu können.");
 	HTML loginHTML = new HTML("<h7></h7>");
 	HTML sontactHTML = new HTML("<h8>SONTACT</h8>");
-	private Anchor signInLink = new Anchor("Mit Google anmelden");
 
-	LoginServiceAsync loginService = GWT.create(LoginService.class);
-	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditorVerwaltung();
-	ClientsideSettings clientSettings = new ClientsideSettings();
-	
-	
 	/**
-	 * Das ist die EntryPoint Methode <code>onModuleLoad()</code>
+	 * Erzeugung des <code>EditorService</code>-Objekts ist noetig, um eine zentrale
+	 * Applikations-Verwaltung zu initialisieren, um die Aktivitaeten der
+	 * Applikation zu steuern.
+	 */
+	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditorVerwaltung();
+	
+	LoginServiceAsync loginService = GWT.create(LoginService.class);
+	ClientsideSettings clientSettings = new ClientsideSettings();
+
+	/**
+	 * Das ist die EntryPoint Methode <code>onModuleLoad()</code>. Sie ist die
+	 * Einstiegspunktmethode, die automatisch aufgerufen wird, indem ein Modul
+	 * geladen wird, das eine implementierende Klasse als Einstiegspunkt deklariert.
 	 */
 	public void onModuleLoad() {
 
@@ -59,7 +69,6 @@ public class Sontact implements EntryPoint {
 			@Override
 			public void onFailure(Throwable error) {
 				Window.alert("Fehler Login: " + error.toString());
-
 			}
 
 			@Override
@@ -72,22 +81,25 @@ public class Sontact implements EntryPoint {
 						@Override
 						public void onFailure(Throwable error) {
 							Window.alert("Es ist ein Fehler beim Login aufgetreten: ");
-					
+
 						}
 
 						@Override
 						public void onSuccess(Nutzer nutzer) {
 							if (nutzer != null) {
 								RootPanel.get("content").clear();
+								// Die start Methode wird geladen
 								start(nutzer);
-								MessageBox.alertWidget("Herzlich Wilkomen", "Wilkommen bei Sontact der Seite im Internet für Teilungen von Kontakten.");
-								
+								MessageBox.alertWidget("Herzlich Wilkomen",
+										"Wilkommen bei Sontact der Seite im Internet für Teilungen von Kontakten.");
+
 							} else {
 								RootPanel.get("content").clear();
 								RootPanel.get("navigator").clear();
 								MessageBox.alertWidget("Kontakt",
 										"Sie haben noch kein Kontakt angelegt, bitte legen Sie Ihren eigenen Kontakt an");
-								
+
+								// Der Nutzer wird anhand der eingeloggten Email-Adresse createt
 								editorVerwaltung.createNutzer(loginInfo.getEmailAddress(), new AsyncCallback<Nutzer>() {
 
 									@Override
@@ -98,30 +110,29 @@ public class Sontact implements EntryPoint {
 									@Override
 									public void onSuccess(Nutzer result) {
 										Nutzer n = result;
-										
-										editorVerwaltung.getUserByGMail(n.getEmailAddress(), new AsyncCallback<Nutzer>() {
+
+										// Der Nutzer wird per Email-Adresse geholt
+										editorVerwaltung.getUserByGMail(n.getEmailAddress(),
+												new AsyncCallback<Nutzer>() {
 
 													@Override
 													public void onFailure(Throwable error) {
 														Window.alert("Es ist ein Fehler beim Login aufgetreten: ");
-
 													}
 
 													@Override
 													public void onSuccess(final Nutzer nutzer) {
-													RootPanel.get("content").add(new RegistrierungsForm(nutzer));
-													
+														RootPanel.get("content").add(new RegistrierungsForm(nutzer));
 													}
 												});
-
 									}
-
 								});
 							}
 						}
 					});
 
 				} else {
+					// Ladet den Login fuer die Applikation
 					loadLogin();
 				}
 			}
@@ -135,102 +146,103 @@ public class Sontact implements EntryPoint {
 	 */
 	private void start(final Nutzer nutzer) {
 
-		//Logout wird hier schon gesetzt
-		HTML signOutLink = new HTML("<p><a href='" + loginInfo.getLogoutUrl() 
+		// Logout wird hier schon gesetzt
+		HTML signOutLink = new HTML("<p><a href='" + loginInfo.getLogoutUrl()
 				+ "'><span class='glyphicon glyphicon-log-out'></span></a></p>");
 		RootPanel.get("nutzermenu").add(signOutLink);
-		
-		
-		//Setzen von Cookies für die spätere Identifizierung eines Nutzers.
-		Cookies.setCookie("nutzerGMail", nutzer.getEmailAddress()); 		
-		//Wenn ein Nutzer vorhanden ist wird die nutzerId noch gesetzt.
+
+		// Setzen von Cookies fuer die spaetere Identifizierung eines Nutzers.
+		Cookies.setCookie("nutzerGMail", nutzer.getEmailAddress());
+
+		// Wenn ein Nutzer vorhanden ist wird zusaetzlich noch die nutzerId gesetzt.
 		Cookies.setCookie("nutzerID", String.valueOf(nutzer.getId()));
 		RootPanel.get("navigator").add(new Navigation(nutzer));
-		
-		//Identifizierung des Registrierungs Kontakts des Nutzers für die Namens Setzung in der GUI.
-		editorVerwaltung.getOwnKontakt(nutzer, new AsyncCallback <Kontakt>() {
+
+		// Identifizierung des Registrierungs-Kontakts des Nutzers fuer den Namen im Header in der GUI.
+		editorVerwaltung.getOwnKontakt(nutzer, new AsyncCallback<Kontakt>() {
 
 			@Override
 			public void onFailure(Throwable err) {
 				err.getMessage().toString();
-				
 			}
 
 			@Override
 			public void onSuccess(Kontakt result) {
-				//Eigenes Profil wird gesetzt um außerhalb Zugriff zu erhalten.
+				
+				// Eigenes Profil wird gesetzt um außerhalb Zugriff zu erhalten.
 				ownProfil = result;
-				//Label wird mit dem Vor-, und Nachnamen des Nutzers befült der sich Eingeloggt hat.
-				profilLb.setText(result.getVorname() +" "+ result.getNachname());
+
+				// Label wird mit dem Vor- und Nachnamen des Nutzers befuellt der sich eingeloggt hat.
+				profilLb.setText(result.getVorname() + " " + result.getNachname());
 				profilLb.setTitle("Dein eigener Kontakt");
-				//Label wird mit ClickHandler versehen um aufs eigene Profil zu gelangen.
-				profilLb.addClickHandler(new ownProfilClickHandler());
+
+				// Label wird mit dem ClickHandler versehen, um auf das eigene Profil zu gelangen.
+				profilLb.addClickHandler(new OwnProfilClickHandler());
 				profilLb.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);
-				
-				
-				//Erstmal den Container leeren.
+
+				// Leeren des NutzerMenu <div> containers.
 				RootPanel.get("nutzermenu").clear();
 
-				//Logout wird hier schon gesetzt
-				HTML signOutLink = new HTML("<p><a href='" + loginInfo.getLogoutUrl() 
+				// Hier wird der Logout schon gesetzt.
+				HTML signOutLink = new HTML("<p><a href='" + loginInfo.getLogoutUrl()
 						+ "'><span class='glyphicon glyphicon-log-out'></span></a></p>");
-				
-				//Label und Logout werden dem NutzerMenu <div> Container hinzugefügt.
+
+				// Label und Logout werden dem NutzerMenu <div> Container hinzugefuegt.
 				RootPanel.get("nutzermenu").add(profilLb);
 				RootPanel.get("nutzermenu").add(new HTML("<p><span class='glyphicon glyphicon-user'></span> &nbsp;"));
 				RootPanel.get("nutzermenu").add(signOutLink);
-				
-				
 			}
-		
 		});
-		
-		
-		// Setzen der HTMl´s für den Footer
+
+		/**
+		 * Hinzufuegen der Sontact.html und SontactReport.html in den Footer.
+		 */
 		HorizontalPanel footer = new HorizontalPanel();
 		Anchor startseite = new Anchor("Startseite", "Sontact.html");
-		HTML copyrightText1 = new HTML(" | ");
-		HTML copyrightText2 = new HTML(" | © 2018 Sontact, IT-Projekt Gruppe01, Hochschule der\n" + "Medien Stuttgart | ");
-		Anchor reportGeneratorLink = new Anchor (" ReportGenerator", "SontactReport.html");
-	//	Anchor impressumLink = new Anchor("Impressum");
-		
+		HTML Text1 = new HTML(" | ");
+		HTML Text2 = new HTML(" | © 2018 Sontact, IT-Projekt Gruppe01, Hochschule der\n" + "Medien Stuttgart | ");
+		Anchor reportGeneratorLink = new Anchor(" ReportGenerator", "SontactReport.html");
+		// Anchor impressumLink = new Anchor("Impressum");
+
 		footer.add(startseite);
-		footer.add(copyrightText1);
+		footer.add(Text1);
 		footer.add(reportGeneratorLink);
-		footer.add(copyrightText2);
+		footer.add(Text2);
 
+		// Das footerPanel wird dem <div> footer hinzugefuegt
 		RootPanel.get("footer").add(footer);
+		// Hinzufuegen der Uebersicht fuer alle Kontakte
 		RootPanel.get("content").add(new ShowKontakte(nutzer));
-
 	}
-	
-	void loadLogin() {	
-		
+
+	/**
+	 * Die Methode loadLogin ladet den Login fuer die Applikation.
+	 */
+	void loadLogin() {
 		signInLink.setHref(loginInfo.getLoginUrl());
 		loginPanel.add(loginHTML);
 		loginPanel.add(sontactHTML);
 		loginPanel.add(loginLabel);
 		loginPanel.add(signInLink);
 		loginPanel.addStyleName("login");
-		
+
+		// Footer wird geelert fuer den LoginContainer
 		RootPanel.get("footer").clear();
-		RootPanel.get("content").add(loginPanel);			
+		// Hinzufuegen des LoginPanels in den <div> Container "content"
+		RootPanel.get("content").add(loginPanel);
 	}
 
 	/**
-	 * ClickHandler fürs Label um auf das eigene Profil zugelangen.
+	 * ClickHandler fuers das Label, um auf das eigene Profil zu gelangen.
 	 * 
 	 * @author Dennis Lehle
-	 *
 	 */
-	class ownProfilClickHandler implements ClickHandler {
+	class OwnProfilClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
 			RootPanel.get("content").clear();
 			new KontaktForm(ownProfil);
-			
 		}
-		
 	}
 }

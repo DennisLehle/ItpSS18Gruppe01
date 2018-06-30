@@ -967,7 +967,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 									av.elementAt(a).getType());
 							
 							if (av.elementAt(a).getStatus() == false) {
-								this.aMapper.setStatusTeilung(av.elementAt(a));
+								Auspraegung aus= new Auspraegung();
+								aus.setId(av.elementAt(a).getId());
+								aus.setStatus(true);
+								this.aMapper.setStatusTeilung(aus);
 							}
 						}
 					}
@@ -995,7 +998,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 							av.elementAt(as).getType());
 					// Setzen eines Statuses für die Ausprägung.
 					if (av.elementAt(as).getStatus() == false) {
-						this.aMapper.setStatusTeilung(av.elementAt(as));
+						Auspraegung aus = new Auspraegung();
+						aus.setId(av.elementAt(as).getId());
+						aus.setStatus(true);
+						this.aMapper.setStatusTeilung(aus);
 					}
 				
 			} 
@@ -1016,7 +1022,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 								av.elementAt(a).getType());
 						// Setzen eines Statuses für die Ausprägung.
 						if (avshare.elementAt(as).getStatus() == false) {
-							this.aMapper.setStatusTeilung(avshare.elementAt(as));
+							Auspraegung aus = new Auspraegung();
+							aus.setId(avshare.elementAt(as).getId());
+							aus.setStatus(true);
+							this.aMapper.setStatusTeilung(aus);
 						}
 					}
 				}
@@ -1044,6 +1053,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	public void deleteBerechtigung(Berechtigung b) throws IllegalArgumentException {
 
+		Vector<Berechtigung> ber = new Vector<Berechtigung>();
+		 ber.addAll(this.getAllBerechtigungenByOwner(b.getOwnerId()));
+		 
 		// Pruefung des Objekttypes
 		if (b.getType() == 'l') {
 
@@ -1068,7 +1080,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 							// Loeschen der Berechtigung fuer die Auspraegung
 							this.bMapper.delete(b2);
-						}
+							//Setzen des Statuses wenn keine Auspraegung mehr in der Tabelle vorhanden ist.
+									for (int i = 0; i < ber.size(); i++) {
+										 if(b2.getObjectId() == ber.elementAt(i).getObjectId() && b2.getType() == ber.elementAt(i).getType()) {
+											 Auspraegung aus = new Auspraegung();
+											 aus.setId(ber.elementAt(i).getObjectId());
+											 aus.setStatus(false);
+											 this.aMapper.setStatusTeilung(aus);
+										 } 
+									}
+							}
 					}
 
 					// Berechtigungsobjekt f�r den Kontakt
@@ -1080,6 +1101,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 					// Loeschen der Berechtigung fuer den Kontakt
 					this.bMapper.delete(b1);
+					
 				}
 			}
 			// Loeschen des Berechtigung fuer die Kontaktliste
@@ -1102,6 +1124,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 					// Loeschen der Berechtigung fuer die Auspraegung
 					this.bMapper.delete(b2);
+					
+					//Setzen des Statuses wenn keine Auspraegung mehr in der Tabelle vorhanden ist.
+					for (int i = 0; i < ber.size(); i++) {
+						 if(b2.getObjectId() == ber.elementAt(i).getObjectId() && b2.getType() == ber.elementAt(i).getType()) {
+							 Auspraegung aus = new Auspraegung();
+							 aus.setId(ber.elementAt(i).getObjectId());
+							 aus.setStatus(false);
+							 this.aMapper.setStatusTeilung(aus);
+						 } 
+					}
 				}
 			}
 
@@ -1115,11 +1147,22 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			k.setId(b.getObjectId());
 
 			this.removeKontaktFromKontaktliste(findKontaktlisteByTitel(n, "Mit mir geteilte Kontakte"), k);
-
+			
 		} else if (b.getType() == 'a') {
 
 			// Loeschen der Berechtigung fuer eine einzelne Auspraegung
 			this.bMapper.delete(b);
+			
+			//Setzen des Statuses wenn keine Auspraegung mehr in der Tabelle vorhanden ist.
+			for (int i = 0; i < ber.size(); i++) {
+				 if(b.getObjectId() == ber.elementAt(i).getObjectId() && b.getType() == ber.elementAt(i).getType()) {
+					 Auspraegung aus = new Auspraegung();
+					 aus.setId(ber.elementAt(i).getObjectId());
+					 aus.setStatus(false);
+					 this.aMapper.setStatusTeilung(aus);
+				 } 
+			}
+
 		}
 	}
 

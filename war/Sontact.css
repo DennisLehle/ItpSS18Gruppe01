@@ -180,7 +180,7 @@ h9 {
 /*
  * Beginn des Footers
  */
-#footer {
+.footer {
 	padding: 10px 0px;
 	text-align: center;
 	color: #666666;
@@ -194,7 +194,6 @@ h9 {
 }
 
 #footer .gwt-HTML {
-	margin: 5px;
 	color: #666666
 }
 
@@ -506,9 +505,9 @@ h8 a {
 
 .regButton{
 	position: absolute;
-    left: 400px;
-    bottom: 20px;
-     padding: 7px 40px;
+    left: 600px;
+    bottom: 200px;
+     padding: 5px 130px;
 }
 
 .eigeneEigButton{
@@ -585,6 +584,17 @@ h8 a {
 	
 }
 
+.labelReg{
+	margin: 4px;
+	font-size: 13px;
+	color: #1b85ea;
+}
+
+.tbRundungReg{
+	border-radius: 15px;
+	 width: 250px;
+}
+
 .tbRundung{
 	border-radius: 15px;
 }
@@ -635,7 +645,7 @@ h8 a {
 .messageBox{
     width: 555px;
     height: 165px;
-    border: 5px solid blue;
+    border: 2px solid blue;
     padding: 25px;
     margin: 25px;
     background: url(/images/sontactmessage2.png) no-repeat left 100%;
@@ -692,7 +702,7 @@ h8 a {
 .label1{
 	margin: 5px;
 	font-size: 15px;
-	color: #59c6e4;
+	color: #f1f9ff;
 }
 
 

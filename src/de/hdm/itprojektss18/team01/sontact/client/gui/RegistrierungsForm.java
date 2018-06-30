@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox;
 
-
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 
@@ -55,6 +54,7 @@ public class RegistrierungsForm extends VerticalPanel {
 	TextBox anschrift = new TextBox();
 
 	// Labels
+	Label willkommen = new Label("Dies ist Ihre erste Anmeldung, Bitte füllen Sie die unten stehenden Felder alle aus.");
 	Label gmail = new Label("Google-Mail");
 	Label vorname = new Label("Vorname");
 	Label nachname = new Label("Nachname");
@@ -81,14 +81,18 @@ public class RegistrierungsForm extends VerticalPanel {
 	FlexTable kontaktTable = new FlexTable();
 	FlexTable infoTable = new FlexTable();
 
-
 	public RegistrierungsForm(Nutzer n) {
 
 		// RootPanel leeren damit neuer Content geladen werden kann.
 		RootPanel.get("content").clear();
 		RootPanel.get("contentHeader").clear();
+		RootPanel.get("footer").clear();
 		// Ueberschrift anzeigen
-		RootPanel.get("contentHeader").add(new HTML("Registrierung"));
+		RootPanel.get("contentHeader").add(new HTML("<image src='/images/group.png' width='23px' height='18px' align='center' /> "));
+		RootPanel.get("contentHeader").add(new HTML("Willkommen bei Sontact"));
+		RootPanel.get("contentHeader").add(new HTML("<image src='/images/group.png' width='23px' height='18px' align='center' /> "));
+		willkommen.setStylePrimaryName("labelReg");
+		RootPanel.get("content").add(willkommen);
 		this.add(speichern);
 
 		onLoad(n);
@@ -96,9 +100,6 @@ public class RegistrierungsForm extends VerticalPanel {
 	}
 
 	protected void onLoad(Nutzer n) {
-
-		DateTimeFormat dateFormat = DateTimeFormat.getFormat(PredefinedFormat.DATE_LONG);
-		geburtsdatum.setFormat(new DateBox.DefaultFormat(dateFormat));
 
 		speichern.setStylePrimaryName("regButton");
 
@@ -108,20 +109,16 @@ public class RegistrierungsForm extends VerticalPanel {
 		gmail.setStylePrimaryName("label");
 		vorname.setStylePrimaryName("label");
 		nachname.setStylePrimaryName("label");
-		geburtsdatumlb.setStylePrimaryName("label");
 		plzlb.setStylePrimaryName("label");
 		wohnortlb.setStylePrimaryName("label");
-		emailadresselb.setStylePrimaryName("label");
 		anschriftlb.setStylePrimaryName("label");
 
-		gmailTb.setStylePrimaryName("tbRundung");
-		vornameTxtBox.setStylePrimaryName("tbRundung");
-		nachnameTxtBox.setStylePrimaryName("tbRundung");
-		geburtsdatum.setStylePrimaryName("tbRundung");
-		plz.setStylePrimaryName("tbRundung");
-		wohnort.setStylePrimaryName("tbRundung");
-		emailadresse.setStylePrimaryName("tbRundung");
-		anschrift.setStylePrimaryName("tbRundung");
+		gmailTb.setStylePrimaryName("tbRundungReg");
+		vornameTxtBox.setStylePrimaryName("tbRundungReg");
+		nachnameTxtBox.setStylePrimaryName("tbRundungReg");
+		plz.setStylePrimaryName("tbRundungReg");
+		wohnort.setStylePrimaryName("tbRundungReg");
+		anschrift.setStylePrimaryName("tbRundungReg");
 
 		kontaktTable.setWidget(1, 0, vorname);
 		kontaktTable.setWidget(1, 1, vornameTxtBox);
@@ -130,16 +127,12 @@ public class RegistrierungsForm extends VerticalPanel {
 		kontaktTable.setWidget(3, 0, gmail);
 		kontaktTable.setWidget(3, 1, gmailTb);
 
-		infoTable.setWidget(1, 0, geburtsdatumlb);
-		infoTable.setWidget(1, 1, geburtsdatum);
+		infoTable.setWidget(1, 0, anschriftlb);
+		infoTable.setWidget(1, 1, anschrift);
 		infoTable.setWidget(2, 0, plzlb);
 		infoTable.setWidget(2, 1, plz);
 		infoTable.setWidget(3, 0, wohnortlb);
 		infoTable.setWidget(3, 1, wohnort);
-		infoTable.setWidget(4, 0, emailadresselb);
-		infoTable.setWidget(4, 1, emailadresse);
-		infoTable.setWidget(5, 0, anschriftlb);
-		infoTable.setWidget(5, 1, anschrift);
 
 		kontaktTable.setStylePrimaryName("infoTable");
 		infoTable.setStylePrimaryName("infoTable");
@@ -147,17 +140,11 @@ public class RegistrierungsForm extends VerticalPanel {
 		hauptPanel.add(kontaktTable);
 		hauptPanel2.add(infoTable);
 		hauptPanel2.add(speichern);
-		
-		
-		
-	
 
 		vornameTxtBox.getElement().setPropertyString("placeholder", "Vorname des Kontakts");
 		nachnameTxtBox.getElement().setPropertyString("placeholder", "Nachname des Kontakts");
-		geburtsdatum.getElement().setPropertyString("placeholder", "Geburtsdatum des Kontakts");
 		plz.getElement().setPropertyString("placeholder", "Postleitzahl des Kontakts");
 		wohnort.getElement().setPropertyString("placeholder", "Wohnort des Kontakts");
-		emailadresse.getElement().setPropertyString("placeholder", "Email des Kontakts");
 		anschrift.getElement().setPropertyString("placeholder", "Anschrift des Kontakts");
 
 		RootPanel.get("content").add(hauptPanel);
@@ -168,13 +155,10 @@ public class RegistrierungsForm extends VerticalPanel {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				
 
-				if (vornameTxtBox.getValue() != "" && nachnameTxtBox.getValue() != "" && 
-						geburtsdatum.getValue().toString() != "" && plz.getText() != "" && wohnort.getText() != "" &&
-						anschrift.getText() != "" && emailadresse.getText() != "") {
-					
-					
+				if (vornameTxtBox.getValue() != "" && nachnameTxtBox.getValue() != "" && plz.getText() != ""
+						&& wohnort.getText() != "" && anschrift.getText() != "") {
+
 					ev.createKontaktRegistrierung(vornameTxtBox.getValue(), nachnameTxtBox.getValue(), n,
 							new AsyncCallback<Kontakt>() {
 
@@ -186,198 +170,132 @@ public class RegistrierungsForm extends VerticalPanel {
 
 								@Override
 								public void onSuccess(Kontakt result2) {
-									
-										ev.getEigenschaftByBezeichnung(geburtsdatumlb.getText(),
-												new AsyncCallback<Eigenschaft>() {
 
-													@Override
-													public void onFailure(Throwable caught) {
-														caught.getMessage().toString();
+									ev.getEigenschaftByBezeichnung(plzlb.getText(), new AsyncCallback<Eigenschaft>() {
 
-													}
+										@Override
+										public void onFailure(Throwable caught) {
+											caught.getMessage().toString();
 
-													@Override
-													public void onSuccess(Eigenschaft result) {
-													
-													Date datum = 	DateTimeFormat.getFormat("yyyyMMdd").parse(DateTimeFormat.getFormat("yyyyMMdd").format(geburtsdatum.getValue()));
-														ev.createAuspraegung(datum.toString(),
-																result.getId(), result2.getId(), n.getId(),
-																new AsyncCallback<Auspraegung>() {
+										}
 
-																	@Override
-																	public void onFailure(Throwable caught) {
-																		caught.getMessage().toString();
+										@Override
+										public void onSuccess(Eigenschaft result) {
 
-																	}
+											ev.createAuspraegung(plz.getText(), result.getId(), result2.getId(),
+													n.getId(), new AsyncCallback<Auspraegung>() {
 
-																	@Override
-																	public void onSuccess(Auspraegung result) {
-																	
-																			ev.getEigenschaftByBezeichnung(plzlb.getText(),
-																					new AsyncCallback<Eigenschaft>() {
+														@Override
+														public void onFailure(Throwable caught) {
+															caught.getMessage().toString();
+
+														}
+
+														@Override
+														public void onSuccess(Auspraegung result) {
+
+															ev.getEigenschaftByBezeichnung(wohnortlb.getText(),
+																	new AsyncCallback<Eigenschaft>() {
+
+																		@Override
+																		public void onFailure(Throwable caught) {
+																			caught.getMessage().toString();
+
+																		}
+
+																		@Override
+																		public void onSuccess(Eigenschaft result) {
+
+																			ev.createAuspraegung(wohnort.getText(),result.getId(), result2.getId(), n.getId(),
+																					new AsyncCallback<Auspraegung>() {
 
 																						@Override
-																						public void onFailure(Throwable caught) {
-																							caught.getMessage().toString();
+																						public void onFailure(
+																								Throwable caught) {
+																							caught.getMessage()
+																									.toString();
 
 																						}
 
 																						@Override
-																						public void onSuccess(Eigenschaft result) {
-																							
-																							ev.createAuspraegung(plz.getText(), result.getId(),
-																									result2.getId(), n.getId(), new AsyncCallback<Auspraegung>() {
+																						public void onSuccess(Auspraegung result) {
+
+																							ev.getEigenschaftByBezeichnung(anschriftlb.getText(),
+																									new AsyncCallback<Eigenschaft>() {
 
 																										@Override
-																										public void onFailure(Throwable caught) {
+																										public void onFailure(
+																												Throwable caught) {
 																											caught.getMessage().toString();
 
 																										}
 
 																										@Override
-																										public void onSuccess(Auspraegung result) {
-																											 
-																													ev.getEigenschaftByBezeichnung(wohnortlb.getText(),
-																															new AsyncCallback<Eigenschaft>() {
+																										public void onSuccess(Eigenschaft result) {
 
-																																@Override
-																																public void onFailure(Throwable caught) {
-																																	caught.getMessage().toString();
+																											ev.createAuspraegung(anschrift.getText(),
+																													result.getId(),
+																													result2.getId(),
+																													n.getId(),
+																													new AsyncCallback<Auspraegung>() {
 
-																																}
+																														@Override
+																														public void onFailure(Throwable caught) {
+																															caught.getMessage().toString();
 
-																																@Override
-																																public void onSuccess(Eigenschaft result) {
-																														
-																																	ev.createAuspraegung(wohnort.getText(), result.getId(),
-																																			result2.getId(), n.getId(), new AsyncCallback<Auspraegung>() {
+																														}
 
-																																				@Override
-																																				public void onFailure(Throwable caught) {
-																																					caught.getMessage().toString();
+																														@Override
+																														public void onSuccess(Auspraegung result) {
 
-																																				}
+																															RootPanel.get("contentHeader").clear();
+																															RootPanel.get("content").clear();
+																															Window.Location.reload();
 
-																																				@Override
-																																				public void onSuccess(Auspraegung result) {
-																																					
-																																						ev.getEigenschaftByBezeichnung(anschriftlb.getText(),
-																																								new AsyncCallback<Eigenschaft>() {
+																														}
 
-																																									@Override
-																																									public void onFailure(Throwable caught) {
-																																										caught.getMessage().toString();
+																													});
 
-																																									}
+																										}
 
-																																									@Override
-																																									public void onSuccess(Eigenschaft result) {
-																																									
-																																										ev.createAuspraegung(anschrift.getText(), result.getId(),
-																																												result2.getId(), n.getId(), new AsyncCallback<Auspraegung>() {
-
-																																													@Override
-																																													public void onFailure(Throwable caught) {
-																																														caught.getMessage().toString();
-
-																																													}
-
-																																													@Override
-																																													public void onSuccess(Auspraegung result) {
-																																														
-																																														ev.getEigenschaftByBezeichnung(emailadresselb.getText(), new AsyncCallback <Eigenschaft>() {
-
-																																															@Override
-																																															public void onFailure(
-																																																	Throwable caught) {
-																																																caught.getMessage().toString();
-																																																
-																																															}
-
-																																															@Override
-																																															public void onSuccess(
-																																																	Eigenschaft result) {
-																																																ev.createAuspraegung(emailadresse.getValue(), result.getId(), result2.getId(), n.getId(), new AsyncCallback<Auspraegung>() {
-
-																																																	@Override
-																																																	public void onFailure(
-																																																			Throwable caught) {
-																																																		caught.getMessage().toString();
-																																																		
-																																																	}
-
-																																																	@Override
-																																																	public void onSuccess(
-																																																			Auspraegung result) {
-																																																		// ContentHeader und Content divs leeren und das
-																																																		// Fenster neu laden.
-																																																		// Weiterleitung in die Start Ansicht des Programms.
-																																																		RootPanel.get("contentHeader").clear();
-																																																		RootPanel.get("content").clear();
-																																																		Window.Location.reload();
-																																																		
-																																																	}
-																																																	
-																																																});
-																																																
-																																															}
-																																															
-																																														});
-
-																																													}
-																																												});
-																																										
-																																									}
-
-																																								});
-																																						}
-																																				
-																																			});
-																																	}
-																																
-																															});
-																												}
-																										
 																									});
-																							}
-																						
+
+																						}
 																					});
+
 																		}
-																	
-																});
+
+																	});
+
 														}
-													
-												});
-									
-								
+
+													});
+										}
+
+									});
+
 								}
 							});
-					
-				}  else {
+
+				} else {
 					MessageBox.alertWidget("Hinweis ", "Bitte füllen Sie die markierten Felder alle aus.");
-					if(plz.getText() == "") {
+					if (plz.getText() == "") {
 						plz.getElement().getStyle().setBorderColor("red");
 					}
-					if(wohnort.getText() == "") {
+					if (wohnort.getText() == "") {
 						wohnort.getElement().getStyle().setBorderColor("red");
 					}
-					if(anschrift.getText() == "") {
+					if (anschrift.getText() == "") {
 						anschrift.getElement().getStyle().setBorderColor("red");
 					}
-					if(emailadresse.getText() =="") {
-						emailadresse.getElement().getStyle().setBorderColor("red");
-					}
-					if(geburtsdatum.getTextBox().toString() == "") {
-						geburtsdatum.getElement().getStyle().setBorderColor("red");
-					}
-					if(vornameTxtBox.getText() =="") {
+					if (vornameTxtBox.getText() == "") {
 						vornameTxtBox.getElement().getStyle().setBorderColor("red");
 					}
-					if(nachnameTxtBox.getText() == "") {
-					nachnameTxtBox.getElement().getStyle().setBorderColor("red");
+					if (nachnameTxtBox.getText() == "") {
+						nachnameTxtBox.getElement().getStyle().setBorderColor("red");
 					}
 				}
-			
+
 			}
 		});
 
@@ -420,18 +338,6 @@ public class RegistrierungsForm extends VerticalPanel {
 		});
 
 		wohnort.addKeyDownHandler(new KeyDownHandler() {
-
-			@Override
-			public void onKeyDown(KeyDownEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					speichern.click();
-
-				}
-			}
-
-		});
-
-		emailadresse.addKeyDownHandler(new KeyDownHandler() {
 
 			@Override
 			public void onKeyDown(KeyDownEvent event) {

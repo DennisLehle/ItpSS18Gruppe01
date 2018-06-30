@@ -55,16 +55,14 @@ public class MessageBox {
 		final DialogBox box = new DialogBox();
 		final VerticalPanel panel = new VerticalPanel();
 		final Label lb = new Label(content);
-		
-	
+
 		lb.setStylePrimaryName("label1");
-		
-		
+
 		box.setStylePrimaryName("standardMessageBox");
 		box.setText(header);
 		box.setGlassEnabled(true);
 		panel.add(new HTML(lb.toString()));
-		
+
 		final Button buttonClose = new Button(
 				"<image src='/images/ok.png' width='30px' height='30px' align='center' />");
 		buttonClose.setStylePrimaryName("messageButtonStandard");
@@ -106,27 +104,26 @@ public class MessageBox {
 		TextBox tb = new TextBox();
 		Label lb = new Label(content);
 		lb.setStylePrimaryName("label1");
-		
+
 		final VerticalPanel panel = new VerticalPanel();
 		final HorizontalPanel hp = new HorizontalPanel();
 		box.setStylePrimaryName("messageBoxKl");
 		box.setText(header);
 		box.setGlassEnabled(true);
 		panel.add(new HTML(lb.toString()));
-		
+
 		tb.setStylePrimaryName("textbMessage");
 		tb.getElement().setPropertyString("placeholder", "E-Mail des Empfängers...");
-		
+
 		final Button buttonClose = new Button(
 				"<image src='/images/abbrechen.png' width='13px' height='13px' align='center' />");
 		buttonClose.setStylePrimaryName("messageButtonshare");
 		buttonClose.setTitle("Abbrechen");
-		
+
 		final Button buttonShare = new Button(
 				"<image src='/images/share.png' width='20px' height='20px' align='center' /> Teilen");
 		buttonShare.setStylePrimaryName("messageButtonshare1");
 		buttonShare.setTitle("Kontaktliste teilen");
-	
 
 		buttonClose.addClickHandler(new ClickHandler() {
 
@@ -175,15 +172,18 @@ public class MessageBox {
 
 										@Override
 										public void onSuccess(Void result) {
-											Window.alert("Sie haben die Kontaktliste " + kl.getTitel()
-													+ " erfolgreich geteilt.");
+											MessageBox.alertWidget("Hinweis", "Sie haben die Kontaktliste "
+													+ kl.getTitel() + " erfolgreich geteilt.");
+											RootPanel.get("content").clear();
+											RootPanel.get("contentHeader").clear();
+											RootPanel.get("content").add(new KontaktlisteForm(kl));
 											box.hide();
 										}
 
 									});
 
 						} else {
-							Window.alert("Es wurde kein Nutzer mit dieser EMail gefunden.");
+							MessageBox.alertWidget("Hinweis", "Es wurde kein Nutzer mit dieser EMail gefunden.");
 						}
 					}
 				});
@@ -223,26 +223,26 @@ public class MessageBox {
 	public static DialogBox shareAlertKontakt(final String header, final String content, Kontakt k,
 			Vector<Relatable> avshare) {
 		final DialogBox box = new DialogBox();
-		
+
 		TextBox tb = new TextBox();
 		Label lb = new Label(content);
 		lb.setStylePrimaryName("label1");
-		
+
 		final VerticalPanel panel = new VerticalPanel();
 		final HorizontalPanel hp = new HorizontalPanel();
 		box.setStylePrimaryName("messageBox");
 		box.setText(header);
 		box.setGlassEnabled(true);
 		panel.add(new HTML(lb.toString()));
-		
+
 		tb.setStylePrimaryName("textbMessage");
 		tb.getElement().setPropertyString("placeholder", "E-Mail des Empfängers...");
-		
+
 		final Button buttonClose = new Button(
 				"<image src='/images/abbrechen.png' width='13px' height='13px' align='center' />");
 		buttonClose.setStylePrimaryName("messageButtonshare");
 		buttonClose.setTitle("Abbrechen");
-		
+
 		final Button buttonShare = new Button(
 				"<image src='/images/share.png' width='20px' height='20px' align='center' /> Teilen");
 		buttonShare.setStylePrimaryName("messageButtonshare1");
@@ -348,12 +348,12 @@ public class MessageBox {
 	 * @return
 	 */
 	public static DialogBox deleteTeilhaber(final String header, final String content, Kontaktliste kl, Kontakt k) {
-		
+
 		final DialogBox box = new DialogBox();
 		final VerticalPanel panel = new VerticalPanel();
 		final HorizontalPanel hp = new HorizontalPanel();
 		final ScrollPanel sp = new ScrollPanel();
-		
+
 		// Nutzer Cookies holen.
 		Nutzer n = new Nutzer();
 		n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
@@ -361,9 +361,10 @@ public class MessageBox {
 
 		CellTable<Nutzer> nutzerTable;
 		Vector<Nutzer> nutzer = new Vector<Nutzer>();
+
 		final MultiSelectionModel<Nutzer> selectionModel = new MultiSelectionModel<Nutzer>(getKeyProvider());
-		
-		//TextBox tb = new TextBox();
+
+		// TextBox tb = new TextBox();
 		Label lb = new Label(content);
 		lb.setStylePrimaryName("label1");
 
@@ -375,18 +376,18 @@ public class MessageBox {
 		nutzerTable = new CellTable<Nutzer>();
 		nutzerTable.setWidth("17px");
 		box.setGlassEnabled(true);
-		
-		//Buttons der MessageBox
+
+		// Buttons der MessageBox
 		final Button buttonClose = new Button(
 				"<image src='/images/abbrechen.png' width='13px' height='13px' align='center' />");
 		buttonClose.setStylePrimaryName("messageButtonStandard");
 		buttonClose.setTitle("Abbrechen");
-		
+
 		final Button buttonDeleteKl = new Button(
 				"<image src='/images/share.png' width='30px' height='30px' align='center' /> löschen");
 		buttonDeleteKl.setStylePrimaryName("messageButtonshare1");
 		buttonDeleteKl.setTitle("Teilung der Kontaktliste löschen");
-		
+
 		final Button buttonDeleteK = new Button(
 				"<image src='/images/share.png' width='30px' height='30px' align='center' /> löschen");
 		buttonDeleteK.setStylePrimaryName("messageButtonshare1");
@@ -408,52 +409,42 @@ public class MessageBox {
 			@Override
 			public void onClick(ClickEvent event) {
 
-				/*
-				 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und
-				 * wenn es eine Übereinstimmung gibt wird die Berechtigung entfernt.
-				 */
-				ev.getAllBerechtigungenByOwner(n.getId(), new AsyncCallback<Vector<Berechtigung>>() {
+				// Gefundene Nutzer alle dem Vector hinzufügen für spätere Bearbeitung davor Vector leeren.
+				nutzer.removeAllElements();
+				nutzer.addAll(selectionModel.getSelectedSet());
 
-					@Override
-					public void onFailure(Throwable caught) {
-						caught.getMessage().toString();
-					}
+				for (int i = 0; i < nutzer.size(); i++) {
 
-					@Override
-					public void onSuccess(Vector<Berechtigung> result) {
+					Berechtigung b = new Berechtigung();
+					b.setObjectId(k.getId());
+					b.setOwnerId(n.getId());
+					b.setReceiverId(nutzer.elementAt(i).getId());
+					b.setType(k.getType());
 
-						for (int i = 0; i < selectionModel.getSelectedSet().size(); i++) {
-
-							if (result.elementAt(i).getObjectId() == k.getId()
-									&& result.elementAt(i).getType() == k.getType()) {
-								Berechtigung b = new Berechtigung();
-								b.setObjectId(k.getId());
-								b.setOwnerId(n.getId());
-								b.setReceiverId(result.elementAt(i).getReceiverId());
-								b.setType(k.getType());
-
-								ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
-									@Override
-									public void onFailure(Throwable caught) {
-										caught.getMessage().toString();
-
-									}
-
-									@Override
-									public void onSuccess(Void result) {
-										MessageBox.alertWidget("Hinweis", "Die Teilhaberschaft an dem Kontakt " + k.getVorname()
-												+ k.getNachname() + " wurde erfolgreich gelöscht.");
-
-									}
-								});
-
-							}
+					ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
+						@Override
+						public void onFailure(Throwable caught) {
+							caught.getMessage().toString();
 
 						}
 
-					}
+						@Override
+						public void onSuccess(Void result) {
+							MessageBox.alertWidget("Hinweis", "Die Teilhaberschaft an dem Kontakt " + k.getVorname()
+									+ k.getNachname() + " wurde erfolgreich gelöscht.");
 
-				});
+						}
+					});
+
+				}
+				//Divs leeren und neu laden für die Aktualisierung.
+				RootPanel.get("content").clear();
+				RootPanel.get("contentHeader").clear();
+				RootPanel.get("navigator").clear();
+				RootPanel.get("navigator").add(new Navigation(n));
+				RootPanel.get("content").add(new KontaktForm(k));
+				box.hide();
+
 			}
 
 		});
@@ -464,57 +455,44 @@ public class MessageBox {
 			@Override
 			public void onClick(ClickEvent event) {
 
-				/*
-				 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und
-				 * wenn es eine Übereinstimmung gibt wird die Berechtigung entfernt.
-				 */
-				ev.getAllBerechtigungenByOwner(n.getId(), new AsyncCallback<Vector<Berechtigung>>() {
+				// Gefundene Nutzer alle dem Vector hinzufügen für spätere Bearbeitung davor Vector leeren.
+				nutzer.removeAllElements();
+				nutzer.addAll(selectionModel.getSelectedSet());
 
-					@Override
-					public void onFailure(Throwable caught) {
-						caught.getMessage().toString();
-					}
+				for (int i = 0; i <= nutzer.size(); i++) {
 
-					@Override
-					public void onSuccess(Vector<Berechtigung> result) {
+					Berechtigung b = new Berechtigung();
+					b.setObjectId(kl.getId());
+					b.setOwnerId(n.getId());
+					b.setReceiverId(nutzer.elementAt(i).getId());
+					b.setType(kl.getType());
 
-						for (int i = 0; i <= selectionModel.getSelectedSet().size(); i++) {
-							for (int j = 0; j <= nutzer.size(); j++) {
-
-								if (result.elementAt(i).getOwnerId() == n.getId()) {
-									Berechtigung b = new Berechtigung();
-									b.setObjectId(kl.getId());
-									b.setOwnerId(n.getId());
-									b.setReceiverId(nutzer.elementAt(j).getId());
-									b.setType(kl.getType());
-
-									ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
-										@Override
-										public void onFailure(Throwable caught) {
-											caught.getMessage().toString();
-
-										}
-
-										@Override
-										public void onSuccess(Void result) {
-											Window.alert("Die Teilhaberschaft an der Kontaktliste " + kl.getTitel()
-													+ " wurde erfolgreich gelöscht.");
-
-										}
-									});
-
-								} else {
-									Window.alert("Uppppppps");
-								}
-							}
+					ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
+						@Override
+						public void onFailure(Throwable caught) {
+							caught.getMessage().toString();
 
 						}
 
-					}
+						@Override
+						public void onSuccess(Void result) {
+							Window.alert("Die Teilhaberschaft an der Kontaktliste " + kl.getTitel()
+									+ " wurde erfolgreich gelöscht.");
+							
 
-				});
+						}
+					});
 
+				}
+				//Divs leeren und neu laden für die Aktualisierung.
+				RootPanel.get("content").clear();
+				RootPanel.get("contentHeader").clear();
+				RootPanel.get("navigator").clear();
+				RootPanel.get("navigator").add(new Navigation(n));
+				RootPanel.get("content").add(new KontaktlisteForm(kl));
+				box.hide();
 			}
+
 		});
 
 		////////////////// Table-von-Email-Adressen//////////////////////////
@@ -537,7 +515,8 @@ public class MessageBox {
 					if (result.size() == 0) {
 
 						nutzerTable.setVisible(false);
-						MessageBox.alertWidget("Hinweis", "Die Kontaktliste " + kl.getTitel() + " hat noch keine Teilhaber.");
+						MessageBox.alertWidget("Hinweis",
+								"Die Kontaktliste " + kl.getTitel() + " hat noch keine Teilhaber.");
 						box.hide();
 
 					} else {
@@ -548,10 +527,6 @@ public class MessageBox {
 					nutzerTable.setRowCount(result.size(), true);
 					nutzerTable.setVisibleRange(0, 10);
 					nutzerTable.setRowData(result);
-
-					// Gefundene Nutzer alle dem Vector hinzufügen für spätere Bearbeitung
-					nutzer.removeAllElements();
-					nutzer.addAll(result);
 
 				}
 

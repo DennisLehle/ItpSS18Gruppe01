@@ -44,7 +44,6 @@ public class KontaktForm extends VerticalPanel {
 
 	EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
 
-
 	Kontakt k = new Kontakt();
 	Auspraegung a = new Auspraegung();
 	Auspraegung a2 = new Auspraegung();
@@ -116,31 +115,26 @@ public class KontaktForm extends VerticalPanel {
 	 */
 	public KontaktForm(Kontakt k) {
 		RootPanel.get("contentHeader").clear();
-		eigeneEigenschaftenTable.setStylePrimaryName("eigeneEigTable");
-		eigeneEigenschaftBearbeitungTable.setStylePrimaryName("eigeneEigTable");
 		this.selectedKontakt = k;
-		
+
 		vorname.setStylePrimaryName("label");
 		nachname.setStylePrimaryName("label");
 
-		// Nutzer Cookies holen.
-		
+		// Nutzer Cookies holen und im Nutzer Objekt speichern.
 		nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 		nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
-
-		
-
-		ev.getKontaktById(k.getId(), new AsyncCallback<Kontakt>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				ClientsideSettings.getLogger().severe("Hopala");
-			}
-
-			@Override
-			public void onSuccess(Kontakt result) {
-
-				selectedKontakt = result;
+//
+//		ev.getKontaktById(k.getId(), new AsyncCallback<Kontakt>() {
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				ClientsideSettings.getLogger().severe("Hopala");
+//			}
+//
+//			@Override
+//			public void onSuccess(Kontakt result) {
+//
+//				selectedKontakt = result;
 
 				HorizontalPanel headerPanel = new HorizontalPanel();
 
@@ -183,7 +177,7 @@ public class KontaktForm extends VerticalPanel {
 
 						@Override
 						public void onSuccess(Nutzer result) {
-						//	ownerLb.setStylePrimaryName("label");
+							// ownerLb.setStylePrimaryName("label");
 							ownerLb.setText("Eigentümer: " + result.getEmailAddress());
 							RootPanel.get("content").add(ownerLb);
 
@@ -214,8 +208,12 @@ public class KontaktForm extends VerticalPanel {
 					@Override
 					public void onSuccess(Boolean result) {
 						if (result == true) {
-
-							HTML shared = new HTML("<image src='/images/sharecontact.png' width='24px' height='24px' />");
+							/*
+							 * Div leeren da Klasse mehrmals aufgerufen werden könnten.
+							 * Somit wird der Status trotzdem nur einmal angezeigt.
+							 */
+							HTML shared = new HTML(
+									"<image src='/images/sharecontact.png' width='24px' height='24px' />");
 							shared.setTitle("Geteilter Kontakt");
 							RootPanel.get("contentHeader").add(shared);
 
@@ -237,45 +235,42 @@ public class KontaktForm extends VerticalPanel {
 						@Override
 						public void onClick(ClickEvent event) {
 							// Abfrage ob Nutzer sich wirklich löschen will.
-							boolean x = Window.confirm("Wollen Sie sich wirklich unwiderruflich von uns verabschieden?");
-						
-							if(x == true) {
-							ev.deleteNutzer(nutzer, new AsyncCallback<Void>() {
+							boolean x = Window
+									.confirm("Wollen Sie sich wirklich unwiderruflich von uns verabschieden?");
 
-								@Override
-								public void onFailure(Throwable caught) {
-									caught.getMessage().toString();
+							if (x == true) {
+								ev.deleteNutzer(nutzer, new AsyncCallback<Void>() {
 
-								}
+									@Override
+									public void onFailure(Throwable caught) {
+										caught.getMessage().toString();
 
-								@Override
-								public void onSuccess(Void result) {
-									// Nutzer wurde gelöscht und wird auf die Startseite verwiesen.
-									Window.Location.replace("Sontact.html");
-									
+									}
 
-								}
+									@Override
+									public void onSuccess(Void result) {
+										// Nutzer wurde gelöscht und wird auf die Startseite verwiesen.
+										Window.Location.replace("Sontact.html");
 
-							});
-							} 
+									}
+
+								});
+							}
 						}
 					});
-					
+
 					btnPanel.add(deleteNutzer);
 				}
 
 				vp.add(headerPanel);
-			
-				
 
 				RootPanel.get("content").add(vp);
 				RootPanel.get("content").add(new ShowEigenschaften(nutzer, k));
 				RootPanel.get("content").add(btnPanel);
-
 				RootPanel.get("content").add(datePanel);
-
-			}
-		});
+//
+//			}
+//		});
 
 	}
 
@@ -287,7 +282,6 @@ public class KontaktForm extends VerticalPanel {
 		RootPanel.get("contentHeader").add(new HTML("Kontakt anlegen"));
 		eigeneEigenschaftenTable.setStylePrimaryName("infoTable");
 
-		
 		FlexTablePanel.setStylePrimaryName("infoTable");
 		flexPanelNeueEig.add(eigeneEigenschaftenTable);
 		FlexTablePanel.add(flexPanelKontaktInfo);
@@ -323,31 +317,33 @@ public class KontaktForm extends VerticalPanel {
 			}
 		});
 
-//		Button addEigenschaftBtn = new Button("Weitere Auswahleigenschaft");
-//		addEigenschaftBtn.addClickHandler(new AuswahlEigenschaftenClickHandler());
+		// Button addEigenschaftBtn = new Button("Weitere Auswahleigenschaft");
+		// addEigenschaftBtn.addClickHandler(new AuswahlEigenschaftenClickHandler());
 
 		Button createEigenschaftBtn = new Button("Eigenschaft definieren");
 		createEigenschaftBtn.setStylePrimaryName("eigeneEigButton");
 		createEigenschaftBtn.addClickHandler(new EigeneEigenschaftClickHandler());
-		
-		Button deleteEigenschaftBtn = new Button("<image src='/images/abbrechen.png' width='20px' height='20px' align='center'/> Eigenschaft");
-	
+
+		Button deleteEigenschaftBtn = new Button(
+				"<image src='/images/abbrechen.png' width='20px' height='20px' align='center'/> Eigenschaft");
+
 		deleteEigenschaftBtn.addClickHandler(new DeleteEigenschaftClickHandler());
 		deleteEigenschaftBtn.setStylePrimaryName("eigeneEigEntfernenButton");
 		btnPanelTop.add(deleteEigenschaftBtn);
 
-//		btnPanelBottom.add(addEigenschaftBtn);
+		// btnPanelBottom.add(addEigenschaftBtn);
 		btnPanelBottom.add(createEigenschaftBtn);
 
 		// Button für den Abbruch der Erstellung.
-		Button quitBtn = new Button("<image src='/images/abbrechen.png' width='20px' height='20px' align='center'/> Abbrechen");
+		Button quitBtn = new Button(
+				"<image src='/images/abbrechen.png' width='20px' height='20px' align='center'/> Abbrechen");
 		quitBtn.setStylePrimaryName("cancelKButton");
 		quitBtn.setTitle("Kontakterstellung abbrechen");
 		quitBtn.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				//Wenn abgerbochen wird, wird man auf die Startseite weitergeleitet.
+				// Wenn abgerbochen wird, wird man auf die Startseite weitergeleitet.
 				RootPanel.get("content").clear();
 				RootPanel.get("contentHeader").clear();
 				RootPanel.get("content").add(new ShowKontakte(n));
@@ -357,7 +353,8 @@ public class KontaktForm extends VerticalPanel {
 
 		btnPanelTop.add(quitBtn);
 
-		Button saveBtn = new Button("<image src='/images/save.png' width='20px' height='20px' align='center'/> Speichern");
+		Button saveBtn = new Button(
+				"<image src='/images/save.png' width='20px' height='20px' align='center'/> Speichern");
 		saveBtn.setStylePrimaryName("bearbeitungKSave");
 		saveBtn.setTitle("Neuen Kontakt speichern");
 		saveBtn.addClickHandler(new SpeichernKontaktClickHandler());
@@ -366,16 +363,15 @@ public class KontaktForm extends VerticalPanel {
 
 		vornameTxtBox.getElement().setPropertyString("placeholder", "Vorname des Kontakts");
 		nachnameTxtBox.getElement().setPropertyString("placeholder", "Nachname des Kontakts");
-		
+
 		vorname.setStylePrimaryName("label");
 		nachname.setStylePrimaryName("label");
-	
 
 		kontaktInfoTable.setWidget(0, 0, vorname);
 		kontaktInfoTable.setWidget(0, 1, vornameTxtBox);
 		kontaktInfoTable.setWidget(1, 0, nachname);
 		kontaktInfoTable.setWidget(1, 1, nachnameTxtBox);
-		
+
 		kontaktInfoTable.setStylePrimaryName("infoTable");
 
 		kontaktinfo.add(kontaktInfoTable);
@@ -392,48 +388,48 @@ public class KontaktForm extends VerticalPanel {
 	 * ClickHandler zum Erzeugen von weiteren Auswahleigenschaften (ListBoxen)
 	 */
 
-//	private class AuswahlEigenschaftenClickHandler implements ClickHandler {
-//
-//		@Override
-//		public void onClick(ClickEvent event) {
-//
-//			ListBox eigenschaftBox = new ListBox();
-//			TextBox wertBox = new TextBox();
-//			
-//			wertBox.setStylePrimaryName("tbRundung");
-//			wertBox.getElement().setPropertyString("placeholder", "Wert eingeben..");
-//
-//			ev.getEigenschaftAuswahl(new AsyncCallback<Vector<Eigenschaft>>() {
-//
-//				@Override
-//				public void onFailure(Throwable caught) {
-//					caught.getMessage();
-//
-//				}
-//
-//				@Override
-//				public void onSuccess(Vector<Eigenschaft> result) {
-//					
-//					if (result != null) {
-//
-//						for (int i = 0; i < result.size(); i++) {
-//							eigenschaftBox.addItem(result.elementAt(i).getBezeichnung());
-//
-//						}
-//
-//					}
-//
-//				}
-//			});
-//
-//			int count = kontaktInfoTable.getRowCount();
-//			kontaktInfoTable.setWidget(count, 0, eigenschaftBox);
-//			kontaktInfoTable.setWidget(count, 1, wertBox);
-//			count++;
-//
-//		}
-//
-//	}
+	// private class AuswahlEigenschaftenClickHandler implements ClickHandler {
+	//
+	// @Override
+	// public void onClick(ClickEvent event) {
+	//
+	// ListBox eigenschaftBox = new ListBox();
+	// TextBox wertBox = new TextBox();
+	//
+	// wertBox.setStylePrimaryName("tbRundung");
+	// wertBox.getElement().setPropertyString("placeholder", "Wert eingeben..");
+	//
+	// ev.getEigenschaftAuswahl(new AsyncCallback<Vector<Eigenschaft>>() {
+	//
+	// @Override
+	// public void onFailure(Throwable caught) {
+	// caught.getMessage();
+	//
+	// }
+	//
+	// @Override
+	// public void onSuccess(Vector<Eigenschaft> result) {
+	//
+	// if (result != null) {
+	//
+	// for (int i = 0; i < result.size(); i++) {
+	// eigenschaftBox.addItem(result.elementAt(i).getBezeichnung());
+	//
+	// }
+	//
+	// }
+	//
+	// }
+	// });
+	//
+	// int count = kontaktInfoTable.getRowCount();
+	// kontaktInfoTable.setWidget(count, 0, eigenschaftBox);
+	// kontaktInfoTable.setWidget(count, 1, wertBox);
+	// count++;
+	//
+	// }
+	//
+	// }
 
 	/**
 	 * ClickHandler zum Erzeugen von neuen Eigenschafts-Angaben
@@ -444,14 +440,12 @@ public class KontaktForm extends VerticalPanel {
 		public void onClick(ClickEvent event) {
 			TextBox bezTb = new TextBox();
 			TextBox wertTb = new TextBox();
-			
 
 			bezTb.setStylePrimaryName("tbRundung2");
 			wertTb.setStylePrimaryName("tbRundung2");
 
 			bezTb.getElement().setPropertyString("placeholder", "Eigenschaft...");
 			wertTb.getElement().setPropertyString("placeholder", "Auspraegung...");
-	
 
 			int count = eigeneEigenschaftenTable.getRowCount();
 			eigeneEigenschaftenTable.setWidget(count, 0, bezTb);
@@ -469,7 +463,7 @@ public class KontaktForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-		
+
 			// Cookies des Nutzers holen.
 			nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 			nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
@@ -479,92 +473,93 @@ public class KontaktForm extends VerticalPanel {
 				MessageBox.alertWidget("Hinweis", "Bitte geben Sie Ihrem Kontakt mindestens einen Vornamen.");
 			} else {
 				// Anlegen des Kontakts mit den Mindestangaben Vor- und Nachname
-				ev.createKontakt(vornameTxtBox.getText(), nachnameTxtBox.getText(), nutzer, new AsyncCallback<Kontakt>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						caught.getMessage();
-
-					}
-
-					@Override
-					public void onSuccess(Kontakt result) {
-						k = result;
-
-						// Angegebene Eigenschaften werden dem String-Vector hinzugefuegt
-						for (int i = 0; i < eigeneEigenschaftenTable.getRowCount(); i++) {
-
-							Widget v = eigeneEigenschaftenTable.getWidget(i, 0);
-							if (v instanceof TextBox) {
-								if (!((TextBox) v).getValue().isEmpty()) {
-									String bez = (((TextBox) v).getText());
-
-									eig.add(bez);
-								}
-
-							}
-						}
-						// Angegebene Auspraegungen werden dem String-Vector hinzugefuegt
-						for (int j = 0; j < eigeneEigenschaftenTable.getRowCount(); j++) {
-
-							Widget v = eigeneEigenschaftenTable.getWidget(j, 1);
-							if (v instanceof TextBox) {
-								if (!((TextBox) v).getValue().isEmpty()) {
-									String wert = (((TextBox) v).getText());
-
-									aus.add(wert);
-
-								}
-
-							}
-						}
-
-						ev.createAuspraegungForNewEigenschaft(eig, aus, k, nutzer.getId(), new AsyncCallback<Void>() {
+				ev.createKontakt(vornameTxtBox.getText(), nachnameTxtBox.getText(), nutzer,
+						new AsyncCallback<Kontakt>() {
 
 							@Override
-							public void onFailure(Throwable error) {
-								error.getMessage().toString();
+							public void onFailure(Throwable caught) {
+								caught.getMessage();
+
 							}
 
 							@Override
-							public void onSuccess(Void result) {
-								//Leeren aller divs und dann den erstellten Kontakt einblenden.
-								RootPanel.get("navigator").clear();
-								RootPanel.get("navigator").add(new Navigation(nutzer));
-								RootPanel.get("content").clear();
-								RootPanel.get("contentHeader").clear();
-								setSontactTreeViewModel(sontactTree);
-								MessageBox.alertWidget("Glückwunsch", "Sie haben den Kontakt "+ k.getVorname() + " " + k.getNachname() + " erfolgreich erstellt.");
-								RootPanel.get("content").add(new KontaktForm(k));
-								
+							public void onSuccess(Kontakt result) {
+								k = result;
+
+								// Angegebene Eigenschaften werden dem String-Vector hinzugefuegt
+								for (int i = 0; i < eigeneEigenschaftenTable.getRowCount(); i++) {
+
+									Widget v = eigeneEigenschaftenTable.getWidget(i, 0);
+									if (v instanceof TextBox) {
+										if (!((TextBox) v).getValue().isEmpty()) {
+											String bez = (((TextBox) v).getText());
+
+											eig.add(bez);
+										}
+
+									}
+								}
+								// Angegebene Auspraegungen werden dem String-Vector hinzugefuegt
+								for (int j = 0; j < eigeneEigenschaftenTable.getRowCount(); j++) {
+
+									Widget v = eigeneEigenschaftenTable.getWidget(j, 1);
+									if (v instanceof TextBox) {
+										if (!((TextBox) v).getValue().isEmpty()) {
+											String wert = (((TextBox) v).getText());
+
+											aus.add(wert);
+
+										}
+
+									}
+								}
+
+								ev.createAuspraegungForNewEigenschaft(eig, aus, k, nutzer.getId(),
+										new AsyncCallback<Void>() {
+
+											@Override
+											public void onFailure(Throwable error) {
+												error.getMessage().toString();
+											}
+
+											@Override
+											public void onSuccess(Void result) {
+												// Leeren aller divs und dann den erstellten Kontakt einblenden.
+												RootPanel.get("navigator").clear();
+												RootPanel.get("navigator").add(new Navigation(nutzer));
+												RootPanel.get("content").clear();
+												RootPanel.get("contentHeader").clear();
+												setSontactTreeViewModel(sontactTree);
+												MessageBox.alertWidget("Glückwunsch",
+														"Sie haben den Kontakt " + k.getVorname() + " "
+																+ k.getNachname() + " erfolgreich erstellt.");
+												RootPanel.get("content").add(new KontaktForm(k));
+
+											}
+										});
 
 							}
 						});
-						
-					}
-				});
 
 			}
 
 		}
 	}
-	
-	//ClickHandler zum löschen von definierten Eigenschaften.
+
+	// ClickHandler zum löschen von definierten Eigenschaften.
 	private class DeleteEigenschaftClickHandler implements ClickHandler {
 		public void onClick(ClickEvent event) {
 
-			//ClickHandler zum entfernen von hinzugefügten Eigenschaften.
+			// ClickHandler zum entfernen von hinzugefügten Eigenschaften.
 			eigeneEigenschaftenTable.removeRow(0);
 			eigeneEigenschaftenTable.removeRow(1);
-				
 
 		}
 
 	}
-		
 
 	/**
-	 * ClickHandler zum löschen einer Teilung.
+	 * ClickHandler zum löschen einer Teilung an einer Kontaktliste.
 	 * 
 	 * @author Dennis Lehle
 	 *
@@ -592,7 +587,7 @@ public class KontaktForm extends VerticalPanel {
 			RootPanel.get("content").clear();
 
 			// Nutzer Cookies holen.
-			
+
 			nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 			nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 			/*
@@ -600,7 +595,7 @@ public class KontaktForm extends VerticalPanel {
 			 */
 			vornameTxtBox.setText(selectedKontakt.getVorname());
 			nachnameTxtBox.setText(selectedKontakt.getNachname());
-			
+
 			kontaktInfoTable.setWidget(0, 0, vorname);
 			kontaktInfoTable.setWidget(0, 1, vornameTxtBox);
 			kontaktInfoTable.setWidget(1, 0, nachname);
@@ -610,94 +605,77 @@ public class KontaktForm extends VerticalPanel {
 			 * Tabelle mit den Eigenschaften und den Auspraegungen des Nutzers befuellen
 			 */
 			// Holen der Auspraegungen des selektierten Kontakts
-			if(selectedKontakt.getOwnerId() == nutzer.getId()) {
-			ev.getAllAuspraegungenByKontaktRelatable(selectedKontakt.getId(), new AsyncCallback<Vector<Relatable>>() {
+			if (selectedKontakt.getOwnerId() == nutzer.getId()) {
+				ev.getAllAuspraegungenByKontaktRelatable(selectedKontakt.getId(),
+						new AsyncCallback<Vector<Relatable>>() {
 
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert(caught.toString());
+							@Override
+							public void onFailure(Throwable caught) {
+								Window.alert(caught.toString());
 
-				}
+							}
 
-				@Override
-				public void onSuccess(Vector<Relatable> result) {
-					kontaktauspraegungen = result;
+							@Override
+							public void onSuccess(Vector<Relatable> result) {
+								kontaktauspraegungen = result;
 
-				Window.alert("Hey Eigentümer");
-				
-			
-					for (int i = 0; i < kontaktauspraegungen.size(); i++) {
-						
-						TextBox auspraegung = new TextBox();
-						auspraegung.setStylePrimaryName("tbRundung");
-						auspraegung.setText(kontaktauspraegungen.elementAt(i).getWert());
+								for (int i = 0; i < kontaktauspraegungen.size(); i++) {
 
-						Label eigenschaftLabel = new Label();
-						eigenschaftLabel.setStylePrimaryName("label");
-						
-						eigenschaftLabel.setText(kontaktauspraegungen.elementAt(i).getBezeichnung());
-						int count = vorhandeneAuspraegungenTable.getRowCount();
-						vorhandeneAuspraegungenTable.setWidget(count, 0, eigenschaftLabel);
-						vorhandeneAuspraegungenTable.setWidget(count, 1, auspraegung);
-						int count2 = vorhandeneAuspraegungenTable.getRowCount();
-						count = count2 + 1;
-						
-						}
-					
-				
-					Window.alert(vorhandeneAuspraegungenTable.toString() + "Vorhandene AUsp");
-				}
-			});
-		}	
-			else {
-			ev.getAllSharedAuspraegungenByKontaktAndNutzer(selectedKontakt, nutzer,  new AsyncCallback<Vector<Relatable>>() {
+									TextBox auspraegung = new TextBox();
+									auspraegung.setStylePrimaryName("tbRundung");
+									auspraegung.setText(kontaktauspraegungen.elementAt(i).getWert());
 
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert(caught.toString());
+									Label eigenschaftLabel = new Label();
+									eigenschaftLabel.setStylePrimaryName("label");
 
-				}
+									eigenschaftLabel.setText(kontaktauspraegungen.elementAt(i).getBezeichnung());
+									int count = vorhandeneAuspraegungenTable.getRowCount();
+									vorhandeneAuspraegungenTable.setWidget(count, 0, eigenschaftLabel);
+									vorhandeneAuspraegungenTable.setWidget(count, 1, auspraegung);
+									int count2 = vorhandeneAuspraegungenTable.getRowCount();
+									count = count2 + 1;
 
-				@Override
-				public void onSuccess(Vector<Relatable> result) {
-					
-					Window.alert("Hey Teilhaber");
-				
-					
-					for (int i = 0; i < result.size(); i++) {
-						if(kontaktauspraegungen.contains(result.elementAt(i))) {
-							result.remove(i);
-						} else {
-							kontaktauspraegungen.add(result.elementAt(i));
-						}
-					}
-					Window.alert(kontaktauspraegungen.toString()+ "Kontaktausp");
-					
-					for (int i = 0; i < kontaktauspraegungen.size(); i++) {
-					
-						
-						
-						TextBox auspraegung = new TextBox();
-						auspraegung.setStylePrimaryName("tbRundung");
-						auspraegung.setText(kontaktauspraegungen.elementAt(i).getWert());
+								}
+							}
+						});
+			} else {
+				ev.getAllSharedAuspraegungenByKontaktAndNutzer(selectedKontakt, nutzer,
+						new AsyncCallback<Vector<Relatable>>() {
 
-						Label eigenschaftLabel = new Label();
-						eigenschaftLabel.setStylePrimaryName("label");
-						
-						eigenschaftLabel.setText(kontaktauspraegungen.elementAt(i).getBezeichnung());
-						int count = vorhandeneAuspraegungenTable.getRowCount();
-						vorhandeneAuspraegungenTable.setWidget(count, 0, eigenschaftLabel);
-						vorhandeneAuspraegungenTable.setWidget(count, 1, auspraegung);
-						int count2 = vorhandeneAuspraegungenTable.getRowCount();
-						count = count2 + 1;
-						}
-					
-						
-					Window.alert(kontaktauspraegungen.toString()+ "Vorhandene Ausp");
-				
+							@Override
+							public void onFailure(Throwable caught) {
+								Window.alert(caught.toString());
 
-				}
-			});
+							}
+
+							@Override
+							public void onSuccess(Vector<Relatable> result) {
+
+								for (int i = 0; i < result.size(); i++) {
+									if (kontaktauspraegungen.contains(result.elementAt(i))) {
+										result.remove(i);
+									} else {
+										kontaktauspraegungen.add(result.elementAt(i));
+									}
+								}
+								for (int i = 0; i < kontaktauspraegungen.size(); i++) {
+
+									TextBox auspraegung = new TextBox();
+									auspraegung.setStylePrimaryName("tbRundung");
+									auspraegung.setText(kontaktauspraegungen.elementAt(i).getWert());
+
+									Label eigenschaftLabel = new Label();
+									eigenschaftLabel.setStylePrimaryName("label");
+
+									eigenschaftLabel.setText(kontaktauspraegungen.elementAt(i).getBezeichnung());
+									int count = vorhandeneAuspraegungenTable.getRowCount();
+									vorhandeneAuspraegungenTable.setWidget(count, 0, eigenschaftLabel);
+									vorhandeneAuspraegungenTable.setWidget(count, 1, auspraegung);
+									int count2 = vorhandeneAuspraegungenTable.getRowCount();
+									count = count2 + 1;
+								}
+							}
+						});
 			}
 
 			/*
@@ -706,11 +684,12 @@ public class KontaktForm extends VerticalPanel {
 			HorizontalPanel BtnPanel = new HorizontalPanel();
 			HorizontalPanel headerPanel = new HorizontalPanel();
 			ScrollPanel scc = new ScrollPanel();
-		
-			RootPanel.get("contentHeader").add(new HTML("<h2>Kontaktinformationen bearbeiten <image src='/images/edit.png' width='30px' height='30px' align='center'/></h2>"));
 
-			
-			Button cancelBtn = new Button("<image src='/images/abbrechen.png' width='20px' height='20px' align='center'/> Abbrechen");
+			RootPanel.get("contentHeader").add(new HTML(
+					"<h2>Kontaktinformationen bearbeiten <image src='/images/edit.png' width='30px' height='30px' align='center'/></h2>"));
+
+			Button cancelBtn = new Button(
+					"<image src='/images/abbrechen.png' width='20px' height='20px' align='center'/> Abbrechen");
 			cancelBtn.setStylePrimaryName("cancelKButton");
 			cancelBtn.setTitle("Abbrechen der Bearbeitung");
 			cancelBtn.addClickHandler(new ClickHandler() {
@@ -723,23 +702,23 @@ public class KontaktForm extends VerticalPanel {
 			});
 
 			BtnPanel.add(cancelBtn);
-			//ClickHandler zum entfernen von hinzugefügten Eigenschaften.
-			Button eigenschaftLoeschen = new Button("<image src='/images/abbrechen.png' width='20px' height='20px' align='center'/> Eigenschaft");
+			// ClickHandler zum entfernen von hinzugefügten Eigenschaften.
+			Button eigenschaftLoeschen = new Button(
+					"<image src='/images/abbrechen.png' width='20px' height='20px' align='center'/> Eigenschaft");
 			eigenschaftLoeschen.setStylePrimaryName("eigeneEigEntfernenButton");
 			eigenschaftLoeschen.setTitle("Erstellte Eigenschaft entfernen");
 			eigenschaftLoeschen.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-				
+
 					eigeneEigenschaftBearbeitungTable.removeRow(0);
 					eigeneEigenschaftBearbeitungTable.removeRow(1);
-					
+
 				}
 			});
-			
+
 			BtnPanel.add(eigenschaftLoeschen);
 
-			
 			Button freieEigenschaft = new Button("Eigenschaft definieren");
 			freieEigenschaft.setTitle("Selbstdefinierte Eigenschaften anlegen");
 			freieEigenschaft.setStylePrimaryName("eigeneEigButton");
@@ -750,15 +729,14 @@ public class KontaktForm extends VerticalPanel {
 				public void onClick(ClickEvent event) {
 					TextBox bezTb = new TextBox();
 					TextBox wertTb = new TextBox();
-					
 
 					bezTb.getElement().setPropertyString("placeholder", "Eigenschaft...");
 					wertTb.getElement().setPropertyString("placeholder", "Auspraegung...");
 					bezTb.setStylePrimaryName("tbRundung2");
 					wertTb.setStylePrimaryName("tbRundung2");
-					
+
 					eigeneEigenschaftBearbeitungTable.setStylePrimaryName("infoTable");
-					
+
 					int count = eigeneEigenschaftBearbeitungTable.getRowCount();
 					eigeneEigenschaftBearbeitungTable.setWidget(count, 0, bezTb);
 					eigeneEigenschaftBearbeitungTable.setWidget(count, 1, wertTb);
@@ -772,7 +750,8 @@ public class KontaktForm extends VerticalPanel {
 
 			// Instanziierung Button zum Speichern der Aenderungen an dem selektierten
 			// Kontakts
-			Button saveBtn = new Button("<image src='/images/save.png' width='20px' height='20px' align='center'/> Speichern");
+			Button saveBtn = new Button(
+					"<image src='/images/save.png' width='20px' height='20px' align='center'/> Speichern");
 			saveBtn.setStylePrimaryName("bearbeitungKSave");
 			saveBtn.setTitle("Speichern der Änderungen");
 			/*
@@ -785,124 +764,122 @@ public class KontaktForm extends VerticalPanel {
 
 					TextBox txtboxvorname = (TextBox) kontaktInfoTable.getWidget(0, 1);
 					TextBox txtboxnachname = (TextBox) kontaktInfoTable.getWidget(1, 1);
-					
+
 					nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 					nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
-					
-					
-					if(txtboxvorname.getText() == "") {
+
+					if (txtboxvorname.getText() == "") {
 						txtboxvorname.getElement().getStyle().setBorderColor("red");
 						MessageBox.alertWidget("Hinweis", "Bitte geben Sie dem Kontakt mindestens einen Vornamen");
 					} else {
-					selectedKontakt.setVorname(txtboxvorname.getText());
-					selectedKontakt.setNachname(txtboxnachname.getText());
+						selectedKontakt.setVorname(txtboxvorname.getText());
+						selectedKontakt.setNachname(txtboxnachname.getText());
 
-					ev.saveKontakt(selectedKontakt, new AsyncCallback<Kontakt>() {
+						ev.saveKontakt(selectedKontakt, new AsyncCallback<Kontakt>() {
 
-						@Override
-						public void onFailure(Throwable caught) {
-							Window.alert(caught.toString());
+							@Override
+							public void onFailure(Throwable caught) {
+								Window.alert(caught.toString());
 
-						}
-
-						@Override
-						public void onSuccess(Kontakt result) {
-							eig.removeAllElements();
-							aus.removeAllElements();
-
-							// Angegebene Eigenschaften werden dem String-Vector hinzugefuegt
-							for (int i = 0; i < eigeneEigenschaftBearbeitungTable.getRowCount(); i++) {
-
-								Widget v = eigeneEigenschaftBearbeitungTable.getWidget(i, 0);
-								if (v instanceof TextBox) {
-									if (!((TextBox) v).getValue().isEmpty()) {
-										String bez = (((TextBox) v).getText());
-
-										eig.add(bez);
-									}
-
-								}
 							}
-							// Angegebene Auspraegungen werden dem String-Vector hinzugefuegt
-							for (int j = 0; j < eigeneEigenschaftBearbeitungTable.getRowCount(); j++) {
 
-								Widget v = eigeneEigenschaftBearbeitungTable.getWidget(j, 1);
-								if (v instanceof TextBox) {
-									if (!((TextBox) v).getValue().isEmpty()) {
-										String wert = (((TextBox) v).getText());
+							@Override
+							public void onSuccess(Kontakt result) {
+								eig.removeAllElements();
+								aus.removeAllElements();
 
-										aus.add(wert);
+								// Angegebene Eigenschaften werden dem String-Vector hinzugefuegt
+								for (int i = 0; i < eigeneEigenschaftBearbeitungTable.getRowCount(); i++) {
+
+									Widget v = eigeneEigenschaftBearbeitungTable.getWidget(i, 0);
+									if (v instanceof TextBox) {
+										if (!((TextBox) v).getValue().isEmpty()) {
+											String bez = (((TextBox) v).getText());
+
+											eig.add(bez);
+										}
 
 									}
-
 								}
-							}
+								// Angegebene Auspraegungen werden dem String-Vector hinzugefuegt
+								for (int j = 0; j < eigeneEigenschaftBearbeitungTable.getRowCount(); j++) {
 
-							ev.createAuspraegungForNewEigenschaft(eig, aus, result, nutzer.getId(), new AsyncCallback<Void>() {
+									Widget v = eigeneEigenschaftBearbeitungTable.getWidget(j, 1);
+									if (v instanceof TextBox) {
+										if (!((TextBox) v).getValue().isEmpty()) {
+											String wert = (((TextBox) v).getText());
 
-								@Override
-								public void onFailure(Throwable error) {
-									error.getMessage().toString();
-								}
+											aus.add(wert);
 
-								@Override
-								public void onSuccess(Void result) {
-									
-								}
-							});
-
-							// Updaten der vorhandenen Auspraegungen
-							aus.removeAllElements();
-							for (int j = 0; j < vorhandeneAuspraegungenTable.getRowCount(); j++) {
-
-								Widget v = vorhandeneAuspraegungenTable.getWidget(j, 1);
-								if (v instanceof TextBox) {
-									if (!((TextBox) v).getValue().isEmpty()) {
-										String wert = (((TextBox) v).getText());
-										aus.add(wert);
-										
+										}
 
 									}
+								}
+
+								ev.createAuspraegungForNewEigenschaft(eig, aus, result, nutzer.getId(),
+										new AsyncCallback<Void>() {
+
+											@Override
+											public void onFailure(Throwable error) {
+												error.getMessage().toString();
+											}
+
+											@Override
+											public void onSuccess(Void result) {
+
+											}
+										});
+
+								// Updaten der vorhandenen Auspraegungen
+								aus.removeAllElements();
+								for (int j = 0; j < vorhandeneAuspraegungenTable.getRowCount(); j++) {
+
+									Widget v = vorhandeneAuspraegungenTable.getWidget(j, 1);
+									if (v instanceof TextBox) {
+										if (!((TextBox) v).getValue().isEmpty()) {
+											String wert = (((TextBox) v).getText());
+											aus.add(wert);
+
+										}
+
+									}
+								}
+
+								Vector<Auspraegung> neueAuspraegungen = new Vector<>();
+								for (int i = 0; i < kontaktauspraegungen.size(); i++) {
+
+									Auspraegung a = new Auspraegung();
+									a.setWert(aus.elementAt(i));
+									a.setId(kontaktauspraegungen.elementAt(i).getId());
+									neueAuspraegungen.add(a);
 
 								}
-							}
-							
 
-							Vector<Auspraegung> neueAuspraegungen = new Vector<>();
-							for (int i = 0; i < kontaktauspraegungen.size(); i++) {
-								
-								Auspraegung a = new Auspraegung();
-								a.setWert(aus.elementAt(i));
-								a.setId(kontaktauspraegungen.elementAt(i).getId());
-								neueAuspraegungen.add(a);
-								
-
-
-							}
-								
-						
 								ev.saveAuspraegung(neueAuspraegungen, new AsyncCallback<Void>() {
 
 									@Override
 									public void onFailure(Throwable caught) {
-										// TODO Auto-generated method stub
+										caught.getMessage().toString();
 
 									}
 
 									@Override
 									public void onSuccess(Void result) {
-									//Alle Panels leere und die KontaktForm mit dem
-									//aktuellen Kontakt wieder aufrufen.
-									RootPanel.get("content").clear();
-									RootPanel.get("contentHeader").clear();
-									RootPanel.get("content").add(new KontaktForm(selectedKontakt));
-									MessageBox.alertWidget("Hinweis", "Der Kontakt " + selectedKontakt.getVorname() + " " +  selectedKontakt.getNachname() + " wurde erfolgreich aktualisiert." );
+										// Alle Panels leere und die KontaktForm mit dem
+										// aktuellen Kontakt wieder aufrufen.
+										RootPanel.get("content").clear();
+										RootPanel.get("contentHeader").clear();
+										RootPanel.get("content").add(new KontaktForm(selectedKontakt));
+										MessageBox.alertWidget("Hinweis",
+												"Der Kontakt " + selectedKontakt.getVorname() + " "
+														+ selectedKontakt.getNachname()
+														+ " wurde erfolgreich aktualisiert.");
 									}
 
 								});
 
-						}
-					});
+							}
+						});
 					}
 
 				}
@@ -914,7 +891,7 @@ public class KontaktForm extends VerticalPanel {
 			eigeneEigenschaftBearbeitungTable.setStylePrimaryName("infoTable");
 			scc.setSize("900px", "400px");
 			BtnPanel.add(saveBtn);
-			
+
 			vp.add(kontaktInfoTable);
 			headerPanel.add(vorhandeneAuspraegungenTable);
 			headerPanel.add(eigeneEigenschaftBearbeitungTable);

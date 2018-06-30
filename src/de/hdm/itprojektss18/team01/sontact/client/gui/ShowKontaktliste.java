@@ -97,7 +97,6 @@ public class ShowKontaktliste extends VerticalPanel {
 				if (result.size() == 0) {
 					kontaktListenTable2.setVisible(false);
 					hp3.setVisible(false);
-					Window.alert("Leider existieren noch keine Kontakte, füge doch gleich welche hinzu :)");
 
 				} else {
 					kontaktListenTable2.setVisible(true);

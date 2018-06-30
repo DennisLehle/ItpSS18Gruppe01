@@ -52,6 +52,7 @@ public class ShowEigenschaften extends VerticalPanel {
 	Vector<Relatable> statusObjects = new Vector<Relatable>();
 	Vector<Relatable> auspraegungen = new Vector<Relatable>();
 	boolean sharedStatus = false;
+	Boolean x = new Boolean(false);
 
 
 	HorizontalPanel hp3 = new HorizontalPanel();
@@ -135,9 +136,7 @@ public class ShowEigenschaften extends VerticalPanel {
 					if (result.size() == 0) {
 
 						eigenschaftAuspraegungTable.setVisible(false);
-						MessageBox.alertWidget("Hinweis", "Dieser Kontakt besitzt noch keine Eigenschaften.");
 
-			
 					} else {
 						eigenschaftAuspraegungTable.setVisible(true);
 						sp.setVisible(true);
@@ -174,14 +173,11 @@ public class ShowEigenschaften extends VerticalPanel {
 
 				@Override
 				public void onSuccess(Vector<Relatable> result) {
-					Window.alert("teilhaber");
-					
 					statusObjects.addAll(result);
+					
 					if (result.size() == 0) {
-
 						eigenschaftAuspraegungTable.setVisible(false);
-						MessageBox.alertWidget("Hinweis", "Dieser Kontakt besitzt noch keine Eigenschaften.");
-
+					
 					} else {
 						eigenschaftAuspraegungTable.setVisible(true);
 						sp.setVisible(true);
@@ -201,7 +197,6 @@ public class ShowEigenschaften extends VerticalPanel {
 						}
 					}
 	
-					Window.alert(auspraegungen.toString());
 					eigenschaftAuspraegungTable.setRowCount(auspraegungen.size(), true);
 					eigenschaftAuspraegungTable.setVisibleRange(0, 10);
 					eigenschaftAuspraegungTable.setRowData(auspraegungen);
@@ -238,16 +233,12 @@ public class ShowEigenschaften extends VerticalPanel {
 				// TODO Auto-generated method stub
 				Nutzer nn = new Nutzer();
 				
-				if(owner.getOwnerId() != n.getId()) {
 					for (int i = 0; i < allUser.size(); i++) {
 						if(owner.getOwnerId() == allUser.elementAt(i).getId()) {
 							nn.setEmailAddress(allUser.elementAt(i).getEmailAddress());
 						}
-					}
-				}
+					}			
 				return nn.getEmailAddress();
-				
-			
 			}
 		};
 
@@ -257,7 +248,7 @@ public class ShowEigenschaften extends VerticalPanel {
 
 			@Override
 			public ImageResource getValue(Relatable object) {
-				if (object.getStatus() == true && object.getOwnerId() == n.getId()) {
+				if (object.getStatus() == true) {
 					return resources.getImageResource();
 				} else {
 					return null;
@@ -346,13 +337,8 @@ public class ShowEigenschaften extends VerticalPanel {
 				gewaehlteAuspraegung.removeAll(gewaehlteAuspraegung);
 				gewaehlteAuspraegung.addAll(selectionModel.getSelectedSet());
 
-				MessageBox.shareAlertKontakt("Geben Sie die Email des Empfängers an", "Email: ", k,
+				MessageBox.shareAlertKontakt("Hinweis", "Geben Sie die Email des Empfängers an.", k,
 						gewaehlteAuspraegung);
-
-				Nutzer nutzer = new Nutzer();
-				nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
-				nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
-
 			}
 		});
 
@@ -361,17 +347,21 @@ public class ShowEigenschaften extends VerticalPanel {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// Vector alle selektierten Eigenschaften/Ausprägungen mitgeben aber davor erst
-				// leeren.
-				
+				// Vector alle selektierten Eigenschaften/Ausprägungen mitgeben aber davor erst leeren.
 				gewaehlteAuspraegung.removeAll(gewaehlteAuspraegung);
 				gewaehlteAuspraegung.addAll(selectionModel.getSelectedSet());
-
-				// Abfrage ob der Nutzer der Owner ist oder nicht.
-				if (n.getId() == k.getOwnerId()) {
-					if(gewaehlteAuspraegung == null) {
-						MessageBox.alertWidget("Hinweis", "Wählen sie eine Eigenschaft aus um mit dem löschen Fortfahren zu können.");
-					} else {
+				
+				//Prüfung auf null Wert des Vectors
+				if(gewaehlteAuspraegung.size() == 0) {
+					MessageBox.alertWidget("Hinweis", "Wählen sie eine Eigenschaft aus um mit dem löschen Fortfahren zu können.");
+				} else {
+					//Wenn Vector nicht null, dann wird gefragt mit Anzahl ob EIgenschaften geloescht werden sollen.
+						x = Window.confirm("Sind sie sicher " +gewaehlteAuspraegung.capacity() + " Eigenschaften löschen zu wollen?");
+				}
+				//Prüfung ob Nutzer Ja angewählt hat damit die Löschoperation durchgeführt werden kann.
+				if(x == true) {
+				 if (n.getId() == k.getOwnerId()) {
+			
 					// Geht die ausgewählten Auspraegungen durch und übergibt jede einzelne für die
 					// Löschung davon.
 					for (int i = 0; i <= gewaehlteAuspraegung.size(); i++) {
@@ -386,44 +376,22 @@ public class ShowEigenschaften extends VerticalPanel {
 
 							@Override
 							public void onSuccess(Void result) {
-								// Aktualisiert das Modifikationsdatum des Kontaks wenn eine Löschung erfolgt.
-								ev.saveModifikationsdatum(k.getId(), new AsyncCallback<Void>() {
-
-									@Override
-									public void onFailure(Throwable caught) {
-										caught.getMessage().toString();
-
-									}
-
-									@Override
-									public void onSuccess(Void result) {
-										RootPanel.get("content").clear();
-										RootPanel.get("contentHeader").clear();
-										RootPanel.get("content").add(new KontaktForm(k));
-									
-										RootPanel.get("contentHeader").clear();
-										MessageBox.alertWidget("Hinweis", "Sie haben "+ gewaehlteAuspraegung.capacity()+ " Eigenschaften mit den dazugehörigen Ausprägungen erfolgreich gelöscht. ");
-
-											
-										
-									}
-
-								});
-
+								RootPanel.get("content").clear();
+								RootPanel.get("contentHeader").clear();
+								RootPanel.get("content").add(new KontaktForm(k));
+								RootPanel.get("contentHeader").clear();
+								
 							}
 
-						});
-						
-
+						});		
+						//Prüfung ob das letzte Element erreicht wurde damit die MessageBox mit der Anzahl von gelöschten Eigenschaften erzeugt wird.
+						if(gewaehlteAuspraegung.elementAt(i) == gewaehlteAuspraegung.lastElement()) {
+						MessageBox.alertWidget("Hinweis", "Sie haben "+ gewaehlteAuspraegung.capacity()+ " Eigenschaften mit den dazugehörigen Ausprägungen erfolgreich gelöscht. ");
+						}
 					}
 
-					}
-					
-				} else {
+					} else if(k.getOwnerId() != n.getId()){
 					// Wenn man nicht der Owner ist springt man in die else Anweisung hinein.
-					if(gewaehlteAuspraegung == null) {
-						MessageBox.alertWidget("Hinweis", "Wählen sie eine Eigenschaft aus um mit dem löschen Fortfahren zu können.");
-					} else {
 					for (int i = 0; i <= gewaehlteAuspraegung.size(); i++) {
 						Berechtigung b = new Berechtigung();
 						b.setObjectId(gewaehlteAuspraegung.elementAt(i).getId());
@@ -432,6 +400,7 @@ public class ShowEigenschaften extends VerticalPanel {
 						// Typ ist hier nicht Verfügbar daher wird dies hier direkt eingetrage
 						// da es sich um eine Auspraegung handelt kennen wir den Type schon 'a'
 						b.setType('a');
+
 						ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
 
 							@Override
@@ -442,33 +411,20 @@ public class ShowEigenschaften extends VerticalPanel {
 
 							@Override
 							public void onSuccess(Void result) {
-								// Aktualisiert das Modifikationsdatum des Kontaks wenn eine Löschung erfolgt.
-								ev.saveModifikationsdatum(k.getId(), new AsyncCallback<Void>() {
-
-									@Override
-									public void onFailure(Throwable caught) {
-										caught.getMessage().toString();
-
-									}
-
-									@Override
-									public void onSuccess(Void result) {
-
-									}
-
-								});
+							
 
 							}
 
 						});
 
 					}
-					
-					}
+						
 					
 				}
 				
+				
 
+			}
 			}
 			
 			

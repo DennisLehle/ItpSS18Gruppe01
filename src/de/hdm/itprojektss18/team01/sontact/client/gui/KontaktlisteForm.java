@@ -160,7 +160,7 @@ public class KontaktlisteForm extends VerticalPanel {
 							HTML shared = new HTML("<image src='/images/share.png' width='15px' height='15px' />");
 							shared.setTitle("Geteilte Kontaktliste");
 							RootPanel.get("contentHeader").add(shared);
-							//
+							
 						}
 					}
 
@@ -316,7 +316,7 @@ public class KontaktlisteForm extends VerticalPanel {
 							|| selectedKontaktliste.getTitel() == "Mit mir geteilte Kontakte"
 									&& selectedKontaktliste.getOwnerId() == nutzer.getId()) {
 
-						MessageBox.alertWidget("Hinweis", "Tut uns leid, die Standard Listen können hier nicht gelöscht werden.");
+						MessageBox.alertWidget("Hinweis", "Tut uns leid, die Standard-Kontaktliste kann nicht gelöscht werden.");
 
 					} else {
 

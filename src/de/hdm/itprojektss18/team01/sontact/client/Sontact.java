@@ -34,14 +34,14 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
  */
 public class Sontact implements EntryPoint {
-
+	
 	private LoginInfo loginInfo = null;
 	private Kontakt ownProfil = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
-	Label profilLb = new Label();
+	private 	Label profilLb = new Label();
 	private Label loginLabel = new Label("Herzlich Wilkommen auf Sontact. Um die Kontaktverwaltung nutzen zu können melden Sie sich bitte mit einem Google-Konto an, um fortfahren zu können.");
-	HTML loginHTML = new HTML("<h7></h7>");
-	HTML sontactHTML = new HTML("<h8>SONTACT</h8>");
+	private HTML loginHTML = new HTML("<h7></h7>");
+	private	HTML sontactHTML = new HTML("<h8>SONTACT</h8>");
 	private Anchor signInLink = new Anchor("Mit Google anmelden");
 
 	LoginServiceAsync loginService = GWT.create(LoginService.class);
@@ -66,7 +66,7 @@ public class Sontact implements EntryPoint {
 			public void onSuccess(LoginInfo result) {
 				loginInfo = result;
 				if (loginInfo.isLoggedIn()) {
-
+					//Der Nutzer wird anhand seiner EMail aus der Db gesucht.
 					editorVerwaltung.getUserByGMail(loginInfo.getEmailAddress(), new AsyncCallback<Nutzer>() {
 
 						@Override
@@ -77,17 +77,17 @@ public class Sontact implements EntryPoint {
 
 						@Override
 						public void onSuccess(Nutzer nutzer) {
+							//Ist der Nutzer noch registriert wird er zur Startseite weitergeleitet.
 							if (nutzer != null) {
+								
 								RootPanel.get("content").clear();
 								start(nutzer);
-								MessageBox.alertWidget("Herzlich Wilkomen", "Wilkommen bei Sontact der Seite im Internet für Teilungen von Kontakten.");
-								
+									
+							//Ist er noch kein Mitglied bei Sontact wird er als Nutzer angelegt und zum Registrierungs-Formular geleitet.
 							} else {
+								//Div's alle leeren.
 								RootPanel.get("content").clear();
 								RootPanel.get("navigator").clear();
-								MessageBox.alertWidget("Kontakt",
-										"Sie haben noch kein Kontakt angelegt, bitte legen Sie Ihren eigenen Kontakt an");
-								
 								editorVerwaltung.createNutzer(loginInfo.getEmailAddress(), new AsyncCallback<Nutzer>() {
 
 									@Override
@@ -97,22 +97,8 @@ public class Sontact implements EntryPoint {
 
 									@Override
 									public void onSuccess(Nutzer result) {
-										Nutzer n = result;
-										
-										editorVerwaltung.getUserByGMail(n.getEmailAddress(), new AsyncCallback<Nutzer>() {
-
-													@Override
-													public void onFailure(Throwable error) {
-														Window.alert("Es ist ein Fehler beim Login aufgetreten: ");
-
-													}
-
-													@Override
-													public void onSuccess(final Nutzer nutzer) {
-													RootPanel.get("content").add(new RegistrierungsForm(nutzer));
-													
-													}
-												});
+										//Das Registrierungs Formular wird aufgerufen.
+										RootPanel.get("content").add(new RegistrierungsForm(result));
 
 									}
 
@@ -139,8 +125,6 @@ public class Sontact implements EntryPoint {
 		HTML signOutLink = new HTML("<p><a href='" + loginInfo.getLogoutUrl() 
 				+ "'><span class='glyphicon glyphicon-log-out'></span></a></p>");
 		RootPanel.get("nutzermenu").add(signOutLink);
-		
-		
 		//Setzen von Cookies für die spätere Identifizierung eines Nutzers.
 		Cookies.setCookie("nutzerGMail", nutzer.getEmailAddress()); 		
 		//Wenn ein Nutzer vorhanden ist wird die nutzerId noch gesetzt.
@@ -186,24 +170,28 @@ public class Sontact implements EntryPoint {
 		});
 		
 		
-		// Setzen der HTMl´s für den Footer
+		// Aufbau des Footers wird initialisiert.
 		HorizontalPanel footer = new HorizontalPanel();
-		Anchor startseite = new Anchor("Startseite", "Sontact.html");
+		Anchor startseite = new Anchor("Startseite ", "Sontact.html");
 		HTML copyrightText1 = new HTML(" | ");
 		HTML copyrightText2 = new HTML(" | © 2018 Sontact, IT-Projekt Gruppe01, Hochschule der\n" + "Medien Stuttgart | ");
-		Anchor reportGeneratorLink = new Anchor (" ReportGenerator", "SontactReport.html");
-	//	Anchor impressumLink = new Anchor("Impressum");
+		Anchor reportGeneratorLink = new Anchor (" ReportGenerator ", "SontactReport.html");
 		
 		footer.add(startseite);
 		footer.add(copyrightText1);
 		footer.add(reportGeneratorLink);
 		footer.add(copyrightText2);
-
+		
+		RootPanel.get("footer").setStylePrimaryName("footer");
 		RootPanel.get("footer").add(footer);
 		RootPanel.get("content").add(new ShowKontakte(nutzer));
 
 	}
 	
+	/*
+	 * Die login-Methode wird aufgerufen wenn der Nutzer 
+	 * noch kein Konto bei Sontact registriert hat.
+	 */
 	void loadLogin() {	
 		
 		signInLink.setHref(loginInfo.getLoginUrl());

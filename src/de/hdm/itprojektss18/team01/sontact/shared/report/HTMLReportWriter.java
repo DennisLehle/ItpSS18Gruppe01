@@ -2,8 +2,6 @@ package de.hdm.itprojektss18.team01.sontact.shared.report;
 
 import java.util.Vector;
 
-import de.hdm.itprojektss18.team01.sontact.shared.report.CompositeReport;
-
 /**
  * Ein <code>ReportWriter</code>, der Reports mittels HTML formatiert. Das im
  * Zielformat vorliegende Ergebnis wird in der Variable <code>reportText</code>
@@ -21,7 +19,7 @@ public class HTMLReportWriter extends ReportWriter {
 	private String reportText = "";
 
 	/**
-	 * Zur√ºcksetzen der Variable <code>reportText</code>.
+	 * Zuruecksetzen der Variable <code>reportText</code>.
 	 */
 	public void resetReportText() {
 		this.reportText = "";
@@ -30,8 +28,7 @@ public class HTMLReportWriter extends ReportWriter {
 	/**
 	 * Umwandeln eines <code>Paragraph</code>-Objekts in HTML.
 	 * 
-	 * @param p
-	 *            der Paragraph
+	 * @param p der Paragraph
 	 * @return HTML-Text
 	 */
 	public String paragraph2HTML(Paragraph p) {
@@ -45,8 +42,7 @@ public class HTMLReportWriter extends ReportWriter {
 	/**
 	 * Umwandeln eines <code>CompositeParagraph</code>-Objekts in HTML.
 	 * 
-	 * @param p
-	 *            der CompositeParagraph
+	 * @param p der CompositeParagraph
 	 * @return HTML-Text
 	 */
 	public String paragraph2HTML(CompositeParagraph p) {
@@ -62,8 +58,7 @@ public class HTMLReportWriter extends ReportWriter {
 	/**
 	 * Umwandeln eines <code>SimpleParagraph</code>-Objekts in HTML.
 	 * 
-	 * @param p
-	 *            der SimpleParagraph
+	 * @param p der SimpleParagraph
 	 * @return HTML-Text
 	 */
 	public String paragraph2HTML(SimpleParagraph p) {
@@ -93,55 +88,59 @@ public class HTMLReportWriter extends ReportWriter {
 
 	/**
 	 * Prozessieren des uebergebenen Reports und Ablage im Zielformat. Ein Auslesen
-	 * des Ergebnisses kann sp√§ter mittels <code>getReportText()</code> erfolgen.
+	 * des Ergebnisses kann spaeter mittels <code>getReportText()</code> erfolgen.
 	 * 
-	 * @param r
-	 *            der zu prozessierende Report
+	 * @param r der zu prozessierende Report
 	 */
 	@Override
 	public void process(AlleKontakteReport r) {
 		// Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
 		this.resetReportText();
 
-		/*
-		 * In diesen Buffer schreiben wir waehrend der Prozessierung sukzessiv unsere
-		 * Ergebnisse.
-		 */
+		//Ein Stringbuffer, an den alle folgenden HTML Inhalte angeh‰ngt werden
 		StringBuffer result = new StringBuffer();
-
-		/*
-		 * Nun werden Schritt fuer Schritt die einzelnen Bestandteile des Reports
-		 * ausgelesen und in HTML-Form uebersetzt.
-		 */
-		result.append("<H3 style=\"font-family:sans-serif;\">" + r.getTitle() + "</H3>");
-		result.append("<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif;\"></br><tr>");
-		result.append("<tr><td>" + " Erstellungsdatum des Reports | " + r.created().toString() + "</td></tr>");
-		// result.append("<td valign=\"top\"><b>" + paragraph2HTML(r.getHeaderData())
-		// + "</b></td></table>");
-
+		
+		// Hinzuf¸gen der Ueberschrift und den Kopfdaten in HTML-Form.
+		result.append("<H3>" + r.getTitle() + "</H3>");
+		result.append(
+				"<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");
+		result.append("<tr><td> " + " Erstellungsdatum des Reports | " + r.created().toString() + "</td></tr>");
+		
+		
 		Vector<Row> rows = r.getRows();
 		result.append("<table style=\"width:100%\">");
 
+		// Innerhalb der Schleife wird jede einzelne Reihe aufgerufen 
 		for (int i = 0; i < rows.size(); i++) {
 			Row row = rows.elementAt(i);
 			result.append("</td></tr>");
+			
+			//Innerhalb der Schleife wird jede einzelne Spalte aufgerufen und daraufhin 
+			//die einzelnen Inhalte der Spalte Reihe fuer Reihe hinzugefuegt 
 			for (int k = 0; k < row.getNumColumns(); k++) {
+				
+				//Hier werden die Inhalte der Tabellenbezeichnung entnommen 
 				if (i == 0) {
-					result.append("<td style=\"background:lightsteelblue;font-weight:bold; font-size: larger; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
-				}
-
-				else if (row.getNumColumns() == 2) {
-					result.append("<td height=\"25\"; style=\"background:lightsteelblue; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
-				}
-
-				else if (row.getNumColumns() == 6) {
 					result.append(
-							"<td height=\"50\"; style=\"border-top: 3px solid #5669b1\">" + "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
+							"<td style=\"background:lightsteelblue;font-weight:bold; font-size: larger; font-family: sans-serif;\">"
+									+ row.getColumnAt(k) + "</td>");
+				}
+				//Hier die Bezeichnung der Untertabelle ausgegeben. 
+				else if (row.getNumColumns() == 2) {
+					result.append("<td height=\"25\"; style=\"background:lightsteelblue; font-family: sans-serif;\">"
+							+ row.getColumnAt(k) + "</td>");
+				}
+				//Hier wird die formative Trennung der einzelnen Ausgaben erkenntlich gemacht
+				else if (row.getNumColumns() == 6) {
+					result.append("<td height=\"50\"; style=\"border-top: 3px solid #5669b1\">"
+							+ "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
 				}
 
 				else {
 					if (i > 1) {
-						result.append("<td height=\"25\"; style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
+						result.append(
+								"<td height=\"25\"; style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif;\">"
+										+ row.getColumnAt(k) + "</td>");
 
 					}
 
@@ -160,7 +159,7 @@ public class HTMLReportWriter extends ReportWriter {
 
 		/*
 		 * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
-		 * reportText-Variable zugewiesen. Dadurch wird es m√∂glich, anschlie√üend das
+		 * reportText-Variable zugewiesen. Dadurch wird es moeglich, anschliessend das
 		 * Ergebnis mittels getReportText() auszulesen.
 		 */
 		this.reportText = result.toString();
@@ -176,202 +175,224 @@ public class HTMLReportWriter extends ReportWriter {
 	@Override
 	public void process(AlleKontakteNachEigenschaftenReport r) {
 		// Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
-		this.resetReportText();
+				this.resetReportText();
 
-		/*
-		 * In diesen Buffer schreiben wir waehrend der Prozessierung sukzessiv unsere
-		 * Ergebnisse.
-		 */
-		StringBuffer result = new StringBuffer();
+				//Ein Stringbuffer, an den alle folgenden HTML Inhalte angeh‰ngt werden
+				StringBuffer result = new StringBuffer();
+				
+				// Hinzuf¸gen der Ueberschrift und den Kopfdaten in HTML-Form.
+				result.append("<H3>" + r.getTitle() + "</H3>");
+				result.append(
+						"<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");
+				result.append("<tr><td> " + " Erstellungsdatum des Reports | " + r.created().toString() + "</td></tr>");
+				
+				
+				Vector<Row> rows = r.getRows();
+				result.append("<table style=\"width:100%\">");
 
-		/*
-		 * Nun werden Schritt fuer Schritt die einzelnen Bestandteile des Reports
-		 * ausgelesen und in HTML-Form uebersetzt.
-		 */
-		result.append("<H3 style=\"font-family:sans-serif;\">" + r.getTitle() + "</H3>");
-		result.append("<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif;\"><tr>");
-		result.append("</tr><tr><td>" + " Erstellungsdatum des Reports|" + r.created().toString() + "</td></br></tr>");
+				// Innerhalb der Schleife wird jede einzelne Reihe aufgerufen 
+				for (int i = 0; i < rows.size(); i++) {
+					Row row = rows.elementAt(i);
+					result.append("</td></tr>");
+					
+					//Innerhalb der Schleife wird jede einzelne Spalte aufgerufen und daraufhin 
+					//die einzelnen Inhalte der Spalte Reihe fuer Reihe hinzugefuegt 
+					for (int k = 0; k < row.getNumColumns(); k++) {
+						
+						//Hier werden die Inhalte der Tabellenbezeichnung entnommen 
+						if (i == 0) {
+							result.append(
+									"<td style=\"background:lightsteelblue;font-weight:bold; font-size: larger; font-family: sans-serif;\">"
+											+ row.getColumnAt(k) + "</td>");
+						}
+						//Hier die Bezeichnung der Untertabelle ausgegeben. 
+						else if (row.getNumColumns() == 2) {
+							result.append("<td height=\"25\"; style=\"background:lightsteelblue; font-family: sans-serif;\">"
+									+ row.getColumnAt(k) + "</td>");
+						}
+						//Hier wird die formative Trennung der einzelnen Ausgaben erkenntlich gemacht
+						else if (row.getNumColumns() == 6) {
+							result.append("<td height=\"50\"; style=\"border-top: 3px solid #5669b1\">"
+									+ "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
+						}
 
-		Vector<Row> rows = r.getRows();
-		result.append("<table style=\"width:100%\">");
+						else {
+							if (i > 1) {
+								result.append(
+										"<td height=\"25\"; style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif;\">"
+												+ row.getColumnAt(k) + "</td>");
 
-		for (int i = 0; i < rows.size(); i++) {
-			Row row = rows.elementAt(i);
-			result.append("</td></tr>");
-			for (int k = 0; k < row.getNumColumns(); k++) {
-				if (i == 0) {
-					result.append("<td style=\"background:lightsteelblue;font-weight:bold; font-size: larger; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
-				}
+							}
 
-				else if (row.getNumColumns() == 2) {
-					result.append("<td height=\"25\"; style=\"background:lightsteelblue; font-family: sans-serif\">" + row.getColumnAt(k) + "</td>");
-				}
-
-				else if (row.getNumColumns() == 6) {
-					result.append(
-							"<td height=\"50\"; style=\"border-top: 3px solid #5669b1; font-family: sans-serif\">" + "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
-				}
-
-				else {
-					if (i > 1) {
-						result.append("<td height=\"25\"; style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif\">" + row.getColumnAt(k) + "</td>");
+							else {
+								result.append("<td valign=\"top\">" + row.getColumnAt(k) + "</td>");
+							}
+						}
 
 					}
 
-					else {
-						result.append("<td valign=\"top\">" + row.getColumnAt(k) + "</td>");
-					}
+					result.append("</tr>");
+
 				}
 
+				result.append("</table>");
+
+				/*
+				 * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
+				 * reportText-Variable zugewiesen. Dadurch wird es moeglich, anschliessend das
+				 * Ergebnis mittels getReportText() auszulesen.
+				 */
+				this.reportText = result.toString();
 			}
 
-			result.append("</tr>");
-
-		}
-
-		result.append("</table>");
-
-		/*
-		 * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
-		 * reportText-Variable zugewiesen. Dadurch wird es m√∂glich, anschlie√üend das
-		 * Ergebnis mittels getReportText() auszulesen.
-		 */
-		this.reportText = result.toString();
-	}
 
 	@Override
 	public void process(AlleKontakteNachTeilhabernReport r) {
 		// Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
-		this.resetReportText();
+				this.resetReportText();
 
-		/*
-		 * In diesen Buffer schreiben wir waehrend der Prozessierung sukzessiv unsere
-		 * Ergebnisse.
-		 */
-		StringBuffer result = new StringBuffer();
+				//Ein Stringbuffer, an den alle folgenden HTML Inhalte angeh‰ngt werden
+				StringBuffer result = new StringBuffer();
+				
+				// Hinzuf¸gen der Ueberschrift und den Kopfdaten in HTML-Form.
+				result.append("<H3>" + r.getTitle() + "</H3>");
+				result.append(
+						"<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");
+				result.append("<tr><td> " + " Erstellungsdatum des Reports | " + r.created().toString() + "</td></tr>");
+				
+				
+				Vector<Row> rows = r.getRows();
+				result.append("<table style=\"width:100%\">");
 
-		/*
-		 * Nun werden Schritt fuer Schritt die einzelnen Bestandteile des Reports
-		 * ausgelesen und in HTML-Form uebersetzt.
-		 */
-		result.append("<H3 style=\"font-family:sans-serif;\">" + r.getTitle() + "</H3>");
-		result.append("<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif;\"><tr>");
-		result.append("</tr><tr><td>" + " Erstellungsdatum des Reports|" + r.created().toString() + "</td></br></tr>");
-
-		Vector<Row> rows = r.getRows();
-		result.append("<table style=\"width:100%\">");
-
-		for (int i = 0; i < rows.size(); i++) {
-			Row row = rows.elementAt(i);
-			result.append("</td></tr>");
-			for (int k = 0; k < row.getNumColumns(); k++) {
-				if (i == 0) {
-					result.append("<td style=\"background:lightsteelblue;font-weight:bold; font-size: larger; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
-				}
-
-				else if (row.getNumColumns() == 2) {
-					result.append("<td height=\"25\"; style=\"background:lightsteelblue; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
-				}
-
-				else if (row.getNumColumns() == 6) {
-					result.append(
-							"<td height=\"50\"; style=\"border-top: 3px solid #5669b1\">" + "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
-				}
-
-				else {
-					if (i > 1) {
-						result.append("<td height=\"25\";style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
-
-					}
-
-					else {
-						result.append("<td valign=\"top\">" + row.getColumnAt(k) + "</td>");
-					}
-				}
-
-			}
-
-			result.append("</tr>");
-
-		}
-
-		result.append("</table>");
-
-		/*
-		 * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
-		 * reportText-Variable zugewiesen. Dadurch wird es m√∂glich, anschlie√üend das
-		 * Ergebnis mittels getReportText() auszulesen.
-		 */
-		this.reportText = result.toString();
-	}
-	
-@Override
-	public void process(AlleGeteiltenKontakteReport r) {
-	// Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
-			this.resetReportText();
-
-			/*
-			 * In diesen Buffer schreiben wir waehrend der Prozessierung sukzessiv unsere
-			 * Ergebnisse.
-			 */
-			StringBuffer result = new StringBuffer();
-
-			/*
-			 * Nun werden Schritt fuer Schritt die einzelnen Bestandteile des Reports
-			 * ausgelesen und in HTML-Form uebersetzt.
-			 */
-			result.append("<H3 style=\"font-family:sans-serif;\">" + r.getTitle() + "</H3>");
-			result.append("<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif;\"><tr>");
-			result.append("</tr><tr><td>" + " Erstellungsdatum des Reports|" + r.created().toString() + "</td></br></tr>");
-
-			Vector<Row> rows = r.getRows();
-			result.append("<table style=\"width:100%\">");
-
-			for (int i = 0; i < rows.size(); i++) {
-				Row row = rows.elementAt(i);
-				result.append("</td></tr>");
-				for (int k = 0; k < row.getNumColumns(); k++) {
-					if (i == 0) {
-						result.append("<td style=\"background:lightsteelblue;font-weight:bold; font-size:larger; font-family:sans-serif;\">" + row.getColumnAt(k) + "</td>");
-					}
-
-					else if (row.getNumColumns() == 2) {
-						result.append("<td height=\"25\"; style=\"background:lightsteelblue; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
-					}
-
-					else if (row.getNumColumns() == 6) {
-						result.append(
-								"<td height=\"50\"; style=\"border-top: 3px solid #5669b1\">" + "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
-					}
-
-					else {
-						if (i > 1) {
-							result.append("<td height=\"25\"; style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif;\">" + row.getColumnAt(k) + "</td>");
-
+				// Innerhalb der Schleife wird jede einzelne Reihe aufgerufen 
+				for (int i = 0; i < rows.size(); i++) {
+					Row row = rows.elementAt(i);
+					result.append("</td></tr>");
+					
+					//Innerhalb der Schleife wird jede einzelne Spalte aufgerufen und daraufhin 
+					//die einzelnen Inhalte der Spalte Reihe fuer Reihe hinzugefuegt 
+					for (int k = 0; k < row.getNumColumns(); k++) {
+						
+						//Hier werden die Inhalte der Tabellenbezeichnung entnommen 
+						if (i == 0) {
+							result.append(
+									"<td style=\"background:lightsteelblue;font-weight:bold; font-size: larger; font-family: sans-serif;\">"
+											+ row.getColumnAt(k) + "</td>");
+						}
+						//Hier die Bezeichnung der Untertabelle ausgegeben. 
+						else if (row.getNumColumns() == 2) {
+							result.append("<td height=\"25\"; style=\"background:lightsteelblue; font-family: sans-serif;\">"
+									+ row.getColumnAt(k) + "</td>");
+						}
+						//Hier wird die formative Trennung der einzelnen Ausgaben erkenntlich gemacht
+						else if (row.getNumColumns() == 6) {
+							result.append("<td height=\"50\"; style=\"border-top: 3px solid #5669b1\">"
+									+ "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
 						}
 
 						else {
-							result.append("<td valign=\"top\">" + row.getColumnAt(k) + "</td>");
+							if (i > 1) {
+								result.append(
+										"<td height=\"25\"; style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif;\">"
+												+ row.getColumnAt(k) + "</td>");
+
+							}
+
+							else {
+								result.append("<td valign=\"top\">" + row.getColumnAt(k) + "</td>");
+							}
 						}
+
 					}
+
+					result.append("</tr>");
 
 				}
 
-				result.append("</tr>");
+				result.append("</table>");
 
+				/*
+				 * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
+				 * reportText-Variable zugewiesen. Dadurch wird es moeglich, anschliessend das
+				 * Ergebnis mittels getReportText() auszulesen.
+				 */
+				this.reportText = result.toString();
 			}
 
-			result.append("</table>");
 
-			/*
-			 * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
-			 * reportText-Variable zugewiesen. Dadurch wird es m√∂glich, anschlie√üend das
-			 * Ergebnis mittels getReportText() auszulesen.
-			 */
-			this.reportText = result.toString();
-		}
-		
-	
+	@Override
+	public void process(AlleGeteiltenKontakteReport r) {
+		// Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
+				this.resetReportText();
+
+				//Ein Stringbuffer, an den alle folgenden HTML Inhalte angeh‰ngt werden
+				StringBuffer result = new StringBuffer();
+				
+				// Hinzuf¸gen der Ueberschrift und den Kopfdaten in HTML-Form.
+				result.append("<H3>" + r.getTitle() + "</H3>");
+				result.append(
+						"<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");
+				result.append("<tr><td> " + " Erstellungsdatum des Reports | " + r.created().toString() + "</td></tr>");
+				
+				
+				Vector<Row> rows = r.getRows();
+				result.append("<table style=\"width:100%\">");
+
+				// Innerhalb der Schleife wird jede einzelne Reihe aufgerufen 
+				for (int i = 0; i < rows.size(); i++) {
+					Row row = rows.elementAt(i);
+					result.append("</td></tr>");
+					
+					//Innerhalb der Schleife wird jede einzelne Spalte aufgerufen und daraufhin 
+					//die einzelnen Inhalte der Spalte Reihe fuer Reihe hinzugefuegt 
+					for (int k = 0; k < row.getNumColumns(); k++) {
+						
+						//Hier werden die Inhalte der Tabellenbezeichnung entnommen 
+						if (i == 0) {
+							result.append(
+									"<td style=\"background:lightsteelblue;font-weight:bold; font-size: larger; font-family: sans-serif;\">"
+											+ row.getColumnAt(k) + "</td>");
+						}
+						//Hier die Bezeichnung der Untertabelle ausgegeben. 
+						else if (row.getNumColumns() == 2) {
+							result.append("<td height=\"25\"; style=\"background:lightsteelblue; font-family: sans-serif;\">"
+									+ row.getColumnAt(k) + "</td>");
+						}
+						//Hier wird die formative Trennung der einzelnen Ausgaben erkenntlich gemacht
+						else if (row.getNumColumns() == 6) {
+							result.append("<td height=\"50\"; style=\"border-top: 3px solid #5669b1\">"
+									+ "<b style=\"font-family: sans-serif;\">" + row.getColumnAt(k) + "</b></td>");
+						}
+
+						else {
+							if (i > 1) {
+								result.append(
+										"<td height=\"25\"; style=\"border-top: 1px solid #e6e6e6; font-family: sans-serif;\">"
+												+ row.getColumnAt(k) + "</td>");
+
+							}
+
+							else {
+								result.append("<td valign=\"top\">" + row.getColumnAt(k) + "</td>");
+							}
+						}
+
+					}
+
+					result.append("</tr>");
+
+				}
+
+				result.append("</table>");
+
+				/*
+				 * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
+				 * reportText-Variable zugewiesen. Dadurch wird es moeglich, anschliessend das
+				 * Ergebnis mittels getReportText() auszulesen.
+				 */
+				this.reportText = result.toString();
+			}
+
 	/**
 	 * Auslesen des Ergebnisses der zuletzt aufgerufenen Prozessierungsmethode.
 	 * 
@@ -380,7 +401,5 @@ public class HTMLReportWriter extends ReportWriter {
 	public String getReportText() {
 		return this.getHeader() + this.reportText + this.getTrailer();
 	}
-
-	
 
 }

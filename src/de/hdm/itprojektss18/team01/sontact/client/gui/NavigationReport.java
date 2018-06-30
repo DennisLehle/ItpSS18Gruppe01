@@ -27,7 +27,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.report.AlleKontakteReport;
 import de.hdm.itprojektss18.team01.sontact.shared.report.HTMLReportWriter;
 
 /**
- * Navigation der GUI fuer den ReportGenerator. Aufbau aehnelt der
+ * Die Navigation der GUI fuer den ReportGenerator. Aufbau aehnelt der
  * Editor-Navigation.
  * 
  * @see Navigation
@@ -44,7 +44,8 @@ public class NavigationReport extends VerticalPanel {
 	 * asynchronen Aufrufe sie anpassen koennen.
 	 */
 	final Button showAllKontakteReport = new Button("Alle Kontakte");
-	final Button showAllKontakteNachBestimmtenAusp = new Button("Kontakte nach bestimmten Eigenschaften und Auspraegungen");
+	final Button showAllKontakteNachBestimmtenAusp = new Button(
+			"Kontakte nach bestimmten Eigenschaften und Auspraegungen");
 	final Button showAllGeteiltenKontakteReport = new Button("Alle geteilten Kontakte");
 	final Button showAllKontakteNachTeilhabendernReport = new Button("Kontakte nach bestimmten Teilhabern");
 
@@ -53,15 +54,12 @@ public class NavigationReport extends VerticalPanel {
 	Kontakt k = new Kontakt();
 
 	/**
-	 * ScrollPanel fuer den navigierenden Baum.
+	 * ScrollPanel fuer den navigierenden Report.
 	 */
 	ScrollPanel sc = new ScrollPanel();
 
 	public NavigationReport(final Nutzer n) {
 		VerticalPanel vp = new VerticalPanel();
-
-//		sc.setSize("200px", "550px");
-//		sc.setVerticalScrollPosition(10);
 
 		/**
 		 * Styling und Festlegung der Buttons.
@@ -75,7 +73,6 @@ public class NavigationReport extends VerticalPanel {
 		showAllKontakteNachBestimmtenAusp.setPixelSize(200, 80);
 		showAllGeteiltenKontakteReport.setPixelSize(200, 80);
 		showAllKontakteNachTeilhabendernReport.setPixelSize(200, 80);
-		
 
 		/**
 		 * Buttons werden der Anzeige innerhalb der Navigation angeheftet.
@@ -112,20 +109,19 @@ public class NavigationReport extends VerticalPanel {
 
 							@Override
 							public void onSuccess(AlleKontakteReport result) {
-								// MessageBox.alertWidget("Hinweis", "In diesem Report finden Sie eine Übersicht
-								// all Ihrer Kontakte. "
-								// + "Dies beinhaltet alle Ihre Kontakte und alle Kontakte die mit Ihnen geteilt
-								// wurden.");
+
+								// Der Inhalt wird geleert und der HTML-process wird uebergeben.
 								RootPanel.get("contentR").clear();
 								writer.process(result);
-								
+
 								HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</br></div>");
 								ScrollPanel sc = new ScrollPanel(html);
-								
+
+								// Der Report wird dem Scrollpanel uebergeben
 								sc.setSize("950px", "550px");
 								sc.setVerticalScrollPosition(10);
 								RootPanel.get("contentR").add(sc);
-								
+
 							}
 
 						});
@@ -147,38 +143,37 @@ public class NavigationReport extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				RootPanel.get("contentR").clear();
 				HorizontalPanel hp = new HorizontalPanel();
-				
+
 				// Filterung nach Eigenschaft
 				TextBox eingabe = new TextBox();
 				ListBox auswahl = new ListBox();
 				auswahl.addItem("Eigenschaft");
-				
+
 				// Filterung nach Auspraegung
 				TextBox eingabe1 = new TextBox();
 				ListBox auswahl1 = new ListBox();
 				auswahl1.addItem("Auspraegung");
-				
-				// Erstellung des Buttons				
-				Button btn = new Button("Report generieren");
 
+				// Erstellung der Eigenschaften und Auspraegung Buttons
+				Button btn = new Button("Report generieren");
 
 				eingabe.setStyleName("contentR");
 				auswahl.setStyleName("contentR");
 				btn.setStyleName("contentR");
-				
 				eingabe1.setStyleName("contentR");
 				auswahl1.setStyleName("contentR");
 				eingabe1.setStyleName("contentR");
 				auswahl1.setStyleName("contentR");
 				btn.setStyleName("contentR");
-				
-				RootPanel.get("contentR").add(new HTML(
-						"<div align=\"center\"> <H3>Kontakte nach Eigenschaften und Auspraegungen</H3></br></div>"));
-				RootPanel.get("contentR").add(new HTML("<div align=\"center\"> Bitte geben Sie mindestens eine Eigenschaft "
-						+ "oder eine Auspraegung an.</div>"));
-				RootPanel.get("contentR").add(new HTML ("</br>"));
-				RootPanel.get("contentR").add(new HTML ("</br>"));
-				RootPanel.get("contentR").add(new HTML ("</br>"));
+
+				// Dem Rootpanel wird die neue Html-Seite uebergeben
+				RootPanel.get("contentR").add(
+						new HTML("<div=><h3>Kontakte nach bestimmten Eigenschaften und Auspraegungen</h3></br></div>"));
+				RootPanel.get("contentR").add(new HTML("<div=><h6> Bitte geben Sie mindestens eine Eigenschaft "
+						+ "oder eine Auspraegung an, um die entsprechenden Kontakte zu erhalten.. <h6> </div>"));
+				RootPanel.get("contentR").add(new HTML("</br>"));
+				RootPanel.get("contentR").add(new HTML("</br>"));
+				RootPanel.get("contentR").add(new HTML("</br>"));
 
 				// Dem Horizontal Panel werden die definierten Elemente hinzugefügt
 				hp.add(auswahl);
@@ -187,10 +182,11 @@ public class NavigationReport extends VerticalPanel {
 				hp.add(eingabe1);
 				hp.add(btn);
 
-
 				RootPanel.get("contentR").add(hp);
 				btn.addClickHandler(new ClickHandler() {
 
+					// Die Aktion des ClickHandlers ueber den Button wird festgelegt und uebergibt
+					// bei Erfolg die Ausgabe des Reports.
 					@Override
 					public void onClick(ClickEvent event) {
 						if (eingabe.getValue() == "" && eingabe1.getValue() == "") {
@@ -207,23 +203,27 @@ public class NavigationReport extends VerticalPanel {
 
 										}
 
+										// Aufruf des prozessierenden Reports
 										@Override
 										public void onSuccess(AlleKontakteNachEigenschaftenReport result) {
 
 											RootPanel.get("contentR").clear();
 											writer.process(result);
 
+											HTML html = new HTML(
+													"<div align=\"center\">" + writer.getReportText() + "</br></div>");
 
-											HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</br></div>");
+											// Der Report wird dem Scrollpanel hinzugefuegt
 											ScrollPanel sc = new ScrollPanel(html);
-											
 											sc.setSize("950px", "470px");
 											sc.setVerticalScrollPosition(10);
+
 											RootPanel.get("contentR").add(sc);
 										}
 
 									});
-
+							// Die Aktion des ClickHandlers ueber den Button wird festgelegt und uebergibt
+							// bei Erfolg die Ausgabe des Reports.
 						} else if (auswahl1.getSelectedItemText() == "Auspraegung" && eingabe1.getValue() != "") {
 
 							final HTMLReportWriter writer = new HTMLReportWriter();
@@ -236,16 +236,18 @@ public class NavigationReport extends VerticalPanel {
 
 										}
 
+										// Aufruf des prozessierenden Reports
 										@Override
 										public void onSuccess(AlleKontakteNachEigenschaftenReport result) {
 
 											RootPanel.get("contentR").clear();
 											writer.process(result);
 
+											HTML html = new HTML(
+													"<div align=\"center\">" + writer.getReportText() + "</div>");
 
-											HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</div>");
+											// Der Report wird dem Scrollpanel hinzugefuegt
 											ScrollPanel sc = new ScrollPanel(html);
-											
 											sc.setSize("950px", "470px");
 											sc.setVerticalScrollPosition(10);
 											RootPanel.get("contentR").add(sc);
@@ -260,7 +262,6 @@ public class NavigationReport extends VerticalPanel {
 
 			}
 		});
-
 
 		/**
 		 * ClickHandler fuer den dritten Report, der die Klasse
@@ -287,17 +288,13 @@ public class NavigationReport extends VerticalPanel {
 
 							@Override
 							public void onSuccess(AlleGeteiltenKontakteReport result) {
-								// MessageBox.alertWidget("Hinweis", "In diesem Report finden Sie eine Übersicht
-								// all Ihrer Kontakte. "
-								// + "Dies beinhaltet alle Ihre Kontakte und alle Kontakte die mit Ihnen geteilt
-								// wurden.");
+
 								RootPanel.get("contentR").clear();
 								writer.process(result);
-								
-								
+
 								HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</br></div>");
 								ScrollPanel sc = new ScrollPanel(html);
-								
+
 								sc.setSize("950px", "470px");
 								sc.setVerticalScrollPosition(10);
 								RootPanel.get("contentR").add(sc);
@@ -327,18 +324,18 @@ public class NavigationReport extends VerticalPanel {
 
 				Button btn = new Button("Report generieren");
 				RootPanel.get("contentR")
-						.add(new HTML("<div align=\"center\"> <H3> Saemtliche Kontakte nach Teilhabern </H3> </div>"));
-				RootPanel.get("contentR").add(
-						new HTML(" <div align=\"center\"> </tr><tr><td> Bitte waehlen Sie einen Nutzer, um die mit "
-								+ "ihm geteilten Kontakte zu erhalten. </tr><tr><td> </div>"));
-				RootPanel.get("contentR").add(new HTML ("</br>"));
-				RootPanel.get("contentR").add(new HTML ("</br>"));
-				RootPanel.get("contentR").add(new HTML ("</br>"));
+						.add(new HTML("<div=\"center\"><h3>Saemtliche Kontakte nach bestimmten Teilhabern</h3></div>"));
+				RootPanel.get("contentR")
+						.add(new HTML(" <div=><h6>Bitte nennen Sie die G-Mail-Adresse des Nutzers, um die mit "
+								+ "ihm geteilten Kontakte zu erhalten.</h6></div>"));
+				RootPanel.get("contentR").add(new HTML("</br>"));
+				RootPanel.get("contentR").add(new HTML("</br>"));
+				RootPanel.get("contentR").add(new HTML("</br>"));
 
 				hp.add(emailGeteiltenutzer);
 				hp.add(btn);
 
-				// Alle Kontakte mit denen der Nutzer Kontakte geteilt hat werden der Listbox
+				// Alle Kontakte des Nutzers die geteilt wurden, werden der Listbox
 				// hinzugefuegt.
 				ev.sharedWithEmail(n, new AsyncCallback<Vector<Nutzer>>() {
 
@@ -406,9 +403,10 @@ public class NavigationReport extends VerticalPanel {
 												RootPanel.get("contentR").clear();
 												writer.process(result);
 
-												HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</br></div>");
+												HTML html = new HTML("<div align=\"center\">" + writer.getReportText()
+														+ "</br></div>");
 												ScrollPanel sc = new ScrollPanel(html);
-												
+
 												sc.setSize("950px", "470px");
 												sc.setVerticalScrollPosition(10);
 												RootPanel.get("contentR").add(sc);

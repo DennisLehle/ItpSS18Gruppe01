@@ -6,12 +6,7 @@ import java.util.Vector;
  * <p>
  * Ein einfacher Report, der neben den Informationen der Superklasse <code>
  * Report</code> eine Tabelle mit "Positionsdaten" aufweist. Die Tabelle greift
- * auf zwei Hilfsklassen namens <code>Row</code> und <code>Column</code> zurück.
- * </p>
- * <p>
- * Die Positionsdaten sind vergleichbar mit der Liste der Bestellpositionen
- * eines Bestellscheins. Dort werden in eine Tabelle zeilenweise Eintragung z.B.
- * bzgl. Artikelnummer, Artikelbezeichnung, Menge, Preis vorgenommen.
+ * auf zwei Hilfsklassen namens <code>Row</code> und <code>Column</code> zurueck.
  * </p>
  * 
  * @see Row
@@ -32,9 +27,9 @@ public abstract class SimpleReport extends Report {
   private Vector<Row> table = new Vector<Row>();
 
   /**
-   * Hinzufügen einer Zeile.
+   * Hinzufuegen einer Zeile.
    * 
-   * @param r die hinzuzufügende Zeile
+   * @param r die hinzuzufuegende Zeile
    */
   public void addRow(Row r) {
     this.table.addElement(r);
@@ -50,7 +45,7 @@ public abstract class SimpleReport extends Report {
   }
 
   /**
-   * Auslesen sämtlicher Positionsdaten.
+   * Auslesen saetlicher Positionsdaten.
    * 
    * @return die Tabelle der Positionsdaten
    */

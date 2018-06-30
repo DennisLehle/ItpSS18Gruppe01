@@ -161,8 +161,7 @@ public class KontaktMapper {
 	 * Loeschen aller <code>Kontakt</code>-Objekte die einem <code>Owner</code>
 	 * zugewiesen sind.
 	 * 
-	 * @param k
-	 *            das aus der DB zu loeschende "Objekt"
+	 * @param k das aus der DB zu loeschende "Objekt"
 	 */
 
 	public void deleteAllByOwner(Nutzer n) {
@@ -301,8 +300,7 @@ public class KontaktMapper {
 	 * Suchen eines Kontakt-Objekts mit vorgegebener KontaktId. Da diese eindeutig
 	 * ist, wird genau ein Objekt zurueckgegeben.
 	 * 
-	 * @param id
-	 *            Primaerschluesselattribut (->DB)
+	 * @param id Primaerschluesselattribut (->DB)
 	 * 
 	 * @return Konto-Objekt, das dem uebergebenen Schluessel entspricht, null bei
 	 *         nicht vorhandenem DB-Tupel.
@@ -354,8 +352,7 @@ public class KontaktMapper {
 	 * 
 	 * @see findKontaktByVorname
 	 * 
-	 * @param String
-	 *            vorname fuer zugehoerige Kontakte
+	 * @param String vorname fuer zugehoerige Kontakte
 	 * 
 	 * @return ein Vektor mit Kontakt-Objekten, die durch den gegebenen Namen
 	 *         repraesentiert werden. Bei evtl. Exceptions wird ein partiell
@@ -418,8 +415,7 @@ public class KontaktMapper {
 	 * 
 	 * @see findKontaktByNachname
 	 * 
-	 * @param String
-	 *            nachname fuer zugehoerige Kontakte
+	 * @param String nachname fuer zugehoerige Kontakte
 	 * 
 	 * @return ein Vektor mit Kontakt-Objekten, die durch den gegebenen Namen
 	 *         repraesentiert werden. Bei evtl. Exceptions wird ein partiell
@@ -477,16 +473,12 @@ public class KontaktMapper {
 		return null;
 	}
 
-	// Alternative:
-	// ##################################################################################################
-
 	/**
 	 * Durchsucht sowohl eigene als auch mit dem Nutzer geteilte Kontakte nach dem
 	 * Namen und gibt diese zurueck. Hierbei wird Vor- und Nachname des Kontaktes
 	 * mit dem vom Nutzer uebergebenem String abgeglichen.
 	 * 
-	 * @param String
-	 *            name, Nutzer n
+	 * @param String name, Nutzer n
 	 * 
 	 * @return Vector<Kontakt>
 	 * 
@@ -561,8 +553,7 @@ public class KontaktMapper {
 	 * Auspraegung und gibt diese zurueck. Hierbei wird die Auspraegung des
 	 * Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
 	 * 
-	 * @param String
-	 *            wert, Nutzer n
+	 * @param String wert, Nutzer n
 	 * 
 	 * @return Vector<Kontakt>
 	 * 
@@ -622,8 +613,7 @@ public class KontaktMapper {
 	 * Eigenschaften und gibt diese zurueck. Hierbei wird die Auspraegung des
 	 * Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
 	 * 
-	 * @param String
-	 *            wert, Nutzer n
+	 * @param String wert, Nutzer n
 	 * 
 	 * @return Vector<Kontakt>
 	 * 
@@ -688,8 +678,7 @@ public class KontaktMapper {
 	 * Auspraegung und die Eigenschaft des Kontaktes mit dem vom Nutzer uebergebenem
 	 * String abgeglichen.
 	 * 
-	 * @param String
-	 *            wert, String eigenschaft, Nutzer n
+	 * @param String wert, String eigenschaft, Nutzer n
 	 * 
 	 * @return Vector<Kontakt>
 	 * 
@@ -748,14 +737,10 @@ public class KontaktMapper {
 		return null;
 	}
 
-	// Alternative End
-	// ##############################################################################################
-
 	/**
 	 * Aktualisierung des Modifikationsdatums.
 	 * 
-	 * @param id
-	 *            des Kontaktes
+	 * @param id des Kontaktes
 	 * @return
 	 */
 

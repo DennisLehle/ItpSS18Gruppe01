@@ -111,8 +111,6 @@ public interface EditorServiceAsync {
 
 	void getStatusForObject(int objectId, char type, AsyncCallback<Boolean> callback);
 
-	void getEigenschaftForAuspraegung(int eigenschaftId, AsyncCallback<Eigenschaft> callback);
-
 	void getKontakteByName(String name, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
 	void getKontakteByAuspraegung(String wert, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
@@ -120,8 +118,6 @@ public interface EditorServiceAsync {
 	void getKontakteByEigenschaft(String bezeichnung, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
 	void getEigenschaftByBezeichnung(String bezeichnung, AsyncCallback<Eigenschaft> callback);
-
-	void getAllKontakteByNutzer(Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
 	void sharedWith(int objectId, char type, Nutzer n, AsyncCallback<Vector<Nutzer>> callback);
 	

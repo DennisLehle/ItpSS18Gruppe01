@@ -22,6 +22,8 @@ public interface Relatable extends Serializable {
 	boolean getStatus();
 	//Gibt den EIgentümer der AUspraegung/EIgenschaft zurück.
 	int getOwnerId();
+	//Gibt den Typ des Objekts zurück.
+	char getType();
 	
 	
 	

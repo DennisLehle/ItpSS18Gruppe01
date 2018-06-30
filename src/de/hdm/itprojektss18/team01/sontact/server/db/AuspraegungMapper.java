@@ -500,18 +500,20 @@ public class AuspraegungMapper {
 	 * 
 	 * @param a das <code>Relatable</code>-Objekt welches geteilt wurde.
 	 */
-	public void setStatusTeilung(Relatable a) {
+	public void setStatusTeilung(Auspraegung a) {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String updateSQL = "UPDATE auspraegung SET status=true WHERE id=?";
+		String updateSQL = "UPDATE auspraegung SET status=? WHERE id=?";
 
 		try {
 
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(updateSQL);
-			stmt.setInt(1, a.getId());
+			stmt.setBoolean(1, a.getStatus());
+			stmt.setInt(2, a.getId());
+	
 
 			stmt.executeUpdate();
 

@@ -51,4 +51,10 @@ public class Eigenschaft extends BusinessObject implements Relatable  {
 		return 0;
 	}
 
+	@Override
+	public char getType() {
+		// TODO Auto-generated method stub
+		return 'a';
+	}
+
 }

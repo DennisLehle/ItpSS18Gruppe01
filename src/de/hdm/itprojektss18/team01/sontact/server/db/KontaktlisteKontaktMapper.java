@@ -21,11 +21,12 @@ public class KontaktlisteKontaktMapper {
 	protected KontaktlisteKontaktMapper() {
 
 	}
-
+	
 	/**
 	 * Pruefung ob diese Klasse schon existiert. Und Methoden dieser Klasse sollen
 	 * nur ueber diese statische Methode aufgerufen werden
 	 * 
+	 * @return DAS <code>KontaktlisteKontaktMapper</code>-Objekt.
 	 */
 	public static KontaktlisteKontaktMapper kontaktlisteKontaktMapper() {
 		if (kontaktlisteKontaktMapper == null) {
@@ -40,7 +41,12 @@ public class KontaktlisteKontaktMapper {
 	 * zusammengesetzten Primaerschluessel - sprich der des Kontakts und der der
 	 * Kontaktliste - zugeordnet.
 	 * 
-	 * @param k fuer das Kontaktobjekt, kl fuer das Kontaktlistenobjekt
+	 * @param kl
+	 * 		fuer das Kontaktlistenobjekt
+	 * @param k
+	 * 		fuer das Kontaktobjekt
+	 * 
+	 * @return null
 	 */
 
 	public KontaktlisteKontakt addKontaktToKontaktliste(Kontaktliste kl, Kontakt k) {
@@ -74,7 +80,10 @@ public class KontaktlisteKontaktMapper {
 	/**
 	 * Loeschen der Zuordnung eines Kontakts zu einer Kontaktliste.
 	 * 
-	 * @param kl,k
+	 * @param kl
+	 * 		fuer Kontaktlisten-Objekt
+	 * @param k
+	 * 		fuer Kontakt-Obejkt
 	 */
 
 	public void removeKontaktFromKontaktliste(Kontaktliste kl, Kontakt k) {
@@ -107,6 +116,7 @@ public class KontaktlisteKontaktMapper {
 	 * Gibt alle Kontakte einer uebergebenen Kontaktliste aus der Datenbank aus.
 	 *
 	 * @param kontaktlisteId
+	 * 				id fuer die Suche aller Kontakte von einer Kontaktliste
 	 * @return Vector von Kontakten
 	 */
 
@@ -169,6 +179,7 @@ public class KontaktlisteKontaktMapper {
 	 * des Kontakts.
 	 * 
 	 * @param k
+	 * 		das zu loeschende Objekt von allen Listen
 	 */
 	public void deleteKontaktFromAllLists(Kontakt k) {
 

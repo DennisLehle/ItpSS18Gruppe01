@@ -24,6 +24,12 @@ public class KontaktlistenMapper {
 	protected KontaktlistenMapper() {
 	}
 
+	/**
+	 * Pruefung ob diese Klasse schon existiert. Und Methoden dieser Klasse sollen
+	 * nur ueber diese statische Methode aufgerufen werden
+	 * 
+	 * @return Das <code>KontaktlistenMapper</code>-Objekt.
+	 */
 	public static KontaktlistenMapper kontaktlistenMapper() {
 		if (kontaktlistenMapper == null) {
 			kontaktlistenMapper = new KontaktlistenMapper();
@@ -35,6 +41,7 @@ public class KontaktlistenMapper {
 	 * Einfuegen eines Kontaktlisten-Objekts in die Datenbank.
 	 * 
 	 * @param kl
+	 * 		das zu speichernde Objekt
 	 * @return Kontaktliste
 	 */
 
@@ -83,6 +90,7 @@ public class KontaktlistenMapper {
 	 * Aktualisierung eines Kontaktlisten-Objekts in der Datenbank.
 	 * 
 	 * @param kl
+	 * 		das zu aktualisierende Obejekt
 	 * @return Kontaktliste
 	 */
 
@@ -120,6 +128,7 @@ public class KontaktlistenMapper {
 	 * Loeschen eines Kontaktlisten-Objekts aus der Datenbank.
 	 * 
 	 * @param kl
+	 * 		das zu loeschende Objekt
 	 */
 	
 	public void delete(Kontaktliste kl) {
@@ -150,6 +159,7 @@ public class KontaktlistenMapper {
 	 * <code>Owner</code> zugewiesen sind.
 	 * 
 	 * @param n
+	 * 		Listen die vom Nutzer geloscht werden sollen
 	 */
 
 	public void deleteAllByOwner(Nutzer n) {
@@ -180,6 +190,7 @@ public class KontaktlistenMapper {
 	 * Owners die er selbst erstellt hat.
 	 * 
 	 * @param ownerId
+	 * 			fremdschluessel-attribut fuer die suche der Kontaktlisten
 	 * @return Vector von Kontaktlisten
 	 */
 	public Vector<Kontaktliste> findKontaktlistenByOwner(int ownerId) {
@@ -230,6 +241,7 @@ public class KontaktlistenMapper {
 	 * Kontaktliste wird beim registrieren erzeugt um Kontakte speichern zu können.
 	 * 
 	 * @param nutzerId
+	 * 				fremdschluessattribut fur die owner Kontaktliste
 	 * @return Kontaktlisten-Objekte
 	 */
 
@@ -320,6 +332,8 @@ public class KontaktlistenMapper {
 	 * Findet ein bestimmtes Kontaktlisten-Objekt anhand der ID aus der Datenbank.
 	 * 
 	 * @param id 
+	 * 		Kontaktlisten-Objekt, das dem übergebenen Schlüssel entspricht, null bei
+   *        nicht vorhandenem DB-Tupel.
 	 * @return Kontaktliste
 	 */
 
@@ -363,9 +377,11 @@ public class KontaktlistenMapper {
 	/**
 	 * Findet ein <code>Kontaktliste</code>-Objekt anahnd seines Titels in der DB.
 	 * 
-	 * @param n das <code>Nutzer</code>-Objekt 
+	 * @param n 
+	 * 		das <code>Nutzer</code>-Objekt 
 	 * 
-	 * @param titel des zu suchenden <code>Kontaktliste</code>-Objekts.
+	 * @param titel 
+	 * 			des zu suchenden <code>Kontaktliste</code>-Objekts.
 	 * 
 	 * @return das gefundene <code>Kontaktliste</code>-Objekt.
 	 */

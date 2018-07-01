@@ -31,8 +31,9 @@ public class EigenschaftMapper {
 
 	/**
 	 * Pruefung ob diese Klasse schon existiert. Und Methoden dieser Klasse sollen
-	 * nur ueber diese statische Methode aufgerufen werden
+	 * nur ueber diese statische Methode aufgerufen werden.
 	 * 
+	 * @return Das <code>EigenschaftMapper</code>-Objekt.
 	 */
 	public static EigenschaftMapper eigenschaftMapper() {
 		if (eigenschaftMapper == null) {
@@ -46,7 +47,9 @@ public class EigenschaftMapper {
 	 * Funktion um selbst Eigenschaften definieren zu koennen.
 	 * 
 	 * @param e
-	 * @return e
+	 * 		das zu speichernde Objekt
+	 * @return e das bereits übergebene Objekt, jedoch mit ggf. korrigierter
+	 *         	<code>id</code>.
 	 */
 	public Eigenschaft insert(Eigenschaft e) {
 
@@ -90,8 +93,9 @@ public class EigenschaftMapper {
 	/**
 	 * Aktualisieren eines Eigenschafts-Objekt
 	 * 
-	 * @param e
-	 * @return e
+	 * @param e 
+	 * 		das Objekt, das in die DB geschrieben werden soll
+	 * @return e das als Parameter übergebene Objekt
 	 */
 	public Eigenschaft update(Eigenschaft e) {
 
@@ -129,6 +133,7 @@ public class EigenschaftMapper {
 	 * Loeschen eines Eigenschaft-Objekts aus der Datenbank.
 	 * 
 	 * @param e
+	 * 		das aus der DB zu loeschende "Objekt"
 	 */
 
 	public void delete(Eigenschaft e) {
@@ -162,6 +167,7 @@ public class EigenschaftMapper {
 	 * Auslesen einer Eigenschaft anhand der uebergebenen id.
 	 * 
 	 * @param id
+	 * 		Primaerschluesselattribut 	
 	 * @return Eigenschaft
 	 */
 
@@ -258,6 +264,7 @@ public class EigenschaftMapper {
 	 * Gibt die Eigenschaft zur einer Auspraegung eines Kontaktes zurueck.
 	 * 
 	 * @param eigenschaftId
+	 * 					id fuer suche der Eigenschaft fuer die Auspraegung
 	 * @return Eigenschaftsobjekte
 	 */
 
@@ -305,7 +312,8 @@ public class EigenschaftMapper {
 	 * Suche nach der bezeichnung einer Eigenschaft fuer die Ausgabe der Eigenschaft
 	 * innerhalb des Reports
 	 * 
-	 * @param bezeichnung
+	 * @param bezeichnung 
+	 * 				fuer die suche der Eigenschaft
 	 * @return Vector von Eigenschaften
 	 */
 
@@ -352,9 +360,10 @@ public class EigenschaftMapper {
 	}
 
 	/**
-	 * Eine Eigenschaft anhand der Bezeichnung auslesen
+	 * Eine Eigenschaft anhand der Bezeichnung auslesen.
 	 * 
-	 * @param bezeichnung   
+	 * @param bezeichnung
+	 * 				attribut fuer die suche der Eigenschaft
 	 * @return Eigenschaft-Objekte
 	 */
 	public Eigenschaft findEigenschaft(String bezeichnung) {

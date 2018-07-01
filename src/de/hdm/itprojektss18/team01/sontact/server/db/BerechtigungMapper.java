@@ -30,7 +30,9 @@ public class BerechtigungMapper {
 
 	/**
 	 * Pruefung ob diese Klasse schon existiert. Und Methoden dieser Klasse sollen
-	 * nur ueber diese statische Methode aufgerufen werden
+	 * nur ueber diese statische Methode aufgerufen werden.
+	 * 
+	 * @return Das <code>BerechtigungMapper</code>-Objekt.
 	 */
 	public static BerechtigungMapper berechtigungMapper() {
 		if (berechtigungMapper == null) {
@@ -45,6 +47,7 @@ public class BerechtigungMapper {
 	 * angepasst.
 	 *
 	 * @param b
+	 * 		das zu speichernde Objekt
 	 * @return das bereits uebergebene Objekt, jedoch mit ggf. korrigierter
 	 *         <code>id</code>
 	 */
@@ -98,6 +101,7 @@ public class BerechtigungMapper {
 	 * Loeschen eines Berechtigung-Objekts aus der Datenbank.
 	 * 
 	 * @param b
+	 * 		das zu loeschende Objekt
 	 */
 	public void delete(Berechtigung b) {
 
@@ -124,6 +128,8 @@ public class BerechtigungMapper {
 	 * ausgelesen und zurueckgegeben.
 	 * 
 	 * @param id
+	 * 		Berechtigung-Obejekt das dem uebergebenen Schluessel entspricht, null bei
+	 * 		nicht vorhandenem DB-Tupel.
 	 * @return Berechtigung
 	 */
 	public Berechtigung findById(int id) {
@@ -224,6 +230,7 @@ public class BerechtigungMapper {
 	 * geteilt wurden.
 	 * 
 	 * @param nutzerId
+	 * 				fremdschluesselattribut
 	 * @return Vector von Berechtigungen
 	 */
 	public Vector<Berechtigung> findAllBerechtigungenByOwner(int nutzerId) {
@@ -279,6 +286,7 @@ public class BerechtigungMapper {
 	 * Nutzergeteilt wurden.
 	 * 
 	 * @param nutzerId
+	 * 				fremdschluessattribur fuer die Berechtigungen des Receiver´s
 	 * @return Vector von Berechtigungen
 	 */
 	public Vector<Berechtigung> findAllBerechtigungenByReceiver(int nutzerId) {

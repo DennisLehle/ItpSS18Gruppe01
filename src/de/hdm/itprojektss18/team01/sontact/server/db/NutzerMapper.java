@@ -33,6 +33,7 @@ public class NutzerMapper {
 	 * Pruefung ob diese Klasse schon existiert. Und Methoden dieser Klasse sollen
 	 * nur ueber diese statische Methode aufgerufen werden
 	 * 
+	 * @return DAS <code>NutzerMapper</code>-Objekt.
 	 */
 	public static NutzerMapper nutzerMapper() {
 		if (nutzerMapper == null) {
@@ -46,7 +47,8 @@ public class NutzerMapper {
 	 * Einfuegen eines <code>Nutzer</code>-Objekts in die Datenbank. Dabei wird auch
 	 * der Primaerschluessel des uebergebenen Objekts geprueft und ggf. berichtigt.
 	 *
-	 * @param n das zu speichernde Objekt
+	 * @param n 
+	 * 		das zu speichernde Objekt
 	 * @return das bereits uebergebene Objekt, jedoch mit ggf. korrigierter
 	 *         <code>id</code>.
 	 */
@@ -95,7 +97,8 @@ public class NutzerMapper {
 	/**
 	 * Suche nach einem <code>Nutzer</code>-Objekts aus der Datenbank.
 	 * 
-	 * @param id
+	 * @param id 
+	 * 		Primaerschluesselattribut 
 	 * @return Nutzer
 	 */
 	
@@ -141,6 +144,7 @@ public class NutzerMapper {
 	 * Loeschen eines Nutzer-Objekts aus der Datenbank.
 	 * 
 	 * @param n
+	 * 		das zu loeschende Objekt
 	 */
 	public void delete(Nutzer n) {
 
@@ -172,6 +176,7 @@ public class NutzerMapper {
 	 * zurueckgegeben.
 	 * 
 	 * @param email
+	 * 			email-adresse des Nutzers
 	 * @return Nutzer
 	 */
 

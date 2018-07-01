@@ -31,11 +31,12 @@ public class AuspraegungMapper {
 	protected AuspraegungMapper() {
 
 	}
-
+	
 	/**
 	 * Pruefung ob diese Klasse schon existiert. Und Methoden dieser Klasse sollen
 	 * nur ueber diese statische Methode aufgerufen werden
 	 * 
+	 * @return Das <code>AuspraegungMapper</code>-Objekt.
 	 */
 	public static AuspraegungMapper auspraegungMapper() {
 
@@ -47,11 +48,11 @@ public class AuspraegungMapper {
 
 	}
 
-
 	/**
 	 * Einfuegen eines Auspraegung-Objekts in die Datenbank.
 	 * 
 	 * @param aus
+	 * 			das zu speichernde Auspraegungs-Objekt
 	 * @return das bereits uebergebene Objekt, jedoch mit ggf. korrigierter id
 	 */
 	public Auspraegung insert(Auspraegung aus) {
@@ -100,6 +101,7 @@ public class AuspraegungMapper {
 	 * Aktualisierung eines Auspraegung-Objekts in der Datenbank.
 	 * 
 	 * @param a
+	 * 			Auspraeguns-Objekt das akutalisert werden soll
 	 * @return das als Parameter uebergebene Objekt
 	 */
 	public Auspraegung update(Auspraegung a) {
@@ -138,6 +140,7 @@ public class AuspraegungMapper {
 	 * Loeschen eines Auspraegung-Objekts aus der Datenbank.
 	 * 
 	 * @param a
+	 * 			das Auspraegungs-Objekt das geloescht werden soll
 	 */
 	public void delete(Auspraegung a) {
 
@@ -181,7 +184,8 @@ public class AuspraegungMapper {
 	/**
 	 * Loescht eine Auspraegung anhand der uebergebenen Id aus dem Selectionmodel.
 	 * 
-	 * @param auspraegungId
+	 * @param auspraegungId 
+	 * 					id der Auspraegung die geloescht werden soll
 	 */
 	public void deleteById(int auspraegungId) {
 
@@ -213,6 +217,7 @@ public class AuspraegungMapper {
 	 * Sucht eine Auspraegung anhand der uebergebenen Id.
 	 * 
 	 * @param id
+	 * 			schluesselatribut fuer das Finden der Auspraegung
 	 * @return Obejekte von Auspraegungen
 	 */
 	public Auspraegung findAuspraegungById(int id) {
@@ -262,8 +267,9 @@ public class AuspraegungMapper {
 	 * Auspraegungen zu einem bestimmten Kontakt werden durch die Eigenschaft abrufen.
 	 * 
 	 * @param e
+	 * 		Eigenschafts-Objekt 
 	 * @param k
-	 * 
+	 * 		Auspraegungs-Objekt
 	 * @return Auspraegungsobjekte
 	 */
 
@@ -320,6 +326,7 @@ public class AuspraegungMapper {
 	 * Auspraegungen eines uebergebenen Kontaktes herauszlesen.
 	 * 
 	 * @param kontaktId
+	 * 				fremdschluessel attribut
 	 * @return Vector von Auspraegunen fuer den Kontakt
 	 */
 	public Vector<Relatable> findAuspraegungByKontaktRelatable(int kontaktId) {
@@ -379,6 +386,7 @@ public class AuspraegungMapper {
 	 * Auspraegungen eines Kontaktes herauslesen.
 	 * 
 	 * @param kontaktId
+	 * 				fremdschluesselattribut
 	 * @return Vector von Auspraegungen 
 	 */
 	public Vector<Auspraegung> findAuspraegungByKontakt(int kontaktId) {
@@ -434,6 +442,7 @@ public class AuspraegungMapper {
 	 * innerhalb des Reports
 	 * 
 	 * @param wert
+	 *			fuer die suche der Auspraegung 			
 	 * @return Vector von Auspraegungen 
 	 */
 

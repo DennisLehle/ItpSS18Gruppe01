@@ -2,27 +2,54 @@ package de.hdm.itprojektss18.team01.sontact.shared.bo;
 
 import java.io.Serializable;
 
-
 /**
- * Dieses Interface führt die Eigenschaft und Ausprägungsklassen als 
- * einen Datentyp zusammen um später in der CellTabel dagestellt werden zu können.
+ * Das Interface <code>Relatable</code> wird von den Klassen
+ * <code>Eigenschaft</code> und <code>Auspraegung</code> implementiert und dient
+ * als Hilfestellung, um die Werte der jeweiligen Objekte - sprich die
+ * Bezeichnung der Eigenschaft sowie den Wert der Auspraegung - in einem neuen
+ * Datentyp <code>Relatable</code> zu repraesenteiren.
  * 
- * @author Dennis Lehle
+ * @see <code>Eigenschaft</code>
+ * @see <code>Auspraegung</code>
  *
  */
 public interface Relatable extends Serializable {
 	
-	//Id des Objektes (Eindeutig)
+
+	/**
+	 * Auslesen der Id
+	 * @return id - Eindeutige id
+	 */
 	int getId();
-	//Gibt die Bezeichnung einer Eigenschaft zurueck.
+
+	/**
+	 * Auslesen der Bezeichnung der Eigenschaft
+	 * @return bezeichnung - Bezeichnung der Eigenschaft
+	 */
 	String getBezeichnung();
-	//Gibt die Auspraegung einer Eigenschaft zurueck.
+
+	/**
+	 * Auslesen des Werts der Auspraegung
+	 * @return wert - Wert der Auspraegung
+	 */
 	String getWert();
-	//Gibt den Status der Teilung einer Auspraegung zurueck.
+
+	/**
+	 * Auslesen des Statuses
+	 * @return status - Status, ob jenes Objekt geteilt ist
+	 */
 	boolean getStatus();
-	//Gibt den EIgentümer der AUspraegung/EIgenschaft zurück.
+	
+	/**
+	 * Auslesen des Eigentuemers/ Erstellers 
+	 * @return ownerId - Eigentuemer/ Ersteller der Auspraegung/Eigenschaft
+	 */
 	int getOwnerId();
-	//Gibt den Typ des Objekts zurück.
+	
+	/**
+	 * Auslesen des Objekt-Types 
+	 * @return type - Type des Objekts
+	 */
 	char getType();
 	
 	

@@ -4,6 +4,13 @@ package de.hdm.itprojektss18.team01.sontact.shared.bo;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+/**
+ * Realisiering einer exemplarischen LoginInfo, welche alle relevanten Informationen des
+ * eingeloggten Nutzers enthaelt.
+ * 
+ * @see <code>IsSerializable</code>
+ * 
+ */
 public class LoginInfo implements IsSerializable {
 
 	private boolean loggedIn = false;
@@ -11,11 +18,12 @@ public class LoginInfo implements IsSerializable {
 	private String logoutUrl = " ";
 	private String emailAddress = "";
 
+	
 	/**
 	 * Gibt TRUE zurueck, wenn ein Nutzer angemeldet ist andernfalls wird 
 	 * FALSE zurueckgegeben.
 	 * 
-	 * @return loggedIn status on der Nutzer eingeloggt ist
+	 * @return loggedIn status ob der Nutzer eingeloggt ist
 	 */
 	public boolean isLoggedIn() {
 		return loggedIn;

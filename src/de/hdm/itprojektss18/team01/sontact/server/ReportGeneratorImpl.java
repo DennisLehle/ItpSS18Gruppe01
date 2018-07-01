@@ -64,7 +64,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	/**
 	 * Abruf des Reports der alle Kontakte des eingeloggten Nutzers generiert.
 	 * 
-	 * @param Nutzer n
+	 * @param n Nutzer von dem der Report generiert werden soll
 	 * @return report
 	 */
 	public AlleKontakteReport createAlleKontakteReport(Nutzer n) throws IllegalArgumentException {
@@ -158,8 +158,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * der Suchleiste uebergeben. Die daraufhin den Report mit dem entsprechenden
 	 * Filter zurueckgeben.
 	 * 
-	 * @param String auspraegung, String eigenschaft, Nutzer n
-	 * @return report
+	 * @param eigenschaft, auspraegung, n 
+	 * @return report 
 	 */
 	public AlleKontakteNachEigenschaftenReport createAuspraegungReport(String eigenschaft, String auspraegung, Nutzer n)
 			throws IllegalArgumentException {
@@ -254,7 +254,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * der Suchleiste uebergeben. Die daraufhin den Report mit dem entsprechenden
 	 * Filter zurueckgeben.
 	 * 
-	 * @param String auspraegung, String eigenschaft, Nutzer n
+	 * @param email, n Nutzer von dem der Report genriert werden soll anhand seiner Email-Adresse
 	 * @return report
 	 */
 	public AlleKontakteNachTeilhabernReport createNachTeilhabernReport(String email, Nutzer n)
@@ -375,7 +375,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * der Suchleiste uebergeben. Die daraufhin den Report mit dem entsprechenden
 	 * Filter zurueckgeben.
 	 * 
-	 * @param String auspraegung, String eigenschaft, Nutzer n
+	 * @param n Nutzer von dem der Report erzeugt werden soll
 	 * @return report
 	 */
 	public AlleGeteiltenKontakteReport createAlleGeteiltenReport(Nutzer n) throws IllegalArgumentException {

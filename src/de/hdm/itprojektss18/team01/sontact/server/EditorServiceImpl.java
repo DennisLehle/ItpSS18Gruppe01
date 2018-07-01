@@ -36,43 +36,43 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Die Mapperklasse wird referenziert, die das Businessobject <Nutzer> mit der
+	 * Die Mapperklasse wird referenziert, die das <code>Nutzer</code>-Objekt mit der
 	 * Datenbank vergleicht.
 	 */
 	private NutzerMapper nMapper = null;
 
 	/**
-	 * Die Mapperklasse wird referenziert, die das Businessobject <Kontakt> mit der
+	 * Die Mapperklasse wird referenziert, die das <code>Kontakt</code>-Objekt mit der
 	 * Datenbank vergleicht.
 	 */
 	private KontaktMapper kMapper = null;
 
 	/**
-	 * Die Mapperklasse wird referenziert, die das Businessobject <Kontaktliste> mit
+	 * Die Mapperklasse wird referenziert, die das <code>Kontaktliste</code>-Objekt mit
 	 * der Datenbank vergleicht.
 	 */
 	private KontaktlistenMapper klMapper = null;
 
 	/**
 	 * Die Mapperklasse wird referenziert, die das Businessobject
-	 * <KontaktlisteKontakt> mit der Datenbank vergleicht.
+	 * <code>KontaktlisteKontakt</code> mit der Datenbank vergleicht.
 	 */
 	private KontaktlisteKontaktMapper klkMapper = null;
 
 	/**
-	 * Die Mapperklasse wird referenziert, die das Businessobject <Eigenschaft> mit
+	 * Die Mapperklasse wird referenziert, die das Businessobject <code>Eigenschaft</code> mit
 	 * der Datenbank vergleicht.
 	 */
 	private EigenschaftMapper eMapper = null;
 
 	/**
-	 * Die Mapperklasse wird referenziert, die das Businessobject <Auspraegung> mit
+	 * Die Mapperklasse wird referenziert, die das Businessobject <code>Auspraegung</code> mit
 	 * der Datenbank vergleicht.
 	 */
 	private AuspraegungMapper aMapper = null;
 
 	/**
-	 * Die Mapperklasse wird referenziert, die das Businessobject <Berechtigung> mit
+	 * Die Mapperklasse wird referenziert, die das Businessobject <code>Berechtigung</code> mit
 	 * der Datenbank vergleicht.
 	 */
 	private BerechtigungMapper bMapper = null;

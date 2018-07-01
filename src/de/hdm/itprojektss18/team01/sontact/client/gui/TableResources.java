@@ -1,6 +1,5 @@
 package de.hdm.itprojektss18.team01.sontact.client.gui;
 
-import com.google.gwt.resources.client.ClientBundle.Source;
 import com.google.gwt.user.cellview.client.CellTable;
 
 /**

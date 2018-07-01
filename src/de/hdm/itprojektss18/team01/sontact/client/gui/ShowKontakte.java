@@ -116,6 +116,8 @@ public class ShowKontakte extends VerticalPanel {
 	/**
 	 * Konstruktor der Klasse um Meine Kontakte der Kontaktliste "Meine Kontakte"
 	 * beim start des Programms anzuzeigen.
+	 * 
+	 * @param n akteull eingeloggter Nutzer
 	 */
 	public ShowKontakte(final Nutzer n) {
 		hp.clear();

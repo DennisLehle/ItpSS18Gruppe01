@@ -35,6 +35,8 @@ public abstract class BusinessObject implements Serializable, IsSerializable{
 
 	/**
 	 * Auslesen der ID.
+	 * 
+	 * @return id des objekts
 	 */
 	public int getId() {
 		return this.id;
@@ -42,6 +44,8 @@ public abstract class BusinessObject implements Serializable, IsSerializable{
 
 	/**
 	 * Setzen der ID
+	 * 
+	 * @param id der Objekts
 	 */
 	public void setId(int id) {
 		this.id = id;

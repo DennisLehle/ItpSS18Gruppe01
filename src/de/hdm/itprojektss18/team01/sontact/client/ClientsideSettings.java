@@ -186,6 +186,8 @@ public class ClientsideSettings extends CommonSettings {
 
 	/**
 	 * Setzen eines Nutzers für die Bearbeitung in der Sontact Verwaltung
+	 * 
+	 * @param n Nutzer 
 	 */
 	public final void setCurrentNutzer(Nutzer n) {
 		this.nutzer = n;
@@ -193,6 +195,8 @@ public class ClientsideSettings extends CommonSettings {
 
 	/**
 	 * Auslesen eines Nutzers für die Bearbeitung in der Sontact Verwaltung
+	 * 
+	 * @return nutzer der gerade eingeloggt ist.
 	 */
 	public Nutzer getCurrentNutzer() {
 		return nutzer;

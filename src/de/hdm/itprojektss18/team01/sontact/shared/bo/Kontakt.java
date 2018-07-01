@@ -23,10 +23,6 @@ public class Kontakt extends BusinessObject {
 	private char identifier;
 	private char type = 'k';
 
-	/**
-	 * Getter- und Setter-Methoden zum Setzen und Auslesen der Werte
-	 */
-
 	public String getVorname() {
 		return vorname;
 	}

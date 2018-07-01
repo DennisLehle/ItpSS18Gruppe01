@@ -61,7 +61,7 @@ public interface EditorService extends RemoteService {
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getNutzerById(int nutzerId);
 	 * @param nutzerId
-	 *            NutzerId des Nutzers
+	 *           NutzerId des Nutzers
 	 * @return nutzer
 	 * 
 	 */
@@ -70,8 +70,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #deleteNutzer(Nutzer n);
-	 * @param n
-	 *            - aktuell eingeloggter Nutzer
+	 * @param n - aktuell eingeloggter Nutzer
 	 * 
 	 */
 	public void deleteNutzer(Nutzer n) throws IllegalArgumentException;
@@ -85,12 +84,9 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #createKontakt(String vorname, String nachnamen Nutzer n);
-	 * @param vorname
-	 *            des Kontakts
-	 * @param nachname
-	 *            des Kontakts
-	 * @param n
-	 *            - aktuell eingeloggter Nutzer
+	 * @param vorname des Kontakts
+	 * @param nachname des Kontakts
+	 * @param n - aktuell eingeloggter Nutzer
 	 * @return erstellter Kontakt
 	 * 
 	 */
@@ -100,12 +96,9 @@ public interface EditorService extends RemoteService {
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #createKontaktRegistrierung(String vorname, String nachname, Nutzer n);
 	 * 
-	 * @param vorname
-	 *            des eigenen Kontakts (Regestrierung)
-	 * @param nachname
-	 *            des eigenen Kontakts (Regestrierung)
-	 * @param n
-	 *            aktuell eingeloggter Nutzer
+	 * @param vorname des eigenen Kontakts (Regestrierung)
+	 * @param nachname des eigenen Kontakts (Regestrierung)
+	 * @param n aktuell eingeloggter Nutzer
 	 * @return Kontakt
 	 * 
 	 */
@@ -115,8 +108,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #saveKontakt(Kontakt k);
-	 * @param k
-	 *            zu aktualisierender Kontakt
+	 * @param k zu aktualisierender Kontakt
 	 * @return Kontakt
 	 * 
 	 */
@@ -125,8 +117,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #removeKontakt(Kontakt k);
-	 * @param k
-	 *            der zu loeschende Kontakt
+	 * @param k der zu loeschende Kontakt
 	 * 
 	 */
 	public void deleteKontakt(Kontakt k) throws IllegalArgumentException;
@@ -134,8 +125,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getKontaktById(int id);
-	 * @param id
-	 *            des zu findenden Kontakts
+	 * @param id des zu findenden Kontakts
 	 * @return Kontakt
 	 * 
 	 */
@@ -144,8 +134,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getOwnKontakt(Nutzer n)
-	 * @param n
-	 *            aktuell eingeloggter Nutzer
+	 * @param n aktuell eingeloggter Nutzer
 	 * @return Kontakt
 	 * 
 	 */
@@ -154,8 +143,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getAllKontakteByOwner(Nutzer n)
-	 * @param n
-	 *            aktuell eingeloggter Nutzer
+	 * @param n aktuell eingeloggter Nutzer
 	 * @return alle Kontakte des Eigentuemers
 	 * 
 	 */
@@ -164,10 +152,8 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #addKontaktToKontaktliste(Kontakt k, Kontaktliste kl);
-	 * @param kl
-	 *            die Kontaktliste
-	 * @param k
-	 *            Kontakt der zur Kontaktliste hinzugefuegt wird
+	 * @param kl die Kontaktliste
+	 * @param k Kontakt der zur Kontaktliste hinzugefuegt wird
 	 * 
 	 */
 	public void addKontaktToKontaktliste(Kontaktliste kl, Kontakt k) throws IllegalArgumentException;
@@ -175,10 +161,8 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #removeKontaktFromKontaktliste(Kontakt k);
-	 * @param kl
-	 *            die Kontaktliste
-	 * @param k
-	 *            Kontakt der aus der Kontaktliste enterfernt wird
+	 * @param kl die Kontaktliste
+	 * @param k Kontakt der aus der Kontaktliste enterfernt wird
 	 * 
 	 */
 	public void removeKontaktFromKontaktliste(Kontaktliste kl, Kontakt k) throws IllegalArgumentException;
@@ -192,8 +176,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #createKontaktlisteRegistrierung(Nutzer n);
-	 * @param n
-	 *            aktuell eingeloggter Nutzer
+	 * @param n aktuell eingeloggter Nutzer
 	 * @return Defaultkontaktliste die alle eignen Kontakte anzeigt
 	 * 
 	 */
@@ -202,10 +185,8 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #createKontaktliste(String titel, Nutzer n);
-	 * @param titel
-	 *            - der Titel der Kontaktliste
-	 * @param n
-	 *            aktuell eingeloggter Nutzer
+	 * @param titel - der Titel der Kontaktliste
+	 * @param n aktuell eingeloggter Nutzer
 	 * @return erstellte Kontaktliste
 	 * 
 	 */
@@ -214,8 +195,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #saveKontaktliste(Kontaktliste kl);
-	 * @param kl
-	 *            - Kontaktliste die upgedated wird
+	 * @param kl - Kontaktliste die upgedated wird
 	 * 
 	 */
 	public void saveKontaktliste(Kontaktliste kl) throws IllegalArgumentException;
@@ -223,8 +203,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #deleteKontaktliste(Kontaktliste kl);
-	 * @param kl
-	 *            - Zu loeschende Kontaktliste
+	 * @param kl - Zu loeschende Kontaktliste
 	 * 
 	 */
 	public void deleteKontaktliste(Kontaktliste kl) throws IllegalArgumentException;
@@ -232,8 +211,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getKontaktlisteById(int id);
-	 * @param id
-	 *            der gesuchten Kontaktliste
+	 * @param id der gesuchten Kontaktliste
 	 * @return Kontaktliste
 	 * 
 	 */
@@ -242,10 +220,8 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #findKontaktlisteByTitel(Nutzer n, String titel);
-	 * @param n
-	 *            aktuell eingeloggter Nutzer
-	 * @param titel
-	 *            - Titel dr Kontaktliste
+	 * @param n aktuell eingeloggter Nutzer
+	 * @param titel - Titel dr Kontaktliste
 	 * @return Kontaktliste
 	 * 
 	 */
@@ -254,8 +230,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getKontaktlisteByOwner(Nutzer n);
-	 * @param n
-	 *            aktuell eingeloggter Nutzer
+	 * @param n aktuell eingeloggter Nutzer
 	 * @return Kontaktliste
 	 * 
 	 */
@@ -264,8 +239,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getKontakteByKontaktliste(Kontaktliste kl);
-	 * @param kontaktlisteId
-	 *            der verwendeten Kontaktliste
+	 * @param kontaktlisteId der verwendeten Kontaktliste
 	 * @return Kontakte der Kontaktliste
 	 * 
 	 */
@@ -280,17 +254,15 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #createEigenschaft(String bezeichnung);
-	 * @param bezeichnung
-	 *            der Eigenschaft
+	 * @param bezeichnung der Eigenschaft
 	 * @return erstellte Eigenschaft
 	 * 
 	 */
 	public Eigenschaft createEigenschaft(String bezeichnung) throws IllegalArgumentException;
-
+	
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
-	 * @param bezeichnung
-	 *            der Eigenschafz
+	 * @param bezeichnung der Eigenschafz
 	 * @return Alle Eigenschaften die erzeugt wurden
 	 */
 	public Vector<Eigenschaft> createEigenschaftV(Vector<String> bezeichnung) throws IllegalArgumentException;
@@ -298,8 +270,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #saveEigenschaft(Eigenschaft e);
-	 * @param e
-	 *            die zu aktualisierende Eigenschaft (update)
+	 * @param e die zu aktualisierende Eigenschaft (update)
 	 * @return Eigenschaft
 	 * 
 	 */
@@ -308,8 +279,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #deleteEigenschaft(Eigenschaft e);
-	 * @param e
-	 *            die zu loeschende Eigenschaft
+	 * @param e die zu loeschende Eigenschaft
 	 * 
 	 */
 	public void deleteEigenschaft(Eigenschaft e) throws IllegalArgumentException;
@@ -317,8 +287,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getEigenschaftById(int eigenschaftId);
-	 * @param eigenschaftId
-	 *            der Eigenschaft
+	 * @param eigenschaftId der Eigenschaft
 	 * @return Eigenschaft
 	 * 
 	 */
@@ -327,7 +296,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getEigenschaftAuswahl();
-	 * @return alle Eigenschaften
+	 * @return alle Eigenschaften 
 	 * 
 	 */
 	public Vector<Eigenschaft> getEigenschaftAuswahl() throws IllegalArgumentException;
@@ -335,8 +304,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #findEigenschaftByBezeichnung(String bezeichnung);
-	 * @param bezeichnung
-	 *            der Eigenschaft
+	 * @param bezeichnung der Eigenschaft
 	 * @return Eigenschaft
 	 * 
 	 */
@@ -346,14 +314,10 @@ public interface EditorService extends RemoteService {
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #createAuspraegung(String wert, int eigenschaftId, int kontaktId, int
 	 *      ownerId);
-	 * @param wert
-	 *            der Eigenschaft
-	 * @param eigenschaftId
-	 *            - id der Eigenschaft
-	 * @param kontaktId
-	 *            - id des Kontakts
-	 * @param ownerId
-	 *            - id des Eigentuemers
+	 * @param wert der Eigenschaft
+	 * @param eigenschaftId - id der Eigenschaft
+	 * @param kontaktId - id des Kontakts
+	 * @param ownerId - id des Eigentuemers
 	 * @return die erstelle Auspraegung
 	 * 
 	 */
@@ -364,15 +328,10 @@ public interface EditorService extends RemoteService {
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #deleteEigenschaftcreateAuspraegungForNewEigenschaft(String bezeichnung,
 	 *      String wert, Kontakt k);
-	 * @param bezeichnung
-	 *            der Eigenschaft
-	 * @param wert
-	 *            der Eigenschaft
-	 * @param k
-	 *            - der Kontakt fuer den die Eigenschaft und Auspraegung erstellt
-	 *            wird
-	 * @param ownerId
-	 *            - id des Eigentuemers
+	 * @param bezeichnung der Eigenschaft
+	 * @param wert der Eigenschaft
+	 * @param k - der Kontakt fuer den die Eigenschaft und Auspraegung erstellt wird
+	 * @param ownerId - id des Eigentuemers
 	 * 
 	 */
 	public void createAuspraegungForNewEigenschaft(Vector<String> bezeichnung, Vector<String> wert, Kontakt k,
@@ -381,16 +340,14 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #saveAuspraegung(Auspraegung a);
-	 * @param a
-	 *            die zu aktualisierenden Auspraegungen (update)
+	 * @param a die zu aktualisierenden Auspraegungen (update)
 	 * 
 	 */
 	public void saveAuspraegung(Vector<Auspraegung> a) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
-	 * @param a
-	 *            die zu loeschende Auspraegung
+	 * @param a die zu loeschende Auspraegung
 	 * 
 	 */
 	public void deleteAuspraegung(Auspraegung a) throws IllegalArgumentException;
@@ -398,8 +355,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #deleteAuspraegung(Auspraegung a);
-	 * @param auspraegungId
-	 *            - id der Auspraegung die geloescht werden soll
+	 * @param auspraegungId - id der Auspraegung die geloescht werden soll
 	 * 
 	 */
 	public void deleteAuspraegungById(int auspraegungId) throws IllegalArgumentException;
@@ -407,8 +363,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getAuspraegungById(Auspraegung a);
-	 * @param auspraegungId
-	 *            - id der Auspraegung
+	 * @param auspraegungId - id der Auspraegung
 	 * @return gesuchte Auspraegung
 	 * 
 	 */
@@ -417,8 +372,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getAllAuspraegungenByKontakt(int kontaktId);
-	 * @param kontaktId
-	 *            - id des Kontakts fuer den alle Auspraegungen gesucht werden
+	 * @param kontaktId - id des Kontakts fuer den alle Auspraegungen gesucht werden
 	 * @return alle Auspraegungen des Kontakts
 	 * 
 	 */
@@ -427,8 +381,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getAllAuspraegungenByKontaktRelatable(int kontaktId);
-	 * @param kontaktId
-	 *            - id des Kontakts fuer den alle Auspraegungen gesucht werden
+	 * @param kontaktId - id des Kontakts fuer den alle Auspraegungen gesucht werden
 	 * @return alle Auspraegungen des Kontakts
 	 * 
 	 */
@@ -444,14 +397,10 @@ public interface EditorService extends RemoteService {
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #createBerechtigung(int ownerId, int receiverId, int objectId, char
 	 *      type);
-	 * @param ownerId
-	 *            - Eigentuemer
-	 * @param receiverId
-	 *            - Empfaenger
-	 * @param objectId
-	 *            - Objekt
-	 * @param type
-	 *            - Objekttyp
+	 * @param ownerId - Eigentuemer
+	 * @param receiverId - Empfaenger
+	 * @param objectId - Objekt 
+	 * @param type - Objekttyp 
 	 * @return Berechtigung
 	 * 
 	 */
@@ -460,24 +409,18 @@ public interface EditorService extends RemoteService {
 
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
-	 * @param ownerId
-	 *            - Eigentuemer
-	 * @param receiverId
-	 *            - Empfaenger
-	 * @param objectId
-	 *            - Objekt
-	 * @param type
-	 *            - Objekttyp
-	 * @param avhsare
-	 *            - alle Auspraegungen die zum Teilen ausgewaehlt wurden
+	 * @param ownerId - Eigentuemer
+	 * @param receiverId - Empfaenger
+	 * @param objectId - Objekt
+	 * @param type - Objekttyp 
+	 * @param avhsare - alle Auspraegungen die zum Teilen ausgewaehlt wurden
 	 */
 	void shareObject(int ownerId, int receiverId, int objectId, char type, Vector<Relatable> avhsare);
 
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #deleteBerechtigung(Berechtigung b);
-	 * @param b
-	 *            - die zu loeschende Berechtigung
+	 * @param b - die zu loeschende Berechtigung
 	 * 
 	 */
 	public void deleteBerechtigung(Berechtigung b) throws IllegalArgumentException;
@@ -485,8 +428,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getAllBerechtigungenByOwner(int ownerId);
-	 * @param ownerId
-	 *            - id des Eigentuemers
+	 * @param ownerId - id des Eigentuemers
 	 * @return alle Berechtigungen des Eigentuemers
 	 * 
 	 */
@@ -495,8 +437,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getAllBerechtigungenByReceiver(int receiver);
-	 * @param receiverId
-	 *            - id des Empfaengers
+	 * @param receiverId - id des Empfaengers
 	 * @return alle Berechtigungen des Empfaengers
 	 * 
 	 */
@@ -505,12 +446,9 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #sharedWith(int objectId, char type, Nutzer n);
-	 * @param objectId
-	 *            - Objekt (Kontakt oder Kontaktliste)
-	 * @param type
-	 *            - Objekttyp
-	 * @param n
-	 *            - aktuell eingeloggter Nutzer
+	 * @param objectId - Objekt (Kontakt oder Kontaktliste)
+	 * @param type - Objekttyp
+	 * @param n - aktuell eingeloggter Nutzer
 	 * @return Alle Nutzer mit denen ein Kontakt oder Kontaktliste geteilt wurde
 	 * 
 	 */
@@ -519,9 +457,8 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #sharedWithEmail(Nutzer n);
-	 * @param n
-	 *            - aktuell eingeloggter Nutzer
-	 * @return Alle Nutzer mit denen ein Kontakt oder Kontaktliste geteilt wurde
+	 * @param n - aktuell eingeloggter Nutzer
+	 * @return Alle Nutzer mit denen ein Kontakt oder Kontaktliste geteilt wurde  
 	 * 
 	 */
 	public Vector<Nutzer> sharedWithEmail(Nutzer n) throws IllegalArgumentException;
@@ -535,8 +472,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getAllSharedKontakteByOwner(int ownerId);
-	 * @param ownerId
-	 *            - id des Eigentuemers
+	 * @param ownerId - id des Eigentuemers
 	 * @return alle Kontakte die ein Eigentuermer geteilt hat
 	 * 
 	 */
@@ -545,8 +481,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getAllSharedKontakteByReceiver(int receiverId);
-	 * @param receiverId
-	 *            - id des Empfaengers
+	 * @param receiverId - id des Empfaengers
 	 * @return alle geteilten Kontakte welche mit dem Nutzer geteilt wurden
 	 * 
 	 */
@@ -555,8 +490,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getAllSharedKontaktlistenByOwner(int ownerId);
-	 * @param ownerId
-	 *            - id des Eigentuemers
+	 * @param ownerId - id des Eigentuemers
 	 * @return alle geteilten Kontaktlisten welche mit dem Nutzer geteilt wurden
 	 * 
 	 */
@@ -565,8 +499,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getAllSharedKontaktlistenByReceiver(int receiverId);
-	 * @param receiverId
-	 *            - id des Empfaengers
+	 * @param receiverId - id des Empfaengers
 	 * @return alle geteilten Kontaktlisten welche mit dem Nutzer geteilt wurden
 	 */
 	public Vector<Kontaktliste> getAllSharedKontaktlistenByReceiver(int receiverId) throws IllegalArgumentException;
@@ -574,12 +507,9 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getAllSharedAuspraegungenByKontaktAndNutzer(Kontakt k, Nutzer n);
-	 * @param k
-	 *            - Kontakt
-	 * @param n
-	 *            - aktuell eingeloggter Nutzer
-	 * @return alle geteilten Auspraegungen zu einem geteilten Kontakt k mit einem
-	 *         Nutzer n aus
+	 * @param k - Kontakt
+	 * @param n - aktuell eingeloggter Nutzer
+	 * @return alle geteilten Auspraegungen zu einem geteilten Kontakt k mit einem Nutzer n aus
 	 * 
 	 */
 	public Vector<Relatable> getAllSharedAuspraegungenByKontaktAndNutzer(Kontakt k, Nutzer n)
@@ -594,12 +524,9 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getKontakteByName(String name, Nutzer n);
-	 * @param name
-	 *            des Kontakts
-	 * @param n
-	 *            - aktuell eigenloggter Nutzer
-	 * @return alle Kontakte des Nutzer welche einen Treffen auf den uebergebenen
-	 *         String haben
+	 * @param name des Kontakts
+	 * @param n - aktuell eigenloggter Nutzer
+	 * @return  alle Kontakte des Nutzer welche einen Treffen auf den uebergebenen String haben
 	 * 
 	 */
 	public Vector<Kontakt> getKontakteByName(String name, Nutzer n) throws IllegalArgumentException;
@@ -607,10 +534,8 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getKontakteByAuspraegung(String wert, Nutzer n);
-	 * @param wert
-	 *            der Eigenschaft (Auspraegung)
-	 * @param n
-	 *            - aktuell eingeloggter Nutzer
+	 * @param wert der Eigenschaft (Auspraegung)
+	 * @param n - aktuell eingeloggter Nutzer
 	 * @return Kontakte die eine bestimmte Auspraegungen besitzen
 	 * 
 	 */
@@ -619,10 +544,8 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getKontakteByEigenschaft(String bezeichnung, Nutzer n);
-	 * @param bezeichnung
-	 *            - die Bezeichnung Eigenschaft
-	 * @param n-
-	 *            aktuell eingeloggter Nutzer
+	 * @param bezeichnung - die Bezeichnung Eigenschaft
+	 * @param n- aktuell eingeloggter Nutzer
 	 * @return Kontakte die eine bestimmte Eigenschaft besitzen
 	 * 
 	 */
@@ -637,8 +560,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getAuspraegungByWert(String wert);
-	 * @param wert
-	 *            der Eigenschaft (Auspraegung)
+	 * @param wert der Eigenschaft (Auspraegung)
 	 * @return Auspraegungen die einen bestimmten Wert besitzen
 	 * 
 	 */
@@ -647,12 +569,9 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getKontaktByAusEig(String wert, String bezeichnung, Nutzer n);
-	 * @param bezeichnung
-	 *            der Eigenschaft
-	 * @param wert
-	 *            der Eigenschaft (Aupraegung)
-	 * @param n
-	 *            - aktuell eingeloggter Nutzer
+	 * @param bezeichnung der Eigenschaft
+	 * @param wert der Eigenschaft (Aupraegung)
+	 * @param n - aktuell eingeloggter Nutzer
 	 * @return Kontakte die eine bestimmte Eigenacht und Auspraegung besitzen
 	 * 
 	 */
@@ -668,10 +587,8 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getStatusForObject(int objectId, char type) ;
-	 * @param objectId
-	 *            - id des Objekts (Kontaktliste, Kontakt oder Auspraegung)
-	 * @param type
-	 *            - Typ des Objekts
+	 * @param objectId - id des Objekts (Kontaktliste, Kontakt oder Auspraegung)
+	 * @param type - Typ des Objekts
 	 * @return Status ob ein Objekt geteilt wurde oder nicht
 	 * 
 	 */
@@ -680,8 +597,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #saveModifikationsdatum(int id);
-	 * @param id
-	 *            des Kontakts
+	 * @param id des Kontakts
 	 * 
 	 */
 	public void saveModifikationsdatum(int id) throws IllegalArgumentException;

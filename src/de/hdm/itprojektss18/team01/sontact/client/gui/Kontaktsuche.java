@@ -60,6 +60,10 @@ public class Kontaktsuche extends VerticalPanel {
 	/**
 	 * Konstruktor wird ausgelöst man einen Kontakt des Nutzers übergibt um die
 	 * Eigenschaften mit ihren Ausprägung anzeigen zu lassen.
+	 * 
+	 * @param n der aktuell eingeloggte Nutzer
+	 * @param auswahl was der Nutzer suchen will (Name/Eigenschaft/Auspraegung)
+	 * @param eingabe des Nutzers
 	 */
 	public Kontaktsuche(final Nutzer n, String auswahl, String eingabe) {
 		RootPanel.get("content").clear();
@@ -375,7 +379,7 @@ public class Kontaktsuche extends VerticalPanel {
 	/**
 	 * Abfrage ob der KeyProvider null ist oder nicht.
 	 * 
-	 * @return
+	 * @return Rueckgabe des KeyProviders
 	 */
 	public static ProvidesKey<Kontakt> getKeyProvider() {
 		if (KEY_PROVIDER != null) {

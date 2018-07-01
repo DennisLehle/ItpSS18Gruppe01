@@ -773,7 +773,7 @@ public class MessageBox {
 	/**
 	 * Abfrage ob der KeyProvider null ist oder nicht.
 	 * 
-	 * @return1
+	 * @return null
 	 */
 	public static ProvidesKey<Nutzer> getKeyProvider() {
 		if (KEY_PROVIDER != null) {

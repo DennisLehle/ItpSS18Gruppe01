@@ -1,9 +1,6 @@
-﻿package de.hdm.itprojektss18.team01.sontact.server;
+package de.hdm.itprojektss18.team01.sontact.server;
 
-import java.util.Date;
-import java.sql.Timestamp;
 
-import java.util.Vector;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -21,6 +18,11 @@ import de.hdm.itprojektss18.team01.sontact.shared.report.AlleKontakteReport;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.*;
 import de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl;
 import de.hdm.itprojektss18.team01.sontact.shared.ReportGenerator;
+import java.util.Date;
+import java.sql.Timestamp;
+
+import java.util.Vector;
+
 
 /**
  * Implementierung des serverseitigen RPC-Services fuer den prozessierenden

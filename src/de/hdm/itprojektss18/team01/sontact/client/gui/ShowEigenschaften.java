@@ -445,8 +445,6 @@ public class ShowEigenschaften extends VerticalPanel {
 
 	/**
 	 * Abfrage ob der KeyProvider null ist oder nicht.
-	 * 
-	 * @return1
 	 */
 	public static ProvidesKey<Relatable> getKeyProvider() {
 		if (KEY_PROVIDER != null) {

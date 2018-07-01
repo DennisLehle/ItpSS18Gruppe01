@@ -97,10 +97,10 @@ public class HTMLReportWriter extends ReportWriter {
 		// Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
 		this.resetReportText();
 
-		//Ein Stringbuffer, an den alle folgenden HTML Inhalte angehängt werden
+		//Ein Stringbuffer, an den alle folgenden HTML Inhalte angehaengt werden
 		StringBuffer result = new StringBuffer();
 		
-		// Hinzufügen der Ueberschrift und den Kopfdaten in HTML-Form.
+		// Hinzufuegen der Ueberschrift und den Kopfdaten in HTML-Form.
 		result.append("<H3>" + r.getTitle() + "</H3>");
 		result.append(
 				"<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");
@@ -177,10 +177,10 @@ public class HTMLReportWriter extends ReportWriter {
 		// Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
 				this.resetReportText();
 
-				//Ein Stringbuffer, an den alle folgenden HTML Inhalte angehängt werden
+				//Ein Stringbuffer, an den alle folgenden HTML Inhalte angehaengt werden
 				StringBuffer result = new StringBuffer();
 				
-				// Hinzufügen der Ueberschrift und den Kopfdaten in HTML-Form.
+				// Hinzufï¿½gen der Ueberschrift und den Kopfdaten in HTML-Form.
 				result.append("<H3>" + r.getTitle() + "</H3>");
 				result.append(
 						"<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");
@@ -251,10 +251,10 @@ public class HTMLReportWriter extends ReportWriter {
 		// Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
 				this.resetReportText();
 
-				//Ein Stringbuffer, an den alle folgenden HTML Inhalte angehängt werden
+				//Ein Stringbuffer, an den alle folgenden HTML Inhalte angehaengt werden
 				StringBuffer result = new StringBuffer();
 				
-				// Hinzufügen der Ueberschrift und den Kopfdaten in HTML-Form.
+				// Hinzufuegen der Ueberschrift und den Kopfdaten in HTML-Form.
 				result.append("<H3>" + r.getTitle() + "</H3>");
 				result.append(
 						"<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");
@@ -325,10 +325,10 @@ public class HTMLReportWriter extends ReportWriter {
 		// Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
 				this.resetReportText();
 
-				//Ein Stringbuffer, an den alle folgenden HTML Inhalte angehängt werden
+				//Ein Stringbuffer, an den alle folgenden HTML Inhalte angehaengt werden
 				StringBuffer result = new StringBuffer();
 				
-				// Hinzufügen der Ueberschrift und den Kopfdaten in HTML-Form.
+				// Hinzufuegen der Ueberschrift und den Kopfdaten in HTML-Form.
 				result.append("<H3>" + r.getTitle() + "</H3>");
 				result.append(
 						"<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");

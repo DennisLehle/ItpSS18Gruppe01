@@ -214,10 +214,9 @@ public class SontactTreeViewModel implements TreeViewModel {
 	}
 
 	/**
-	 * F�gt eine neue Kontaktliste zum Baum hinzu.
+	 * Fuegt eine neue Kontaktliste zum Baum hinzu.
 	 * 
-	 * @param die
-	 *            neue Kontaktliste
+	 * @param kontaktliste die hunzugefuegt wird
 	 */
 	public void addKontaktliste(Kontaktliste kontaktliste) {
 		this.kontaktlisteDataProvider.getList().add(kontaktliste);

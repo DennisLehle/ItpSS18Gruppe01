@@ -17,10 +17,8 @@ public class Nutzer extends BusinessObject implements IsSerializable {
 
 	/**
 	 * Auslesen der Email
-	 * 
-	 * @param emailAddress
+	 * @return emailAddress des Nutzers
 	 */
-
 	public String getEmailAddress() {
 		return emailAddress;
 	}

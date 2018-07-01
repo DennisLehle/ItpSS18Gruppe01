@@ -36,10 +36,7 @@ public class LoginInfo implements IsSerializable {
 
 	/**
 	 * Setzt den Login-Status
-	 * 
-	 * @return loggedIn
 	 */
-
 	public void setLoginIn(boolean loggedIn) {
 		this.loggedIn = loggedIn;
 	}
@@ -57,9 +54,8 @@ public class LoginInfo implements IsSerializable {
 	/**
 	 * Setzt die LoginUrl
 	 * 
-	 * @param loggedIn
+	 * @param loginUrl die gesetzt werden soll
 	 */
-
 	public void setLoginUrl(String loginUrl) {
 		this.loginUrl = loginUrl;
 	}

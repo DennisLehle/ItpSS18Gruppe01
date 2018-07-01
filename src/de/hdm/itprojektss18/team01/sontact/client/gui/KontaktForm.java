@@ -111,7 +111,7 @@ public class KontaktForm extends VerticalPanel {
 	/**
 	 * Konstruktor der zum Einsatz kommt, wenn ein Kontakt bereits vorhanden ist.
 	 * 
-	 * @param Kontakt
+	 * @param k ausgewaehlter Kontakt
 	 */
 	public KontaktForm(Kontakt k) {
 		RootPanel.get("contentHeader").clear();

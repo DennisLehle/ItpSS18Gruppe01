@@ -99,10 +99,7 @@ public class ShowKontakte extends VerticalPanel {
 	 * Konstruktor der Klasse für's Anzeigen von Kontakten einer Kontaktliste, wenn
 	 * man auf eine Kontaktliste klickt
 	 * 
-	 * @param n
-	 *            Nutzer der übergeben wird
-	 * @param kl
-	 *            Kontaktliste die ausgewählt wurde
+	 * @param kl Kontaktliste die ausgewählt wurde
 	 */
 	public ShowKontakte(Kontaktliste kl) {
 

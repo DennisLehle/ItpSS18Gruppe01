@@ -9,11 +9,11 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 /**
  * <p>
  * Die Klasse <code>BusinessObject</code> stellt die Basisklasse aller in diesem
- * Projekt für die Umsetzung des Fachkonzepts relevanten Klassen dar.
+ * Projekt fuer die Umsetzung des Fachkonzepts relevanten Klassen dar.
  * </p>
  * <p>
  * Zentrales Merkmal ist, dass jedes <code>BusinessObject</code> eine Nummer
- * besitzt, die man in einer relationalen Datenbank auch als Primaerschlüssel
+ * besitzt, die man in einer relationalen Datenbank auch als Primaerschluessel
  * bezeichnen wuerde. Fernen ist jedes <code>BusinessObject</code> als
  * {@link Serializable} gekennzeichnet. Durch diese Eigenschaft kann jedes
  * <code>BusinessObject</code> automatisch in eine textuelle Form ueberfuehrt

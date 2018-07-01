@@ -12,7 +12,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.LoginService;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.LoginInfo;
 
 /**
- * Implementierung des serverseitigen RPC-Services für den Login. 
+ * Implementierung des serverseitigen RPC-Services fuer den Login. 
  */
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService, IsSerializable{
 

@@ -54,7 +54,7 @@ public class KontaktlisteForm extends VerticalPanel {
 	 * Konstruktor der zum Einsatz kommt, wenn eine Kontaktliste bereits vorhanden
 	 * ist.
 	 * 
-	 * @param Kontaktliste
+	 * @param kl Kontktliste die ausgewaehlt wurde
 	 */
 	public KontaktlisteForm(Kontaktliste kl) {
 		

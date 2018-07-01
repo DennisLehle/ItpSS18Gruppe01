@@ -73,7 +73,7 @@ public class PlainTextReportWriter extends ReportWriter {
 
 			/*
 			 * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
-			 * reportText-Variable zugewiesen. Dadurch wird es moeglich, anschlie√ssend das
+			 * reportText-Variable zugewiesen. Dadurch wird es moeglich, anschliessend das
 			 * Ergebnis mittels getReportText() auszulesen.
 			 */
 			this.reportText = result.toString();

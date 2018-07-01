@@ -64,7 +64,7 @@ public class Navigation extends VerticalPanel {
 			@Override
 			public void onClick(ClickEvent event) {
 				RootPanel.get("content").clear();
-				RootPanel.get("content").add(new KontaktForm(nutzer));
+				RootPanel.get("content").add(new RegistrierungsForm(nutzer));
 
 			}
 		});

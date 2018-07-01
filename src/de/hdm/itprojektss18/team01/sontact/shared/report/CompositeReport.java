@@ -20,7 +20,7 @@ public abstract class CompositeReport
 	private Vector<Report> subReports = new Vector<Report>();
 
 	/**
-	 * Hinzufügen eines Teil-Reports.
+	 * Hinzufuegen eines Teil-Reports.
 	 * @param r der hinzuzufuegende Teil-Report.
 	 */
 	public void addSubReport(Report r) {

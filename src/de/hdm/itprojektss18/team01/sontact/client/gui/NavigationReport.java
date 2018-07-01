@@ -175,7 +175,7 @@ public class NavigationReport extends VerticalPanel {
 				RootPanel.get("contentR").add(new HTML("</br>"));
 				RootPanel.get("contentR").add(new HTML("</br>"));
 
-				// Dem Horizontal Panel werden die definierten Elemente hinzugefügt
+				// Dem Horizontal Panel werden die definierten Elemente hinzugefuegt
 				hp.add(auswahl);
 				hp.add(eingabe);
 				hp.add(auswahl1);

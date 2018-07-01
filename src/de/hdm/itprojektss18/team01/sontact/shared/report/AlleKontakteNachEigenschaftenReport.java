@@ -3,7 +3,7 @@ package de.hdm.itprojektss18.team01.sontact.shared.report;
 /**
 /**
  * Reportklasse die eine Abfrage aller Kontakte eines Nutzers nach bestimmten Eigenschaften 
- * und Auspraegungen ausführt. 
+ * und Auspraegungen ausfuehrt. 
  * @author Miescha
  */
 

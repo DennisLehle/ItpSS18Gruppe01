@@ -6,7 +6,7 @@ package de.hdm.itprojektss18.team01.sontact.shared.bo;
 public class Berechtigung extends BusinessObject {
 	
 	/*
-	 * Testkommentar für nicht getrackte Klasse. 
+	 * Testkommentar fuer nicht getrackte Klasse. 
 	 */
 
 	private static final long serialVersionUID = 1L;

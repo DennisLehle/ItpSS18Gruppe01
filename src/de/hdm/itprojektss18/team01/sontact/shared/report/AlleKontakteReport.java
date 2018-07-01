@@ -2,7 +2,7 @@ package de.hdm.itprojektss18.team01.sontact.shared.report;
 
 /**
 /**
- * Reportklasse die eine Abfrage aller Kontakte eines Nutzers ausführt. 
+ * Reportklasse die eine Abfrage aller Kontakte eines Nutzers ausfuehrt. 
  * @author Miescha
  */
 

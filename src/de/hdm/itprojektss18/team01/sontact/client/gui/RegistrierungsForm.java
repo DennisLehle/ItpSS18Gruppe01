@@ -103,6 +103,7 @@ public class RegistrierungsForm extends VerticalPanel {
 		// Hier wird der Speichern-Button gestylt
 		speichern.setStylePrimaryName("regButton");
 
+		
 		gmailTb.setText(n.getEmailAddress());
 		gmailTb.setEnabled(false);
 		

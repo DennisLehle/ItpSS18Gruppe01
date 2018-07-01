@@ -86,7 +86,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	/**
 	 * Vollstaendiger Satz von Mappern mit deren Hilfe die Administratorenklasse
-	 * <EditorServiceImpl> mit der Datenbank kommunizieren kann.
+	 * EditorServiceImpl-Klasse mit der Datenbank kommunizieren kann.
 	 */
 	public void init() throws IllegalArgumentException {
 
@@ -115,7 +115,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Erzeugen eines neuen Nutzers, dieser wird angelegt und anschliessend in der
 	 * DB gespeichert.
 	 * 
-	 * @param String email
+	 * @param email des Nutzers
 	 * @return Nutzer
 	 */
 	public Nutzer createNutzer(String email) throws IllegalArgumentException {
@@ -145,7 +145,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Anhand der identifizierenden Emailaddresse wird ueberprueft, ob diese als
 	 * Nutzer bereits existiert.
 	 * 
-	 * @param email
+	 * @param email des Nutzers
 	 * @return Nutzer
 	 */
 	public Nutzer getUserByGMail(String email) throws IllegalArgumentException {
@@ -176,8 +176,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Ein Nutzer wird mit allen Zusammenhaengenden Objekten aus der Datenbank
 	 * geloescht.
 	 * 
-	 * @param Nutzer
-	 * @return void
+	 * @param n der Nutzer der geloescht werden soll
 	 */
 	public void deleteNutzer(Nutzer n) throws IllegalArgumentException {
 
@@ -249,8 +248,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Nutzers "Meine Kontakte" zugeordnet und steht dem Nutzer nun zu weiteren
 	 * Funktionen zur Verfuegung.
 	 * 
-	 * @param String vorname, String nachname, Nutzer n
-	 * @return Kontakt
+	 * @param vorname, nachname, n des Kontakt der erstellt wird
+	 * @return k1 der erstellte Kontakt
 	 */
 	public Kontakt createKontakt(String vorname, String nachname, Nutzer n)
 			throws IllegalArgumentException {
@@ -292,8 +291,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * des Nutzers und alle weiteren, die vom Nutzer angelegt werden, gespeichert
 	 * sind.
 	 * 
-	 * @param String vorname, String nachname, Nutzer n
-	 * @return Kontakt
+	 * @param vorname, nachname, n
+	 * @return k
 	 */
 
 	public Kontakt createKontaktRegistrierung(String vorname, String nachname, Nutzer n)
@@ -340,8 +339,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Modifikation eines Kontakts.
 	 * 
-	 * @param Kontakt k
-	 * @return Kontakt
+	 * @param k Kontakt der modifiziert wird
+	 * @return k Rueckgabe des modifizierten Kontakts
 	 */
 	public Kontakt saveKontakt(Kontakt k) throws IllegalArgumentException {
 
@@ -354,8 +353,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Loeschen eines Kontakts mit seinen Auspraegungen seinen
 	 * Kontaktlistenzugehoerigkeiten und seinen Berechtigungseintraegen
 	 * 
-	 * @param Kontakt k
-	 * @return void
+	 * @param k der zu loeschende Kontakt
 	 */
 	public void deleteKontakt(Kontakt k) throws IllegalArgumentException {
 
@@ -398,8 +396,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Auslesen des Registierungs- Kontaktformulars eines Nutzers.
 	 * 
-	 * @param n
-	 * @return
+	 * @param n Nutzer der gesucht werden soll
+	 * @return Rueckgabe des Kontaktes
 	 */
 	public Kontakt getOwnKontakt(Nutzer n) throws IllegalArgumentException {
 
@@ -410,8 +408,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Ausgabe aller Kontakte, bei welchen der Nutzer als Eigentuemer hinterlegt
 	 * ist.
 	 * 
-	 * @param Nutzer n
-	 * @return Vector <Kontakt>
+	 * @param n Nutzer von dem alle seine Kontakte gesucht werden sollen
+	 * @return  Rueckgabe aller Kontakte des Nutzers
 	 */
 	public Vector<Kontakt> getAllKontakteByOwner(Nutzer n)
 			throws IllegalArgumentException {
@@ -423,8 +421,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Zuweisung eines Kontakt zu einer Kontaktliste.
 	 * 
-	 * @param Kontaktliste kl, Kontakt k
-	 * @return void
+	 * @param kl, k der Kontakt der zu einer Kontakltiste zugewiesen werden soll
 	 */
 	public void addKontaktToKontaktliste(Kontaktliste kl, Kontakt k)
 			throws IllegalArgumentException {
@@ -435,8 +432,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Aufhebung der Zuweisung eines Kontakts zu einer Kontaktliste
 	 * 
-	 * @param Kontaktliste kl, Kontakt k
-	 * @return void
+	 * @param kl, k Kontakt aus einer Kontaktliste loeschen
 	 */
 	public void removeKontaktFromKontaktliste(Kontaktliste kl, Kontakt k)
 			throws IllegalArgumentException {
@@ -461,8 +457,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * der DB gespeichert. Die Kontaktliste steht dem Nutzer nun zu weiteren
 	 * Funktionen zur Verfuegung.
 	 * 
-	 * @param String titel, Nutzer n
-	 * @return Kontaktliste
+	 * @param titel, n der Nutzer der eine Kontakltiste mit einem Titel erzeugt
+	 * @return kl Rueckgabe der Kontakltiste die erzeugt wurde
 	 */
 	public Kontaktliste createKontaktliste(String titel, Nutzer n)
 			throws IllegalArgumentException {
@@ -485,8 +481,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * angelegt und anschliessend in der DB gespeichert. Die Kontaktliste bildet den
 	 * Speicherort aller angelegten Kontakte.
 	 * 
-	 * @param Nutzer n
-	 * @return Kontaktliste
+	 * @param n der Nutzer der sie erzeugt
+	 * @return kl Ruckegabe der Kontaktliste
 	 */
 	public Kontaktliste createKontaktlisteRegistrierung(Nutzer n) throws IllegalArgumentException {
 
@@ -504,7 +500,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	
 	/**
-	 * Prüfung ob ein Kontakt in einer Kontaktliste bereits vorhanden ist.
+	 * Pruefung ob ein Kontakt in einer Kontaktliste bereits vorhanden ist.
 	 * Ist dieser schon vorhanden wird true zurcÃ¼kgegeben.
 	 * 
 	 * @param kontaktlisteId der Kontaktliste die ueberprueft wird.
@@ -534,8 +530,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Speichern einer modifizierten Kontaktliste
 	 * 
-	 * @param Kontaktliste kl
-	 * @return void
+	 * @param kl die Kontakltiste die modifiziert wurde
 	 */
 	public void saveKontaktliste(Kontaktliste kl) throws IllegalArgumentException {
 
@@ -546,15 +541,14 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Loeschen einer Kontaktliste. Eine Kontaktliste wird mit allen
 	 * zusammenhaengenden Objekten aus der DB entfernt.
 	 * 
-	 * @param Kontaktliste kl
-	 * @return void
+	 * @param kl Kontkaliste die geloescht werden soll
 	 */
 	public void deleteKontaktliste(Kontaktliste kl) throws IllegalArgumentException {
 
 		/*
 		 * zunaechst Abruf aller Berechtgigungen: Abgleich aller Berechtigungen
-		 * (objektId) mit der Id der Kontaktliste bei ï¿½bereinstummung entfernen der
-		 * Berechtigungen fï¿½r die Kontaktliste mit allen zugehï¿½rigen Berechtigungen
+		 * (objektId) mit der Id der Kontaktliste bei Uebereinstummung entfernen der
+		 * Berechtigungen fuer die Kontaktliste mit allen zugehoerigen Berechtigungen
 		 * auf die Kontakte und Auspraegungen der Kontaktliste kl
 		 */
 		Vector<Berechtigung> bv = this.bMapper.findAll();
@@ -580,7 +574,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Auslesen einer Kontaktliste anhand id.
 	 * 
-	 * @param id
+	 * @param id der Kontaktliste die Sie eindeutig macht
 	 * @return Kontaktliste
 	 */
 	public Kontaktliste getKontaktlisteById(int id) throws IllegalArgumentException {
@@ -600,8 +594,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Ausgabe aller Kontaktlisten eines Nutzers
 	 * 
-	 * @param Nutzer n
-	 * @return Vector<Kontaktliste>
+	 * @param n Nutzer von dem die Kontakltisten ausgegeben werden sollen
 	 */
 	public Vector<Kontaktliste> getKontaktlistenByOwner(Nutzer n) throws IllegalArgumentException {
 
@@ -611,9 +604,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Ausgabe der Kontakte einer Kontaktliste
 	 * 
-	 * @param kl
-	 * @return Vector<Kontakt>
-	 * @throws IllegalArgumentException
+	 * @param kontaktlisteId Kontaktliste in der gesucht werden soll
 	 */
 	public Vector<Kontakt> getKontakteByKontaktliste(int kontaktlisteId) throws IllegalArgumentException {
 
@@ -637,8 +628,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * gespeichert wird. Der Nutzer kann hiermit eigene Eigenschaften anlegen und
 	 * mit Auspraegungen vervollstaendigen.
 	 * 
-	 * @param String bezeichnung
-	 * @return Eigenschaft
+	 * @param bezeichnung Name der Eigenschaft die erzeugt wird
+	 * @return e EIgenschaft die in der db anglegt wurde
 	 */
 	public Eigenschaft createEigenschaft(String bezeichnung)
 			throws IllegalArgumentException {
@@ -689,10 +680,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
-	 * Gibt eine Eigenschaft anhand ihrer ID zururck.
+	 * Gibt eine Eigenschaft anhand ihrer ID zurueck.
 	 * 
 	 * @return Eigenschaft
-	 * @throws IllegalArgumentException
 	 */
 	public Eigenschaft getEigenschaftById(int eigenschaftId)
 			throws IllegalArgumentException {
@@ -703,8 +693,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Gibt eine vordefinierte Auswahl an Eigenschaften zuruck.
 	 * 
-	 * @return Vector <Eigenschaft>
-	 * @throws IllegalArgumentException
 	 */
 	public Vector<Eigenschaft> getEigenschaftAuswahl()
 			throws IllegalArgumentException {
@@ -728,8 +716,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * bereichern und erhaelt die Moeglichkeit "Kontaktinformationen" in Form von
 	 * Auspraegungen zu hinterlegen.
 	 * 
-	 * @param String wert, int eigenschaftId, int kontaktId
-	 * @return Auspraegung
+	 * @param wert, eigenschaftId, kontaktId, ownerId 
+	 * @return a Auspraegung die erzeigt werden soll
 	 */
 	public Auspraegung createAuspraegung(String wert, int eigenschaftId, int kontaktId, int ownerId)
 			throws IllegalArgumentException {
@@ -755,8 +743,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * hiermit in einem Zuge Eigenschaften anlegen und mit einem Auspraegungswert
 	 * befuellen.
 	 * 
-	 * @param String bezeichnung, String wert, Kontakt k
-	 * @return void
+	 * @param bezeichnung, wert, k
 	 */
 	public void createAuspraegungForNewEigenschaft(Vector<String> bezeichnung, Vector<String> wert, Kontakt k, int ownerId)
 			throws IllegalArgumentException {
@@ -813,8 +800,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Loeschen einer Auspraegung anhand der id.
 	 * 
-	 * @param a
-	 * @throws IllegalArgumentException
+	 * @param auspraegungId Auspraegung die geloescht werden soll
 	 */
 	public void deleteAuspraegungById(int auspraegungId)
 			throws IllegalArgumentException {
@@ -833,7 +819,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Gibt alle Auspraegungen eines Kontaktes zurueck
 	 * 
-	 * @return Vector<Auspraegung>
+	 * @return Vector von Auspraegungen
 	 */
 	public Vector<Auspraegung> getAllAuspraegungenByKontakt(int kontaktId)
 			throws IllegalArgumentException {
@@ -843,8 +829,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	/**
 	 * Gibt alle Auspraegungen eines Kontaktes zurueck
-	 * 
-	 * @return Vector<Relatable>
 	 */
 	public Vector<Relatable> getAllAuspraegungenByKontaktRelatable(int kontaktId)
 			throws IllegalArgumentException {
@@ -874,7 +858,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 * 
 	 * @param ownerId, receiverId, objectId, type
-	 * @return Berechtigung
+	 * @return b
 	 */
 	public Berechtigung createBerechtigung(int ownerId, int receiverId, int objectId, char type)
 			throws IllegalArgumentException {
@@ -902,7 +886,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * des Objekts eindeutig ist, eingetragen.
 	 * 
 	 * @param ownerId, receiverId, objectId, type
-	 * @throws IllegalArgumentException
 	 */
 	public void shareObject(int ownerId, int receiverId, int objectId, char type, Vector<Relatable> avshare)
 			throws IllegalArgumentException {
@@ -1013,8 +996,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * fortlaufend von der Teilhaberschaft geloest ergo werden alle Berechtigungen
 	 * auf die entsprechenden Objekte einzeln geloescht.
 	 * 
-	 * @param Berechtigung b
-	 * @throws IllegalArgumentException
+	 * @param b Berechtigung die geloescht werden soll
 	 */
 	public void deleteBerechtigung(Berechtigung b) throws IllegalArgumentException {
 
@@ -1135,8 +1117,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Gibt alle Objekt-Berechtigungen ueber jene Objekte aus, welche vom Nutzer
 	 * geteilt wurden.
 	 * 
-	 * @param ownerId
-	 * @return Berechtigungen
+	 * @param nutzerId id des Owners von geteilten Objekten
+	 * @return b die Berechtigungen des Nutzers
 	 */
 	public Vector<Berechtigung> getAllBerechtigungenByOwner(int nutzerId)
 			throws IllegalArgumentException {
@@ -1149,8 +1131,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Gibt alle Objekt-Berechtigungen ueber jene Objekte aus, welche mit dem Nutzer
 	 * geteilt wurden.
 	 * 
-	 * @param receiverId
-	 * @return Berechtigungen
+	 * @param nutzerId des nutzers mit dem geteilt wurde
+	 * @return b die geteilte Berechtigung 
 	 */
 	public Vector<Berechtigung> getAllBerechtigungenByReceiver(int nutzerId)
 			throws IllegalArgumentException {
@@ -1164,8 +1146,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Kontaktliste oder Auspraegung) geteilt wurde. (Relevant fuer die Aufhebaung/
 	 * Loeschung einer Teilhaberschaft als Owner).
 	 * 
-	 * @param int objectId, char type, Nutzer n
-	 * @return Vector<Nutzer>
+	 * @param objectId, type, n
 	 */
 	public Vector<Nutzer> sharedWith(int objectId, char type, Nutzer n) throws IllegalArgumentException {
 
@@ -1231,8 +1212,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Gibt alle <code>Kontakt</code>-Objekte aus, welche vom Nutzer geteilt wurden.
 	 * 
-	 * @param ownerId
-	 * @return Vector<Kontakt>
+	 * @param nutzerId des Nutzers
 	 */
 	public Vector<Kontakt> getAllSharedKontakteByOwner(int nutzerId)
 			throws IllegalArgumentException {
@@ -1267,8 +1247,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Gibt alle <code>Kontakt</code>-Objekte aus, welche mit dem Nutzer geteilt
 	 * wurden.
 	 * 
-	 * @param nutzerId
-	 * @return Vector<Kontakt>
+	 * @param nutzerId des Nutzers mit dem geteilt wurde
+	 * @return Vector von Kontakten
 	 */
 	public Vector<Kontakt> getAllSharedKontakteByReceiver(int nutzerId)
 			throws IllegalArgumentException {
@@ -1276,7 +1256,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Vektor welcher alle fuer den Nutzer gesetzten Berechtigungen enthaelt
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(nutzerId);
 
-		// Leerer Vektor fï¿½r alle mit dem Nutzer geteilten Kontakte
+		// Leerer Vektor fuer alle mit dem Nutzer geteilten Kontakte
 		Vector<Kontakt> kv = new Vector<Kontakt>();
 
 		// Schleife welche alle fï¿½r den Nutzer gesetzten Berechtigungen durchlaeuft
@@ -1302,8 +1282,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Gibt alle <code>Kontaktliste</code>-Objekte aus, welche vom Nutzer geteilt
 	 * wurden.
 	 * 
-	 * @param nutzerId
-	 * @return Vector<Kontakt>
+	 * @param nutzerId des Nutzers
 	 */
 	public Vector<Kontaktliste> getAllSharedKontaktlistenByOwner(int nutzerId)
 			throws IllegalArgumentException {
@@ -1337,8 +1316,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Gibt alle <code>Kontaktliste</code>-Objekte aus, welche mit dem Nutzer
 	 * geteilt wurden.
 	 * 
-	 * @param nutzerId
-	 * @return Vector<Kontakt>
+	 * @param nutzerId des Nutzers mit dem Kontaktlisten geteilt wurden
 	 */
 	public Vector<Kontaktliste> getAllSharedKontaktlistenByReceiver(int nutzerId)
 			throws IllegalArgumentException {
@@ -1346,10 +1324,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Vektor welcher alle fuer den Nutzer gesetzten Berechtigungen enthaelt
 		Vector<Berechtigung> bv = this.getAllBerechtigungenByReceiver(nutzerId);
 
-		// Leerer Vektor fï¿½r alle mit dem Nutzer geteilten Kontaktlisten
+		// Leerer Vektor fuer alle mit dem Nutzer geteilten Kontaktlisten
 		Vector<Kontaktliste> klv = new Vector<Kontaktliste>();
 
-		// Schleife welche alle fï¿½r den Nutzer gesetzten Berechtigungen durchlaeuft
+		// Schleife welche alle fuer den Nutzer gesetzten Berechtigungen durchlaeuft
 		for (int b = 0; b < bv.size(); b++) {
 
 			// Abgleich des Nutzers als Receiver sowie des Objekttypes um die Eindeutigkeit
@@ -1373,9 +1351,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Gibt alle geteilten Auspraegungen zu einem geteilten Kontakt k mit einem
 	 * Nutzer n aus.
 	 * 
-	 * @param Kontakt
-	 *            k, Nutzer n
-	 * @return Vector<Auspraegung>
+	 * @param k, n
+	 * @return avshare
 	 */
 	public Vector<Relatable> getAllSharedAuspraegungenByKontaktAndNutzer(Kontakt k, Nutzer n)
 			throws IllegalArgumentException {
@@ -1386,7 +1363,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Vektor welche alle Auspraegungen eines Kontaktes enthaelt
 		Vector<Relatable> av = this.getAllAuspraegungenByKontaktRelatable(k.getId());
 
-		// Leerer Vektor fï¿½r alle geteilten Auspraegungen des Kontaktes k
+		// Leerer Vektor fuer alle geteilten Auspraegungen des Kontaktes k
 		Vector<Relatable> avshare = new Vector<Relatable>();
 
 		// Schleife welche alle Auspraegungen des Kontaktes k durchlaeuft
@@ -1437,8 +1414,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 * @param name, vom Nutzer uebergebener String
 	 * @param n Nutzer
-	 * @return Vector<Kontakt>
-	 * @throws IllegalArgumentException
+	 * @return Vector von Kontakten
 	 */
 	public Vector<Kontakt> getKontakteByName(String name, Nutzer n)
 			throws IllegalArgumentException {
@@ -1451,10 +1427,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * dem Wert und gibt diesen zurueck. Hierbei wird die Auspraegung eines
 	 * Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
 	 * 
-	 * @param wert, vom Nutzer uebergebener String
+	 * @param wert vom Nutzer uebergebener String
 	 * @param n Nutzer
-	 * @return Vector<Kontakt>
-	 * @throws IllegalArgumentException
 	 */
 	public Vector<Kontakt> getKontakteByAuspraegung(String wert, Nutzer n)
 			throws IllegalArgumentException {
@@ -1467,10 +1441,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * der Bezeichnung und gibt diesen zurueck. Hierbei wird die Eigenschaft eines
 	 * Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
 	 * 
-	 * @param wert, vom Nutzer uebergebener String
+	 * @param bezeichnung, n, vom Nutzer uebergebener String
 	 * @param n Nutzer
-	 * @return Vector<Kontakt>
-	 * @throws IllegalArgumentException
 	 */
 	public Vector<Kontakt> getKontakteByEigenschaft(String bezeichnung, Nutzer n)
 			throws IllegalArgumentException {
@@ -1483,9 +1455,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Wert der Eigenschaft und Auspraegung und gibt diesen zurueck. Hierbei wird die Auspraegung
 	 * und die Eigenschaft mit der dazugehoerigen Eigenschaft dem Kontakt zurueckgegeben.
 	 * 
-	 * @param wert,bezeichnung vom Nutzer uebergebener String
-	 * @return Vector<Auspraegung>
-	 * @throws IllegalArgumentException
+	 * @param wert, bezeichnung vom Nutzer uebergebener String
 	 */
 	
 	public Vector<Kontakt> getKontaktByAusEig(String bezeichnung, String wert, Nutzer n)
@@ -1512,8 +1482,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * mit der dazugehoerigen Eigenschaft dem Kontakt zurueckgegeben.
 	 * 
 	 * @param wert, vom Nutzer uebergebener String
-	 * @return Vector<Auspraegung>
-	 * @throws IllegalArgumentException
+	 * @return Vector von Auspraegungen
 	 */
 	public Vector<Auspraegung> getAuspraegungByWert(String wert) throws IllegalArgumentException {
 

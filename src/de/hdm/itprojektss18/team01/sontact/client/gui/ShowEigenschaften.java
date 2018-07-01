@@ -62,6 +62,9 @@ public class ShowEigenschaften extends VerticalPanel {
 	/**
 	 * Konstruktor wird ausgelöst man einen Kontakt des Nutzers übergibt um die
 	 * Eigenschaften mit ihren Ausprägung anzeigen zu lassen.
+	 * 
+	 * @param n aktuell eingeloggter Nutzer
+	 * @param k Uebergebener Kontakt der ausgewaehlt wurde
 	 */
 	public ShowEigenschaften(final Nutzer n, Kontakt k) {
 	
@@ -444,6 +447,9 @@ public class ShowEigenschaften extends VerticalPanel {
 
 	/**
 	 * Abfrage ob der KeyProvider null ist oder nicht.
+	 * 
+	 * @return KEY_PROVIDER mit der Anzahl der Relatable Objekte
+	 * @return null nichts kommt zurueck
 	 */
 	public static ProvidesKey<Relatable> getKeyProvider() {
 		if (KEY_PROVIDER != null) {

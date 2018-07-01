@@ -120,7 +120,8 @@ public class SontactTreeViewModel implements TreeViewModel {
 
 	/**
 	 * Konstruktur der Klasse SontactTreeViewModel.
-	 *
+	 * 
+	 * @param n der aktuell eingeloggte Nutzer
 	 */
 	public SontactTreeViewModel(final Nutzer n) {
 		this.n = n;
@@ -133,6 +134,8 @@ public class SontactTreeViewModel implements TreeViewModel {
 
 	/**
 	 * Formulare fuer die Setter.
+	 * 
+	 * @param kontaktlisteForm Kontaktliste die gesetzt wird
 	 */
 	public void setKontaktlisteForm(KontaktlisteForm kontaktlisteForm) {
 		this.kontaktlisteForm = kontaktlisteForm;
@@ -155,7 +158,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 	 * Setzt die selektierte Kontaktliste welches der Nutzer angeklickt hat. Die
 	 * selektierte Kontaktliste wird der KontaktlisteForm/Kontaktform mitgeteilt.
 	 * 
-	 * @param selectedKontaktliste
+	 * @param selectedKontaktliste die ausgewahelt wurde
 	 */
 	public void setSelectedKontaktliste(Kontaktliste selectedKontaktliste) {
 
@@ -180,7 +183,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 	/**
 	 * Diese Methode wird aufgerufen wenn der Nutzer einen Kontakt selektiert.
 	 * 
-	 * @param selectedKontakt
+	 * @param selectedKontakt der ausgewaehlt wurde
 	 */
 	public void setSelectedKontakt(Kontakt selectedKontakt) {
 
@@ -223,7 +226,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 	/**
 	 * Aktualsierung des Kontaktlisten-Objekts.
 	 * 
-	 * @param kontaktliste
+	 * @param kontaktliste die aktualisiert wird
 	 */
 	public void updateKontaktliste(Kontaktliste kontaktliste) {
 		List<Kontaktliste> kontaktlisteList = this.kontaktlisteDataProvider.getList();
@@ -242,7 +245,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 	/**
 	 * Loeschung eines Kontaktlisten-Objekts.
 	 * 
-	 * @param kontaktliste
+	 * @param kontaktliste die geloescht wird
 	 */
 	public void deleteKontaktliste(Kontaktliste kontaktliste) {
 
@@ -254,8 +257,8 @@ public class SontactTreeViewModel implements TreeViewModel {
 	/**
 	 * Hinzufuegen eines Kontakt-Objekts in eine Kontaktliste.
 	 * 
-	 * @param kontakt
-	 * @param kontaktliste
+	 * @param kontakt der hinzugefuegt wird
+	 * @param kontaktliste in der der Kontakt hinzugefuegt wird
 	 */
 	public void addKontakt(Kontakt kontakt, Kontaktliste kontaktliste) {
 
@@ -279,7 +282,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 	/**
 	 * Aktualsierung eines Kontakt-Objekts.
 	 * 
-	 * @param kontakt
+	 * @param kontakt der aktualisiert wird
 	 */
 	public void updateKontakt(final Kontakt kontakt) {
 		
@@ -308,8 +311,8 @@ public class SontactTreeViewModel implements TreeViewModel {
 	/**
 	 * Loeschung eines Kontakt-Objekts aus der Kontaktliste.
 	 * 
-	 * @param kontakt
-	 * @param kontaktliste
+	 * @param kontakt der geloescht wird
+	 * @param kontaktliste aus der der Kontakt geloescht wird
 	 */
 	public void deleteKontakt(Kontakt kontakt, Kontaktliste kontaktliste) {
 

@@ -45,11 +45,10 @@ public class MessageBox {
 	/**
 	 * Normale MessageBox die beim Aufruf eine Information ausgibt.
 	 * 
-	 * @param header
-	 *            die Überschrift des Box
-	 * @param content
-	 *            die Information die Übermittelt wird
-	 * @return
+	 * @param header  die Überschrift des Box          
+	 * @param content die Information die Übermittelt wird
+	 *           
+	 * @return box MessageBox die als PopUp angezeigt wird.
 	 */
 	public static DialogBox alertWidget(final String header, final String content) {
 		final DialogBox box = new DialogBox();
@@ -91,13 +90,11 @@ public class MessageBox {
 	/**
 	 * Die Erweiterung fürs Teilen einer Kontaktliste.
 	 * 
-	 * @param header
-	 *            Überschrift der Box
-	 * @param content
-	 *            die Information zur Email eingabe.
-	 * @param kl
-	 *            die Kontaktliste die geteilt wird.
-	 * @return
+	 * @param header Überschrift der Box         
+	 * @param content die Information zur Email eingabe.        
+	 * @param kl die Kontaktliste die geteilt wird.
+	 *            
+	 * @return box MessageBox die als PopUp angezeigt wird.
 	 */
 	public static DialogBox shareAlert(final String header, final String content, Kontaktliste kl) {
 		final DialogBox box = new DialogBox();
@@ -212,13 +209,12 @@ public class MessageBox {
 	 * Diese MessageBox wird beim teilen eines Kontaktes angezeigt. Es wird eine
 	 * Email verlangt für wenn der Kontakt freigegeben werden soll.
 	 * 
-	 * @param header
-	 *            Überschrift der Box
-	 * @param content
-	 *            die Information zur Email eingabe.
-	 * @param k
-	 *            der Kontakt der geteilt wird.
-	 * @return
+	 * @param header Überschrift der Box
+	 * @param content die Information zur Email eingabe.         
+	 * @param k der Kontakt der geteilt wird.
+	 * @param avshare gewaehlte Eigenschaften
+	 *          
+	 * @return box MessageBox die als PopUp angezeigt wird.
 	 */
 	public static DialogBox shareAlertKontakt(final String header, final String content, Kontakt k,
 			Vector<Relatable> avshare) {
@@ -337,15 +333,12 @@ public class MessageBox {
 	 * Kontaktes. Diese Teilhaberschaftsauflösung wird vom Nutzer (Owner) initiiert,
 	 * wenn er einem oder mehreren Nutzern die Teilhaberschaft entziehen will.
 	 * 
-	 * @param header
-	 *            Überschift des MessageBox.
-	 * @param content
-	 *            Erklärung für den Nutzer.
-	 * @param kl
-	 *            das Object Kontaktliste.
-	 * @param k
-	 *            das Object Kontakt.
-	 * @return
+	 * @param header  Überschift des MessageBox.
+	 * @param content Erklärung für den Nutzer.
+	 * @param kl das Object Kontaktliste.
+	 * @param k das Object Kontakt.
+	 * 
+	 * @return box MessageBox die als PopUp angezeigt wird.
 	 */
 	public static DialogBox deleteTeilhaber(final String header, final String content, Kontaktliste kl, Kontakt k) {
 
@@ -643,17 +636,13 @@ public class MessageBox {
 	 * Eigenschaften. Es werden die Sichten des Owners oder Receivers überprüft, da
 	 * der Receiver geteilte Ausprägungen/ Eigenschaften ebenso weiter teilen kann.
 	 * 
-	 * @param header
-	 *            Info für den Nutzer
-	 * @param content
-	 *            Aktionsbeschreibung für den Nutzer
-	 * @param sharedAus
-	 *            Vektor der geteilten Auspraegungen
-	 * @param b
-	 *            Vektor der Berechtigungen des aktuellen Nutzers.
-	 * @param k
-	 *            Kontakt in dem man den Status abgefragt hat
-	 * @return
+	 * @param header Info für den Nutzer          
+	 * @param content Aktionsbeschreibung für den Nutzer       
+	 * @param sharedAus  Vektor der geteilten Auspraegungen       
+	 * @param b Vektor der Berechtigungen des aktuellen Nutzers.
+	 * @param k Kontakt in dem man den Status abgefragt hat
+	 *           
+	 * @return box MessageBox die als PopUp angezeigt wird.
 	 */
 	public static DialogBox statusAuspraegungTeilung(final String header, final String content,
 			Vector<Relatable> sharedAus, Vector<Berechtigung> b, Kontakt k) {

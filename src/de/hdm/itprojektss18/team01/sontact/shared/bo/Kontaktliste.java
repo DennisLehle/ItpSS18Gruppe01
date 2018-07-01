@@ -15,10 +15,6 @@ public class Kontaktliste extends BusinessObject {
 	private int ownerId;
 	private char type = 'l';
 
-	/**
-	 * Getter- und Setter-Methoden zum Setzen und Auslesen der Werte
-	 */
-	
 	public String getTitel() {
 		return titel;
 	}

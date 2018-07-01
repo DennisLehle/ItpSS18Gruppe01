@@ -14,8 +14,9 @@ public class LoginInfo implements IsSerializable {
 	/**
 	 * Gibt TRUE zurueck, wenn ein Nutzer angemeldet ist andernfalls wird 
 	 * FALSE zurueckgegeben.
+	 * 
+	 * @return loggedIn status on der Nutzer eingeloggt ist
 	 */
-
 	public boolean isLoggedIn() {
 		return loggedIn;
 	}
@@ -32,6 +33,8 @@ public class LoginInfo implements IsSerializable {
 
 	/**
 	 * Setzt den Login-Status
+	 * 
+	 * @param loggedIn Status setzen für den eingeloggten Nutzer
 	 */
 	public void setLoginIn(boolean loggedIn) {
 		this.loggedIn = loggedIn;
@@ -69,9 +72,8 @@ public class LoginInfo implements IsSerializable {
 	/**
 	 * Setzt die LogoutUrl
 	 * 
-	 * @param logoutUrl
+	 * @param logoutUrl für den Loggout
 	 */
-
 	public void setLogoutUrl(String logoutUrl) {
 		this.logoutUrl = logoutUrl;
 	}
@@ -89,7 +91,7 @@ public class LoginInfo implements IsSerializable {
 	/**
 	 * Setzt die Email
 	 * 
-	 * @param emailAddress
+	 * @param emailAddress des Nutzers
 	 */
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;

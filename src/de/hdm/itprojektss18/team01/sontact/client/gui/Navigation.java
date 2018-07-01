@@ -32,6 +32,8 @@ public class Navigation extends VerticalPanel {
 
 	/**
 	 * Konstruktor fuer die Navigations-Klasse.
+	 * 
+	 * @param nutzer der aktuell eingeloggte Nutzer
 	 */
 	public Navigation(final Nutzer nutzer) {
 

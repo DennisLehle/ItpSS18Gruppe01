@@ -177,6 +177,8 @@ public class KontaktlisteForm extends VerticalPanel {
 
 	/**
 	 * Konstruktor der zum Einsatz kommt, wenn eine Kontaktliste neu erstellt wird.
+	 * 
+	 * @param n Nutzer der eingeloggt ist
 	 */
 	public KontaktlisteForm(final Nutzer n) {
 

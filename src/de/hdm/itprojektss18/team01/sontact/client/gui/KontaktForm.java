@@ -273,6 +273,8 @@ public class KontaktForm extends VerticalPanel {
 
 	/**
 	 * Konstruktor der zum Einsatz kommt, wenn ein Kontakt neu erstellt wird
+	 * 
+	 * @param n Nutzer der eingeloggt ist.
 	 */
 	public KontaktForm(final Nutzer n) {
 		RootPanel.get("contentHeader").clear();

@@ -51,6 +51,10 @@ public class ShowKontaktliste extends VerticalPanel {
 
 	/**
 	 * Konstruktor wird ausgeloest wenn ein Kontakt bereits existiert.
+	 * 
+	 * @param n akteull eingeloggter Nutzer
+	 * @param k ausgewaehlter Kontakt
+	 * @param ko Vector von Kontakt Objekten 
 	 */
 	public ShowKontaktliste(final Nutzer n, Kontakt k, Vector<Kontakt> ko) {
 		RootPanel.get("contentHeader").clear();

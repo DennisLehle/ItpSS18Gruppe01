@@ -23,7 +23,7 @@ public class Nutzer extends BusinessObject implements IsSerializable {
 	/**
 	 * Setzen der Email
 	 * 
-	 * @param emailAddress
+	 * @param emailAddress des Nutzers
 	 */
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;

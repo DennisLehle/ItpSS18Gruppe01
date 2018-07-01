@@ -10,12 +10,6 @@ public class Eigenschaft extends BusinessObject implements Relatable  {
 	private String bezeichnung;
 	private Auspraegung a;
 	
-
-	/**
-	 * Getter- und Setter zum Setzen und Auslesen der Werte
-	 * 
-	 * @return
-	 */
 	public String getBezeichnung() {
 		return bezeichnung;
 	}
@@ -32,8 +26,6 @@ public class Eigenschaft extends BusinessObject implements Relatable  {
 		this.a = a;
 	}
 
-	//Wert der Eigenschaft
-	@Override
 	public String getWert() {
 		
 		return null;
@@ -41,19 +33,19 @@ public class Eigenschaft extends BusinessObject implements Relatable  {
 
 	@Override
 	public boolean getStatus() {
-		// TODO Auto-generated method stub
+	
 		return false;
 	}
 
 	@Override
 	public int getOwnerId() {
-		// TODO Auto-generated method stub
+		
 		return 0;
 	}
 
 	@Override
 	public char getType() {
-		// TODO Auto-generated method stub
+
 		return 'a';
 	}
 

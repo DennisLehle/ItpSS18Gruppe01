@@ -34,7 +34,6 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  * Kontaktliste in einer CellTabel an.
  * 
  * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
- *
  */
 
 public class ShowKontaktliste extends VerticalPanel {
@@ -51,7 +50,7 @@ public class ShowKontaktliste extends VerticalPanel {
 	ScrollPanel sp = new ScrollPanel();
 
 	/**
-	 * Konstruktor wird ausgelöst wenn ein Kontakt bereits existiert.
+	 * Konstruktor wird ausgeloest wenn ein Kontakt bereits existiert.
 	 */
 	public ShowKontaktliste(final Nutzer n, Kontakt k, Vector<Kontakt> ko) {
 		RootPanel.get("contentHeader").clear();
@@ -69,15 +68,14 @@ public class ShowKontaktliste extends VerticalPanel {
 	 * aufgerufen.
 	 * 
 	 * @param n
-	 *            der Nutzer der übergeben wird
+	 *            der Nutzer der uebergeben wird
 	 * @param k
-	 *            der Kontakt der übergeben wird
+	 *            der Kontakt der uebergeben wird
 	 */
 	protected void onLoad(final Nutzer n, Kontakt k, Vector<Kontakt> ko) {
 
-		/**
-		 * Initialisierung des Labels und eines CellTabels für die Kontakte
-		 */
+		
+		 // Initialisierung des Labels und eines CellTabels für die Kontakte
 		kontaktListenTable2 = new CellTable<Kontaktliste>(10, tableRes);
 
 		// Auslesen aller Kontaktlisten die der Nutzer aktuell besitzt.
@@ -112,7 +110,7 @@ public class ShowKontaktliste extends VerticalPanel {
 		});
 
 		/**
-		 * Tabelle Befüllen mit den aus der DB abgerufenen Kontakt Informationen.
+		 * Tabelle befuellen mit den aus der DB abgerufenen Kontakt Informationen.
 		 */
 		TextColumn<Kontaktliste> NameDerKLColumn = new TextColumn<Kontaktliste>() {
 
@@ -134,7 +132,7 @@ public class ShowKontaktliste extends VerticalPanel {
 		};
 
 		/**
-		 * Hinzufügen der Columns für die Darstellung der Kontaktlisten.
+		 * Hinzufuegen der Columns für die Darstellung der Kontaktlisten.
 		 */
 		kontaktListenTable2.addColumn(NameDerKLColumn, "Kontaktlisten ");
 		NameDerKLColumn.setSortable(true);
@@ -154,26 +152,27 @@ public class ShowKontaktliste extends VerticalPanel {
 
 		this.add(kontaktListenTable2);
 
-		// Größe des ScrollPanels bestimmen plus in das ScrollPanel die CellTable
-		// hinzufügen.
+		// Groeße des ScrollPanels bestimmen, außerdem wird das ScrollPanel in die CellTable
+		// hinzugefuegt.
 		sp.setSize("900px", "400px");
 		sp.add(kontaktListenTable2);
+		
 		this.add(sp);
 		this.add(hp3);
 
-		// Mit doppel Klick wird der Kontakt einer Kontaktliste hinzugefügt.
+		// Mit doppel Klick wird der Kontakt einer Kontaktliste hinzugefuegt.
 		kontaktListenTable2.addDomHandler(new DoubleClickHandler() {
 
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
 
+				// Auslesen der Kontakt aus einer Kontaktliste
 				ev.getKontakteByKontaktliste(selectionModel.getSelectedObject().getId(),
 						new AsyncCallback<Vector<Kontakt>>() {
 
 							@Override
 							public void onFailure(Throwable caught) {
-								// TODO Auto-generated method stub
-
+								caught.getMessage();
 							}
 
 							@Override
@@ -187,8 +186,9 @@ public class ShowKontaktliste extends VerticalPanel {
 														+ ko.elementAt(i).getNachname()
 														+ " existiert bereits in dieser Kontaktliste");
 									} else {
-										// Es wird die selektierte Kontaktliste übergeben und der Kontakt der zuvor
-										// ausgewählt wurde. (Kostruktor übergabe)
+										
+										// Es wird die selektierte Kontaktliste uebergeben und der Kontakt der zuvor
+										// ausgewaehlt wurde. (Kostruktor uebergabe)
 										ev.addKontaktToKontaktliste(selectionModel.getSelectedObject(), ko.elementAt(i),
 												new AsyncCallback<Void>() {
 
@@ -208,8 +208,8 @@ public class ShowKontaktliste extends VerticalPanel {
 							}
 
 						});
-				// Div's leeren und Kontaktliste anzeigen bei der die Kontakte hinzugefuegt
-				// wurden.
+				
+				// Div's leeren und Kontaktliste anzeigen bei der die Kontakte hinzugefuegt wurden.
 				RootPanel.get("content").clear();
 				RootPanel.get("contentHeader").clear();
 				RootPanel.get("content").add(new KontaktlisteForm(selectionModel.getSelectedObject()));
@@ -219,5 +219,4 @@ public class ShowKontaktliste extends VerticalPanel {
 		}, DoubleClickEvent.getType());
 
 	}
-
 }

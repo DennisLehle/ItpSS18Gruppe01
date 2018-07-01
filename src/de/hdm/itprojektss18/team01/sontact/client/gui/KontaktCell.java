@@ -24,7 +24,7 @@ public class KontaktCell extends AbstractCell<Kontakt> {
 		sb.appendHtmlConstant("<div>");
 		sb.appendHtmlConstant("<p><span class='glyphicon glyphicon-user'></span> &nbsp; ");
 		sb.appendEscaped(k.getVorname());
-		sb.appendHtmlConstant(", ");
+		sb.appendHtmlConstant("");
 		sb.appendEscaped(k.getNachname());
 		sb.appendHtmlConstant("</div>");
 

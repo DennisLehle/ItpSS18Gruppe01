@@ -42,7 +42,7 @@ public class EigenschaftMapper {
 	}
 
 	/**
-	 * Hinzufügen einer neuen Eigenschaft in die Datenbank. Der Nutzer erhaelt die
+	 * Hinzufuegen einer neuen Eigenschaft in die Datenbank. Der Nutzer erhaelt die
 	 * Funktion um selbst Eigenschaften definieren zu koennen.
 	 * 
 	 * @param e
@@ -67,8 +67,8 @@ public class EigenschaftMapper {
 				// SQL-Anweisung zum Einfuegen des Tupels in die DB
 				PreparedStatement stmt1 = con.prepareStatement(
 						"INSERT INTO eigenschaft(id, bezeichnung)" + "VALUES(?, ?) ",
-
 						Statement.RETURN_GENERATED_KEYS);
+				
 				stmt1.setInt(1, e.getId());
 				stmt1.setString(2, e.getBezeichnung());
 
@@ -78,6 +78,7 @@ public class EigenschaftMapper {
 				stmt1.executeUpdate();
 			}
 		}
+		
 		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		catch (SQLException e2) {
 			e2.printStackTrace();
@@ -114,6 +115,7 @@ public class EigenschaftMapper {
 			System.out.println("Updated");
 
 		}
+		
 		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		catch (SQLException e2) {
 			e2.printStackTrace();
@@ -172,7 +174,6 @@ public class EigenschaftMapper {
 		String selectByKey = "SELECT * FROM eigenschaft WHERE id=? ORDER BY id";
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
@@ -208,8 +209,7 @@ public class EigenschaftMapper {
 	 * Auslesen aller Eigenschaften welche beim Anlegen einer neuen Auspraegung
 	 * eines Kontakt-Objekts zur Verfuegung stehen.
 	 * 
-	 * @return Eigenschaften
-	 * @throws SQLException
+	 * @return Vector von Eigenschaften
 	 */
 
 	public Vector<Eigenschaft> findEigenschaftAuswahl() {
@@ -234,7 +234,10 @@ public class EigenschaftMapper {
 			// Schleife die Zeile pro Zeile durchlaeuft
 			while (rs.next()) {
 
+				// Ergebnis-Tupel in Objekt umwandeln
 				Eigenschaft e = new Eigenschaft();
+				
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				e.setId(rs.getInt("id"));
 				e.setBezeichnung(rs.getString("bezeichnung"));
 
@@ -251,13 +254,11 @@ public class EigenschaftMapper {
 		return result;
 	}
 
-	// findEigenschaftForAuspraegung() evlt. in AuspraegungMapper uebernehmen.
-
 	/**
 	 * Gibt die Eigenschaft zur einer Auspraegung eines Kontaktes zurueck.
 	 * 
-	 * @param id
-	 * @return Eigenschaft
+	 * @param eigenschaftId
+	 * @return Eigenschaftsobjekte
 	 */
 
 	public Eigenschaft findEigenschaftForAuspraegung(int eigenschaftId) {
@@ -280,16 +281,20 @@ public class EigenschaftMapper {
 
 				// Ergebnis-Tupel in Objekt umwandeln
 				Eigenschaft e = new Eigenschaft();
-
+				
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				e.setId(rs.getInt("id"));
 				e.setBezeichnung(rs.getString("bezeichnung"));
+				
 				return e;
 			}
 		}
 
 		catch (SQLException e2) {
+			
 			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 			e2.printStackTrace();
+			
 			return null;
 		}
 
@@ -300,8 +305,8 @@ public class EigenschaftMapper {
 	 * Suche nach der bezeichnung einer Eigenschaft fuer die Ausgabe der Eigenschaft
 	 * innerhalb des Reports
 	 * 
-	 * @param wert
-	 * @return
+	 * @param bezeichnung
+	 * @return Vector von Eigenschaften
 	 */
 
 	public Vector<Eigenschaft> findEigenschaftByBezeichnung(String bezeichnung) {
@@ -349,9 +354,8 @@ public class EigenschaftMapper {
 	/**
 	 * Eine Eigenschaft anhand der Bezeichnung auslesen
 	 * 
-	 * @param Bezeichnung
-	 *            der Eigenschaft
-	 * @return
+	 * @param bezeichnung   
+	 * @return Eigenschaft-Objekte
 	 */
 	public Eigenschaft findEigenschaft(String bezeichnung) {
 
@@ -371,7 +375,11 @@ public class EigenschaftMapper {
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
+				
+				// Ergebnis-Tupel in Objekt umwandeln
 				Eigenschaft e = new Eigenschaft();
+				
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				e.setId(rs.getInt("id"));
 				e.setBezeichnung(rs.getString("bezeichnung"));
 				return e;
@@ -379,8 +387,10 @@ public class EigenschaftMapper {
 		}
 
 		catch (SQLException e2) {
+			
 			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 			e2.printStackTrace();
+			
 			return null;
 		}
 

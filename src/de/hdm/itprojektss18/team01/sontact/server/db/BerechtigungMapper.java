@@ -10,7 +10,7 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 
 /**
  * Die Klasse <code>BerechtigungMapper</code> bildet auf der Datenbank alle
- * Berechtigungen eines Nutzers zu den eigenen oder geteilten Objekten ab. F�r
+ * Berechtigungen eines Nutzers zu den eigenen oder geteilten Objekten ab. Fuer
  * weitere Informationen:
  * 
  * @see NutzerMapper
@@ -31,7 +31,6 @@ public class BerechtigungMapper {
 	/**
 	 * Pruefung ob diese Klasse schon existiert. Und Methoden dieser Klasse sollen
 	 * nur ueber diese statische Methode aufgerufen werden
-	 * 
 	 */
 	public static BerechtigungMapper berechtigungMapper() {
 		if (berechtigungMapper == null) {
@@ -87,7 +86,7 @@ public class BerechtigungMapper {
 			// INSERT-Query ausfuehren
 			stmt.executeUpdate();
 
-			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
+		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
@@ -106,7 +105,6 @@ public class BerechtigungMapper {
 		Connection con = DBConnection.connection();
 
 		try {
-
 			// SQL-Anweisung zum auslesen des Berechtigungtupels aus der DB
 			PreparedStatement prestmt = con.prepareStatement(" DELETE FROM berechtigung WHERE" + " ownerid = "
 					+ b.getOwnerId() + " AND receiverid = " + b.getReceiverId() + " AND objectid = " + b.getObjectId()
@@ -115,18 +113,17 @@ public class BerechtigungMapper {
 			// Ausfuehren des SQL Statement
 			prestmt.execute();
 
-			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
+		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
 	}
 
 	/**
-	 * Ein Berechtigung wird mithilfe der uebergebenen <id> aus der Datenbank
+	 * Ein Berechtigung wird mithilfe der uebergebenen id aus der Datenbank
 	 * ausgelesen und zurueckgegeben.
 	 * 
 	 * @param id
-	 * 
 	 * @return Berechtigung
 	 */
 	public Berechtigung findById(int id) {
@@ -138,7 +135,6 @@ public class BerechtigungMapper {
 		String selectByKey = "SELECT * FROM berechtigung WHERE id=? ORDER BY id";
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 
@@ -164,6 +160,7 @@ public class BerechtigungMapper {
 				return b;
 			}
 		}
+		
 		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		catch (SQLException e2) {
 			e2.printStackTrace();
@@ -174,10 +171,9 @@ public class BerechtigungMapper {
 	}
 
 	/**
-	 * /** Findet bestimmte Berechtigung-Objekte aus der Datenbank.
+	 * Findet bestimmte Berechtigung-Objekte aus der Datenbank.
 	 * 
-	 * @param berechtigung
-	 * @return void
+	 * @return Vector von Berechtigungen
 	 */
 	public Vector<Berechtigung> findAll() {
 
@@ -191,7 +187,6 @@ public class BerechtigungMapper {
 		Vector<Berechtigung> result = new Vector<Berechtigung>();
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectAll);
@@ -211,7 +206,7 @@ public class BerechtigungMapper {
 				b.setObjectId(rs.getInt("objectid"));
 				b.setType(rs.getString("type").charAt(0));
 
-				// Statt return wird hier der Vektor erweitert
+				// Das Objekt wird dem Vektor hinzugefuegt
 				result.addElement(b);
 			}
 		}
@@ -228,8 +223,8 @@ public class BerechtigungMapper {
 	 * Gibt alle Objekt-Berechtigungen ueber jene Objekte aus, welche vom Nutzer
 	 * geteilt wurden.
 	 * 
-	 * @param nutzerid
-	 * @return Berechtigungen
+	 * @param nutzerId
+	 * @return Vector von Berechtigungen
 	 */
 	public Vector<Berechtigung> findAllBerechtigungenByOwner(int nutzerId) {
 
@@ -243,7 +238,6 @@ public class BerechtigungMapper {
 		Vector<Berechtigung> result = new Vector<Berechtigung>();
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 
@@ -255,7 +249,6 @@ public class BerechtigungMapper {
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-
 				// Ergebnis-Tupel in Objekt umwandeln
 				Berechtigung b = new Berechtigung();
 
@@ -285,23 +278,24 @@ public class BerechtigungMapper {
 	 * Gibt alle Objekt-Berechtigungen ueber jene Objekte aus, welche mit dem
 	 * Nutzergeteilt wurden.
 	 * 
-	 * @param receiverId
-	 * @return Berechtigungen
+	 * @param nutzerId
+	 * @return Vector von Berechtigungen
 	 */
 	public Vector<Berechtigung> findAllBerechtigungenByReceiver(int nutzerId) {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
-
+		
+		// Query fuer den Select
 		String selectByKey = "SELECT * FROM berechtigung WHERE receiverid=?";
 
 		// Erstellung des Ergebnisvektors
 		Vector<Berechtigung> result = new Vector<Berechtigung>();
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
+			
 			// Aufbereitung des vorbereitenden Statements
 			stmt = con.prepareStatement(selectByKey);
 			stmt.setInt(1, nutzerId);
@@ -310,7 +304,6 @@ public class BerechtigungMapper {
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-
 				// Ergebnis-Tupel in Objekt umwandeln
 				Berechtigung b = new Berechtigung();
 
@@ -327,6 +320,7 @@ public class BerechtigungMapper {
 		}
 
 		catch (SQLException e2) {
+			
 			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 			e2.printStackTrace();
 			return null;
@@ -334,46 +328,4 @@ public class BerechtigungMapper {
 
 		return result;
 	}
-
-	// --> ?
-
-	// /**
-	// * Gibt eine spezielle Berechtigung eines Objekts zurück.
-	// * Welche mit dem Receiver geteilt wurde.
-	// *
-	// * @param receiverId
-	// * @return Berechtigungen
-	// */
-	// public Berechtigung findASingleBerechtigung(int receiverId) {
-	// // DBConnection herstellen
-	// Connection con = DBConnection.connection();
-	//
-	// try {
-	//
-	// // SQL-Statement anlegen
-	// PreparedStatement prestmt = con
-	// .prepareStatement("SELECT * FROM berechtigung WHERE receiverid =" +
-	// receiverId);
-	//
-	// ResultSet rs = prestmt.executeQuery();
-	//
-	// // Jeder Treffer erzeugt eine neue Instanz als Suchergebnis.
-	// if(rs.next()) {
-	// Berechtigung b = new Berechtigung();
-	// b.setId(rs.getInt("id"));
-	// b.setOwnerId(rs.getInt("ownerid"));
-	// b.setReceiverId(rs.getInt("receiverid"));
-	// b.setObjectId(rs.getInt("objectid"));
-	// b.setType(rs.getString("type").charAt(0));
-	//
-	// return b;
-	//
-	// }
-	//
-	// } catch (SQLException e2) {
-	// e2.printStackTrace();
-	// }
-	// return null;
-	// }
-
 }

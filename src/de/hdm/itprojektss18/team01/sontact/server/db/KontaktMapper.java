@@ -15,7 +15,6 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  * eines Nutzers. Fuer weitere Informationen:
  * 
  * @see NutzerMapper
- *
  */
 
 public class KontaktMapper {
@@ -36,8 +35,8 @@ public class KontaktMapper {
 	/**
 	 * Einfuegen eines Kontakt-Objekts in die Datenbank.
 	 * 
-	 * @param kontakt
-	 * @return kontakt
+	 * @param k
+	 * @return Kontakt
 	 */
 
 	public Kontakt insert(Kontakt k) {
@@ -88,10 +87,10 @@ public class KontaktMapper {
 	/**
 	 * Aktualisierung eines Kontakt-Objekts in der Datenbank.
 	 * 
-	 * @param kontakt
-	 * @return kontakt
+	 * @param k
+	 * @return Kontakt
 	 */
-
+	
 	public Kontakt update(Kontakt k) {
 
 		Connection con = null;
@@ -129,8 +128,7 @@ public class KontaktMapper {
 	/**
 	 * Loeschen eines Kontakt-Objekts aus der Datenbank.
 	 * 
-	 * @param kontakt
-	 * @return void
+	 * @param k
 	 */
 
 	public void delete(Kontakt k) {
@@ -143,7 +141,6 @@ public class KontaktMapper {
 
 		try {
 			con = DBConnection.connection();
-
 			stmt = con.prepareStatement(deleteSQL);
 			stmt.setInt(1, k.getId());
 
@@ -161,7 +158,7 @@ public class KontaktMapper {
 	 * Loeschen aller <code>Kontakt</code>-Objekte die einem <code>Owner</code>
 	 * zugewiesen sind.
 	 * 
-	 * @param k das aus der DB zu loeschende "Objekt"
+	 * @param n
 	 */
 
 	public void deleteAllByOwner(Nutzer n) {
@@ -173,7 +170,6 @@ public class KontaktMapper {
 		String deleteSQL = "DELETE FROM kontakt WHERE ownerid=?";
 
 		try {
-
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(deleteSQL);
 			stmt.setInt(1, n.getId());
@@ -192,8 +188,8 @@ public class KontaktMapper {
 	 * Die Methode findAllByOwner gibt alle Kontakte des Nutzers zurueck wo er
 	 * Eigentuemer ist.
 	 * 
-	 * @param ownerId
-	 * @return <Vector< mit Kontakten
+	 * @param nutzerId
+	 * @return Vector mit Kontakten wo der Nutzer Eigentuemer ist
 	 */
 
 	public Vector<Kontakt> findAllByOwner(int nutzerId) {
@@ -249,8 +245,8 @@ public class KontaktMapper {
 	 * fuer Registrierung steht. Mit der nutzerId und dem identifier kann der
 	 * <code>Kontakt</code> des Nutzers eindeutig identifiziert werden.
 	 * 
-	 * @param ownerId
-	 * @return kontakt
+	 * @param nutzerId
+	 * @return Kontakt 
 	 */
 
 	public Kontakt findNutzerKontaktByIdentifier(int nutzerId) {
@@ -294,15 +290,12 @@ public class KontaktMapper {
 		return null;
 	}
 
-	// Methoden checken ob sie funktionieren und ob benötigt wird.....!!
-
 	/**
 	 * Suchen eines Kontakt-Objekts mit vorgegebener KontaktId. Da diese eindeutig
 	 * ist, wird genau ein Objekt zurueckgegeben.
 	 * 
-	 * @param id Primaerschluesselattribut (->DB)
-	 * 
-	 * @return Konto-Objekt, das dem uebergebenen Schluessel entspricht, null bei
+	 * @param id  
+	 * @return Kontakt-Objekt, das dem uebergebenen Schluessel entspricht, null bei
 	 *         nicht vorhandenem DB-Tupel.
 	 */
 
@@ -350,14 +343,10 @@ public class KontaktMapper {
 	/**
 	 * Auslesen aller Kontakte mit einem speziellen Vornamen
 	 * 
-	 * @see findKontaktByVorname
-	 * 
-	 * @param String vorname fuer zugehoerige Kontakte
-	 * 
+	 * @param vorname, n
 	 * @return ein Vektor mit Kontakt-Objekten, die durch den gegebenen Namen
 	 *         repraesentiert werden. Bei evtl. Exceptions wird ein partiell
 	 *         gefuellter oder ggf. auch leerer Vektor zurueckgeliefert.
-	 * 
 	 */
 
 	public Vector<Kontakt> findKontaktByVorname(String vorname, Nutzer n) {
@@ -382,7 +371,7 @@ public class KontaktMapper {
 
 			// While Schleife fuer das Durchlaufen vieler Zeilen
 			// Schreiben der Objekt-Attribute aus ResultSet
-			while (rs.next()) {
+				while (rs.next()) {
 
 				// Ergebnis-Tupel in Objekt umwandeln
 				Kontakt k = new Kontakt();
@@ -413,14 +402,10 @@ public class KontaktMapper {
 	/**
 	 * Auslesen aller Kontakte mit einem speziellen Nachnamen
 	 * 
-	 * @see findKontaktByNachname
-	 * 
-	 * @param String nachname fuer zugehoerige Kontakte
-	 * 
+	 * @param nachname, n
 	 * @return ein Vektor mit Kontakt-Objekten, die durch den gegebenen Namen
 	 *         repraesentiert werden. Bei evtl. Exceptions wird ein partiell
 	 *         gefuellter oder ggf. auch leerer Vektor zurueckgeliefert.
-	 * 
 	 */
 
 	public Vector<Kontakt> findKontaktByNachname(String nachname, Nutzer n) {
@@ -443,7 +428,6 @@ public class KontaktMapper {
 			// Execute SQL Statement
 			ResultSet rs = stmt.executeQuery();
 
-			// While Schleife fuer das Durchlaufen vieler Zeilen
 			// Schreiben der Objekt-Attribute aus ResultSet
 			while (rs.next()) {
 
@@ -478,9 +462,8 @@ public class KontaktMapper {
 	 * Namen und gibt diese zurueck. Hierbei wird Vor- und Nachname des Kontaktes
 	 * mit dem vom Nutzer uebergebenem String abgeglichen.
 	 * 
-	 * @param String name, Nutzer n
-	 * 
-	 * @return Vector<Kontakt>
+	 * @param name, n
+	 * @return Vector von Kontakten
 	 * 
 	 */
 
@@ -488,17 +471,6 @@ public class KontaktMapper {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
-
-		// String selectByName = "SELECT * FROM kontakt WHERE ownerid=? AND vorname like
-		// '%?%' OR nachname like '%?%' "
-		// + "UNION "
-		// + "SELECT kontakt.id, kontakt.vorname, kontakt.nachname,
-		// kontakt.erstellungsdatum, kontakt.modifikationsdatum, kontakt.ownerid,
-		// kontakt.identifier "
-		// + "FROM kontakt INNER JOIN berechtigung ON kontakt.id = berechtigung.objectid
-		// "
-		// + "WHERE berechtigung.receiverid=? AND berechtigung.type = 'k' "
-		// + "AND vorname like '%?%' OR nachname like '%?%'";
 
 		// Vector erzeugen, der die Kontaktdatensaetze aufnehmen kann
 		Vector<Kontakt> result = new Vector<Kontakt>();
@@ -553,9 +525,8 @@ public class KontaktMapper {
 	 * Auspraegung und gibt diese zurueck. Hierbei wird die Auspraegung des
 	 * Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
 	 * 
-	 * @param String wert, Nutzer n
-	 * 
-	 * @return Vector<Kontakt>
+	 * @param wert, n
+	 * @return Vector von Kontakten
 	 * 
 	 */
 
@@ -613,10 +584,8 @@ public class KontaktMapper {
 	 * Eigenschaften und gibt diese zurueck. Hierbei wird die Auspraegung des
 	 * Kontaktes mit dem vom Nutzer uebergebenem String abgeglichen.
 	 * 
-	 * @param String wert, Nutzer n
-	 * 
-	 * @return Vector<Kontakt>
-	 * 
+	 * @param bezeichnung, n
+	 * @return Vector von Kontakten
 	 */
 
 	public Vector<Kontakt> findKontakteByEigenschaft(String bezeichnung, Nutzer n) {
@@ -678,10 +647,8 @@ public class KontaktMapper {
 	 * Auspraegung und die Eigenschaft des Kontaktes mit dem vom Nutzer uebergebenem
 	 * String abgeglichen.
 	 * 
-	 * @param String wert, String eigenschaft, Nutzer n
-	 * 
-	 * @return Vector<Kontakt>
-	 * 
+	 * @param bezeichnung, wert, n
+	 * @return Vector von Kontakten
 	 */
 	public Vector<Kontakt> findKontakteByAusEig(String bezeichnung, String wert, Nutzer n) {
 
@@ -743,7 +710,6 @@ public class KontaktMapper {
 	 * @param id des Kontaktes
 	 * @return
 	 */
-
 	public int updateModifikationsdatum(int id) {
 
 		Connection con = DBConnection.connection();

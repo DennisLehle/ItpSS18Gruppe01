@@ -49,25 +49,19 @@ public class AuspraegungMapper {
 
 
 	/**
-	 * Einf�gen eines Auspraegung-Objekts in die Datenbank.
+	 * Einfuegen eines Auspraegung-Objekts in die Datenbank.
 	 * 
-	 * @param a
-	 *            das zu speichernde Objekt
-	 * @return das bereits �bergebene Objekt, jedoch mit ggf. korrigierter
-	 *         <code>id</code>.
+	 * @param aus
+	 * @return das bereits uebergebene Objekt, jedoch mit ggf. korrigierter id
 	 */
 	public Auspraegung insert(Auspraegung aus) {
 
-		/**
-		 * Verbindung zur DB Connection aufbauen
-		 */
-
+		// Verbindung zur DB Connection aufbauen
 		Connection con = DBConnection.connection();
 
 		try {
 			Statement stmt = con.createStatement();
-
-
+			
 			// Query fuer die Abfrage der hoechsten ID (Primaerschluessel) in der Datenbank
 			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM auspraegung ");
 
@@ -79,8 +73,8 @@ public class AuspraegungMapper {
 				PreparedStatement stmt1 = con.prepareStatement(
 
 						"INSERT INTO auspraegung(id, wert, eigenschaftid, kontaktid, status, ownerid)" + " VALUES(?,?,?,?,?,?) ",
-
 						Statement.RETURN_GENERATED_KEYS);
+				
 				stmt1.setInt(1, aus.getId());
 				stmt1.setString(2, aus.getWert());
 				stmt1.setInt(3, aus.getEigenschaftId());
@@ -95,26 +89,19 @@ public class AuspraegungMapper {
 			}
 
 			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
-
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
 
-
 		return aus;
 	}
-
-
-
 
 	/**
 	 * Aktualisierung eines Auspraegung-Objekts in der Datenbank.
 	 * 
 	 * @param a
-	 *            das Objekt, das in die DB geschrieben werden soll
 	 * @return das als Parameter uebergebene Objekt
 	 */
-
 	public Auspraegung update(Auspraegung a) {
 
 		Connection con = null;
@@ -124,7 +111,6 @@ public class AuspraegungMapper {
 		String updateSQL = "UPDATE auspraegung SET wert=? WHERE id=?";
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(updateSQL);
@@ -161,13 +147,10 @@ public class AuspraegungMapper {
 		// SQL-Anweisung zum Einfuegen des neuen Nutzertupels in die DB
 		String deleteSQL = "DELETE FROM auspraegung WHERE id=?";
 
-		// Query f�r die Aktualisierung des Modifikationsdatums von dem
-		// dazugeh�rigen
-		// Kontakt
+		// Query fuer die Aktualisierung des Modifikationsdatums von dem dazugehoerigen Kontakt
 		// String sqlDat = "UPDATE kontakt SET modifikationsdatum=? WHERE id=?";
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 
@@ -195,10 +178,10 @@ public class AuspraegungMapper {
 		}
 	}
 
-	/*
+	/**
 	 * Loescht eine Auspraegung anhand der uebergebenen Id aus dem Selectionmodel.
 	 * 
-	 * @param a
+	 * @param auspraegungId
 	 */
 	public void deleteById(int auspraegungId) {
 
@@ -209,7 +192,6 @@ public class AuspraegungMapper {
 		String deleteSQL = "DELETE FROM auspraegung WHERE id=?";
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 
@@ -218,19 +200,20 @@ public class AuspraegungMapper {
 
 			// SQL-Statement ausfuehren
 			stmt.executeUpdate();
-
 		}
+		
 		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		catch (SQLException e2) {
 			e2.printStackTrace();
 
 		}
 	}
-
+	
 	/**
 	 * Sucht eine Auspraegung anhand der uebergebenen Id.
 	 * 
-	 * @param a
+	 * @param id
+	 * @return Obejekte von Auspraegungen
 	 */
 	public Auspraegung findAuspraegungById(int id) {
 
@@ -241,7 +224,6 @@ public class AuspraegungMapper {
 		String selectByKey = "SELECT * FROM auspraegung WHERE id=? ORDER BY id";
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
@@ -251,7 +233,6 @@ public class AuspraegungMapper {
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-
 				// Ergebnis-Tupel in Objekt umwandeln
 				Auspraegung a = new Auspraegung();
 
@@ -270,6 +251,7 @@ public class AuspraegungMapper {
 		catch (SQLException e2) {
 			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 			e2.printStackTrace();
+			
 			return null;
 		}
 
@@ -277,10 +259,11 @@ public class AuspraegungMapper {
 	}
 
 	/**
-	 * Auspraegungen zu einem bestimmten Kontakt abrufen.
+	 * Auspraegungen zu einem bestimmten Kontakt werden durch die Eigenschaft abrufen.
 	 * 
-	 * @param Eigenschaft
-	 * @param Kontakt
+	 * @param e
+	 * @param k
+	 * 
 	 * @return Auspraegungsobjekte
 	 */
 
@@ -296,7 +279,6 @@ public class AuspraegungMapper {
 		Vector<Auspraegung> result = new Vector<Auspraegung>();
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
@@ -327,6 +309,7 @@ public class AuspraegungMapper {
 		catch (SQLException e2) {
 			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 			e2.printStackTrace();
+			
 			return null;
 		}
 
@@ -337,7 +320,7 @@ public class AuspraegungMapper {
 	 * Auspraegungen eines uebergebenen Kontaktes herauszlesen.
 	 * 
 	 * @param kontaktId
-	 * @return
+	 * @return Vector von Auspraegunen fuer den Kontakt
 	 */
 	public Vector<Relatable> findAuspraegungByKontaktRelatable(int kontaktId) {
 
@@ -383,6 +366,7 @@ public class AuspraegungMapper {
 		}
 
 		catch (SQLException e2) {
+			
 			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 			e2.printStackTrace();
 			return null;
@@ -395,7 +379,7 @@ public class AuspraegungMapper {
 	 * Auspraegungen eines Kontaktes herauslesen.
 	 * 
 	 * @param kontaktId
-	 * @return
+	 * @return Vector von Auspraegungen 
 	 */
 	public Vector<Auspraegung> findAuspraegungByKontakt(int kontaktId) {
 
@@ -436,6 +420,7 @@ public class AuspraegungMapper {
 		}
 
 		catch (SQLException e2) {
+			
 			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 			e2.printStackTrace();
 			return null;
@@ -444,19 +429,22 @@ public class AuspraegungMapper {
 		return result;
 	}
 
-	/*
+	/**
 	 * Suche nach dem Wert einer Auspraegung fuer die Ausgabe der Auspraegung
 	 * innerhalb des Reports
 	 * 
 	 * @param wert
-	 * @return
+	 * @return Vector von Auspraegungen 
 	 */
 
 	public Vector<Auspraegung> findAuspraegungByWert(String wert) {
+		
 		Connection con = null;
 		PreparedStatement stmt = null;
-
+		
+		// Erstellung eines Vectors von Auspraegungen
 		Vector<Auspraegung> result = new Vector<Auspraegung>();
+		
 		try {
 
 			// Aufbau der DB-Verbindung
@@ -474,7 +462,7 @@ public class AuspraegungMapper {
 				// Ergebnis-Tupel in Objekt umwandeln
 				Auspraegung a = new Auspraegung();
 
-				// Setzen der Attribute den Datens�tzen aus der DB entsprechend
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				a.setId(rs.getInt("id"));
 				a.setWert(rs.getString("wert"));
 				a.setEigenschaftId(rs.getInt("eigenschaftid"));
@@ -485,6 +473,7 @@ public class AuspraegungMapper {
 				result.addElement(a);
 
 			}
+			
 			return result;
 		}
 
@@ -514,17 +503,12 @@ public class AuspraegungMapper {
 			stmt.setBoolean(1, a.getStatus());
 			stmt.setInt(2, a.getId());
 	
-
 			stmt.executeUpdate();
-
-
 		}
 
 		catch (SQLException e2) {
 			e2.printStackTrace();
 
 		}
-
 	}
-
 }

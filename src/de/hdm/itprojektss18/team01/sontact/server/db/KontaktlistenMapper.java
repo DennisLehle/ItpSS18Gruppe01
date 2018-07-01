@@ -34,7 +34,7 @@ public class KontaktlistenMapper {
 	/**
 	 * Einfuegen eines Kontaktlisten-Objekts in die Datenbank.
 	 * 
-	 * @param kontaktliste
+	 * @param kl
 	 * @return Kontaktliste
 	 */
 
@@ -82,8 +82,7 @@ public class KontaktlistenMapper {
 	/**
 	 * Aktualisierung eines Kontaktlisten-Objekts in der Datenbank.
 	 * 
-	 * @param kontaktliste
-	 * 
+	 * @param kl
 	 * @return Kontaktliste
 	 */
 
@@ -120,10 +119,9 @@ public class KontaktlistenMapper {
 	/**
 	 * Loeschen eines Kontaktlisten-Objekts aus der Datenbank.
 	 * 
-	 * @param kontaktliste
-	 * @return void
+	 * @param kl
 	 */
-
+	
 	public void delete(Kontaktliste kl) {
 
 		Connection con = null;
@@ -133,9 +131,7 @@ public class KontaktlistenMapper {
 		String deleteSQL = "DELETE FROM kontaktliste WHERE id=?";
 
 		try {
-
 			con = DBConnection.connection();
-
 			stmt = con.prepareStatement(deleteSQL);
 			stmt.setInt(1, kl.getId());
 
@@ -153,9 +149,7 @@ public class KontaktlistenMapper {
 	 * Loeschen aller <code>Kontaktlisten</code>-Objekte die einem
 	 * <code>Owner</code> zugewiesen sind.
 	 * 
-	 * @param ownerId
-	 * 
-	 * @return void
+	 * @param n
 	 */
 
 	public void deleteAllByOwner(Nutzer n) {
@@ -167,7 +161,6 @@ public class KontaktlistenMapper {
 		String deleteSQL = "DELETE FROM kontaktliste WHERE ownerid=?";
 
 		try {
-
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(deleteSQL);
 			stmt.setInt(1, n.getId());
@@ -186,9 +179,8 @@ public class KontaktlistenMapper {
 	 * Die Methode findKontaklistenByOwner findet alle Kontaktlisten-Objekte eines
 	 * Owners die er selbst erstellt hat.
 	 * 
-	 * @param ownerid
-	 * 
-	 * @return Vector von <code>Kontaktliste</code>-Objekten.
+	 * @param ownerId
+	 * @return Vector von Kontaktlisten
 	 */
 	public Vector<Kontaktliste> findKontaktlistenByOwner(int ownerId) {
 
@@ -202,7 +194,6 @@ public class KontaktlistenMapper {
 		Vector<Kontaktliste> result = new Vector<Kontaktliste>();
 
 		try {
-
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
 			stmt.setInt(1, ownerId);
@@ -239,9 +230,7 @@ public class KontaktlistenMapper {
 	 * Kontaktliste wird beim registrieren erzeugt um Kontakte speichern zu können.
 	 * 
 	 * @param nutzerId
-	 * 
-	 * @return code>Kontaktliste</code>-Objekt des Nutzers.
-	 * 
+	 * @return Kontaktlisten-Objekte
 	 */
 
 	public Kontaktliste findOwnersDefaultKontaktliste(int nutzerId) {
@@ -253,7 +242,6 @@ public class KontaktlistenMapper {
 		String selectByKey = "SELECT * FROM kontaktliste WHERE ownerid=? AND titel = 'Meine Kontakte'";
 
 		try {
-
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
 			stmt.setInt(1, nutzerId);
@@ -286,7 +274,6 @@ public class KontaktlistenMapper {
 	 * sind.
 	 * 
 	 * @return Vector von <code>Kontaktliste</code>-Objekten.
-	 * 
 	 */
 
 	public Vector<Kontaktliste> findAll() {
@@ -301,7 +288,6 @@ public class KontaktlistenMapper {
 		Vector<Kontaktliste> result = new Vector<Kontaktliste>();
 
 		try {
-
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
 
@@ -333,8 +319,7 @@ public class KontaktlistenMapper {
 	/**
 	 * Findet ein bestimmtes Kontaktlisten-Objekt anhand der ID aus der Datenbank.
 	 * 
-	 * @param id
-	 * 
+	 * @param id 
 	 * @return Kontaktliste
 	 */
 
@@ -347,7 +332,6 @@ public class KontaktlistenMapper {
 		String selectByKey = "SELECT * FROM kontaktliste WHERE id=? ORDER BY id";
 
 		try {
-
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
 			stmt.setInt(1, id);
@@ -379,12 +363,9 @@ public class KontaktlistenMapper {
 	/**
 	 * Findet ein <code>Kontaktliste</code>-Objekt anahnd seines Titels in der DB.
 	 * 
-	 * @param n
-	 *            das <code>Nutzer</code>-Objekt von dem die Kontaktliste gfunden
-	 *            werden soll.
+	 * @param n das <code>Nutzer</code>-Objekt 
 	 * 
-	 * @param titel
-	 *            des zu suchenden <code>Kontaktliste</code>-Objekts.
+	 * @param titel des zu suchenden <code>Kontaktliste</code>-Objekts.
 	 * 
 	 * @return das gefundene <code>Kontaktliste</code>-Objekt.
 	 */
@@ -398,7 +379,6 @@ public class KontaktlistenMapper {
 		String selectByKey = "SELECT * FROM kontaktliste WHERE ownerid=? AND titel=?";
 
 		try {
-
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
 			stmt.setInt(1, n.getId());
@@ -427,5 +407,4 @@ public class KontaktlistenMapper {
 
 		return null;
 	}
-
 }

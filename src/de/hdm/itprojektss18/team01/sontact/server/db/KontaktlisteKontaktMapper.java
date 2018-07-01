@@ -40,8 +40,7 @@ public class KontaktlisteKontaktMapper {
 	 * zusammengesetzten Primaerschluessel - sprich der des Kontakts und der der
 	 * Kontaktliste - zugeordnet.
 	 * 
-	 * @param k
-	 *            fuer das Kontaktobjekt, kl fuer das Kontaktlistenobjekt
+	 * @param k fuer das Kontaktobjekt, kl fuer das Kontaktlistenobjekt
 	 */
 
 	public KontaktlisteKontakt addKontaktToKontaktliste(Kontaktliste kl, Kontakt k) {
@@ -53,7 +52,6 @@ public class KontaktlisteKontaktMapper {
 		String addKontakt = "INSERT INTO kontaktlistekontakt (kontaktlisteid, kontaktid) VALUES (?,?)";
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(addKontakt);
@@ -65,21 +63,18 @@ public class KontaktlisteKontaktMapper {
 			// Ausfuehren des SQL Statement
 			stmt.executeUpdate();
 
-			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
+		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
 
 		return null;
-
 	}
 
 	/**
-	 * Loeschen der Zuordnung eines Kontakts zu einer Kontaktliste
+	 * Loeschen der Zuordnung eines Kontakts zu einer Kontaktliste.
 	 * 
-	 * @see insert
-	 * @param k
-	 *            das aus der DB zu loeschende "Objekt"
+	 * @param kl,k
 	 */
 
 	public void removeKontaktFromKontaktliste(Kontaktliste kl, Kontakt k) {
@@ -87,11 +82,10 @@ public class KontaktlisteKontaktMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		// SQL-Anweisung zum l�schen des Tupels aus der DB
+		// SQL-Anweisung zum loeschen des Tupels aus der DB
 		String deleteSQL = "DELETE FROM kontaktlistekontakt WHERE kontaktlisteid=? AND kontaktid =?";
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 
@@ -102,10 +96,10 @@ public class KontaktlisteKontaktMapper {
 			// Ausfuehren des SQL Statement
 			stmt.executeUpdate();
 		}
+		
 		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen
 		catch (SQLException e2) {
 			e2.printStackTrace();
-
 		}
 	}
 
@@ -113,7 +107,7 @@ public class KontaktlisteKontaktMapper {
 	 * Gibt alle Kontakte einer uebergebenen Kontaktliste aus der Datenbank aus.
 	 *
 	 * @param kontaktlisteId
-	 * @return Vector<Kontakte>
+	 * @return Vector von Kontakten
 	 */
 
 	public Vector<Kontakt> findAllKontakteByKontaktliste(int kontaktlisteId) {
@@ -134,7 +128,6 @@ public class KontaktlisteKontaktMapper {
 		try {
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
-
 			stmt = con.prepareStatement(selectByKey);
 
 			ResultSet rs = stmt.executeQuery();
@@ -149,6 +142,7 @@ public class KontaktlisteKontaktMapper {
 				// Ergebnis-Tupel in Objekt umwandeln
 				Kontakt k = new Kontakt();
 
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				k.setId(rs.getInt("id"));
 				k.setVorname(rs.getString("vorname"));
 				k.setNachname(rs.getString("nachname"));
@@ -161,6 +155,7 @@ public class KontaktlisteKontaktMapper {
 				result.addElement(k);
 			}
 		}
+		
 		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen
 		catch (SQLException e2) {
 			e2.printStackTrace();
@@ -193,46 +188,11 @@ public class KontaktlisteKontaktMapper {
 			// Ausfuehren des SQL Statement
 			stmt.executeUpdate();
 		}
+		
 		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen
 		catch (SQLException e2) {
 			e2.printStackTrace();
 
 		}
 	}
-
-	// /**
-	// * Updaten der Zuordnung eines Kontakts einer Kontaktliste (eingeklammert)
-	// * @see insert
-	// * @param k das Objekt, das in die DB geschrieben werden soll
-	// * @return das als Parameter �bergebene Objekt
-	// */
-	//
-	// public void update(Kontaktliste kl, Kontakt k) {
-	// String sql = "UPDATE KontaktlisteKontakt SET kontaktlisteid=?, kontaktid=?
-	// WHERE kontaktlisteid=?, kontaktid=?";
-	//
-	// Connection con = DBConnection.connection();
-	//
-	// try {
-	// PreparedStatement stmt = con.prepareStatement(sql);
-	//
-	//
-	// stmt.setInt(1, kl.getId());
-	// stmt.setInt(2, k.getId());
-	//
-	// stmt.setInt(3, kl.getId());
-	// stmt.setInt(4, k.getId());
-	//
-	// stmt.executeUpdate();
-	//
-	// }
-	//
-	// catch (SQLException e2){
-	// e2.printStackTrace();
-	// }
-	// /**
-	// * Um Analogie zu insertKontakt(Kontakt k) zu wahren, geben wir k zur�ck
-	// */
-	// }
-
 }

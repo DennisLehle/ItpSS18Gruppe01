@@ -9,7 +9,7 @@ import java.util.Vector;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * * Die Mapper-Klasse stellt Methoden zur Verfuegung die
+ * Die Mapper-Klasse stellt Methoden zur Verfuegung die
  * <code>Profil</code>-Objekte auf eine relationale Datenbank abbildet. Die
  * Methoden bieten die Moeglichkeit Objekte aus der Datenbank zu suchen, sie zu
  * erzeugen und zu loeschen. Das Mapping ist bidirektional. D.h., Objekte
@@ -46,12 +46,9 @@ public class NutzerMapper {
 	 * Einfuegen eines <code>Nutzer</code>-Objekts in die Datenbank. Dabei wird auch
 	 * der Primaerschluessel des uebergebenen Objekts geprueft und ggf. berichtigt.
 	 *
-	 * @param n
-	 *            das zu speichernde Objekt
+	 * @param n das zu speichernde Objekt
 	 * @return das bereits uebergebene Objekt, jedoch mit ggf. korrigierter
 	 *         <code>id</code>.
-	 * 
-	 * @author thies
 	 */
 	public Nutzer insert(Nutzer n) {
 
@@ -65,7 +62,6 @@ public class NutzerMapper {
 		String insertSQL = "INSERT INTO nutzer (id, email) VALUES (?,?)";
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(maxIdSQL);
@@ -97,11 +93,12 @@ public class NutzerMapper {
 	}
 
 	/**
-	 * /** Suche nach einem <code>Nutzer</code>-Objekts aus der Datenbank.
-	 *
+	 * Suche nach einem <code>Nutzer</code>-Objekts aus der Datenbank.
+	 * 
 	 * @param id
-	 * @return das gesuchte Objekt
+	 * @return Nutzer
 	 */
+	
 	public Nutzer findNutzerById(int id) {
 
 		Connection con = null;
@@ -111,7 +108,6 @@ public class NutzerMapper {
 		String selectByKey = "SELECT * FROM nutzer WHERE id=?";
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
@@ -154,7 +150,6 @@ public class NutzerMapper {
 		String deleteSQL = "DELETE FROM nutzer WHERE id=?";
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 
@@ -165,10 +160,10 @@ public class NutzerMapper {
 			// Ausfuehren des SQL Statement
 			stmt.executeUpdate();
 		}
+		
 		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		catch (SQLException e2) {
 			e2.printStackTrace();
-
 		}
 	}
 
@@ -189,7 +184,6 @@ public class NutzerMapper {
 		String selectByKey = "SELECT * FROM nutzer WHERE email=?";
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 
@@ -214,6 +208,7 @@ public class NutzerMapper {
 		}
 
 		catch (SQLException e2) {
+			
 			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 			e2.printStackTrace();
 			return null;
@@ -221,8 +216,13 @@ public class NutzerMapper {
 
 		return null;
 	}
-
 	
+	/**
+	 * Die Methode findAll sucht alle Nutzer des Systems 
+	 * und gibt diese aus
+	 * 
+	 * @return Vektor von Nutzern
+	 */
 	public Vector<Nutzer> findAll() {
 
 		Connection con = null;
@@ -233,14 +233,12 @@ public class NutzerMapper {
 		String selectByKey = "SELECT * FROM nutzer ";
 
 		try {
-
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 
 			// Aufbereitung des vorbereitenden Statements
 			stmt = con.prepareStatement(selectByKey);
 		
-
 			// Ausfuehren des SQL Statement
 			ResultSet rs = stmt.executeQuery();
 
@@ -259,6 +257,7 @@ public class NutzerMapper {
 		}
 
 		catch (SQLException e2) {
+		
 			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 			e2.printStackTrace();
 			return null;
@@ -268,20 +267,3 @@ public class NutzerMapper {
 	}
 	
 }
-
-// /**
-// * Auslesen des dazugehörigen Kontakt Objekts des jeweiligen Nutzers der sich
-// * in das System einloggt.
-// * @param n
-// * @return
-// */
-// public Kontakt getNutzerAsKontakt(Nutzer n) {
-//
-// /*
-// * Wir greifen auf den <code>KontaktMapper</code> zurück
-// * der uns zum Nutzer der sich einloggt den passenden Kontakt (Sich selbst)
-// * zurückgibt.
-// */
-//
-// return KontaktMapper.kontaktMapper().findKontaktById()
-// }

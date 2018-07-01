@@ -230,7 +230,7 @@ public class ShowKontakte extends VerticalPanel {
 
 		kontaktTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		kontaktTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
-		kontaktTable.setWidth("100%", true);
+		kontaktTable.setWidth("97%", true);
 		kontaktTable.setColumnWidth(vornameCol, "150px");
 		kontaktTable.setColumnWidth(nachnameCol, "200px");
 		kontaktTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Kontakt>createCheckboxManager());
@@ -355,7 +355,7 @@ public class ShowKontakte extends VerticalPanel {
 
 														@Override
 														public void onSuccess(Void result) {
-															Window.alert("Die Teilhaberschaft wurde aufgelöst.");
+															MessageBox.alertWidget("Hinweis", "Die Teilhaberschaft wurde aufgelöst.");
 
 														}
 													});
@@ -515,7 +515,7 @@ public class ShowKontakte extends VerticalPanel {
 
 		kontaktListenTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		kontaktListenTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
-		kontaktListenTable.setWidth("100%", true);
+		kontaktListenTable.setWidth("97%", true);
 		kontaktListenTable.setColumnWidth(vornameColumn, "100px");
 		kontaktListenTable.setColumnWidth(nachnameColumn, "200px");
 
@@ -532,7 +532,7 @@ public class ShowKontakte extends VerticalPanel {
 		sp.add(kontaktListenTable);
 
 		// Größse des ScrollPanels bestimmen.
-		sp.setSize("800px", "400px");
+		sp.setSize("790px", "400px");
 
 		this.add(sp);
 		this.add(hp);
@@ -831,7 +831,7 @@ public class ShowKontakte extends VerticalPanel {
 
 		kontaktTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		kontaktTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
-		kontaktTable.setWidth("100%", true);
+		kontaktTable.setWidth("97%", true);
 		kontaktTable.setColumnWidth(vornameCol, "100px");
 		kontaktTable.setColumnWidth(nachnameCol, "200px");
 		kontaktTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Kontakt>createCheckboxManager());
@@ -909,10 +909,11 @@ public class ShowKontakte extends VerticalPanel {
 
 										@Override
 										public void onSuccess(Void result) {
-
+											
 										}
 									});
 								}
+								
 							}
 
 							// Div's leeren und Kontaktliste anzeigen bei der die Kontakte hinzugefuegt
@@ -920,11 +921,13 @@ public class ShowKontakte extends VerticalPanel {
 							RootPanel.get("content").clear();
 							RootPanel.get("contentHeader").clear();
 							RootPanel.get("content").add(new KontaktlisteForm(kl));
+							MessageBox.alertWidget("Glückwunsch", "Sie haben " + ko.capacity() + " Kontakte zu Ihrer Kontaktliste " + kl.getTitel() + " hinzugefügt");
 						}
 
 					});
 
 				}
+				
 
 			}
 		});

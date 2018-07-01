@@ -143,7 +143,7 @@ public class ShowKontaktliste extends VerticalPanel {
 
 		kontaktListenTable2.setColumnWidth(checkColumn, 40, Unit.PX);
 		kontaktListenTable2.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
-		kontaktListenTable2.setWidth("100%", true);
+		kontaktListenTable2.setWidth("97%", true);
 		kontaktListenTable2.setColumnWidth(NameDerKLColumn, "200px");
 		kontaktListenTable2.setSelectionModel(selectionModel,
 				DefaultSelectionEventManager.<Kontaktliste>createDefaultManager());

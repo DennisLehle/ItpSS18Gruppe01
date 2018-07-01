@@ -30,17 +30,18 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
 /**
- * Klasse welche Formulare f�r Kontaktd darstellt, diese erlauben
- * Interaktionsm�glichkeiten um Kontakte Anzuzeigen, zu Bearbeiten, zu L�schen
+ * Klasse welche Formulare fuer Kontaktd darstellt, diese erlauben
+ * Interaktionsmoeglichkeiten um Kontakte Anzuzeigen, zu Bearbeiten, zu Loeschen
  * oder Neuanzulegen.
  * 
  * @author Kevin Batista, Dennis Lehle, Ugur Bayrak
  */
-
 public class KontaktForm extends VerticalPanel {
 
+	//Setzen des Zugriffs auf das Asyne Service Interface
 	EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
 
+	//Leere Objekte anlegen
 	Kontakt k = new Kontakt();
 	Auspraegung a = new Auspraegung();
 	Auspraegung a2 = new Auspraegung();
@@ -49,7 +50,6 @@ public class KontaktForm extends VerticalPanel {
 	Auspraegung updatedAuspraegung = new Auspraegung();
 	Eigenschaft updatedEigenschaft = new Eigenschaft();
 	Nutzer nutzer = new Nutzer();
-
 	Kontakt selectedKontakt = null;
 	Vector<Eigenschaft> kontakteigenschaften = new Vector<>();
 	Vector<Relatable> kontaktauspraegungen = new Vector<>();
@@ -67,12 +67,15 @@ public class KontaktForm extends VerticalPanel {
 	Vector<Berechtigung> receiver = new Vector<Berechtigung>();
 	ListBox auswahlEigenschaftenListBox1 = new ListBox();
 
+	//TreeView auf null setten
 	SontactTreeViewModel sontactTree = null;
 
+	//TextBoxen erstellen
 	TextBox vornameTxtBox = new TextBox();
 	TextBox nachnameTxtBox = new TextBox();
 	TextBox auspraegungTxtBx1 = new TextBox();
 
+	//Labels erstellen
 	Label erstellungsdatum = new Label();
 	Label modifikationsdatum = new Label();
 	Label infoLb = new Label();
@@ -90,9 +93,9 @@ public class KontaktForm extends VerticalPanel {
 	HorizontalPanel FlexTablePanel = new HorizontalPanel();
 	VerticalPanel flexPanelNeueEig = new VerticalPanel();
 	VerticalPanel flexPanelKontaktInfo = new VerticalPanel();
-
+	
+	//Panels fuer die Buttons und der Kontaktinformation
 	VerticalPanel vp = new VerticalPanel();
-
 	HorizontalPanel btnPanelTop = new HorizontalPanel();
 	HorizontalPanel kontaktinfo = new HorizontalPanel();
 	HorizontalPanel btnPanelBottom = new HorizontalPanel();
@@ -111,27 +114,31 @@ public class KontaktForm extends VerticalPanel {
 	 * @param k ausgewaehlter Kontakt
 	 */
 	public KontaktForm(Kontakt k) {
+		//Div leeren
 		RootPanel.get("contentHeader").clear();
+		
+		//Kontakt setzen
 		this.selectedKontakt = k;
 
+		//Styling der TextBoxen.
 		vorname.setStylePrimaryName("label");
 		nachname.setStylePrimaryName("label");
 
 		// Nutzer Cookies holen und im Nutzer Objekt speichern.
 		nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 		nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
-//
-//		ev.getKontaktById(k.getId(), new AsyncCallback<Kontakt>() {
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				ClientsideSettings.getLogger().severe("Hopala");
-//			}
-//
-//			@Override
-//			public void onSuccess(Kontakt result) {
-//
-//				selectedKontakt = result;
+
+		ev.getKontaktById(k.getId(), new AsyncCallback<Kontakt>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				ClientsideSettings.getLogger().severe("Hopala");
+			}
+
+			@Override
+			public void onSuccess(Kontakt result) {
+
+				selectedKontakt = result;
 
 				HorizontalPanel headerPanel = new HorizontalPanel();
 
@@ -265,9 +272,9 @@ public class KontaktForm extends VerticalPanel {
 				RootPanel.get("content").add(new ShowEigenschaften(nutzer, k));
 				RootPanel.get("content").add(btnPanel);
 				RootPanel.get("content").add(datePanel);
-//
-//			}
-//		});
+
+			}
+		});
 
 	}
 
@@ -315,9 +322,6 @@ public class KontaktForm extends VerticalPanel {
 
 			}
 		});
-
-		// Button addEigenschaftBtn = new Button("Weitere Auswahleigenschaft");
-		// addEigenschaftBtn.addClickHandler(new AuswahlEigenschaftenClickHandler());
 
 		Button createEigenschaftBtn = new Button("Eigenschaft definieren");
 		createEigenschaftBtn.setStylePrimaryName("eigeneEigButton");
@@ -382,53 +386,6 @@ public class KontaktForm extends VerticalPanel {
 		this.add(vp);
 
 	}
-
-	/**
-	 * ClickHandler zum Erzeugen von weiteren Auswahleigenschaften (ListBoxen)
-	 */
-
-	// private class AuswahlEigenschaftenClickHandler implements ClickHandler {
-	//
-	// @Override
-	// public void onClick(ClickEvent event) {
-	//
-	// ListBox eigenschaftBox = new ListBox();
-	// TextBox wertBox = new TextBox();
-	//
-	// wertBox.setStylePrimaryName("tbRundung");
-	// wertBox.getElement().setPropertyString("placeholder", "Wert eingeben..");
-	//
-	// ev.getEigenschaftAuswahl(new AsyncCallback<Vector<Eigenschaft>>() {
-	//
-	// @Override
-	// public void onFailure(Throwable caught) {
-	// caught.getMessage();
-	//
-	// }
-	//
-	// @Override
-	// public void onSuccess(Vector<Eigenschaft> result) {
-	//
-	// if (result != null) {
-	//
-	// for (int i = 0; i < result.size(); i++) {
-	// eigenschaftBox.addItem(result.elementAt(i).getBezeichnung());
-	//
-	// }
-	//
-	// }
-	//
-	// }
-	// });
-	//
-	// int count = kontaktInfoTable.getRowCount();
-	// kontaktInfoTable.setWidget(count, 0, eigenschaftBox);
-	// kontaktInfoTable.setWidget(count, 1, wertBox);
-	// count++;
-	//
-	// }
-	//
-	// }
 
 	/**
 	 * ClickHandler zum Erzeugen von neuen Eigenschafts-Angaben
@@ -904,6 +861,11 @@ public class KontaktForm extends VerticalPanel {
 
 	}
 
+	/**
+	 * Methode zum setten des aktuell selektierten Kontakts.
+	 * 
+	 * @param k Kontakt der selektiert wurde
+	 */
 	public void setSelectedKontakt(Kontakt k) {
 		if (k != null) {
 			selectedKontakt = k;
@@ -919,6 +881,11 @@ public class KontaktForm extends VerticalPanel {
 
 	}
 
+	/**
+	 * Methode zum setzen des Baums
+	 * 
+	 * @param sontactTreeViewModel der Baum der gesetzt wird.
+	 */
 	public void setSontactTreeViewModel(SontactTreeViewModel sontactTreeViewModel) {
 		sontactTree = sontactTreeViewModel;
 	}

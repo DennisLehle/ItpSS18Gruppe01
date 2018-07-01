@@ -73,7 +73,7 @@ public interface EditorServiceAsync {
 
 	void deleteAuspraegung(Auspraegung a, AsyncCallback<Void> callback);
 
-	void deleteAuspraegungById(int auspraegungId, AsyncCallback<Void> callback);
+	void deleteAuspraegungById(int auspraegungId, int kontaktId, AsyncCallback<Void> callback);
 
 	void getAuspraegungById(int auspraegungId, AsyncCallback<Auspraegung> callback);
 

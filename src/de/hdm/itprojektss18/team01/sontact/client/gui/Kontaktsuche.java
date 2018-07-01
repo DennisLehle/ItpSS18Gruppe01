@@ -35,27 +35,42 @@ import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
+/**
+ * Klasse die Allgemein fuer die Suche von Kontakten nach bestimmten
+ * Eigenschaften, Auspraegungen oder Namen zustaendig ist.
+ * 
+ * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
+ *
+ */
 public class Kontaktsuche extends VerticalPanel {
 
+	//Setzen des Zugriffs auf das Asyne Service Interface
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
+	
+	//Setzen des Zugriffs auf das Interface der CellTabel Css
 	private CellTable.Resources tableRes = GWT.create(TableResources.class);
 	
+	//Erstellung der CellTable mit dem selectionModel und dem DataProvider
 	private CellTable<Kontakt> searchTable;
-	final SingleSelectionModel<Kontakt> selectionModel = new SingleSelectionModel<Kontakt>();
+	private final SingleSelectionModel<Kontakt> selectionModel = new SingleSelectionModel<Kontakt>();
 	final ListDataProvider<Kontakt> dataProvider = new ListDataProvider<Kontakt>();
+	
+	//Leerer Kontakt Vector erzeugen
 	Vector<Kontakt> ko = new Vector<Kontakt>();
 
+	//Erzeugen von Listbox und TectBox
 	ListBox lb = new ListBox();
 	TextBox tb = new TextBox();
 
+	//Deklarierung von Buttons
 	private Button search;
 	private Button addKontaktToKontaktlisteStart;
 
-	HorizontalPanel hp3 = new HorizontalPanel();
-	HorizontalPanel head = new HorizontalPanel();
-	HorizontalPanel searchbar = new HorizontalPanel();
-	HorizontalPanel showKontaktButtonPanel = new HorizontalPanel();
-	ScrollPanel sp = new ScrollPanel();
+	//Erstellen von Panels
+	private HorizontalPanel hp3 = new HorizontalPanel();
+	private HorizontalPanel searchbar = new HorizontalPanel();
+	private HorizontalPanel showKontaktButtonPanel = new HorizontalPanel();
+	private ScrollPanel sp = new ScrollPanel();
 
 	/**
 	 * Konstruktor wird ausgelöst man einen Kontakt des Nutzers übergibt um die
@@ -66,20 +81,16 @@ public class Kontaktsuche extends VerticalPanel {
 	 * @param eingabe des Nutzers
 	 */
 	public Kontaktsuche(final Nutzer n, String auswahl, String eingabe) {
+		//Panels leeren und dem Header eine Ueberschrift geben und hinzufuegen
 		RootPanel.get("content").clear();
 		hp3.clear();
-		
-		
 		hp3.add(new HTML("<h9>Ergebnis Ihrer Suche</h9>"));
 		this.add(hp3);
-		//Div's leeren und dem ContentHeader Container den neuen Titel zuweisen.
-//		RootPanel.get("content").clear();
-//		RootPanel.get("contentHeader").clear();
-//		RootPanel.get("contentHeader").add(new HTML("<h3>Ergebnis der Suche </h3>"));
 
 		// Methode die beim Start dieser Klasse aufgerufen wird.
 		onLoad(n, auswahl, eingabe);
 		
+		//Button dem Panel hinzufuegen
 		showKontaktButtonPanel.add(addKontaktToKontaktlisteStart);
 
 	}
@@ -208,7 +219,7 @@ public class Kontaktsuche extends VerticalPanel {
 
 			@Override
 			public String getValue(Kontakt vorname) {
-				// TODO Auto-generated method stub
+			
 				return (String) vorname.getVorname();
 			}
 		};
@@ -217,7 +228,7 @@ public class Kontaktsuche extends VerticalPanel {
 
 			@Override
 			public String getValue(Kontakt nachname) {
-				// TODO Auto-generated method stub
+			
 				return (String) nachname.getNachname();
 			}
 		};
@@ -330,8 +341,7 @@ public class Kontaktsuche extends VerticalPanel {
 						if(ko.capacity() == 0) {
 							MessageBox.alertWidget("Hinweis", "Bitte wählen Sie mindestens einen Kontakt aus.");
 						} else if(ko.capacity() >= 1){
-//						RootPanel.get("content").clear();
-//						RootPanel.get("contentHeader").clear();
+
 						RootPanel.get("content").add(new ShowKontaktliste(n, null, ko));
 						}
 		
@@ -345,7 +355,6 @@ public class Kontaktsuche extends VerticalPanel {
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
 				
-					//RootPanel.get("content").clear();
 					ev.getKontaktById(selectionModel.getSelectedObject().getId(), new AsyncCallback<Kontakt>() {
 						@Override
 						public void onFailure(Throwable caught) {

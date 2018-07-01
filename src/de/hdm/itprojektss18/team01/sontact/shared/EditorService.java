@@ -354,11 +354,12 @@ public interface EditorService extends RemoteService {
 
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
-	 *      #deleteAuspraegung(Auspraegung a);
+	 *      #deleteAuspraegungById(auspraegungId, kontaktId);
 	 * @param auspraegungId - id der Auspraegung die geloescht werden soll
+	 * @param kontaktId - id des Kontakt bei dem das Modifikationdatum aktualisiert wird
 	 * 
 	 */
-	public void deleteAuspraegungById(int auspraegungId) throws IllegalArgumentException;
+	public void deleteAuspraegungById(int auspraegungId, int kontaktId) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl

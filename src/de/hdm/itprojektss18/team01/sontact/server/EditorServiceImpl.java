@@ -788,6 +788,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	/**
 	 * Loeschen einer Auspraegung.
+	 * 
+	 * @param a Auspraegung die geloescht werden soll
 	 */
 	public void deleteAuspraegung(Auspraegung a)
 			throws IllegalArgumentException {
@@ -796,16 +798,17 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.aMapper.delete(a);
 	}
 
-	// -> ?
 	/**
 	 * Loeschen einer Auspraegung anhand der id.
 	 * 
 	 * @param auspraegungId Auspraegung die geloescht werden soll
+	 * @param kontaktId von dem das Modifikationsdatum aktualisiert werden soll
 	 */
-	public void deleteAuspraegungById(int auspraegungId)
+	public void deleteAuspraegungById(int auspraegungId, int kontaktId)
 			throws IllegalArgumentException {
+		this.saveModifikationsdatum(kontaktId);
 		this.aMapper.deleteById(auspraegungId);
-	} // -> ?
+	} 
 
 	/**
 	 * Auslesen einer Auspraegung anhand id.

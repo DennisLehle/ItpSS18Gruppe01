@@ -4,9 +4,9 @@ package de.hdm.itprojektss18.team01.sontact.shared.bo;
  * Realisierung einer exemplarischen Auspraegung, welche in Verbindung mit einer
  * Eigenschaft einem Kontakt zugewiesen wird. Hierbei hat ein
  * Auspraegungs-Objekt einen Wert, welcher den tatsaechlichen Wert der
- * Eigenschaft darstellt, sowie die Verweise eigenschaftId für die dazugehoerige
+ * Eigenschaft darstellt, sowie die Verweise eigenschaftId fuer die dazugehoerige
  * Eigenschaftsbezeichnung, kontaktId fuer den dazugehoerigen Kontakt der
- * Eigenschaft, den status um zu prüfen, die Auspraegung geteilt ist, die
+ * Eigenschaft, den status um zu pruefen, die Auspraegung geteilt ist, die
  * ownerId fuer den Eigentuemer/Ersteller der Auspraegung und den Objekt-type.
  * 
  * @see <code>BusinessObject</code>

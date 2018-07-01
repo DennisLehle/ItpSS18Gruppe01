@@ -2,12 +2,12 @@ package de.hdm.itprojektss18.team01.sontact.shared.bo;
 
 /**
  * Realisierung einer exemplarischen Berechtigung auf ein geteiltes Objekt.
- * Berechtigungs-Objekte könne von Nutzern für Nutzer für folgende Objekte
+ * Berechtigungs-Objekte koenne von Nutzern fuer Nutzer fuer folgende Objekte
  * erteilt werden: <code>Kontakt</code>-, <code>Kontaktliste</code>- und
  * <code>Auspraegung</code>-Objekte.
  * 
- * Ein Berechtigungs-Objekt referenziert jeweils zwei Nutzer, den Eigentümer
- * (ownerId) und den Empfänger (reveiverId) der Berechtigung, sowie eine
+ * Ein Berechtigungs-Objekt referenziert jeweils zwei Nutzer, den Eigentuemer
+ * (ownerId) und den Empfaenger (reveiverId) der Berechtigung, sowie eine
  * ObjektId (objectId), welche in verbindung mit dem Objekt-Type (type)
  * eindeutig ist.
  * 

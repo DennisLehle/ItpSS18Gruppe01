@@ -419,7 +419,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			for (int j = 0; j < b.size(); j++) {
 
 				if (kontakt.elementAt(i).getId() == b.elementAt(j).getObjectId()
-						&& n.getId() == b.elementAt(j).getOwnerId())
+						&& n.getId() == b.elementAt(j).getOwnerId() && kontakt.elementAt(i).getType() == b.elementAt(j).getType())
 
 				{
 					Kontakt k = new Kontakt();
@@ -430,6 +430,18 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 			}
 		}
+		
+		/*
+		 * Receiver Vector durchgehen und Objekte mit Typ k
+		 * herauslesen und dem Vector allNutzer hinzufuegen.
+		 */
+		Vector<Nutzer> allNutzer = new Vector<Nutzer>();
+		for (int i = 0; i < receiv.size(); i++) {
+			if(receiv.elementAt(i).getType() ==  'k') {
+				allNutzer.addAll(getEditorService().sharedWith(receiv.elementAt(i).getId(), 'k', n));
+			}
+		}
+		
 
 		// Die Berechtigungen des gespeicherten Vectors, werden pro Zeile der
 		// Reporttabelle
@@ -443,8 +455,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			kon.addColumn(new Column(receiv.elementAt(i).getNachname()));
 			kon.addColumn(new Column(receiv.elementAt(i).getErstellDat().toString()));
 			kon.addColumn(new Column(receiv.elementAt(i).getModDat().toString()));
-			kon.addColumn(new Column(
-					getEditorService().sharedWith(receiv.elementAt(i).getId(), 'k', n).get(i).getEmailAddress()));
+			kon.addColumn(new Column(allNutzer.elementAt(i).getEmailAddress()));
 			kon.addColumn(new Column(""));
 			
 			// Hinzufuegen der Zeile zum Report

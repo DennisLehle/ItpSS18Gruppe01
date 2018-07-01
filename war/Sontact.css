@@ -405,9 +405,10 @@ h8 a {
     bottom: 537px;
     padding: 7px 31px;
     color: black;
-  
-	
 }
+	
+
+
 .teilunsDeleteButton{
 	position: absolute;
     right: 18px;
@@ -691,6 +692,14 @@ h8 a {
 	bottom: 120px;
     border-radius: 15px;
 }
+
+.messageButtonshareDel{
+	position: absolute;
+	right: 80px;
+	bottom: 122px;
+    border-radius: 15px;
+}
+
 
 .messageButtonStandard{
 	position: absolute;

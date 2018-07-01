@@ -373,16 +373,16 @@ public class MessageBox {
 		// Buttons der MessageBox
 		final Button buttonClose = new Button(
 				"<image src='/images/abbrechen.png' width='13px' height='13px' align='center' />");
-		buttonClose.setStylePrimaryName("messageButtonStandard");
+		buttonClose.setStylePrimaryName("messageButtonshareDel");
 		buttonClose.setTitle("Abbrechen");
 
 		final Button buttonDeleteKl = new Button(
-				"<image src='/images/share.png' width='30px' height='30px' align='center' /> löschen");
+				"<image src='/images/share.png' width='20px' height='20px' align='center' /> löschen");
 		buttonDeleteKl.setStylePrimaryName("messageButtonshare1");
 		buttonDeleteKl.setTitle("Teilung der Kontaktliste löschen");
 
 		final Button buttonDeleteK = new Button(
-				"<image src='/images/share.png' width='30px' height='30px' align='center' /> löschen");
+				"<image src='/images/share.png' width='20px' height='20px' align='center' /> löschen");
 		buttonDeleteK.setStylePrimaryName("messageButtonshare1");
 		buttonDeleteK.setTitle("Teilung des Kontakts löschen");
 

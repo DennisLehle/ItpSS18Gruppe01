@@ -288,7 +288,7 @@ public class ShowEigenschaften extends VerticalPanel {
 
 		eigenschaftAuspraegungTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		eigenschaftAuspraegungTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
-		eigenschaftAuspraegungTable.setWidth("100%", true);
+		eigenschaftAuspraegungTable.setWidth("97%", true);
 		eigenschaftAuspraegungTable.setColumnWidth(eigenschaftColumn, "100px");
 		eigenschaftAuspraegungTable.setColumnWidth(auspraegnungColumn, "100px");
 		eigenschaftAuspraegungTable.setColumnWidth(imageColumn, "45px");
@@ -368,7 +368,7 @@ public class ShowEigenschaften extends VerticalPanel {
 					// Löschung davon.
 					for (int i = 0; i <= gewaehlteAuspraegung.size(); i++) {
 						
-						ev.deleteAuspraegungById(gewaehlteAuspraegung.elementAt(i).getId(), new AsyncCallback<Void>() {
+						ev.deleteAuspraegungById(gewaehlteAuspraegung.elementAt(i).getId(), k.getId(), new AsyncCallback<Void>() {
 
 							@Override
 							public void onFailure(Throwable caught) {
@@ -381,8 +381,7 @@ public class ShowEigenschaften extends VerticalPanel {
 								RootPanel.get("content").clear();
 								RootPanel.get("contentHeader").clear();
 								RootPanel.get("content").add(new KontaktForm(k));
-								RootPanel.get("contentHeader").clear();
-								
+						
 							}
 
 						});		

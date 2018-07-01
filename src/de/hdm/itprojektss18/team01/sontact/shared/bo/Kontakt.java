@@ -133,7 +133,7 @@ public class Kontakt extends BusinessObject {
 
 
 	/**
-	 * Auslesen des identifiers, welcher den Marker für den eigenen Kontakt des Nutzres darstellt.
+	 * Auslesen des identifiers, welcher den Marker fuer den eigenen Kontakt des Nutzres darstellt.
 	 * @return identifier - Marker fuer den eigenen Kontakt des Nutzers
 	 */
 	public char getIdentifier() {

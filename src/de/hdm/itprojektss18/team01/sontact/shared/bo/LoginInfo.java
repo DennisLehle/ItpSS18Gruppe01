@@ -1,14 +1,10 @@
 package de.hdm.itprojektss18.team01.sontact.shared.bo;
 
-import de.hdm.itprojektss18.team01.sontact.shared.bo.BusinessObject;
 
-import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class LoginInfo implements IsSerializable {
-
-	private static final long serialVersionUID = 1L;
 
 	private boolean loggedIn = false;
 	private String loginUrl = "";

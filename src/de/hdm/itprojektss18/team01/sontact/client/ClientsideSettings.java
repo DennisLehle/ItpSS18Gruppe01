@@ -110,13 +110,9 @@ public class ClientsideSettings extends CommonSettings {
 	 * Methode erstellt die Verwaltung, sofern sie noch nicht existiert. Bei
 	 * wiederholtem Aufruf dieser Methode wird stets das bereits zuvor angelegte
 	 * Objekt zurueckgegeben.
-	 * </p>
 	 * 
-	 * <p>
 	 * Der Aufruf dieser Methode erfolgt im Client z.B. durch
 	 * <code>LoginSerivceAsync loginSerivce = ClientSideSettings.getLoginService()</code>
-	 * .
-	 * </p>
 	 * 
 	 * @return eindeutige Instanz des Typs <code>LoginServiceAsync</code>
 	 */

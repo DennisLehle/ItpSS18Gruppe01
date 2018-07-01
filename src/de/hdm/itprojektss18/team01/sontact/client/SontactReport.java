@@ -34,7 +34,6 @@ public class SontactReport implements EntryPoint {
 	private VerticalPanel loginPanel = new VerticalPanel();
 	private Label loginLabel = new Label(
 			"Bitte Melden Sie sich mit Ihren Google Account, um einen Zugriff auf den ReportGenerator zu bekommen.");
-	private Anchor signOutLink = new Anchor("Logout");
 	private Anchor signInLink = new Anchor("Mit Google anmelden");
 	HTML loginHTML = new HTML("<h7></h7>");
 	HTML sontactHTML = new HTML("<h9>SONTACT-REPORT</h9>");

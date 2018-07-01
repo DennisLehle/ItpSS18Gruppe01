@@ -1,9 +1,7 @@
 package de.hdm.itprojektss18.team01.sontact.shared.bo;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
 
 /**
  * Realisierung einer exemplarischen Kontaktklasse.

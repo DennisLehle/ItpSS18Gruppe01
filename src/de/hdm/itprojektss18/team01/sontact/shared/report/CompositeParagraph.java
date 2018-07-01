@@ -61,9 +61,7 @@ public class CompositeParagraph extends Paragraph implements Serializable {
   /**
    * Auslesen eines einzelnen Unterabschnitts.
    * 
-   * @param i der Index des gewünschten Unterabschnitts (0 <= i <n), mit n =
-   *          Anzahl der Unterabschnitte.
-   * 
+   * @param i der gewuenschte Unterabschnitt des Index
    * @return der gewünschte Unterabschnitt.
    */
   public SimpleParagraph getParagraphAt(int i) {

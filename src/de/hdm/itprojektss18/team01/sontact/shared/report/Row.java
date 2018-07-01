@@ -62,9 +62,7 @@ public class Row implements Serializable {
 	/**
 	 * Auslesen eines einzelnen Spalten-Objekts.
 	 * 
-	 * @param i
-	 *            der Index der auszulesenden Spalte (0 <= i < n), mit n = Anzahl
-	 *            der Spalten.
+	 * @param i  der Index der auszulesenden Spalten Anzahl.
 	 * @return das gewuenschte Spaltenobjekt.
 	 */
 	public Column getColumnAt(int i) {

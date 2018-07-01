@@ -1,6 +1,5 @@
 package de.hdm.itprojektss18.team01.sontact.server;
 
-import java.io.Serializable;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;

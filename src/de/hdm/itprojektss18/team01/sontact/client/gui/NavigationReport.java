@@ -70,6 +70,15 @@ public class NavigationReport extends VerticalPanel {
 		showAllGeteiltenKontakteReport.setStyleName("ButtonStyle");
 		showAllKontakteNachTeilhabendernReport.setStyleName("ButtonStyle");
 
+		showAllKontakteReport.setTitle(
+				"Hier erhalten Sie einen Report, der alle Ihre angelegten, sowie die mit Ihnen geteilten Kontakte ausgibt");
+		showAllKontakteNachBestimmtenAusp.setTitle(
+				"Hier erhalten Sie einen Report, der alle Ihre angelegten, sowie die mit Ihnen geteilten Kontakte, nach bestimmten Eigenschaften und Auspraegungen ausgibt");
+		showAllGeteiltenKontakteReport.setTitle(
+				"Hier erhalten Sie einen Report, der alle Ihre geteilten Kontakte, mit allen Nutzern ausgibt");
+		showAllKontakteNachTeilhabendernReport.setTitle(
+				"Hier erhalten Sie einen Report, der alle Ihre geteilten Kontakte, mit bestimmten Nutzern ausgibt");
+
 		showAllKontakteReport.setPixelSize(200, 80);
 		showAllKontakteNachBestimmtenAusp.setPixelSize(200, 80);
 		showAllGeteiltenKontakteReport.setPixelSize(200, 80);
@@ -147,14 +156,14 @@ public class NavigationReport extends VerticalPanel {
 
 				// Filterung nach Eigenschaft
 				TextBox eingabe = new TextBox();
-			
+
 				Label eigLb = new Label("Eigenschaft: ");
-//				auswahl.addItem("Eigenschaft");
+				// auswahl.addItem("Eigenschaft");
 
 				// Filterung nach Auspraegung
 				TextBox eingabe1 = new TextBox();
 				Label ausLb = new Label("Auspraegung:");
-				//auswahl1.addItem("Auspraegung");
+				// auswahl1.addItem("Auspraegung");
 
 				// Erstellung der Eigenschaften und Auspraegung Buttons
 				Button btn = new Button("Report generieren");
@@ -165,7 +174,7 @@ public class NavigationReport extends VerticalPanel {
 				eingabe1.setStyleName("contentR");
 				ausLb.setStyleName("contentR");
 				eingabe1.setStyleName("contentR");
-				//auswahl1.setStyleName("contentR");
+				// auswahl1.setStyleName("contentR");
 				btn.setStyleName("contentR");
 
 				// Dem Rootpanel wird die neue Html-Seite uebergeben
@@ -350,21 +359,21 @@ public class NavigationReport extends VerticalPanel {
 					@Override
 					public void onSuccess(Vector<Nutzer> result) {
 
-						//Leeren Vector erstellen
-					      Vector<String> allN = new Vector <String>();
-					      
-					      if (result != null) {
+						// Leeren Vector erstellen
+						Vector<Nutzer> allN = new Vector<Nutzer>();
 
-					       for (int i = 0; i < result.size(); i++) {
-					        if(allN.contains(result.elementAt(i).getEmailAddress())) {
-					         allN.remove(i);
-					        } else {
-					         allN.add(result.elementAt(i).getEmailAddress());    
-					         }
+						for (int i = 0; i < result.size(); i++) {
+							if (allN.contains(result.elementAt(i))) {
+								result.remove(i);
+							} else {
+								allN.add(result.elementAt(i));
 							}
 
 						}
+						for (int j = 0; j < allN.size(); j++) {
+							emailGeteiltenutzer.addItem(allN.elementAt(j).getEmailAddress());
 
+						}
 					}
 				});
 

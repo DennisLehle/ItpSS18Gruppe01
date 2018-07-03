@@ -144,8 +144,6 @@ h1 {
 
 h3 {
 	width: 70%;
-	background: url(/images/sontact2.png) no-repeat left 80%;
-	background-size: 20px;
 	color: black;
 	font-weight: lighter !important;
 	font-variant: small-caps;
@@ -170,8 +168,6 @@ h8 {
 	font-weight: 400;
 	font-size: 22px;
 	width: 19%;
-	background: url(/images/sontact2.png) no-repeat left 80%;
-	background-size: contain;
 	color: black;
 	font: 'Gotham';
 	font-weight: lighter !important;
@@ -252,6 +248,7 @@ h9 a {
 	font-family: sans-serif;
 	min-height: 550px;
 	font-family: sans-serif;
+	background: url(/images/sontactbackground.jpg) no-repeat left 93%;
 }
 
 #navigatorR {

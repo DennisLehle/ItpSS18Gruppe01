@@ -9,6 +9,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -146,24 +147,25 @@ public class NavigationReport extends VerticalPanel {
 
 				// Filterung nach Eigenschaft
 				TextBox eingabe = new TextBox();
-				ListBox auswahl = new ListBox();
-				auswahl.addItem("Eigenschaft");
+			
+				Label eigLb = new Label("Eigenschaft: ");
+//				auswahl.addItem("Eigenschaft");
 
 				// Filterung nach Auspraegung
 				TextBox eingabe1 = new TextBox();
-				ListBox auswahl1 = new ListBox();
-				auswahl1.addItem("Auspraegung");
+				Label ausLb = new Label("Auspraegung:");
+				//auswahl1.addItem("Auspraegung");
 
 				// Erstellung der Eigenschaften und Auspraegung Buttons
 				Button btn = new Button("Report generieren");
 
 				eingabe.setStyleName("contentR");
-				auswahl.setStyleName("contentR");
+				eigLb.setStyleName("contentR");
 				btn.setStyleName("contentR");
 				eingabe1.setStyleName("contentR");
-				auswahl1.setStyleName("contentR");
+				ausLb.setStyleName("contentR");
 				eingabe1.setStyleName("contentR");
-				auswahl1.setStyleName("contentR");
+				//auswahl1.setStyleName("contentR");
 				btn.setStyleName("contentR");
 
 				// Dem Rootpanel wird die neue Html-Seite uebergeben
@@ -176,9 +178,9 @@ public class NavigationReport extends VerticalPanel {
 				RootPanel.get("contentR").add(new HTML("</br>"));
 
 				// Dem Horizontal Panel werden die definierten Elemente hinzugefuegt
-				hp.add(auswahl);
+				hp.add(eigLb);
 				hp.add(eingabe);
-				hp.add(auswahl1);
+				hp.add(ausLb);
 				hp.add(eingabe1);
 				hp.add(btn);
 
@@ -191,7 +193,7 @@ public class NavigationReport extends VerticalPanel {
 					public void onClick(ClickEvent event) {
 						if (eingabe.getValue() == "" && eingabe1.getValue() == "") {
 							Window.alert("Bitte geben sie etwas in das Textfeld ein.");
-						} else if (auswahl.getSelectedItemText() == "Eigenschaft" && eingabe.getValue() != "") {
+						} else if (eingabe.getValue() != "") {
 
 							final HTMLReportWriter writer = new HTMLReportWriter();
 							ClientsideSettings.getReportGeneratorService().createAuspraegungReport(eingabe.getValue(),
@@ -224,7 +226,7 @@ public class NavigationReport extends VerticalPanel {
 									});
 							// Die Aktion des ClickHandlers ueber den Button wird festgelegt und uebergibt
 							// bei Erfolg die Ausgabe des Reports.
-						} else if (auswahl1.getSelectedItemText() == "Auspraegung" && eingabe1.getValue() != "") {
+						} else if (eingabe1.getValue() != "") {
 
 							final HTMLReportWriter writer = new HTMLReportWriter();
 							ClientsideSettings.getReportGeneratorService().createAuspraegungReport(eingabe.getValue(),
@@ -348,15 +350,17 @@ public class NavigationReport extends VerticalPanel {
 					@Override
 					public void onSuccess(Vector<Nutzer> result) {
 
-						if (result != null) {
+						//Leeren Vector erstellen
+					      Vector<String> allN = new Vector <String>();
+					      
+					      if (result != null) {
 
-							for (int i = 0; i < result.size(); i++) {
-								emailGeteiltenutzer.addItem(result.elementAt(i).getEmailAddress());
-								// ABfrage ob EMail-Adresse schon vorhanden ist oder nicht.
-								// if (emailGeteiltenutzer.getItemText(i) ==
-								// result.elementAt(i).getEmailAddress()) {
-								// emailGeteiltenutzer.removeItem(i);
-								// }
+					       for (int i = 0; i < result.size(); i++) {
+					        if(allN.contains(result.elementAt(i).getEmailAddress())) {
+					         allN.remove(i);
+					        } else {
+					         allN.add(result.elementAt(i).getEmailAddress());    
+					         }
 							}
 
 						}

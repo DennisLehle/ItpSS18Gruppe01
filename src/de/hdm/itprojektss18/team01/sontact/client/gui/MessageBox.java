@@ -469,7 +469,7 @@ public class MessageBox {
 
 						@Override
 						public void onSuccess(Void result) {
-							Window.alert("Die Teilhaberschaft an der Kontaktliste " + kl.getTitel()
+							MessageBox.alertWidget("Hinweis","Die Teilhaberschaft an der Kontaktliste " + kl.getTitel()
 									+ " wurde erfolgreich gelöscht.");
 							
 

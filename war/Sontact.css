@@ -585,6 +585,33 @@ h8 a {
 	
 }
 
+.labelD{
+	border-style: dotted;
+    border-width: 2px;
+    border-radius: 4px;
+    margin: 5px;
+	
+}
+
+.labelModDat{
+	
+	font-size: 15px;
+	left: 400px;
+	
+}
+
+.labelModPanel{
+	margin-left: 20px;
+	font-size: 18px;
+	
+}
+
+.labelOwnerPanel{
+	margin-left: 100px;
+	font-size: 17px;
+	
+}
+
 .labelReg{
 	margin: 4px;
 	font-size: 13px;

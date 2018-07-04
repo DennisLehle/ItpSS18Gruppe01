@@ -19,6 +19,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -55,9 +57,13 @@ public class ShowEigenschaften extends VerticalPanel {
 
 
 	HorizontalPanel hp3 = new HorizontalPanel();
+	HorizontalPanel hp = new HorizontalPanel();
 	HorizontalPanel head = new HorizontalPanel();
 	VerticalPanel status = new VerticalPanel();
+	VerticalPanel vp = new VerticalPanel();
 	ScrollPanel sp = new ScrollPanel();
+	Label ownerlb = new Label();
+	
 
 	/**
 	 * Konstruktor wird ausgelöst man einen Kontakt des Nutzers übergibt um die
@@ -71,6 +77,13 @@ public class ShowEigenschaften extends VerticalPanel {
 		RootPanel.get("content").clear();
 		RootPanel.get("contentHeader").clear();
 		
+		/*
+		 * Prüfungs Mehtode ob der Nutzer der Owner ist
+		 * fuer die Label Setzung.
+		 */
+		ownerPruefung(k,n);
+		
+		RootPanel.get("content").add(hp);
 		head.add(new HTML("<h5>Kontaktinformationen </h5>"));
 		RootPanel.get("content").add(head);
 		// Methode die beim Start dieser Klasse aufgerufen wird.
@@ -146,14 +159,6 @@ public class ShowEigenschaften extends VerticalPanel {
 
 					}
 				
-//					for (int i = 0; i < statusObjects.size(); i++) {
-//						
-//						
-//						if(statusObjects.elementAt(i).getOwnerId() == n.getId() ) {
-//							auspraegungen.add(statusObjects.elementAt(i));
-//						}
-//					}
-		
 					eigenschaftAuspraegungTable.setRowCount(statusObjects.size(), true);
 					eigenschaftAuspraegungTable.setVisibleRange(0, 10);
 					eigenschaftAuspraegungTable.setRowData(statusObjects);
@@ -300,7 +305,6 @@ public class ShowEigenschaften extends VerticalPanel {
 		eigenschaftAuspraegungTable.addColumnSortHandler(sort);
 		eigenschaftAuspraegungTable.setSelectionModel(selectionModel,
 				DefaultSelectionEventManager.<Relatable>createCheckboxManager());
-
 		this.add(eigenschaftAuspraegungTable);
 
 		// ClickHandler zum teilen von Kontakten mit ausgewählten Ausprägungen.
@@ -318,7 +322,7 @@ public class ShowEigenschaften extends VerticalPanel {
 
 		// Größe des ScrollPanels bestimmen plus in das ScrollPanel die CellTable
 		// hinzufügen.
-
+		
 		sp.setSize("900px", "400px");
 		sp.add(eigenschaftAuspraegungTable);
 		hp3.add(shareKontakt);
@@ -431,6 +435,46 @@ public class ShowEigenschaften extends VerticalPanel {
 			
 		});
 
+	}
+	
+	/**
+	 * Methode zum pruefen wer der Eigentuemer ist fuer die
+	 * Setzung des Labels des Eiegentuemers und des
+	 * Teilungsstatuses.
+	 * 
+	 * @param k uebergebener aktueller Kontakt
+	 * @param n aktuell eingeloggter Nutzer
+	 */
+	public void ownerPruefung(Kontakt k, Nutzer n) {
+		// Abfrage wer der Owner der Liste ist.
+		if (k.getOwnerId() != n.getId()) {
+			ev.getNutzerById(k.getOwnerId(), new AsyncCallback<Nutzer>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					caught.getMessage().toString();
+
+				}
+
+				@Override
+				public void onSuccess(Nutzer result) {
+					ownerlb.setText("Eigentümer: " + result.getEmailAddress());
+					ownerlb.setStylePrimaryName("labelD");
+					hp.add(new HTML("<image src='/images/info3.png' width='22px' height='22px' />"));
+					hp.add(ownerlb);
+					hp.setTitle("Information des Eigentums");
+				}
+
+			});
+		} else {
+			
+			ownerlb.setText("Sie sind der Eigentümer dieses Kontakts");
+			ownerlb.setStylePrimaryName("labelD");
+			hp.add(new HTML("<image src='/images/info3.png' width='22px' height='22px' />"));
+			hp.add(ownerlb);
+			hp.setTitle("Information des Eigentums");
+	
+		}
 	}
 
 	/**

@@ -190,7 +190,9 @@ h9 {
 	display: flex;
 	justify-content: center;
 	background: #999 url('http://mindchamps-medical.com/wp-content/uploads/2015/04/Abstract-Background-White.jpg') no-repeat left 50%;
-	
+	position: fixed;
+    left: 0px;
+    bottom: 0px;
 }
 
 #footer .gwt-HTML {

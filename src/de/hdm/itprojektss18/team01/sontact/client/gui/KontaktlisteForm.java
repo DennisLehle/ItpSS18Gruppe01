@@ -34,146 +34,167 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 public class KontaktlisteForm extends VerticalPanel {
 
-	//Setzen des Zugriffs auf das Asyne Service Interface
+	// Setzen des Zugriffs auf das Asyne Service Interface
 	EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
-	
-	//Erstellung / Deklarierung von Objekten
+
+	// Erstellung / Deklarierung von Objekten
 	Kontaktliste kl = new Kontaktliste();
 	Kontaktliste selectedKontaktliste = null;
 	Nutzer nutzer = new Nutzer();
 	SontactTreeViewModel sontactTree = null;
-	
-	//Panels anlegen
+
+	// Panels anlegen
 	HorizontalPanel BtnPanel = new HorizontalPanel();
+	HorizontalPanel hp = new HorizontalPanel();
 	VerticalPanel vp = new VerticalPanel();
-	
-	//Label anlegen
+
+	// Label anlegen
 	Label ownerLb = new Label();
 	Label infolb = new Label();
-	
-	//TextBox anlegen
-	TextBox txtBox = new TextBox();
 
+	// TextBox anlegen
+	TextBox txtBox = new TextBox();
 
 	/**
 	 * Konstruktor der zum Einsatz kommt, wenn eine Kontaktliste bereits vorhanden
 	 * ist.
 	 * 
-	 * @param kl Kontktliste die ausgewaehlt wurde
+	 * @param kl
+	 *            Kontktliste die ausgewaehlt wurde
 	 */
 	public KontaktlisteForm(Kontaktliste kl) {
-				this.kl = kl;
-				//this.selectedKontaktliste = kl;
-			
-				RootPanel.get("content").clear();
-				RootPanel.get("contentHeader").clear();
-				RootPanel.get("contentHeader").add(new HTML(kl.getTitel()));
+		this.kl = kl;
 
-				//Setten des Nutzers durch Cookies.
-				nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
-				nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
-			
-				/*
-				 * Erstllung der Buttons und dem zuweisen zu einem CSS-Style.
-				 */
-				// Update-Button intanziieren und dem Panel zuweisen
-				Button editKontaktlisteBtn = new Button(
-						"<image src='/images/edit.png' width='20px' height='20px' align='center' /> bearbeiten");
+		RootPanel.get("content").clear();
+		RootPanel.get("contentHeader").clear();
+		RootPanel.get("contentHeader").add(new HTML(kl.getTitel()));
 
-				editKontaktlisteBtn.setStylePrimaryName("bearbeitenKlButton");
-				editKontaktlisteBtn.setTitle("Bearbeitung der Kontaktliste");
+		// Setten des Nutzers durch Cookies.
+		nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+		nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
-				// ClickHandler f�r das Updaten einer Kontaktliste
-				editKontaktlisteBtn.addClickHandler(new updateKontaktlisteClickHandler());
-				BtnPanel.add(editKontaktlisteBtn);
+		/*
+		 * Erstllung der Buttons und dem zuweisen zu einem CSS-Style.
+		 */
+		// Update-Button intanziieren und dem Panel zuweisen
+		Button editKontaktlisteBtn = new Button(
+				"<image src='/images/edit.png' width='20px' height='20px' align='center' /> bearbeiten");
 
-				// L�sch-Button instanziieren und dem Panel zuweisen
-				Button deleteKlBtn = new Button(
-						"<image src='/images/trash.png' width='20px' height='20px' align='center' />  löschen");
+		editKontaktlisteBtn.setStylePrimaryName("bearbeitenKlButton");
+		editKontaktlisteBtn.setTitle("Bearbeitung der Kontaktliste");
 
-				deleteKlBtn.setStylePrimaryName("deleteKlButton");
-				deleteKlBtn.setTitle("Löschen der Kontaktliste");
+		// ClickHandler f�r das Updaten einer Kontaktliste
+		editKontaktlisteBtn.addClickHandler(new updateKontaktlisteClickHandler());
+		BtnPanel.add(editKontaktlisteBtn);
 
-				// ClickHandler f�r das L�schen einer Kontaktliste
-				deleteKlBtn.addClickHandler(new deleteClickHandler());
-				BtnPanel.add(deleteKlBtn);
+		// L�sch-Button instanziieren und dem Panel zuweisen
+		Button deleteKlBtn = new Button(
+				"<image src='/images/trash.png' width='20px' height='20px' align='center' />  löschen");
 
-				Button addKontaktBtn = new Button(
-						"<image src='/images/user.png' width='20px' height='20px' align='center' /> hinzufügen");
+		deleteKlBtn.setStylePrimaryName("deleteKlButton");
+		deleteKlBtn.setTitle("Löschen der Kontaktliste");
 
-				addKontaktBtn.setStylePrimaryName("addKontaktToKlButton");
-				addKontaktBtn.setTitle("Hinzufügen eines Kontakts zu Kontaktliste");
+		// ClickHandler f�r das L�schen einer Kontaktliste
+		deleteKlBtn.addClickHandler(new deleteClickHandler());
+		BtnPanel.add(deleteKlBtn);
 
-				addKontaktBtn.addClickHandler(new addKontaktClickHandler());
-				BtnPanel.add(addKontaktBtn);
+		Button addKontaktBtn = new Button(
+				"<image src='/images/user.png' width='20px' height='20px' align='center' /> hinzufügen");
 
-				infolb.setText("Kontaktlisten Interaktion");
-				infolb.setStylePrimaryName("infoLabel");
-				vp.add(infolb);
+		addKontaktBtn.setStylePrimaryName("addKontaktToKlButton");
+		addKontaktBtn.setTitle("Hinzufügen eines Kontakts zu Kontaktliste");
 
-				// ClickHandler zum Löschen von Kontaktlisten-Teilhaberschaften.
-				Button deleteTeilhaber = new Button(
-						"<image src='/images/share.png' width='20px' height='20px' align='center' /> löschen");
+		addKontaktBtn.addClickHandler(new addKontaktClickHandler());
+		BtnPanel.add(addKontaktBtn);
 
-				deleteTeilhaber.setStylePrimaryName("teilunsDeleteKlButton");
-				deleteTeilhaber.setTitle("Löschen einer Teilhaberschaft an der Kontaktliste");
+		infolb.setText("Kontaktlisten Interaktion");
+		infolb.setStylePrimaryName("infoLabel");
+		vp.add(infolb);
 
-				deleteTeilhaber.addClickHandler(new deleteTeilhaberClickHandler());
-				BtnPanel.add(deleteTeilhaber);
+		// ClickHandler zum Löschen von Kontaktlisten-Teilhaberschaften.
+		Button deleteTeilhaber = new Button(
+				"<image src='/images/share.png' width='20px' height='20px' align='center' /> löschen");
 
-				// Abfrage wer der Owner der Liste ist.
-				if (kl.getOwnerId() != nutzer.getId()) {
-					ev.getNutzerById(kl.getOwnerId(), new AsyncCallback<Nutzer>() {
+		deleteTeilhaber.setStylePrimaryName("teilunsDeleteKlButton");
+		deleteTeilhaber.setTitle("Löschen einer Teilhaberschaft an der Kontaktliste");
 
-						@Override
-						public void onFailure(Throwable caught) {
-							caught.getMessage().toString();
+		deleteTeilhaber.addClickHandler(new deleteTeilhaberClickHandler());
+		BtnPanel.add(deleteTeilhaber);
 
-						}
+		/**
+		 * Prüfungs Methode ob der Nutzer der Owner
+		 * des Kontaktes ist um dementsprechen das Label
+		 * und die Images der Teilung zu setzen.
+		 */
+		ownerPruefung();
 
-						@Override
-						public void onSuccess(Nutzer result) {
-							ownerLb.setText("Eigentümer: " + result.getEmailAddress());
+		vp.add(hp);
+		vp.add(BtnPanel);
+		RootPanel.get("content").add(vp);
+		RootPanel.get("content").add(new ShowKontakte(nutzer, kl));
 
-						}
+	}
 
-					});
+	/**
+	 * Methode die Prüft ob der Nutzer der Owner des Kontaktes ist
+	 * oder nicht um dementsprechen das Label und Image für die Teilung zu setzen.
+	 */
+	public void ownerPruefung() {
+		// Abfrage wer der Owner der Liste ist.
+		if (kl.getOwnerId() != nutzer.getId()) {
+			ev.getNutzerById(kl.getOwnerId(), new AsyncCallback<Nutzer>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					caught.getMessage().toString();
+
 				}
 
-				// Überprüft den Status eines Objektes ob es geteilt wurde.
-				ev.getStatusForObject(kl.getId(), kl.getType(), new AsyncCallback<Boolean>() {
+				@Override
+				public void onSuccess(Nutzer result) {
+					ownerLb.setText("Eigentümer: " + result.getEmailAddress());
+					ownerLb.setStylePrimaryName("labelD");
+					hp.add(new HTML("<image src='/images/info3.png' width='22px' height='22px' />"));
+					hp.add(ownerLb);
 
-					@Override
-					public void onFailure(Throwable caught) {
-						caught.getMessage().toString();
+				}
 
-					}
+			});
+		} else {
+			ownerLb.setText("Sie sind der Eigentümer dieser Kontaktliste");
+			ownerLb.setStylePrimaryName("labelD");
+			hp.add(new HTML("<image src='/images/info3.png' width='22px' height='22px' />"));
+			hp.add(ownerLb);
+		}
 
-					@Override
-					public void onSuccess(Boolean result) {
-						if (result == true) {
-							HTML shared = new HTML("<image src='/images/share.png' width='15px' height='15px' />");
-							shared.setTitle("Geteilte Kontaktliste");
-							RootPanel.get("contentHeader").add(shared);
-							
-						}
-					}
+		// Überprüft den Status eines Objektes ob es geteilt wurde.
+		ev.getStatusForObject(kl.getId(), kl.getType(), new AsyncCallback<Boolean>() {
 
-				});
-
-				vp.add(ownerLb);
-				vp.add(BtnPanel);
-				RootPanel.get("content").add(vp);
-				RootPanel.get("content").add(new ShowKontakte(nutzer, kl));
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.getMessage().toString();
 
 			}
 
-	
+			@Override
+			public void onSuccess(Boolean result) {
+				if (result == true) {
+					HTML shared = new HTML("<image src='/images/share.png' width='15px' height='15px' />");
+					shared.setTitle("Geteilte Kontaktliste");
+					RootPanel.get("contentHeader").add(shared);
+
+				}
+			}
+
+		});
+
+	}
 
 	/**
 	 * Konstruktor der zum Einsatz kommt, wenn eine Kontaktliste neu erstellt wird.
 	 * 
-	 * @param n Nutzer der eingeloggt ist
+	 * @param n
+	 *            Nutzer der eingeloggt ist
 	 */
 	public KontaktlisteForm(final Nutzer n) {
 
@@ -212,8 +233,8 @@ public class KontaktlisteForm extends VerticalPanel {
 		vp.add(BtnPanel);
 
 		RootPanel.get("content").add(vp);
-		
-		//Der TextBox einen KexDownHandler hinzufügen für Userfreundlicheren Umgang
+
+		// Der TextBox einen KexDownHandler hinzufügen für Userfreundlicheren Umgang
 		txtBox.addKeyDownHandler(new KeyDownHandler() {
 
 			@Override
@@ -236,8 +257,7 @@ public class KontaktlisteForm extends VerticalPanel {
 		@Override
 		public void onClick(ClickEvent event) {
 
-			boolean x = Window.confirm(
-					"Sind Sie sicher die Kontaktliste " + kl.getTitel() + " löschen zu wollen?");
+			boolean x = Window.confirm("Sind Sie sicher die Kontaktliste " + kl.getTitel() + " löschen zu wollen?");
 
 			if (x == true) {
 				// Nutzer Cookies setzen und dann per Nutzer holen.
@@ -281,7 +301,8 @@ public class KontaktlisteForm extends VerticalPanel {
 										@Override
 										public void onSuccess(Void result) {
 
-											MessageBox.alertWidget("Hinweis", "Die Teilhaberschaft wurde erfolgreich aufgelöst.");
+											MessageBox.alertWidget("Hinweis",
+													"Die Teilhaberschaft wurde erfolgreich aufgelöst.");
 
 											// Nutzer Cookies holen.
 											Nutzer n = new Nutzer();
@@ -308,12 +329,11 @@ public class KontaktlisteForm extends VerticalPanel {
 				} else {
 
 					// Zusätzliche Prüfung ob es sich um eines der default Kontaktlisten handelt.
-					if (kl.getTitel() == "Meine Kontakte"
-							&& kl.getOwnerId() == nutzer.getId()
-							|| kl.getTitel() == "Mit mir geteilte Kontakte"
-									&& kl.getOwnerId() == nutzer.getId()) {
+					if (kl.getTitel() == "Meine Kontakte" && kl.getOwnerId() == nutzer.getId()
+							|| kl.getTitel() == "Mit mir geteilte Kontakte" && kl.getOwnerId() == nutzer.getId()) {
 
-						MessageBox.alertWidget("Hinweis", "Tut uns leid, die Standard-Kontaktliste kann nicht gelöscht werden.");
+						MessageBox.alertWidget("Hinweis",
+								"Tut uns leid, die Standard-Kontaktliste kann nicht gelöscht werden.");
 
 					} else {
 
@@ -348,7 +368,6 @@ public class KontaktlisteForm extends VerticalPanel {
 		}
 	}
 
-
 	/**
 	 * ClickHandler zum Speichern einer neu angelegten Kontaktliste.
 	 */
@@ -361,36 +380,37 @@ public class KontaktlisteForm extends VerticalPanel {
 			nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 			nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
-			if(txtBox.getText() == "") {
+			if (txtBox.getText() == "") {
 				MessageBox.alertWidget("Hinweis", "Bitte geben Sie der Kontaktliste einen Namen");
 				txtBox.getElement().getStyle().setBorderColor("red");
 			} else {
-			ev.createKontaktliste(txtBox.getText(), nutzer, new AsyncCallback<Kontaktliste>() {
+				ev.createKontaktliste(txtBox.getText(), nutzer, new AsyncCallback<Kontaktliste>() {
 
-				@Override
-				public void onFailure(Throwable caught) {
-					caught.getMessage().toString();
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.getMessage().toString();
 
-				}
+					}
 
-				@Override
-				public void onSuccess(Kontaktliste result) {
-					// Refresh der Seite für die Aktualisierug des Baumes.
-					RootPanel.get("navigator").clear();
-					RootPanel.get("content").clear();
-					RootPanel.get("contentHeader").clear();
-					RootPanel.get("navigator").add(new Navigation(nutzer));
-					RootPanel.get("content").add(new KontaktlisteForm(result));
-					MessageBox.alertWidget("Glückwunsch", "Sie haben die Kontaktliste " + result.getTitel()+ " erfolgreich erstellt.");
+					@Override
+					public void onSuccess(Kontaktliste result) {
+						// Refresh der Seite für die Aktualisierug des Baumes.
+						RootPanel.get("navigator").clear();
+						RootPanel.get("content").clear();
+						RootPanel.get("contentHeader").clear();
+						RootPanel.get("navigator").add(new Navigation(nutzer));
+						RootPanel.get("content").add(new KontaktlisteForm(result));
+						MessageBox.alertWidget("Glückwunsch",
+								"Sie haben die Kontaktliste " + result.getTitel() + " erfolgreich erstellt.");
 
-				}
-			});
+					}
+				});
 			}
 
 		}
 
 	}
-	
+
 	/**
 	 * ClickHandler um Kontakte einer Kontaktliste hinzuzufügen.
 	 */
@@ -410,8 +430,7 @@ public class KontaktlisteForm extends VerticalPanel {
 		public void onClick(ClickEvent event) {
 
 			MessageBox.deleteTeilhaber("Teilhaberschaft entfernen",
-					"Wählen sie für die Löschung einer Teilhaberschaft eine EMail Adresse aus.", kl,
-					null);
+					"Wählen sie für die Löschung einer Teilhaberschaft eine EMail Adresse aus.", kl, null);
 
 		}
 
@@ -430,9 +449,11 @@ public class KontaktlisteForm extends VerticalPanel {
 			RootPanel.get("contentHeader").clear();
 			BtnPanel.clear();
 
-			RootPanel.get("contentHeader").add(new HTML(kl.getTitel() + " bearbeiten <image src='/images/edit.png' width='30px' height='30px' align='center'/></h2>"));
+			RootPanel.get("contentHeader").add(new HTML(kl.getTitel()
+					+ " bearbeiten <image src='/images/edit.png' width='30px' height='30px' align='center'/></h2>"));
 
-			Button cancelBtn = new Button("<image src='/images/abbrechen.png' width='20px' height='20px' align='center'/> Abbrechen");
+			Button cancelBtn = new Button(
+					"<image src='/images/abbrechen.png' width='20px' height='20px' align='center'/> Abbrechen");
 			cancelBtn.setTitle("Abbrechen der Bearbeitung");
 			cancelBtn.setStylePrimaryName("cancelKontaktlButton");
 
@@ -442,70 +463,71 @@ public class KontaktlisteForm extends VerticalPanel {
 					RootPanel.get("content").clear();
 					BtnPanel.clear();
 					RootPanel.get("content").add(new KontaktlisteForm(kl));
-		
+
 				}
 			});
-			if(kl.getTitel() == "Meine Kontakte" && kl.getOwnerId()== nutzer.getId() || 
-					kl.getTitel() == "Mit mir geteilte Kontakte" && kl.getOwnerId()== nutzer.getId()){
+			if (kl.getTitel() == "Meine Kontakte" && kl.getOwnerId() == nutzer.getId()
+					|| kl.getTitel() == "Mit mir geteilte Kontakte" && kl.getOwnerId() == nutzer.getId()) {
 				RootPanel.get("content").clear();
 				RootPanel.get("contentHeader").clear();
 				BtnPanel.clear();
 				RootPanel.get("content").add(new KontaktlisteForm(kl));
-				MessageBox.alertWidget("Hinweis", "Sie dürfen die Standard Kontaktliste " + kl.getTitel() + " nicht umbenennen.");
+				MessageBox.alertWidget("Hinweis",
+						"Sie dürfen die Standard Kontaktliste " + kl.getTitel() + " nicht umbenennen.");
 
 			} else {
-			// Instanziierung Button zum Speichern der Aenderungen an der selektierten Kontaktliste
-			Button saveBtn = new Button("<image src='/images/save.png' width='20px' height='20px' align='center'/> Speichern");
-			saveBtn.setTitle("Speichern der Änderung");
-			saveBtn.setStylePrimaryName("bearbeitungKSave");
-			
-			// ClickHandler fuer das Speichern
-			saveBtn.addClickHandler(new ClickHandler() {
+				// Instanziierung Button zum Speichern der Aenderungen an der selektierten
+				// Kontaktliste
+				Button saveBtn = new Button(
+						"<image src='/images/save.png' width='20px' height='20px' align='center'/> Speichern");
+				saveBtn.setTitle("Speichern der Änderung");
+				saveBtn.setStylePrimaryName("bearbeitungKSave");
 
-				@Override
-				public void onClick(ClickEvent event) {
-					
-								
-					if(txtBox.getText() == "") {
-						MessageBox.alertWidget("Hinweis", "Sie dürfen keine Kontaktliste ohne Namen erstellen");
-						txtBox.getElement().getStyle().setBorderColor("red");
-					} else {
-						kl.setTitel(txtBox.getText());
-					
-					ev.saveKontaktliste(kl, new AsyncCallback<Void>() {
+				// ClickHandler fuer das Speichern
+				saveBtn.addClickHandler(new ClickHandler() {
 
-						@Override
-						public void onFailure(Throwable caught) {
-							caught.getMessage().toString();
+					@Override
+					public void onClick(ClickEvent event) {
 
+						if (txtBox.getText() == "") {
+							MessageBox.alertWidget("Hinweis", "Sie dürfen keine Kontaktliste ohne Namen erstellen");
+							txtBox.getElement().getStyle().setBorderColor("red");
+						} else {
+							kl.setTitel(txtBox.getText());
+
+							ev.saveKontaktliste(kl, new AsyncCallback<Void>() {
+
+								@Override
+								public void onFailure(Throwable caught) {
+									caught.getMessage().toString();
+
+								}
+
+								@Override
+								public void onSuccess(Void result) {
+									RootPanel.get("navigator").clear();
+									RootPanel.get("navigator").add(new Navigation(nutzer));
+									RootPanel.get("content").add(new KontaktlisteForm(kl));
+									MessageBox.alertWidget("Hinweis",
+											"Ihre Kontaktliste wurde erfolgreich aktualisiert.");
+									sontactTree.updateKontaktliste(kl);
+									sontactTree.setSelectedKontaktliste(kl);
+
+								}
+
+							});
 						}
 
-						@Override
-						public void onSuccess(Void result) {
-							RootPanel.get("navigator").clear();
-							RootPanel.get("navigator").add(new Navigation(nutzer));
-							RootPanel.get("content").add(new KontaktlisteForm(kl));
-							MessageBox.alertWidget("Hinweis", "Ihre Kontaktliste wurde erfolgreich aktualisiert.");
-							sontactTree.updateKontaktliste(kl);
-							sontactTree.setSelectedKontaktliste(kl);
-							
-
-						}
-
-					});
 					}
-							
-				}
 
-				
-			});
-			BtnPanel.add(saveBtn);
-			BtnPanel.add(cancelBtn);
-			txtBox.getElement().setPropertyString("placeholder", "Neuer Titel...");
-			vp.add(txtBox);
-			vp.add(BtnPanel);
-			RootPanel.get("content").add(vp);
-			selectedKontaktliste.setTitel(txtBox.getText());
+				});
+				BtnPanel.add(saveBtn);
+				BtnPanel.add(cancelBtn);
+				txtBox.getElement().setPropertyString("placeholder", "Neuer Titel...");
+				vp.add(txtBox);
+				vp.add(BtnPanel);
+				RootPanel.get("content").add(vp);
+				selectedKontaktliste.setTitel(txtBox.getText());
 			}
 
 		}

@@ -79,6 +79,7 @@ public class KontaktForm extends VerticalPanel {
 	Label erstellungsdatum = new Label();
 	Label modifikationsdatum = new Label();
 	Label infoLb = new Label();
+	Label ownerlb = new Label();
 
 	// Flextables welche f�r das Anlegen eines neuen Kontakts ben�tigt werden
 	FlexTable kontaktInfoTable = new FlexTable();
@@ -96,9 +97,11 @@ public class KontaktForm extends VerticalPanel {
 	
 	//Panels fuer die Buttons und der Kontaktinformation
 	VerticalPanel vp = new VerticalPanel();
+	VerticalPanel datePanel = new VerticalPanel();
 	HorizontalPanel btnPanelTop = new HorizontalPanel();
 	HorizontalPanel kontaktinfo = new HorizontalPanel();
 	HorizontalPanel btnPanelBottom = new HorizontalPanel();
+	HorizontalPanel btnPanel = new HorizontalPanel();
 	ScrollPanel sp = new ScrollPanel();
 
 	// Labels
@@ -139,13 +142,7 @@ public class KontaktForm extends VerticalPanel {
 			public void onSuccess(Kontakt result) {
 
 				selectedKontakt = result;
-
-				HorizontalPanel headerPanel = new HorizontalPanel();
-
-				HorizontalPanel btnPanel = new HorizontalPanel();
-				VerticalPanel vp = new VerticalPanel();
-				Label ownerLb = new Label();
-
+			
 				// Update-Button intanziieren und dem Panel zuweisen
 				Button editKontaktBtn = new Button(
 						"<image src='/images/user.png' width='20px' height='20px' align='center' /> bearbeiten");
@@ -169,37 +166,15 @@ public class KontaktForm extends VerticalPanel {
 				infoLb.setStylePrimaryName("infoLabel");
 				btnPanel.add(infoLb);
 
-				// Abfrage wer der Owner des Kontaktes ist.
-				if (k.getOwnerId() != nutzer.getId()) {
-					ev.getNutzerById(k.getOwnerId(), new AsyncCallback<Nutzer>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-							caught.getMessage().toString();
-
-						}
-
-						@Override
-						public void onSuccess(Nutzer result) {
-							// ownerLb.setStylePrimaryName("label");
-							ownerLb.setText("Eigentümer: " + result.getEmailAddress());
-							RootPanel.get("content").add(ownerLb);
-
-						}
-
-					});
-				}
-
-				// Panel fuer das Erstellungs- und Modifikationsdatum
-				VerticalPanel datePanel = new VerticalPanel();
-
 				DateTimeFormat dateFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM);
 				erstellungsdatum.setText("Erstellungsdatum : " + dateFormat.format(selectedKontakt.getErstellDat()));
 				modifikationsdatum.setText("Modifikationsdatum : " + dateFormat.format(selectedKontakt.getModDat()));
-
+				erstellungsdatum.setStylePrimaryName("labelModPanel");
+				modifikationsdatum.setStylePrimaryName("labelModPanel");
+				
 				datePanel.add(erstellungsdatum);
 				datePanel.add(modifikationsdatum);
-
+				
 				// Überprüft Status eines Objekts ob es geteilt wurde.
 				ev.getStatusForObject(k.getId(), k.getType(), new AsyncCallback<Boolean>() {
 
@@ -265,9 +240,7 @@ public class KontaktForm extends VerticalPanel {
 
 					btnPanel.add(deleteNutzer);
 				}
-
-				vp.add(headerPanel);
-
+			
 				RootPanel.get("content").add(vp);
 				RootPanel.get("content").add(new ShowEigenschaften(nutzer, k));
 				RootPanel.get("content").add(btnPanel);
@@ -275,8 +248,10 @@ public class KontaktForm extends VerticalPanel {
 
 			}
 		});
-
+		
 	}
+	
+
 
 	/**
 	 * Konstruktor der zum Einsatz kommt, wenn ein Kontakt neu erstellt wird

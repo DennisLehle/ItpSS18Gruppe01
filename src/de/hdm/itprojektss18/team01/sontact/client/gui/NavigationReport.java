@@ -181,7 +181,7 @@ public class NavigationReport extends VerticalPanel {
 				RootPanel.get("contentR").add(
 						new HTML("<div=><h3>Kontakte nach bestimmten Eigenschaften und Auspraegungen</h3></br></div>"));
 				RootPanel.get("contentR").add(new HTML("<div=><h6> Bitte geben Sie mindestens eine Eigenschaft "
-						+ "oder eine Auspraegung an, um die entsprechenden Kontakte zu erhalten.. <h6> </div>"));
+						+ "und/oder eine Auspraegung an, um die entsprechenden Kontakte zu erhalten.. <h6> </div>"));
 				RootPanel.get("contentR").add(new HTML("</br>"));
 				RootPanel.get("contentR").add(new HTML("</br>"));
 				RootPanel.get("contentR").add(new HTML("</br>"));
@@ -189,9 +189,13 @@ public class NavigationReport extends VerticalPanel {
 				// Dem Horizontal Panel werden die definierten Elemente hinzugefuegt
 				hp.add(eigLb);
 				hp.add(eingabe);
+				eingabe.setStylePrimaryName("ButtonStyleReportEig");
 				hp.add(ausLb);
 				hp.add(eingabe1);
+				eingabe1.setStylePrimaryName("ButtonStyleReportEig");
 				hp.add(btn);
+				btn.setStylePrimaryName("ButtonStyleReportSuche");
+				
 
 				RootPanel.get("contentR").add(hp);
 				btn.addClickHandler(new ClickHandler() {
@@ -337,14 +341,16 @@ public class NavigationReport extends VerticalPanel {
 				RootPanel.get("contentR")
 						.add(new HTML("<div=\"center\"><h3>Saemtliche Kontakte nach bestimmten Teilhabern</h3></div>"));
 				RootPanel.get("contentR")
-						.add(new HTML(" <div=><h6>Bitte nennen Sie die G-Mail-Adresse des Nutzers, um die mit "
+						.add(new HTML(" <div=><h6>Bitte waehlen Sie die G-Mail-Adresse des Nutzers aus, um die mit "
 								+ "ihm geteilten Kontakte zu erhalten.</h6></div>"));
 				RootPanel.get("contentR").add(new HTML("</br>"));
 				RootPanel.get("contentR").add(new HTML("</br>"));
 				RootPanel.get("contentR").add(new HTML("</br>"));
 
 				hp.add(emailGeteiltenutzer);
+				emailGeteiltenutzer.setStylePrimaryName("ButtonStyleReport");
 				hp.add(btn);
+				btn.setStylePrimaryName("ButtonStyleReportSuche");
 
 				// Alle Kontakte des Nutzers die geteilt wurden, werden der Listbox
 				// hinzugefuegt.

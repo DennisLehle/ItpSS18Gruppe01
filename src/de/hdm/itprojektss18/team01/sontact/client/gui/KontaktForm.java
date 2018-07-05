@@ -261,6 +261,8 @@ public class KontaktForm extends VerticalPanel {
 	public KontaktForm(final Nutzer n) {
 		RootPanel.get("contentHeader").clear();
 		RootPanel.get("contentHeader").add(new HTML("Kontakt anlegen"));
+		RootPanel.get("content").add(new HTML("<image src='/images/info3.png' width='25px' height='25px' align='center'/> Sie können auch Eigenschaften für ihren Kontakt definieren."));
+
 		eigeneEigenschaftenTable.setStylePrimaryName("infoTable");
 
 		FlexTablePanel.setStylePrimaryName("infoTable");
@@ -297,6 +299,7 @@ public class KontaktForm extends VerticalPanel {
 
 			}
 		});
+		
 
 		Button createEigenschaftBtn = new Button("Eigenschaft definieren");
 		createEigenschaftBtn.setStylePrimaryName("eigeneEigButton");
@@ -516,6 +519,7 @@ public class KontaktForm extends VerticalPanel {
 		public void onClick(ClickEvent event) {
 			RootPanel.get("contentHeader").clear();
 			RootPanel.get("content").clear();
+		
 
 			// Nutzer Cookies holen.
 
@@ -549,7 +553,13 @@ public class KontaktForm extends VerticalPanel {
 							@Override
 							public void onSuccess(Vector<Relatable> result) {
 								kontaktauspraegungen = result;
-
+								
+								//HTML setzen wenn Kontakt noch keine Eigenschaften besitzt.
+								if(result.size() == 0) {
+									HTML html =	new HTML("<image src='/images/info3.png' width='25px' height='25px' align='center'/> Dieser Kontakt besitzt noch keine Eigenschaften.");
+									html.setStylePrimaryName("label");
+									RootPanel.get("content").add(html);
+									}
 								for (int i = 0; i < kontaktauspraegungen.size(); i++) {
 
 									TextBox auspraegung = new TextBox();
@@ -581,7 +591,13 @@ public class KontaktForm extends VerticalPanel {
 
 							@Override
 							public void onSuccess(Vector<Relatable> result) {
-
+								
+								//HTML setzen wenn Kontakt noch keine Eigenschaften besitzt.
+								if(result.size() == 0) {
+									HTML html =	new HTML("<image src='/images/info3.png' width='25px' height='25px' align='center'/> Dieser Kontakt besitzt noch keine Eigenschaften.");
+									html.setStylePrimaryName("label");
+									RootPanel.get("content").add(html);
+									}
 								for (int i = 0; i < result.size(); i++) {
 									if (kontaktauspraegungen.contains(result.elementAt(i))) {
 										result.remove(i);

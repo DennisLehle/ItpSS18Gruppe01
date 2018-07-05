@@ -367,11 +367,29 @@ public class ShowEigenschaften extends VerticalPanel {
 				//Prüfung ob Nutzer Ja angewählt hat damit die Löschoperation durchgeführt werden kann.
 				if(x == true) {
 				 if (n.getId() == k.getOwnerId()) {
-			
+					 
 					// Geht die ausgewählten Auspraegungen durch und übergibt jede einzelne für die
 					// Löschung davon.
 					for (int i = 0; i <= gewaehlteAuspraegung.size(); i++) {
 						
+						//Löschung der Berechtigung und dann wird die AUspraegung entfernt.
+						ev.deleteAllBerechtigungenByOwner(n, gewaehlteAuspraegung.elementAt(i).getId(), new AsyncCallback<Void>() {
+
+							@Override
+							public void onFailure(Throwable caught) {
+								caught.getMessage().toString();
+								
+							}
+
+							@Override
+							public void onSuccess(Void result) {
+							//Hier passiert nichts weiter....
+								
+							}
+							
+						});
+									
+						//Loeschnung der ausgewaehlten Auspraegung.
 						ev.deleteAuspraegungById(gewaehlteAuspraegung.elementAt(i).getId(), k.getId(), new AsyncCallback<Void>() {
 
 							@Override
@@ -382,13 +400,16 @@ public class ShowEigenschaften extends VerticalPanel {
 
 							@Override
 							public void onSuccess(Void result) {
+
 								RootPanel.get("content").clear();
 								RootPanel.get("contentHeader").clear();
 								RootPanel.get("content").add(new KontaktForm(k));
 						
 							}
+							
 
 						});		
+					
 						//Prüfung ob das letzte Element erreicht wurde damit die MessageBox mit der Anzahl von gelöschten Eigenschaften erzeugt wird.
 						if(gewaehlteAuspraegung.elementAt(i) == gewaehlteAuspraegung.lastElement()) {
 						MessageBox.alertWidget("Hinweis", "Sie haben "+ gewaehlteAuspraegung.capacity()+ " Eigenschaften mit den dazugehörigen Ausprägungen erfolgreich gelöscht. ");
@@ -398,29 +419,25 @@ public class ShowEigenschaften extends VerticalPanel {
 					} else if(k.getOwnerId() != n.getId()){
 					// Wenn man nicht der Owner ist springt man in die else Anweisung hinein.
 					for (int i = 0; i <= gewaehlteAuspraegung.size(); i++) {
-						Berechtigung b = new Berechtigung();
-						b.setObjectId(gewaehlteAuspraegung.elementAt(i).getId());
-						b.setOwnerId(k.getOwnerId());
-						b.setReceiverId(n.getId());
-						// Typ ist hier nicht Verfügbar daher wird dies hier direkt eingetrage
-						// da es sich um eine Auspraegung handelt kennen wir den Type schon 'a'
-						b.setType('a');
+						
+					//Berechtigung an einer Eigenschaft aufloesen als Teilhaber der Eigenschaft.
+					 ev.deleteAllBerechtigungenByReceiver(n, gewaehlteAuspraegung.elementAt(i).getId(), new AsyncCallback<Void>() {
 
-						ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
-
-							@Override
-							public void onFailure(Throwable caught) {
-								caught.getMessage().toString();
-
-							}
-
-							@Override
-							public void onSuccess(Void result) {
+						@Override
+						public void onFailure(Throwable caught) {
+							caught.getMessage().toString();
 							
+						}
 
-							}
-
-						});
+						@Override
+						public void onSuccess(Void result) {
+							RootPanel.get("content").clear();
+							RootPanel.get("contentHeader").clear();
+							RootPanel.get("content").add(new KontaktForm(k));
+							
+						}
+						 
+					 });
 
 					}
 						
@@ -500,27 +517,6 @@ public class ShowEigenschaften extends VerticalPanel {
 		} else {
 			return null;
 		}
-	}
-
-	public Vector<Berechtigung> berechtigungen(Nutzer n) {
-		Vector<Berechtigung> b = new Vector<Berechtigung>();
-		ev.getAllBerechtigungenByReceiver(n.getId(), new AsyncCallback<Vector<Berechtigung>>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				caught.getMessage().toString();
-
-			}
-
-			@Override
-			public void onSuccess(Vector<Berechtigung> result) {
-				b.addAll(result);
-
-			}
-
-		});
-		return b;
-
 	}
 
 }

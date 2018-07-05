@@ -291,7 +291,7 @@ public class MessageBox {
 
 										@Override
 										public void onSuccess(Void result) {
-											Window.alert("Sie haben den Kontakt: " + k.getVorname() + " "
+											MessageBox.alertWidget("Glückwunsch", "Sie haben den Kontakt: " + k.getVorname() + " "
 													+ k.getNachname() + " erfolgreich geteilt.");
 											RootPanel.get("content").clear();
 											RootPanel.get("contentHeader").clear();

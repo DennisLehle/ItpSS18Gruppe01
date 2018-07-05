@@ -448,6 +448,7 @@ public class KontaktlisteForm extends VerticalPanel {
 			RootPanel.get("content").clear();
 			RootPanel.get("contentHeader").clear();
 			BtnPanel.clear();
+			vp.clear();
 
 			RootPanel.get("contentHeader").add(new HTML(kl.getTitel()
 					+ " bearbeiten <image src='/images/edit.png' width='30px' height='30px' align='center'/></h2>"));

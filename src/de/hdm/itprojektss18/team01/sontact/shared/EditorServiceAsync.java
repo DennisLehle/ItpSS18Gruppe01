@@ -135,5 +135,15 @@ public interface EditorServiceAsync {
 	
 	void getKontaktByAusEig(String bezeichnung, String wert, Nutzer n, AsyncCallback<Vector<Kontakt>> callback);
 
+	void deleteAllBerechtigungenByOwner(Nutzer n, int objectId, AsyncCallback<Void> callback);
+
+	void deleteAllBerechtigungenByReceiver(Nutzer n, int objectId, AsyncCallback<Void> callback);
+
+	void createBerechtigungForEigenschaft(Vector<Relatable> avshare, int ownerId, int receiverId,
+			AsyncCallback<Void> callback);
+
+
+	
+
 
 }

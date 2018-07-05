@@ -929,19 +929,46 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 				}
 			}
 		} else if (type == 'k') {
-			// Eintrag der Berechtigung fuer das Kontakt-Objekt (ObjectId)
-			this.createBerechtigung(ownerId, receiverId, objectId, type);
-
+			
 			/*
-			 * Erstellung des Nutzer- und Kontakt- Objekts sowie das hinzufuegen des
-			 * geteilten Kontakts der Kontaktliste des Receivers
+			 * Erstellen der Eigentum-, Teilhaber-Objekten und die Setzung 
+			 * des Statuses ob eine Eigenschaft bereits geteilt wurde, anfang wird
+			 * dieses auf false gesetzt.
 			 */
 			Nutzer n = this.getNutzerById(receiverId);
+			Nutzer nn =  this.getNutzerById(ownerId);
 			Kontakt k = this.getKontaktById(objectId);
+			Boolean status = false;
+
+			//Leeren Vector erstellen
+			Vector<Berechtigung> ber = new Vector<Berechtigung>();
+					
+			//Alle gefundenen Berechtigungen dem Vector hinzufuegen
+			ber.addAll(this.getAllBerechtigungenByOwner(nn.getId()));
+			
+			for (int i = 0; i < ber.size(); i++) {
+				if(ber.elementAt(i).getObjectId() == k.getId() && ber.elementAt(i).getType() == 'k' && ber.elementAt(i).getReceiverId() == receiverId) {
+					//Erstellen der Berechtigung fuer die zusaetzlich geteilte Eigenschaft
+					this.createBerechtigungForEigenschaft(avshare, ownerId, receiverId);	
+					//Status auf true setzen wenn der Kontakt vorhanden ist.
+					status = true;
+				
+				}
+			}
+			//Ist der Status false wird der ganze Kontakt mit den geaehlten Eigenschaften geteilt.
+			if(status == false) {
+			// Eintrag der Berechtigung fuer das Kontakt-Objekt (ObjectId)
+			this.createBerechtigung(ownerId, receiverId, objectId, type);
 			this.addKontaktToKontaktliste(this.findKontaktlisteByTitel(n, "Mit mir geteilte Kontakte"), k);
 			
+			//Alle Auspraegungen des Kontakts dem Vector hinzufuegen
 			Vector<Auspraegung> av = this.getAllAuspraegungenByKontakt(objectId);
-	
+			
+			/*
+			 * Ist der uebergebene Vector avshare leer werden die zuvor aus der Db
+			 * gelesenen Eigenschaften des Kontakts der geteilt werden soll fuer
+			 * die Teilung uebergeben und geteilt.
+			 */
 			if(avshare.isEmpty()) {
 				for (int as = 0; as < av.size(); as++) {
 
@@ -955,18 +982,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 						aus.setStatus(true);
 						this.aMapper.setStatusTeilung(aus);
 					}
-				
-			} 
+				} 
 			} else {
 
 			// Schleife welche alle Aauspraegungsobjekte des Kontaktes k durchgeht
 			for (int a = 0; a < av.size(); a++) {
 
-				// Schleife welche alle selektierten/ zu teilenden Aauspraegungsobjekte des
-				// Kontaktes k durchgeht
-				
+				// Schleife welche alle selektierten/ zu teilenden Aauspraegungsobjekte des Kontaktes k durchgeht
 				for (int as = 0; as < avshare.size(); as++) {
-
+ 
 					// Abgleich der zwei Vektoren mit ihren Auspraegungsobjekten bzw. ihren ids
 					if (avshare != null && av.elementAt(a).getId() == avshare.elementAt(as).getId()) {
 						// Eintrag der Berechtigung f�r das zu teilende Auspraegungsobjekt
@@ -983,12 +1007,40 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 				}
 			}
 					
-		} }
-		else if (type == 'a') {
+		}
+	} 
+			
+		 } else if (type == 'a') {
 			// Eintrag der Berechtigung fuer ein einzelnes zu teilendes
 			// Auspraegungsobjekt(profilaktisch)
 			this.createBerechtigung(ownerId, receiverId, objectId, type);
 		}
+	}
+	
+	/**
+	 * Methode zum teilen von einzelnen Eigenschaften nachdem der Kontakt schon
+	 * mit einerm Nutzer geteilt wurde.
+	 * 
+	 * @param avshare - Vector von Eigenschaften
+	 * @param ownerId - id des Eigentuemers
+	 * @param receiverId - id des Empfaengers
+	 */
+	public void createBerechtigungForEigenschaft(Vector<Relatable> avshare, int ownerId, int receiverId) {
+		
+		for (int i = 0; i < avshare.size(); i++) {
+			//Berechtigung fuer das einzelne Eigenschafts-Objekt erstellen
+			this.createBerechtigung(ownerId, receiverId, avshare.elementAt(i).getId(), 'a');
+			
+			// Setzen eines Statuses fuer die Eigenschaft setzen.
+			if (avshare.elementAt(i).getStatus() == false) {
+				Auspraegung aus = new Auspraegung();
+				aus.setId(avshare.elementAt(i).getId());
+				aus.setStatus(true);
+				this.aMapper.setStatusTeilung(aus);
+			}
+			
+		}
+		
 	}
 
 	/**
@@ -1199,6 +1251,63 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 		return nv;
 	}
+	
+	/**
+	 * Diese Methode loescht alle Berechtigungen der einzelnen Eigenschaften, wenn der
+	 * Eigentuemer diese loescht.
+	 * 
+	 * @param n aktuell eingeloggter Nutzer (Eigentuemer)
+	 * @param objectId die ausgewahelte Eigenschaft die geloescht werden soll.
+	 */
+	public void deleteAllBerechtigungenByOwner(Nutzer n, int objectId) {
+		//Leeren Vector erstellen
+		Vector<Berechtigung> ber = new Vector<Berechtigung>();
+		
+		//Alle gefundenen Berechtigungen dem Vector hinzufuegen
+		ber.addAll(this.getAllBerechtigungenByOwner(n.getId()));
+		
+		for (int i = 0; i < ber.size(); i++) {
+			if(ber.elementAt(i).getObjectId() == objectId && ber.elementAt(i).getType() == 'a') {
+				Berechtigung b = new Berechtigung();
+				b.setObjectId(objectId);
+				b.setOwnerId(n.getId());
+				b.setReceiverId(ber.elementAt(i).getReceiverId());
+				b.setType('a');
+				this.deleteBerechtigung(b);
+			}
+		}
+	
+	}
+	
+
+	/**
+	 * Diese Methode loescht alle Berechtigungen der einzelnen Eigenschaften, wenn der
+	 * Teilhaber diese loescht.
+	 * 
+	 * @param n aktuell eingeloggter Nutzer (Teilhaber)
+	 * @param objectId die ausgewahelte Eigenschaft die geloescht werden soll.
+	 */
+	public void deleteAllBerechtigungenByReceiver(Nutzer n, int objectId) {
+		//Leeren Vector erstellen
+		Vector<Berechtigung> ber = new Vector<Berechtigung>();
+		
+		//Alle gefundenen Berechtigungen dem Vector hinzufuegen
+		ber.addAll(this.getAllBerechtigungenByReceiver(n.getId()));
+		
+		//Berechtigungen durchgehn und alle Auspraegungen entfernen.
+		for (int i = 0; i < ber.size(); i++) {
+			if(ber.elementAt(i).getObjectId() == objectId && ber.elementAt(i).getType() == 'a') {
+				Berechtigung b = new Berechtigung();
+				b.setObjectId(objectId);
+				b.setOwnerId(ber.elementAt(i).getOwnerId());
+				b.setReceiverId(n.getId());
+				b.setType('a');
+				this.deleteBerechtigung(b);
+			}
+		}
+	}
+	
+
 
 	/*
 	 * *****************************************************************************

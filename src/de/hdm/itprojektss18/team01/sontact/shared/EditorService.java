@@ -425,6 +425,34 @@ public interface EditorService extends RemoteService {
 	 * 
 	 */
 	public void deleteBerechtigung(Berechtigung b) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
+	 *      #deleteAllBerechtigungenByOwner(Nutzer n, Berechtigung b);
+	 * @param n - der aktuell eingeloggte Nutzer
+	 * @param objectId - das zuloeschende Objekt
+	 * 
+	 */
+	public void deleteAllBerechtigungenByOwner(Nutzer n, int objectId) throws IllegalArgumentException;
+
+	/**
+	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
+	 *      #deleteAllBerechtigungenByReceiver(Nutzer n, Berechtigung b);
+	 * @param n - der aktuell eingeloggte Nutzer
+	 * @param objectId - das zuloeschende Objekt
+	 * 
+	 */
+	public void deleteAllBerechtigungenByReceiver(Nutzer n, int objectId) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
+	 *      #createBerechtigungForEigenschaft(Vectoravshare, int ownerId, int receiverId);
+	 * @param avshare - Vector von Eigenschaften
+	 * @param ownerId - id des Eigentuemers
+	 * @param receiverId - id des Empfaengers
+	 * 
+	 */
+	public void createBerechtigungForEigenschaft(Vector<Relatable> avshare, int ownerId, int receiverId) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl

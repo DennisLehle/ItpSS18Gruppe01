@@ -142,6 +142,35 @@ public interface EditorService extends RemoteService {
 
 	/**
 	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
+	 *      #deleteBerechtigungReceiver(Vector ko, Nutzer n)
+	 * @param ko Vector von Kontakten
+	 * @param n aktuell eingeloggter Nutzer
+	 * 
+	 */
+	public void deleteBerechtigungReceiver(Vector<Kontakt> ko, Nutzer n) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
+	 *      #deleteBerechtigungReceiverKontaktliste(Kontaktliste kl, Nutzer n)
+	 * @param kl von der die Teilhaberschaft entfernt werden soll
+	 * @param n aktuell eingeloggter Nutzer
+	 * 
+	 */
+	public void deleteBerechtigungReceiverKontaktliste(Kontaktliste kl, Nutzer n) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
+	 *      #deleteBerechtigungReceiverKontaktliste(Kontaktliste kl, Nutzer n)
+	 * @param nutzer Vevtor von Nutzern bei denen die Teilhaberschaft entfernt werden soll
+	 * @param kl die Kontaktliste bei der die Teilhaberschaft fuer einen Nutzer entfernt werden soll.
+	 * @param k der Kontakt bei dem die Teilhaberschaft entfernt werden soll
+	 * @param n aktuell eingeloggter Nutzer
+	 * 
+	 */
+	public void deleteBerechtigungOwner(Vector<Nutzer> nutzer, Kontaktliste kl, Kontakt k, Nutzer n) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
 	 *      #getAllKontakteByOwner(Nutzer n)
 	 * @param n aktuell eingeloggter Nutzer
 	 * @return alle Kontakte des Eigentuemers

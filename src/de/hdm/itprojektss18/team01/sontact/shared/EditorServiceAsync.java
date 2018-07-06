@@ -149,6 +149,13 @@ public interface EditorServiceAsync {
 
 	void deleteKontaktFromKontaktliste(Vector<Kontakt> ko, Kontaktliste kl, Nutzer nutzer,
 			AsyncCallback<Void> callback);
+
+	void deleteBerechtigungReceiver(Vector<Kontakt> ko, Nutzer n, AsyncCallback<Void> callback);
+
+	void deleteBerechtigungReceiverKontaktliste(Kontaktliste kl, Nutzer n, AsyncCallback<Void> callback);
+
+	void deleteBerechtigungOwner(Vector<Nutzer> nutzer, Kontaktliste kl, Kontakt k, Nutzer n,
+			AsyncCallback<Void> callback);
 	
 
 

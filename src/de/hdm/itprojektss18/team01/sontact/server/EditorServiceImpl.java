@@ -2,7 +2,6 @@ package de.hdm.itprojektss18.team01.sontact.server;
 
 import java.sql.Timestamp;
 import java.util.Vector;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import de.hdm.itprojektss18.team01.sontact.server.db.AuspraegungMapper;
 import de.hdm.itprojektss18.team01.sontact.server.db.BerechtigungMapper;
@@ -1233,6 +1232,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param ko Vector von Kontakten die geloscht werden sollen
 	 * @param kl Kontaktliste in der man die Kontakte entfernen will
 	 * @param nutzer der aktuell eingeloggte Nutzer.
+	 * @deprecated Veraltet da angepasst.
 	 */
 	public void deleteKontaktFromKontaktliste(Vector<Kontakt> ko, Kontaktliste kl, Nutzer nutzer) {
 		
@@ -1255,7 +1255,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und
 			 * wenn es eine Übereinstimmung gibt wird die Berechtigung entfernt.
 			 */
-	
+			System.out.println("berechtigung");
 				Berechtigung b = new Berechtigung();
 				b.setObjectId(ko.elementAt(i).getId());
 				b.setOwnerId(ko.elementAt(i).getOwnerId());
@@ -1268,11 +1268,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			 * Ist man Owner des Kontakts und befindet sich der Kontakt in der Liste
 			 * "Meine Kontakte" wird er permanent gelöscht.
 			 */
-		} else if (kl.getTitel() == "Meine Kontakte" && ko.elementAt(i).getOwnerId() == nutzer.getId()
-				
-				
-				
-				&& ko.elementAt(i).getIdentifier() != 'r') {
+		} else if (kl.getTitel() == "Meine Kontakte" && ko.elementAt(i).getOwnerId() == nutzer.getId()) {
+			System.out.println("hallo eigentlich");
 			this.deleteKontakt(ko.elementAt(i));
 			/*
 			 * Case 1: Ist man nicht der Owner und befindet sich in der Kontaktliste
@@ -1286,6 +1283,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 				|| kl.getTitel() != "Mit mir geteilte Kontakte"
 						&& ko.elementAt(i).getOwnerId() != nutzer.getId()) {
 
+			System.out.println("hallo");
 			this.removeKontaktFromKontaktliste(kl, ko.elementAt(i));
 			/*
 			 * Ist man Owner und will einen Kontakt aus einer NICHT Standard Kontaktliste
@@ -1294,7 +1292,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		} else if (kl.getTitel() != "Meine Kontakte"
 				&& ko.elementAt(i).getOwnerId() == nutzer.getId() || kl.getTitel() != "Meine Kontakte"
 						&& ko.elementAt(i).getOwnerId() != nutzer.getId()) {
-
+			System.out.println("hallo2");
+	
 			this.removeKontaktFromKontaktliste(kl, ko.elementAt(i));
 
 		
@@ -1302,12 +1301,121 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Liste nicht ""Mit mir geteilte Kontakte" heißt.
 		}else if (nutzer.getId() != ko.elementAt(i).getOwnerId()
 				&& kl.getTitel() != "Mit mir geteilte Kontakte") {
-
+			System.out.println("hallo3");
 			this.removeKontaktFromKontaktliste(kl, ko.elementAt(i));
 			}
 		}
 	}
 	
+	
+	/**
+	 * Methode zum entfernen von Teilhaberschaften an einem Kontakt in
+	 * der "Mit mir geteilte" Kontakteliste.
+	 * 
+	 * @param ko Vector von zu loeschenden Teilhaberschaften
+	 * @param n akteull eingeloggter Nutzer (Teilhbaer)
+	 */
+	public void deleteBerechtigungReceiver(Vector<Kontakt> ko, Nutzer n) {
+		// Leeren Vector erstellen
+		Vector<Berechtigung> ber = new Vector<Berechtigung>();
+		// Alle Berechtigungen des Teilhabers in den Vector speichern
+		ber.addAll(this.getAllBerechtigungenByReceiver(n.getId()));
+
+		// Schleife welche Berechtigungs-Vector durlaeuft.
+		for (int i = 0; i < ber.size(); i++) {
+			// Schleife welche den Kontakt-Vector durlaeuft.
+			for (int j = 0; j < ko.size(); j++) {
+				// Abfrage ob es sich um dieses Objekt mit dem richtigen Type handelt
+				if (ber.elementAt(i).getObjectId() == ko.elementAt(j).getId() && ber.elementAt(i).getType() == 'k') {
+					Berechtigung b = new Berechtigung();
+					b.setObjectId(ko.elementAt(j).getId());
+					b.setOwnerId(ko.elementAt(j).getOwnerId());
+					b.setReceiverId(n.getId());
+					b.setType('k');
+
+					// Bei Uebereinstimmung wird Berechtigung entfernt.
+					this.deleteBerechtigung(b);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Methode zum entfernen von Teilhaberschaften an einer Kontaktliste als 
+	 * 
+	 * @param kl Kontaktliste von der die Teilhaberschaft entfernt werden soll.
+	 * @param n aktuell eingeloggter Nutzer (Teilhbaer)
+	 */
+	public void deleteBerechtigungReceiverKontaktliste(Kontaktliste kl, Nutzer n) {
+		// Leeren Vector erstellen
+		Vector<Berechtigung> ber = new Vector<Berechtigung>();
+		// Alle Berechtigungen des Teilhabers in den Vector speichern
+		ber.addAll(this.getAllBerechtigungenByReceiver(n.getId()));
+
+		// Schleife welche Berechtigungs-Vector durlaeuft.
+		for (int i = 0; i < ber.size(); i++) {
+				// Abfrage ob es sich um dieses Objekt mit dem richtigen Type handelt
+				if (ber.elementAt(i).getObjectId() == kl.getId() && ber.elementAt(i).getType() == 'l') {
+					Berechtigung b = new Berechtigung();
+					b.setObjectId(kl.getId());
+					b.setOwnerId(kl.getOwnerId());
+					b.setReceiverId(n.getId());
+					b.setType('l');
+
+					// Bei Uebereinstimmung wird Berechtigung entfernt.
+					this.deleteBerechtigung(b);
+				}
+		}	
+	}
+	
+	/**
+	 * Methode zum Auflisen von Teilhaberschaften.
+	 * Die Initiative geht hier vom Nutzer der Eigentuemer einer
+	 * Kontaktliste oder Kontakt ist aus.
+	 * 
+	 * Es werden alle Berechtigungen aufgehoben die der Eigentuemer dem Teilhaber
+	 * uebergeben hat.
+	 * 
+	 * @param nutzer Vevtor von Nutzern bei denen die Teilhaberschaft entfernt werden soll
+	 * @param kl die Kontaktliste bei der die Teilhaberschaft fuer einen Nutzer entfernt werden soll.
+	 * @param k der Kontakt bei dem die Teilhaberschaft entfernt werden soll
+	 * @param n aktuell eingeloggter Nutzer
+	 * 
+	 */
+	public void deleteBerechtigungOwner(Vector<Nutzer> nutzer, Kontaktliste kl, Kontakt k, Nutzer n) {
+
+		// Wenn eine Kontaktliste uebergebenw wurde
+		if (kl != null) {
+			// Schleife durchlaufen mit allen uebergebenen Nutzern
+			for (int i = 0; i < nutzer.size(); i++) {
+				// Berechtigungs-Objekt erzeugen
+				Berechtigung b = new Berechtigung();
+				b.setObjectId(kl.getId());
+				b.setOwnerId(n.getId());
+				b.setReceiverId(nutzer.elementAt(i).getId());
+				b.setType(kl.getType());
+
+				// Loeschung der Teilhaberschaft duchfuehren
+				this.deleteBerechtigung(b);
+			}
+
+		} else if (k != null) {
+			// Schleife durchlaufen mit allen uebergebenen Nutzern
+			for (int i = 0; i < nutzer.size(); i++) {
+				// Berechtigungs-Objekt erzeugen
+				Berechtigung b = new Berechtigung();
+				b.setObjectId(k.getId());
+				b.setOwnerId(n.getId());
+				b.setReceiverId(nutzer.elementAt(i).getId());
+				b.setType(k.getType());
+
+				// Loeschung der Teilhaberschaft duchfuehren
+				this.deleteBerechtigung(b);
+
+			}
+		}
+
+	}
 	
 	/**
 	 * Gibt alle Objekt-Berechtigungen ueber jene Objekte aus, welche vom Nutzer

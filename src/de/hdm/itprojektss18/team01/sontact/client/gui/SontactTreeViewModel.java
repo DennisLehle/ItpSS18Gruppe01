@@ -344,31 +344,23 @@ public class SontactTreeViewModel implements TreeViewModel {
 
 				@Override
 				public void onSuccess(Vector<Kontaktliste> result) {
-					
-					// Alle gefundenen Kontaktlisten werden dem DataProvider hinzugefuegt
-					for (Kontaktliste kontaktliste : result) {
-						kontaktlisteDataProvider.getList().add(kontaktliste);
-					}
-					
-					//Wenn die eigenen Kontakte in dem Baum eingepflegt wurden werden nun die von
-					//anderen Nutzern geteilten Kontaktlisten eingepflegt.
-					ev.getAllSharedKontaktlistenByReceiver(n.getId(), new AsyncCallback<Vector<Kontaktliste>>() {
+						//Statusabfrage ob Kontakliste geteilt wurde
+						ev.statusSharingKontaktliste(result, new AsyncCallback<Vector<Kontaktliste>>() {
 
-						@Override
-						public void onFailure(Throwable error) {
-							error.getMessage().toString();
-							
-						}
+							@Override
+							public void onFailure(Throwable caught) {
+								caught.getMessage().toString();								
+							}
 
-						@Override
-						public void onSuccess(Vector<Kontaktliste> result) {
+							@Override
+							public void onSuccess(Vector<Kontaktliste> result) {
+								//ALle Kontaktlisten dem ListDataProvider hinzufuegen.
+								kontaktlisteDataProvider.getList().addAll(result);
+								
+							}
 							
-							//Geteilten Kontaktlisten deren Namen jetzt bekannt sind hinzufügen.
-							for (Kontaktliste kontaktliste : result) {
-								kontaktlisteDataProvider.getList().add(kontaktliste);
-						}
-						}
-					});
+						});
+					
 					}
 			});
 			
@@ -393,9 +385,27 @@ public class SontactTreeViewModel implements TreeViewModel {
 				}
 
 				public void onSuccess(Vector<Kontakt> result) {
-					for (Kontakt kontakt : result) {
-						kontaktLDP.getList().add(kontakt);
-					}
+					
+						ev.statusSharingKontakt(result, new AsyncCallback<Vector<Kontakt>>() {
+
+							@Override
+							public void onFailure(Throwable caught) {
+								// TODO Auto-generated method stub
+								
+							}
+
+							@Override
+							public void onSuccess(Vector<Kontakt> result) {
+								
+									kontaktLDP.getList().addAll(result);
+								 {
+								
+								}
+								
+							}
+							
+						});
+					
 				}
 
 			});

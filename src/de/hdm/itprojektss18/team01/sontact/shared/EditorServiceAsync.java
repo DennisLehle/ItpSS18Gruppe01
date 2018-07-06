@@ -142,6 +142,15 @@ public interface EditorServiceAsync {
 	void createBerechtigungForEigenschaft(Vector<Relatable> avshare, int ownerId, int receiverId,
 			AsyncCallback<Void> callback);
 
+	void statusSharingKontakt(Vector<Kontakt> statusObjects, AsyncCallback<Vector<Kontakt>> callback);
+
+	void statusSharingKontaktliste(Vector<Kontaktliste> statusKontaktlisteObjects,
+			AsyncCallback<Vector<Kontaktliste>> callback);
+
+	void deleteKontaktFromKontaktliste(Vector<Kontakt> ko, Kontaktliste kl, Nutzer nutzer,
+			AsyncCallback<Void> callback);
+	
+
 
 	
 

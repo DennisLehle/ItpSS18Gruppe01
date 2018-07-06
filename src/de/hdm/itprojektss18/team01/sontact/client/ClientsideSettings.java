@@ -88,20 +88,14 @@ public class ClientsideSettings extends CommonSettings {
 	 */
 	public static EditorServiceAsync getEditorVerwaltung() {
 
-		/**
-		 * Gab es bislang noch keine Verwaltung-Instanz, wird eine erstellt.
-		 */
+		//Gab es bislang noch keine Verwaltung-Instanz, wird eine erstellt.
 		if (editorVerwaltung == null) {
-
-			/**
-			 * Instanziieren des EditorService's.
-			 */
+	 
+			// Instanziieren des EditorService's.
 			editorVerwaltung = GWT.create(EditorService.class);
 		}
 
-		/**
-		 * Rueckgabe des EditorService's.
-		 */
+		// Rueckgabe des EditorService's.
 		return editorVerwaltung;
 	}
 
@@ -118,20 +112,14 @@ public class ClientsideSettings extends CommonSettings {
 	 */
 	public static LoginServiceAsync getLoginService() {
 
-		/**
-		 * Gab es bislang noch keine Verwaltung-Instanz, wird eine erstellt.
-		 */
+		// Gab es bislang noch keine Verwaltung-Instanz, wird eine erstellt. 
 		if (loginService == null) {
 
-			/**
-			 * Instantiieren des EditorService's.
-			 */
+			 // Instantiieren des EditorService's.
 			loginService = GWT.create(LoginService.class);
 		}
 
-		/**
-		 * Rueckgabe des EditorService's.
-		 */
+		// Rueckgabe des EditorService's. 
 		return loginService;
 	}
 
@@ -155,10 +143,8 @@ public class ClientsideSettings extends CommonSettings {
 	 */
 	public static ReportGeneratorAsync getReportGeneratorService() {
 
-		/**
-		 * Gab es bislang noch keine ReportGenerator-Instanz, wird eine neue erstellt.
-		 * Auch ein sogenannter <Singleton>
-		 */
+		// Gab es bislang noch keine ReportGenerator-Instanz, wird eine neue erstellt.
+		// Auch ein sogenannter <Singleton>
 		if (reportGeneratorVerwaltung == null) {
 
 			reportGeneratorVerwaltung = GWT.create(ReportGenerator.class);
@@ -178,9 +164,7 @@ public class ClientsideSettings extends CommonSettings {
 			reportGeneratorVerwaltung.init(initReportGeneratorServiceCallback);
 		}
 
-		/**
-		 * Rueckgabe des ReportGeneratorService's.
-		 */
+		// Rueckgabe des ReportGeneratorService's.
 		return reportGeneratorVerwaltung;
 	}
 

@@ -29,6 +29,7 @@ public class Kontakt extends BusinessObject {
 	private char identifier;
 	private char type = 'k';
 	private int KontaktlisteId;
+	private boolean status;
 
 	
 	/**
@@ -147,6 +148,22 @@ public class Kontakt extends BusinessObject {
 	public void setIdentifier(char identifier) {
 		this.identifier = identifier;
 	}
+	
+	/**
+	 * Auslesen des Statuses
+	 * @return status - Teilung des Objekts
+	 */
+	public boolean getStatus() {
+		return status;
+	}
+
+	/**
+	 * Setzten des Statuses 
+	 * @param status - Teilung des Objekts setzen
+	 */
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 
 	
 	
@@ -159,8 +176,5 @@ public class Kontakt extends BusinessObject {
 	public void setKontaktlisteId(int kontaktlisteId) {
 		KontaktlisteId = kontaktlisteId;
 	}
-	
-	
-	
 	
 }

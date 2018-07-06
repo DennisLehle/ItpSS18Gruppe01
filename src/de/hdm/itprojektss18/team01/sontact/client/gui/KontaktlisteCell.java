@@ -28,6 +28,10 @@ public class KontaktlisteCell extends AbstractCell<Kontaktliste> {
 		sb.appendHtmlConstant("<div>");
 		sb.appendHtmlConstant("<image src='/images/kontaktliste.png' width='15px' height='15px' align='center' /> ");
 		sb.appendEscaped(kl.getTitel());
+		sb.appendEscaped(" ");
+		if(kl.getStatus()==true) {
+			sb.appendHtmlConstant("<image src='/images/share.png' width='12px' height='12px' align='center'/>");
+			}
 		sb.appendHtmlConstant("</div>");
 
 	}

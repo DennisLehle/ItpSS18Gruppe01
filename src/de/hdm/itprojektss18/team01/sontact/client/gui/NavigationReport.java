@@ -79,10 +79,10 @@ public class NavigationReport extends VerticalPanel {
 		showAllKontakteNachTeilhabendernReport.setTitle(
 				"Hier erhalten Sie einen Report, der alle Ihre geteilten Kontakte, mit bestimmten Nutzern ausgibt");
 
-		showAllKontakteReport.setPixelSize(200, 80);
-		showAllKontakteNachBestimmtenAusp.setPixelSize(200, 80);
-		showAllGeteiltenKontakteReport.setPixelSize(200, 80);
-		showAllKontakteNachTeilhabendernReport.setPixelSize(200, 80);
+		showAllKontakteReport.setPixelSize(200, 120);
+		showAllKontakteNachBestimmtenAusp.setPixelSize(200, 120);
+		showAllGeteiltenKontakteReport.setPixelSize(200, 120);
+		showAllKontakteNachTeilhabendernReport.setPixelSize(200, 120);
 
 		/**
 		 * Buttons werden der Anzeige innerhalb der Navigation angeheftet.
@@ -128,7 +128,7 @@ public class NavigationReport extends VerticalPanel {
 								ScrollPanel sc = new ScrollPanel(html);
 
 								// Der Report wird dem Scrollpanel uebergeben
-								sc.setSize("950px", "550px");
+								sc.setSize("1100px", "700px");
 								sc.setVerticalScrollPosition(10);
 								RootPanel.get("contentR").add(sc);
 
@@ -157,7 +157,8 @@ public class NavigationReport extends VerticalPanel {
 				// Filterung nach Eigenschaft
 				TextBox eingabe = new TextBox();
 
-				Label eigLb = new Label("Eigenschaft: ");
+				Label eigLb = new Label("Eigenschaft:");
+				//eigLb.setStylePrimaryName("h6");
 				// auswahl.addItem("Eigenschaft");
 
 				// Filterung nach Auspraegung
@@ -230,7 +231,7 @@ public class NavigationReport extends VerticalPanel {
 
 											// Der Report wird dem Scrollpanel hinzugefuegt
 											ScrollPanel sc = new ScrollPanel(html);
-											sc.setSize("950px", "470px");
+											sc.setSize("1100px", "700px");
 											sc.setVerticalScrollPosition(10);
 
 											RootPanel.get("contentR").add(sc);
@@ -310,7 +311,7 @@ public class NavigationReport extends VerticalPanel {
 								HTML html = new HTML("<div align=\"center\">" + writer.getReportText() + "</br></div>");
 								ScrollPanel sc = new ScrollPanel(html);
 
-								sc.setSize("950px", "470px");
+								sc.setSize("1100px", "700px");
 								sc.setVerticalScrollPosition(10);
 								RootPanel.get("contentR").add(sc);
 							}
@@ -426,7 +427,7 @@ public class NavigationReport extends VerticalPanel {
 														+ "</br></div>");
 												ScrollPanel sc = new ScrollPanel(html);
 
-												sc.setSize("950px", "470px");
+												sc.setSize("1100px", "700px");
 												sc.setVerticalScrollPosition(10);
 												RootPanel.get("contentR").add(sc);
 

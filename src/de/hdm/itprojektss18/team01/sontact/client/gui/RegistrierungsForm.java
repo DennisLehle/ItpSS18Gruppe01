@@ -23,7 +23,8 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Eigenschaft;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontakt;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
- /* Die Klasse RegistrierungsFormular wird beim Login aufgerufen, wenn der Nutzer
+ /**
+  * Die Klasse RegistrierungsFormular wird beim Login aufgerufen, wenn der Nutzer
   * noch keinen Kontakt in der Datenbank gespeichert hat, und sich somit zum Ersten Mal in der 
   * Applikation anmeldet.
   * 
@@ -56,7 +57,8 @@ public class RegistrierungsForm extends VerticalPanel {
 
 	Label auswahleigenschaften = new Label("Auswahleigenschaft");
 	Label freitexteigenschaften = new Label("Freitexteigenschaft");
-
+	
+	// Erstellung des Speichern-Buttons
 	Button speichern = new Button(
 			"<image src='/images/user.png' width='20px' height='20px' align='center' /> Jetzt registrieren");
 
@@ -69,10 +71,11 @@ public class RegistrierungsForm extends VerticalPanel {
 	// Hauptpanel fuer die Ansicht der Kontakteigenschaftsangaben
 	VerticalPanel hauptPanel2 = new VerticalPanel();
 
+	// FlexTable fuer die Eigenschaften
 	FlexTable kontaktTable = new FlexTable();
 	FlexTable infoTable = new FlexTable();
 
-	/*
+	/**
 	 * Konstruktor fuer die RegistrierungsForm-Klasse.
 	 */
 	public RegistrierungsForm(Nutzer n) {
@@ -103,7 +106,7 @@ public class RegistrierungsForm extends VerticalPanel {
 		// Hier wird der Speichern-Button gestylt
 		speichern.setStylePrimaryName("regButton");
 
-		
+		// Email-Adresse vom Nutzer wird in der TextBox gesetzt
 		gmailTb.setText(n.getEmailAddress());
 		gmailTb.setEnabled(false);
 		
@@ -130,6 +133,7 @@ public class RegistrierungsForm extends VerticalPanel {
 		kontaktTable.setWidget(3, 0, gmail);
 		kontaktTable.setWidget(3, 1, gmailTb);
 
+		// Anordnung der zweiten FlexTable
 		infoTable.setWidget(1, 0, anschriftlb);
 		infoTable.setWidget(1, 1, anschrift);
 		infoTable.setWidget(2, 0, plzlb);
@@ -137,15 +141,16 @@ public class RegistrierungsForm extends VerticalPanel {
 		infoTable.setWidget(3, 0, wohnortlb);
 		infoTable.setWidget(3, 1, wohnort);
 
-		// Anordnung der zweiten FlexTable
+		// Styling der Tables
 		kontaktTable.setStylePrimaryName("infoTable");
 		infoTable.setStylePrimaryName("infoTable");
 
+		
 		hauptPanel.add(kontaktTable);
 		hauptPanel2.add(infoTable);
 		hauptPanel2.add(speichern);
 
-		// Hinzufuegen derPlaceholder fuer die TextBoxen 
+		// Hinzufuegen der Placeholder fuer die TextBoxen 
 		vornameTxtBox.getElement().setPropertyString("placeholder", "Vorname des Kontakts");
 		nachnameTxtBox.getElement().setPropertyString("placeholder", "Nachname des Kontakts");
 		plz.getElement().setPropertyString("placeholder", "Postleitzahl des Kontakts");
@@ -160,7 +165,7 @@ public class RegistrierungsForm extends VerticalPanel {
 
 			@Override
 			public void onClick(ClickEvent event) {
-
+				// Ueberpruefung ob alle Eigenschaften angegeben wurden
 				if (vornameTxtBox.getValue() != "" && nachnameTxtBox.getValue() != "" && plz.getText() != ""
 						&& wohnort.getText() != "" && anschrift.getText() != "") {
 					
@@ -222,8 +227,8 @@ public class RegistrierungsForm extends VerticalPanel {
 																						@Override
 																						public void onFailure(
 																								Throwable caught) {
-																							caught.getMessage()
-																									.toString();
+																							caught.getMessage().toString();
+																									
 
 																						}
 
@@ -265,7 +270,7 @@ public class RegistrierungsForm extends VerticalPanel {
 																															RootPanel.get("content").clear();
 																															
 																															// Fenster neu laden.
-																															// Weiterleitung in die Start Ansicht des Programms.
+																															// Weiterleitung in die Start Ansicht des Programms
 																															Window.Location.reload();
 
 																														}

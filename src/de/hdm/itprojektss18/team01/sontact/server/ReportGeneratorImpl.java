@@ -1,7 +1,5 @@
 package de.hdm.itprojektss18.team01.sontact.server;
 
-
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss18.team01.sontact.shared.EditorService;
@@ -22,7 +20,6 @@ import java.util.Date;
 import java.sql.Timestamp;
 
 import java.util.Vector;
-
 
 /**
  * Implementierung des serverseitigen RPC-Services fuer den prozessierenden
@@ -64,7 +61,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	/**
 	 * Abruf des Reports der alle Kontakte des eingeloggten Nutzers generiert.
 	 * 
-	 * @param n Nutzer von dem der Report generiert werden soll
+	 * @param n
+	 *            Nutzer von dem der Report generiert werden soll
 	 * @return report
 	 */
 	public AlleKontakteReport createAlleKontakteReport(Nutzer n) throws IllegalArgumentException {
@@ -102,17 +100,17 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 		// Die Kontakte des gespeicherten Vectors, pro Zeile der Reporttabelle
 		// hinzufuegen
-	
+
 		for (int i = 0; i < kontakt.size(); i++) {
 			Vector<Relatable> auspraegungen = new Vector<Relatable>();
-			
+
 			if (kontakt.elementAt(i).getOwnerId() == n.getId()) {
-			auspraegungen.addAll(getEditorService()
-					.getAllAuspraegungenByKontaktRelatable(kontakt.elementAt(i).getId()));
+				auspraegungen
+						.addAll(getEditorService().getAllAuspraegungenByKontaktRelatable(kontakt.elementAt(i).getId()));
 
 			} else if (kontakt.elementAt(i).getOwnerId() != n.getId()) {
-				auspraegungen.addAll(getEditorService()
-						.getAllSharedAuspraegungenByKontaktAndNutzer(kontakt.elementAt(i), n));				
+				auspraegungen.addAll(
+						getEditorService().getAllSharedAuspraegungenByKontaktAndNutzer(kontakt.elementAt(i), n));
 			}
 
 			Row kon = new Row();
@@ -137,8 +135,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				report.addRow(zwischen);
 			}
 
-			// Aufruf der Kontakteigenschaften des Reports, sowie hinzufuegen der 
-			//zusammengehoerigen Eigenschaften und Auspraegungen pro Zeile
+			// Aufruf der Kontakteigenschaften des Reports, sowie hinzufuegen der
+			// zusammengehoerigen Eigenschaften und Auspraegungen pro Zeile
 			for (int j = 0; j < auspraegungen.size(); j++) {
 
 				Row e = new Row();
@@ -148,8 +146,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				e.addColumn(new Column(""));
 				e.addColumn(new Column(""));
 				e.addColumn(new Column(""));
-				
-				//hinzufuegen der Kontakteigenschaften zu der untergeordneten Tabelle
+
+				// hinzufuegen der Kontakteigenschaften zu der untergeordneten Tabelle
 				report.addRow(e);
 
 			}
@@ -167,8 +165,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * der Suchleiste uebergeben. Die daraufhin den Report mit dem entsprechenden
 	 * Filter zurueckgeben.
 	 * 
-	 * @param eigenschaft, auspraegung, n 
-	 * @return report 
+	 * @param eigenschaft,
+	 *            auspraegung, n
+	 * @return report
 	 */
 	public AlleKontakteNachEigenschaftenReport createAuspraegungReport(String eigenschaft, String auspraegung, Nutzer n)
 			throws IllegalArgumentException {
@@ -195,14 +194,12 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		// Spalte zur Darstellung des Eigentuemer eines Kontaktes
 		head.addColumn(new Column("Kontakteigentuemer"));
 
-		
-
 		// Kopfzeile dem Report hinzufuegen
 		report.addRow(head);
 
 		// Angeforderte Kontaktdaten in den Vektor laden und dem Report hinzufuegen
 		Vector<Kontakt> kontakt = new Vector<Kontakt>();
-		
+
 		// Pruefung des uebergebenen Parameters, dieses durch die Suche den Report
 		// ausgibt
 		if (eigenschaft != null && auspraegung != null) {
@@ -214,14 +211,14 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		// hinzufuegen
 		for (int i = 0; i < kontakt.size(); i++) {
 			Vector<Relatable> auspraegungen = new Vector<Relatable>();
-			
+
 			if (kontakt.elementAt(i).getOwnerId() == n.getId()) {
-			auspraegungen.addAll(getEditorService()
-					.getAllAuspraegungenByKontaktRelatable(kontakt.elementAt(i).getId()));
+				auspraegungen
+						.addAll(getEditorService().getAllAuspraegungenByKontaktRelatable(kontakt.elementAt(i).getId()));
 
 			} else if (kontakt.elementAt(i).getOwnerId() != n.getId()) {
-				auspraegungen.addAll(getEditorService()
-						.getAllSharedAuspraegungenByKontaktAndNutzer(kontakt.elementAt(i), n));				
+				auspraegungen.addAll(
+						getEditorService().getAllSharedAuspraegungenByKontaktAndNutzer(kontakt.elementAt(i), n));
 			}
 
 			Row kon = new Row();
@@ -233,7 +230,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			kon.addColumn(
 					new Column(getEditorService().getNutzerById(kontakt.elementAt(i).getOwnerId()).getEmailAddress()));
 			kon.addColumn(new Column(""));
-			
+
 			// Hinzufuegen der Zeile zum Report
 			report.addRow(kon);
 
@@ -241,11 +238,11 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 			zwischen.addColumn(new Column("Eigenschaft:"));
 			zwischen.addColumn(new Column("Auspraegung:"));
-			
+
 			report.addRow(zwischen);
 
-			// Aufruf der Kontakteigenschaften des Reports, sowie hinzufuegen der 
-			//zusammengehoerigen Eigenschaften und Auspraegungen pro Zeile
+			// Aufruf der Kontakteigenschaften des Reports, sowie hinzufuegen der
+			// zusammengehoerigen Eigenschaften und Auspraegungen pro Zeile
 			for (int j = 0; j < auspraegungen.size(); j++) {
 
 				Row e = new Row();
@@ -271,7 +268,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * der Suchleiste uebergeben. Die daraufhin den Report mit dem entsprechenden
 	 * Filter zurueckgeben.
 	 * 
-	 * @param email, n Nutzer von dem der Report genriert werden soll anhand seiner Email-Adresse
+	 * @param email,
+	 *            n Nutzer von dem der Report genriert werden soll anhand seiner
+	 *            Email-Adresse
 	 * @return report
 	 */
 	public AlleKontakteNachTeilhabernReport createNachTeilhabernReport(String email, Nutzer n)
@@ -330,24 +329,34 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 					Kontakt k = new Kontakt();
 					k = this.editorService.getKontaktById(b.elementAt(j).getObjectId());
-					
-					if(receiv.contains(k)) {
-						
+
+					if (receiv.contains(k)) {
+
 					} else {
 						receiv.add(k);
 					}
-					
-				}
-			}
 
-		}
+				}
+			}}
+
+
 
 		// Die Berechtigungen des gespeicherten Vectors, werden pro Zeile der
 		// Reporttabelle
 		// hinzugefuegt
 		for (int i = 0; i < receiv.size(); i++) {
-			Vector<Relatable> auspraegungen = getEditorService()
-					.getAllAuspraegungenByKontaktRelatable(receiv.elementAt(i).getId());
+			 Vector<Relatable> auspraegungen = getEditorService()
+			 .getAllAuspraegungenByKontaktRelatable(receiv.elementAt(i).getId());
+//			
+//
+//			if (kontakt.elementAt(i).getOwnerId() == n.getId()) {
+//				auspraegungen
+//						.addAll(getEditorService().getAllAuspraegungenByKontaktRelatable(kontakt.elementAt(i).getId()));
+//
+//			} else if (kontakt.elementAt(i).getStatus() )) {
+//				auspraegungen.addAll(
+//						getEditorService().getAllSharedAuspraegungenByKontaktAndNutzer(kontakt.elementAt(i), n));
+//				}
 
 			Row kon = new Row();
 			kon.addColumn(new Column(receiv.elementAt(i).getVorname()));
@@ -368,22 +377,55 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				zwischen.addColumn(new Column("Auspraegung:"));
 				report.addRow(zwischen);
 			}
+//			kontakt.elementAt(i).getStatus()
+			
 
-			// Aufruf der Kontakteigenschaften des Reports, sowie hinzufuegen der 
-			//zusammengehoerigen Eigenschaften und Auspraegungen pro Zeile
-			for (int j = 0; j < auspraegungen.size(); j++) {
+				// Aufruf der Kontakteigenschaften des Reports, sowie hinzufuegen der
+				// zusammengehoerigen Eigenschaften und Auspraegungen pro Zeile
+				for (int j = 0; j < auspraegungen.size(); j++) {
+					
+					if (getEditorService().getStatusForObject(receiv.elementAt(i).getId(), 
+							receiv.elementAt(i).getType()) == true &&  
+							getEditorService().getStatusForObject(auspraegungen.elementAt(j).getId(), 
+									auspraegungen.elementAt(j).getType()) == false) {
+						
+//					if (getEditorService().getStatusForObject(auspraegungen.elementAt(j).getId(), 'a') == true) {
+						
+						Vector<Relatable> ausgabe = getEditorService().getAllSharedAuspraegungenByKontaktAndNutzer(receiv.elementAt(i), n);
+						
+						for (int l = 0; l < ausgabe.size(); l++) {
+						
+						Row e = new Row();
 
-				Row e = new Row();
+						e.addColumn(new Column(ausgabe.elementAt(l).getBezeichnung()));
+						e.addColumn(new Column(ausgabe.elementAt(l).getWert()));
+						e.addColumn(new Column(""));
+						e.addColumn(new Column(""));
+						e.addColumn(new Column(""));
 
-				e.addColumn(new Column(auspraegungen.elementAt(j).getBezeichnung()));
-				e.addColumn(new Column(auspraegungen.elementAt(j).getWert()));
-				e.addColumn(new Column(""));
-				e.addColumn(new Column(""));
-				e.addColumn(new Column(""));
+						// Hinzufuegen der Zeile zum Report
+						report.addRow(e);
 
-				// Hinzufuegen der Zeile zum Report
-				report.addRow(e);
+					}}
+				
+				
+					else if (getEditorService().getStatusForObject(receiv.elementAt(i).getId(), 
+							receiv.elementAt(i).getType()) == true &&  
+							getEditorService().getStatusForObject(auspraegungen.elementAt(j).getId(), 
+									auspraegungen.elementAt(j).getType()) == true) { 
+				
+					Row e = new Row();
 
+					e.addColumn(new Column(auspraegungen.elementAt(j).getBezeichnung()));
+					e.addColumn(new Column(auspraegungen.elementAt(j).getWert()));
+					e.addColumn(new Column(""));
+					e.addColumn(new Column(""));
+					e.addColumn(new Column(""));
+
+					// Hinzufuegen der Zeile zum Report
+					report.addRow(e);
+
+				}
 			}
 			// Einzelne Zeile dem Report hinzufuegen
 
@@ -398,7 +440,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * der Suchleiste uebergeben. Die daraufhin den Report mit dem entsprechenden
 	 * Filter zurueckgeben.
 	 * 
-	 * @param n Nutzer von dem der Report erzeugt werden soll
+	 * @param n
+	 *            Nutzer von dem der Report erzeugt werden soll
 	 * @return report
 	 */
 	public AlleGeteiltenKontakteReport createAlleGeteiltenReport(Nutzer n) throws IllegalArgumentException {
@@ -442,7 +485,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			for (int j = 0; j < b.size(); j++) {
 
 				if (kontakt.elementAt(i).getId() == b.elementAt(j).getObjectId()
-						&& n.getId() == b.elementAt(j).getOwnerId() && kontakt.elementAt(i).getType() == b.elementAt(j).getType())
+						&& n.getId() == b.elementAt(j).getOwnerId()
+						&& kontakt.elementAt(i).getType() == b.elementAt(j).getType())
 
 				{
 					Kontakt k = new Kontakt();
@@ -453,18 +497,17 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 			}
 		}
-		
+
 		/*
-		 * Receiver Vector durchgehen und Objekte mit Typ k
-		 * herauslesen und dem Vector allNutzer hinzufuegen.
+		 * Receiver Vector durchgehen und Objekte mit Typ k herauslesen und dem Vector
+		 * allNutzer hinzufuegen.
 		 */
 		Vector<Nutzer> allNutzer = new Vector<Nutzer>();
 		for (int i = 0; i < receiv.size(); i++) {
-			if(receiv.elementAt(i).getType() ==  'k') {
+			if (receiv.elementAt(i).getType() == 'k') {
 				allNutzer.addAll(getEditorService().sharedWith(receiv.elementAt(i).getId(), 'k', n));
 			}
 		}
-		
 
 		// Die Berechtigungen des gespeicherten Vectors, werden pro Zeile der
 		// Reporttabelle
@@ -480,7 +523,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			kon.addColumn(new Column(receiv.elementAt(i).getModDat().toString()));
 			kon.addColumn(new Column(allNutzer.elementAt(i).getEmailAddress()));
 			kon.addColumn(new Column(""));
-			
+
 			// Hinzufuegen der Zeile zum Report
 			report.addRow(kon);
 
@@ -493,10 +536,40 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				report.addRow(zwischen);
 			}
 
-			// Aufruf der Kontakteigenschaften des Reports, sowie hinzufuegen der 
-			//zusammengehoerigen Eigenschaften und Auspraegungen pro Zeile
+			// Aufruf der Kontakteigenschaften des Reports, sowie hinzufuegen der
+			// zusammengehoerigen Eigenschaften und Auspraegungen pro Zeile
 			for (int j = 0; j < auspraegungen.size(); j++) {
+				
+				// Prüfung ob alle Auspraegungen dieses Kontakts geteilt wurden 
+				if (getEditorService().getStatusForObject(receiv.elementAt(i).getId(), 
+						receiv.elementAt(i).getType()) == true &&  
+						getEditorService().getStatusForObject(auspraegungen.elementAt(j).getId(), 
+								auspraegungen.elementAt(j).getType()) == false) {
+					
+					
+					Vector<Relatable> ausgabe = getEditorService().getAllSharedAuspraegungenByKontaktAndNutzer(receiv.elementAt(i), n);
+					
+					for (int l = 0; l < ausgabe.size(); l++) {
+					
+					Row e = new Row();
 
+					e.addColumn(new Column(ausgabe.elementAt(l).getBezeichnung()));
+					e.addColumn(new Column(ausgabe.elementAt(l).getWert()));
+					e.addColumn(new Column(""));
+					e.addColumn(new Column(""));
+					e.addColumn(new Column(""));
+
+					// Hinzufuegen der Zeile zum Report
+					report.addRow(e);
+
+				}}
+				
+				// Ausgabe aller Auspraegungen da gesamtes Kontaktobjekt geteilt wurde 
+				else if (getEditorService().getStatusForObject(receiv.elementAt(i).getId(), 
+						receiv.elementAt(i).getType()) == true &&  
+						getEditorService().getStatusForObject(auspraegungen.elementAt(j).getId(), 
+								auspraegungen.elementAt(j).getType()) == true) { 
+			
 				Row e = new Row();
 
 				e.addColumn(new Column(auspraegungen.elementAt(j).getBezeichnung()));
@@ -507,6 +580,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 				// Hinzufuegen der Zeile zum Report
 				report.addRow(e);
+				}
 			}
 		}
 		// Einzelne Zeile dem Report hinzufuegen
@@ -584,33 +658,33 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	// e.addColumn(new Column(auspraegungen.elementAt(j).getWert()));
 	// }
 	// else if (eigenschaft != null && auspraegung == null) {
-			// kontakt.addAll(this.getEditorService().getKontakteByEigenschaft(eigenschaft,
-			// n));
-			// } else if (auspraegung != null && eigenschaft == null) {
-			// kontakt.addAll(this.getEditorService().getKontakteByAuspraegung(auspraegung,
-			// n));
-			// }
+	// kontakt.addAll(this.getEditorService().getKontakteByEigenschaft(eigenschaft,
+	// n));
+	// } else if (auspraegung != null && eigenschaft == null) {
+	// kontakt.addAll(this.getEditorService().getKontakteByAuspraegung(auspraegung,
+	// n));
+	// }
 
-			// for (int i = 0; i < kontakt.size(); i++) {
-			// Vector<Relatable> ausgabe = getEditorService()
-			// .getAllAuspraegungenByKontaktRelatable(kontakt.elementAt(i).getId());
-			//
-			// for (int j = 0; j < ausgabe.size(); j++) {
-			// if (auspraegung != ausgabe.elementAt(j).getWert()) {
-			// kontakt.removeElementAt(i);
-			// } else if (eigenschaft != ausgabe.elementAt(j).getBezeichnung()) {
-			// kontakt.removeElementAt(i);
-			// }
-			// }
-			// }
+	// for (int i = 0; i < kontakt.size(); i++) {
+	// Vector<Relatable> ausgabe = getEditorService()
+	// .getAllAuspraegungenByKontaktRelatable(kontakt.elementAt(i).getId());
+	//
+	// for (int j = 0; j < ausgabe.size(); j++) {
+	// if (auspraegung != ausgabe.elementAt(j).getWert()) {
+	// kontakt.removeElementAt(i);
+	// } else if (eigenschaft != ausgabe.elementAt(j).getBezeichnung()) {
+	// kontakt.removeElementAt(i);
+	// }
+	// }
+	// }
 
-			// else if (auspraegung != null) {
-			// kontakt.addAll(this.getEditorService().getKontakteByAuspraegung(auspraegung,
-			// n));
-			//
-			// }
-			// Die Kontakte des gespeicherten Vectors, pro Zeile der Reporttabelle
-			// hinzufuegen
+	// else if (auspraegung != null) {
+	// kontakt.addAll(this.getEditorService().getKontakteByAuspraegung(auspraegung,
+	// n));
+	//
+	// }
+	// Die Kontakte des gespeicherten Vectors, pro Zeile der Reporttabelle
+	// hinzufuegen
 
-			// Vector<Relatable> relatable = new Vector<Relatable>();
+	// Vector<Relatable> relatable = new Vector<Relatable>();
 }

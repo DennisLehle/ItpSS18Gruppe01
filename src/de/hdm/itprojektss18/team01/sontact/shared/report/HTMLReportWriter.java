@@ -103,7 +103,7 @@ public class HTMLReportWriter extends ReportWriter {
 		// Hinzufuegen der Ueberschrift und den Kopfdaten in HTML-Form.
 		result.append("<H3>" + r.getTitle() + "</H3>");
 		result.append(
-				"<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");
+				"<table style=\"width:550px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");
 		result.append("<tr><td> " + " Erstellungsdatum des Reports | " + r.created().toString() + "</td></tr>");
 		
 		
@@ -183,7 +183,7 @@ public class HTMLReportWriter extends ReportWriter {
 				// Hinzuf�gen der Ueberschrift und den Kopfdaten in HTML-Form.
 				result.append("<H3>" + r.getTitle() + "</H3>");
 				result.append(
-						"<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");
+						"<table style=\"width:550px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");
 				result.append("<tr><td> " + " Erstellungsdatum des Reports | " + r.created().toString() + "</td></tr>");
 				
 				
@@ -257,7 +257,7 @@ public class HTMLReportWriter extends ReportWriter {
 				// Hinzufuegen der Ueberschrift und den Kopfdaten in HTML-Form.
 				result.append("<H3>" + r.getTitle() + "</H3>");
 				result.append(
-						"<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");
+						"<table style=\"width:550px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");
 				result.append("<tr><td> " + " Erstellungsdatum des Reports | " + r.created().toString() + "</td></tr>");
 				
 				
@@ -331,7 +331,7 @@ public class HTMLReportWriter extends ReportWriter {
 				// Hinzufuegen der Ueberschrift und den Kopfdaten in HTML-Form.
 				result.append("<H3>" + r.getTitle() + "</H3>");
 				result.append(
-						"<table style=\"width:500px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");
+						"<table style=\"width:550px;border:1px solid #e6e6e6; font-family: sans-serif; margin-bottom:5px;\"></br><tr>");
 				result.append("<tr><td> " + " Erstellungsdatum des Reports | " + r.created().toString() + "</td></tr>");
 				
 				

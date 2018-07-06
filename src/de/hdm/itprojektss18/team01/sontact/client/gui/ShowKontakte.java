@@ -11,6 +11,9 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -424,6 +427,19 @@ public class ShowKontakte extends VerticalPanel {
 				}
 			}
 		});
+			
+		//KeyDownHandler fuer die suche von Kontakten Button zu aktivieren
+		eingabe.addKeyDownHandler(new KeyDownHandler() {
+
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					search.click();
+
+				}
+			}
+
+		});
 
 	}
 
@@ -577,173 +593,37 @@ public class ShowKontakte extends VerticalPanel {
 					x = Window.confirm("Sind sie sicher " + ko.capacity() + " Kontakt/e löschen zu wollen?");
 				}
 				if (x == true) {
-					for (int i = 0; i < ko.size(); i++) {
-						/*
-						 * Prüfung ob man der Owner der Kontaktliste ist und ob es sich um die
-						 * Kontaktliste "Mit mir geteilte Kontakte" handelt um die Berechtigung zu
-						 * löschen. Berechtigung kann nur aus der mit mir geteilte Kontakteliste
-						 * entfernt werden, handelt es sich nicht um diese Liste wird nur der Kontakt
-						 * aus der Kontaktliste entfernt.
-						 * 
-						 * Dies dient dazu, weil man Kontakte auch nur aus einer Kontaktliste entfernen
-						 * will ohne die Intension die Berechtigung zu entfernen.
+				
+					for (int j = 0; j < ko.size(); j++) {
+						/**
+						 * Abfrage ob der Nutzer seinen eigenen Kontakt loeschen will
+						 * diese koenten in dem Vector vorhanden sein. Wenn ja 
+						 * wird die Loeschung beendet und ein Hinweis ausgegegeben.
 						 */
-						if (nutzer.getId() != ko.elementAt(i).getOwnerId()
-								&& kl.getTitel() == "Mit mir geteilte Kontakte") {
-							// Nutzer Cookies setzen und dann per Nutzer holen.
-
-							/*
-							 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und
-							 * wenn es eine Übereinstimmung gibt wird die Berechtigung entfernt.
-							 */
-							Window.alert("Teilhaber Löschung");
-							ev.getAllBerechtigungenByReceiver(nutzer.getId(),
-									new AsyncCallback<Vector<Berechtigung>>() {
-
-										@Override
-										public void onFailure(Throwable caught) {
-											caught.getMessage().toString();
-										}
-
-										@Override
-										public void onSuccess(Vector<Berechtigung> result) {
-											Vector<Berechtigung> berecht = result;
-
-											for (int i = 0; i < berecht.size(); i++) {
-
-												if (berecht.elementAt(i).getObjectId() == ko.elementAt(i).getId()) {
-													Berechtigung b = new Berechtigung();
-													b.setObjectId(ko.elementAt(i).getId());
-													b.setOwnerId(ko.elementAt(i).getOwnerId());
-													b.setReceiverId(nutzer.getId());
-													b.setType(ko.elementAt(i).getType());
-
-													ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
-														@Override
-														public void onFailure(Throwable caught) {
-															caught.getMessage().toString();
-
-														}
-
-														@Override
-														public void onSuccess(Void result) {
-															MessageBox.alertWidget("Hinweis",
-																	"Die Teilhaberschaft wurde aufgelöst.");
-
-														}
-													});
-
-												}
-											}
-
-										}
-
-									});
-
-							/*
-							 * Ist man Owner des Kontakts und befindet sich der Kontakt in der Liste
-							 * "Meine Kontakte" wird er permanent gelöscht.
-							 */
-						} else if (kl.getTitel() == "Meine Kontakte" && ko.elementAt(i).getOwnerId() == nutzer.getId()
-								&& ko.elementAt(i).getIdentifier() != 'r') {
-							ev.deleteKontakt(ko.elementAt(i), new AsyncCallback<Void>() {
-
-								@Override
-								public void onFailure(Throwable caught) {
-									caught.getMessage().toString();
-
-								}
-
-								@Override
-								public void onSuccess(Void result) {
-									MessageBox.alertWidget("Hinweis",
-											ko.capacity() + " Kontakt/e wurde/n erfolgreich gelöscht.");
-
-								}
-
-							});
-							/*
-							 * Case 1: Ist man nicht der Owner und befindet sich in der Kontaktliste
-							 * "Meine Kontakte" wird der Kontakt nur aus der Kontaktliste entfernt.
-							 * 
-							 * Case 2: Befindet man sich nicht in der Kontaktliste
-							 * "Mit mir geteilte Kontakte" oder ist der Owner des Kontakts wird der Kontakt
-							 * nur aus der Kontaktliste entfernt.
-							 */
-						} else if (kl.getTitel() == "Meine Kontakte" && ko.elementAt(i).getOwnerId() != nutzer.getId()
-								|| kl.getTitel() != "Mit mir geteilte Kontakte"
-										&& ko.elementAt(i).getOwnerId() != nutzer.getId()) {
-
-							ev.removeKontaktFromKontaktliste(kl, ko.elementAt(i), new AsyncCallback<Void>() {
-
-								@Override
-								public void onFailure(Throwable caught) {
-									caught.getMessage().toString();
-								}
-
-								@Override
-								public void onSuccess(Void result) {
-									MessageBox.alertWidget("Hinweis",
-											"Es wurden " + ko.capacity() + " Kontakte erfolgreich aus der Kontaktliste "
-													+ kl.getTitel() + " gelöscht");
-
-								}
-
-							});
-							/*
-							 * Ist man Owner und will einen Kontakt aus einer NICHT Standard Kontaktliste
-							 * löschen.
-							 */
-						} else if (kl.getTitel() != "Meine Kontakte"
-								&& ko.elementAt(i).getOwnerId() == nutzer.getId()) {
-
-							ev.removeKontaktFromKontaktliste(kl, ko.elementAt(i), new AsyncCallback<Void>() {
-
-								@Override
-								public void onFailure(Throwable caught) {
-									caught.getMessage().toString();
-								}
-
-								@Override
-								public void onSuccess(Void result) {
-									MessageBox.alertWidget("Hinweis",
-											"Es wurden " + ko.capacity() + " Kontakte erfolgreich aus der Kontaktliste "
-													+ kl.getTitel() + " gelöscht");
-
-								}
-
-							});
-
-						} else if (kl.getTitel() == "Meine Kontakte" && ko.elementAt(i).getOwnerId() == nutzer.getId()
-								&& ko.elementAt(i).getIdentifier() == 'r') {
+						if (kl.getTitel() == "Meine Kontakte" && ko.elementAt(j).getOwnerId() == nutzer.getId()
+								&& ko.elementAt(j).getIdentifier() == 'r') {
 							MessageBox.alertWidget("Hinweis", "Sie können Ihren eigenen Kontakt nicht löschen.");
-						}
-						// Löschen von Kontakten aus der Kontaktliste als Teilhaber, wenn der Titel der
-						// Liste nicht ""Mit mir geteilte Kontakte" heißt.
-						else if (nutzer.getId() != ko.elementAt(i).getOwnerId()
-								&& kl.getTitel() != "Mit mir geteilte Kontakte") {
-
-							ev.removeKontaktFromKontaktliste(kl, ko.elementAt(i), new AsyncCallback<Void>() {
+							
+						//Ist dies nicht der Fall wird mit der Loeschung forgefahren.
+						} else {
+							//Loeschung der ausgewaehlten Kontakte einer Kontaktliste
+							ev.deleteKontaktFromKontaktliste(ko, kl, nutzer, new AsyncCallback<Void>() {
 
 								@Override
 								public void onFailure(Throwable caught) {
 									caught.getMessage().toString();
+									
 								}
 
 								@Override
 								public void onSuccess(Void result) {
-									MessageBox.alertWidget("Hinweis",
-											"Es wurden " + ko.capacity() + " Kontakte erfolgreich aus der Kontaktliste "
-													+ kl.getTitel() + " gelöscht");
-
+									MessageBox.alertWidget("Hinweis", "Sie haben "+ ko.capacity() + " Kontakte aus der Kontaktliste "+ kl.getTitel()+ " entfernt");
 								}
-
+								
 							});
-						
 						}
-
 					}
-
+				
 					// Div's leeren und Kontaktliste aktualisieren.
 					RootPanel.get("content").clear();
 					RootPanel.get("contentHeader").clear();

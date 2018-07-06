@@ -21,6 +21,7 @@ public class Kontaktliste extends BusinessObject {
 	private String titel;
 	private int ownerId;
 	private char type = 'l';
+	private boolean status;
 	
 
 	/**
@@ -73,6 +74,22 @@ public class Kontaktliste extends BusinessObject {
 	 */
 	public char getType() {
 		return type;
+	}
+
+	/**
+	 * Auslesen des Statuses
+	 * @return status - Teilung des Objekts
+	 */
+	public boolean getStatus() {
+		return status;
+	}
+
+	/**
+	 * Setzten des Statuses 
+	 * @param status - Teilung des Objekts setzen
+	 */
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 

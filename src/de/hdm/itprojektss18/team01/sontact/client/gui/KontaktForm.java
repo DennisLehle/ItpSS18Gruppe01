@@ -418,6 +418,7 @@ public class KontaktForm extends VerticalPanel {
 
 							@Override
 							public void onSuccess(Kontakt result) {
+								
 								k = result;
 
 								// Angegebene Eigenschaften werden dem String-Vector hinzugefuegt

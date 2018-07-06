@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.Vector;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-
 import de.hdm.itprojektss18.team01.sontact.server.db.AuspraegungMapper;
 import de.hdm.itprojektss18.team01.sontact.server.db.BerechtigungMapper;
 import de.hdm.itprojektss18.team01.sontact.server.db.EigenschaftMapper;
@@ -597,8 +596,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param n Nutzer von dem die Kontakltisten ausgegeben werden sollen
 	 */
 	public Vector<Kontaktliste> getKontaktlistenByOwner(Nutzer n) throws IllegalArgumentException {
-
-		return this.klMapper.findKontaktlistenByOwner(n.getId());
+		
+		Vector<Kontaktliste> owenNShared = new Vector<Kontaktliste>();
+		owenNShared.addAll(this.klMapper.findKontaktlistenByOwner(n.getId()));
+		
+		if(this.getAllSharedKontaktlistenByReceiver(n.getId()) != null) {
+		owenNShared.addAll(this.getAllSharedKontaktlistenByReceiver(n.getId()));
+		}
+		
+		return owenNShared;
+		
 	}
 
 	/**
@@ -1042,7 +1049,58 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 		
 	}
-
+	
+	/**
+	 * Diese Mehtode prueft ob Kontakte die sich in einer Kontaktliste
+	 * befinden bereits geteilt wurden oder nicht. Wenn diese geteilt sind,
+	 * wird der Status des Kontakts auf true gesetzt.
+	 * 
+	 * @param statusObjects Vector von Kontkten die auf Teilung geprueft werden
+	 */
+	public Vector<Kontakt> statusSharingKontakt(Vector<Kontakt> statusObjects){
+		
+		//Leerer Vector von Kontakten
+		Vector<Kontakt> ko = new Vector<Kontakt>();
+		//Uebergebener Vector von Kontakten prufen ob sie geteilt sind
+		for (int i = 0; i < statusObjects.size(); i++) {
+			//Ist der Kontakt geteilt wird der Status auf true gesetzt
+			if(this.getStatusForObject(statusObjects.elementAt(i).getId(), statusObjects.elementAt(i).getType())== true) {
+				statusObjects.elementAt(i).setStatus(true);
+				ko.add(statusObjects.elementAt(i));
+				//Ansonsten wird er einfach wie er ist hinzugefuegt
+			} else {
+				ko.add(statusObjects.elementAt(i));
+			}
+		}
+		//Rueckgabe des Vectors der Kontakte
+		return ko;	
+	}
+	
+	/**
+	 * Diese Mehtode prueft ob Kontaktlisten bereits geteilt wurden oder nicht.
+	 * Wenn diese geteilt sind, wird der Status der Kontaktliste auf true gesetzt.
+	 * 
+	 * @param statusKontaktlisteObjects Vector von Kontaktlisten die auf Teilung geprueft werden sollen
+	 */
+	public Vector<Kontaktliste> statusSharingKontaktliste(Vector<Kontaktliste> statusKontaktlisteObjects){
+		
+		//Leerer Vector von Kontakten
+		Vector<Kontaktliste> kl = new Vector<Kontaktliste>();
+		//Uebergebener Vector von Kontakten prufen ob sie geteilt sind
+				for (int i = 0; i < statusKontaktlisteObjects.size(); i++) {
+					//Ist der Kontakt geteilt wird der Status auf true gesetzt
+					if(this.getStatusForObject(statusKontaktlisteObjects.elementAt(i).getId(), statusKontaktlisteObjects.elementAt(i).getType())== true) {
+						statusKontaktlisteObjects.elementAt(i).setStatus(true);
+						kl.add(statusKontaktlisteObjects.elementAt(i));
+						//Ansonsten wird er einfach wie er ist hinzugefuegt
+					} else {
+						kl.add(statusKontaktlisteObjects.elementAt(i));
+					}
+				}
+		//Rueckgabe der Kontaktlisten.
+		return statusKontaktlisteObjects;
+	}
+		
 	/**
 	 * Das Loeschen einer Berechtigung. Diese Methode hebt die Berechtigung und
 	 * damit die Teilhaberschaft zu einem bestimmten Objekt auf. Es werden alle
@@ -1168,6 +1226,89 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Diese Methode prueft ob der Nutzer seinen Kontakt, eine Berechtigung oder 
+	 * allgemein seinen Kontakt permanent aus der Kontaktliste entfernen will.
+	 * 
+	 * @param ko Vector von Kontakten die geloscht werden sollen
+	 * @param kl Kontaktliste in der man die Kontakte entfernen will
+	 * @param nutzer der aktuell eingeloggte Nutzer.
+	 */
+	public void deleteKontaktFromKontaktliste(Vector<Kontakt> ko, Kontaktliste kl, Nutzer nutzer) {
+		
+		for (int i = 0; i < ko.size(); i++) {
+		/*
+		 * Prüfung ob man der Owner der Kontaktliste ist und ob es sich um die
+		 * Kontaktliste "Mit mir geteilte Kontakte" handelt um die Berechtigung zu
+		 * löschen. Berechtigung kann nur aus der mit mir geteilte Kontakteliste
+		 * entfernt werden, handelt es sich nicht um diese Liste wird nur der Kontakt
+		 * aus der Kontaktliste entfernt.
+		 * 
+		 * Dies dient dazu, weil man Kontakte auch nur aus einer Kontaktliste entfernen
+		 * will ohne die Intension die Berechtigung zu entfernen.
+		 */
+		if (nutzer.getId() != ko.elementAt(i).getOwnerId()
+				&& kl.getTitel() == "Mit mir geteilte Kontakte") {
+			// Nutzer Cookies setzen und dann per Nutzer holen.
+
+			/*
+			 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und
+			 * wenn es eine Übereinstimmung gibt wird die Berechtigung entfernt.
+			 */
+	
+				Berechtigung b = new Berechtigung();
+				b.setObjectId(ko.elementAt(i).getId());
+				b.setOwnerId(ko.elementAt(i).getOwnerId());
+				b.setReceiverId(nutzer.getId());
+				b.setType('k');
+
+				this.deleteBerechtigung(b);
+
+			/*
+			 * Ist man Owner des Kontakts und befindet sich der Kontakt in der Liste
+			 * "Meine Kontakte" wird er permanent gelöscht.
+			 */
+		} else if (kl.getTitel() == "Meine Kontakte" && ko.elementAt(i).getOwnerId() == nutzer.getId()
+				
+				
+				
+				&& ko.elementAt(i).getIdentifier() != 'r') {
+			this.deleteKontakt(ko.elementAt(i));
+			/*
+			 * Case 1: Ist man nicht der Owner und befindet sich in der Kontaktliste
+			 * "Meine Kontakte" wird der Kontakt nur aus der Kontaktliste entfernt.
+			 * 
+			 * Case 2: Befindet man sich nicht in der Kontaktliste
+			 * "Mit mir geteilte Kontakte" oder ist der Owner des Kontakts wird der Kontakt
+			 * nur aus der Kontaktliste entfernt.
+			 */
+		} else if (kl.getTitel() == "Meine Kontakte" && ko.elementAt(i).getOwnerId() != nutzer.getId()
+				|| kl.getTitel() != "Mit mir geteilte Kontakte"
+						&& ko.elementAt(i).getOwnerId() != nutzer.getId()) {
+
+			this.removeKontaktFromKontaktliste(kl, ko.elementAt(i));
+			/*
+			 * Ist man Owner und will einen Kontakt aus einer NICHT Standard Kontaktliste
+			 * löschen.
+			 */
+		} else if (kl.getTitel() != "Meine Kontakte"
+				&& ko.elementAt(i).getOwnerId() == nutzer.getId() || kl.getTitel() != "Meine Kontakte"
+						&& ko.elementAt(i).getOwnerId() != nutzer.getId()) {
+
+			this.removeKontaktFromKontaktliste(kl, ko.elementAt(i));
+
+		
+		// Löschen von Kontakten aus der Kontaktliste als Teilhaber, wenn der Titel der
+		// Liste nicht ""Mit mir geteilte Kontakte" heißt.
+		}else if (nutzer.getId() != ko.elementAt(i).getOwnerId()
+				&& kl.getTitel() != "Mit mir geteilte Kontakte") {
+
+			this.removeKontaktFromKontaktliste(kl, ko.elementAt(i));
+			}
+		}
+	}
+	
+	
 	/**
 	 * Gibt alle Objekt-Berechtigungen ueber jene Objekte aus, welche vom Nutzer
 	 * geteilt wurden.

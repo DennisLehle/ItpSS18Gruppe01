@@ -6,13 +6,17 @@ import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.client.Cookies;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -25,6 +29,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
@@ -73,6 +78,16 @@ public class MessageBox {
 
 			}
 		});
+		
+		class MyWidget extends Widget {
+			  public MyWidget() {
+			    addDomHandler(new ClickHandler() {
+			      public void onClick(ClickEvent event) {
+			        // Do something with click
+			      }
+			    }, ClickEvent.getType());
+			  }
+			}
 
 		final Label emptyLabel = new Label("");
 		emptyLabel.setSize("auto", "25px");
@@ -172,6 +187,8 @@ public class MessageBox {
 											MessageBox.alertWidget("Hinweis", "Sie haben die Kontaktliste "
 													+ kl.getTitel() + " erfolgreich geteilt.");
 											RootPanel.get("content").clear();
+											RootPanel.get("navigator").clear();
+											RootPanel.get("navigator").add(new Navigation(n));
 											RootPanel.get("contentHeader").clear();
 											RootPanel.get("content").add(new KontaktlisteForm(kl));
 											box.hide();
@@ -188,6 +205,20 @@ public class MessageBox {
 			}
 		});
 
+
+		//KeyDownHandler fürs teilen.
+		tb.addKeyDownHandler(new KeyDownHandler() {
+
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					buttonShare.click();
+
+				}
+			}
+
+		});
+		
 		final Label emptyLabel = new Label("");
 		emptyLabel.setSize("auto", "25px");
 		panel.add(emptyLabel);
@@ -251,7 +282,7 @@ public class MessageBox {
 
 			}
 		});
-
+		
 		buttonShare.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -295,6 +326,8 @@ public class MessageBox {
 													+ k.getNachname() + " erfolgreich geteilt.");
 											RootPanel.get("content").clear();
 											RootPanel.get("contentHeader").clear();
+											RootPanel.get("navigator").clear();
+											RootPanel.get("navigator").add(new Navigation(n));
 											RootPanel.get("content").add(new KontaktForm(k));
 											box.hide();
 										}
@@ -311,6 +344,18 @@ public class MessageBox {
 			}
 		});
 
+		//KeyDownHandler fuer das Teilen von Kontakten
+		tb.addKeyDownHandler(new KeyDownHandler() {
+
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					buttonShare.click();
+
+				}
+			}
+
+		});
 		final Label emptyLabel = new Label("");
 		emptyLabel.setSize("auto", "25px");
 		panel.add(emptyLabel);
@@ -395,6 +440,7 @@ public class MessageBox {
 
 			}
 		});
+		
 
 		// Button zum löschen der Teilhaberschaft an einem Kontakt.
 		buttonDeleteK.addClickHandler(new ClickHandler() {
@@ -471,7 +517,6 @@ public class MessageBox {
 						public void onSuccess(Void result) {
 							MessageBox.alertWidget("Hinweis","Die Teilhaberschaft an der Kontaktliste " + kl.getTitel()
 									+ " wurde erfolgreich gelöscht.");
-							
 
 						}
 					});
@@ -484,6 +529,32 @@ public class MessageBox {
 				RootPanel.get("navigator").add(new Navigation(n));
 				RootPanel.get("content").add(new KontaktlisteForm(kl));
 				box.hide();
+				
+			}
+
+		});
+		
+		//KeyDownHandler fuers loeschen von Teilungen von Kontaktlisten
+		buttonDeleteKl.addKeyDownHandler(new KeyDownHandler() {
+
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					buttonDeleteKl.click();
+				}
+			}
+
+		});
+				
+		//KeyDownHandler fuers loeschen von Teilungen von Kontakten
+		buttonDeleteK.addKeyDownHandler(new KeyDownHandler() {
+			
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					buttonDeleteK.click();
+
+				}
 			}
 
 		});

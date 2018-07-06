@@ -330,7 +330,13 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 					Kontakt k = new Kontakt();
 					k = this.editorService.getKontaktById(b.elementAt(j).getObjectId());
-					receiv.add(k);
+					
+					if(receiv.contains(k)) {
+						
+					} else {
+						receiv.add(k);
+					}
+					
 				}
 			}
 

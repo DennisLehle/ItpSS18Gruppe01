@@ -607,6 +607,32 @@ public interface EditorService extends RemoteService {
 	public Vector<Kontakt> getKontaktByAusEig(String bezeichnung, String wert, Nutzer n)
 			throws IllegalArgumentException;
 
+	/**
+	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
+	 *      #statusSharingKontakt(Vector statusObjects);
+	 * @param statusObjects Vector von Kontakten die auf Teilung geprueft werden.
+	 * @return Vector von Kontakten
+	 */
+	public Vector<Kontakt> statusSharingKontakt(Vector<Kontakt> statusObjects) 
+			throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
+	 *      #statusSharingKontaktliste(Vector statusKontaktlisteObjects);
+	 * @param statusKontaktlisteObjects Vector von Kontaktlisten die auf Teilung geprueft werden.
+	 * @return Vector von Kontaktlisten
+	 */
+	public Vector<Kontaktliste> statusSharingKontaktliste(Vector<Kontaktliste> statusKontaktlisteObjects) 
+			throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss18.team01.sontact.server.EditorServiceImpl
+	 *      #deleteKontaktFromKontaktliste(Vector ko, Kontaktliste kl, Nutzer nutzer);
+	 * @param ko Vector von Kontakten die ausgewaehlt wurden
+	 * @param kl die Kontaktliste in der Kontakte entfertn werden sollen
+	 * @param nutzer der aktuell eingeloggte Nutzers
+	 */
+	public void deleteKontaktFromKontaktliste(Vector<Kontakt> ko, Kontaktliste kl, Nutzer nutzer) throws IllegalArgumentException;
 	/*
 	 * ********************************************************************** *
 	 * ABSCHNITT: SONSTIGES *

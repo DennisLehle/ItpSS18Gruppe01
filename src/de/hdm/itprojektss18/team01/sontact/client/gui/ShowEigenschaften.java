@@ -75,6 +75,26 @@ public class ShowEigenschaften extends VerticalPanel {
 		RootPanel.get("content").clear();
 		RootPanel.get("contentHeader").clear();
 		
+		/**
+		 * Alle Nutzer holen für den Abgleich wer Eigentümer/Ersteller einer Eigenschaft ist.
+		 */
+		ev.findAllNutzer(new AsyncCallback<Vector<Nutzer>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.getMessage().toString();
+				
+			}
+
+			@Override
+			public void onSuccess(Vector<Nutzer> result) {
+				//Alle gefundenen Nutzer in dem Vector speichern.
+				allUser.addAll(result);
+				
+			}
+			
+		});
+		
 		/*
 		 * Prüfungs Mehtode ob der Nutzer der Owner ist
 		 * fuer die Label Setzung.
@@ -127,6 +147,7 @@ public class ShowEigenschaften extends VerticalPanel {
 			
 		});
 
+		
 		// Auslesen aller Ausprägungen eines Kontakts. Prüfung ob Nutzer der Owner ist.
 		if (n.getId() == k.getOwnerId()) {
 			ev.getAllAuspraegungenByKontaktRelatable(k.getId(), new AsyncCallback<Vector<Relatable>>() {

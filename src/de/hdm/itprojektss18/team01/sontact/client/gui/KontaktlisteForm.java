@@ -1,6 +1,5 @@
 package de.hdm.itprojektss18.team01.sontact.client.gui;
 
-import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -17,10 +16,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import de.hdm.itprojektss18.team01.sontact.client.ClientsideSettings;
 import de.hdm.itprojektss18.team01.sontact.shared.EditorServiceAsync;
-import de.hdm.itprojektss18.team01.sontact.shared.bo.Berechtigung;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
@@ -31,7 +28,6 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  * 
  * @author Kevin Batista, Dennis Lehle, Ugur Bayrak
  */
-
 public class KontaktlisteForm extends VerticalPanel {
 
 	// Setzen des Zugriffs auf das Asyne Service Interface
@@ -256,14 +252,15 @@ public class KontaktlisteForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
+			
+			// Nutzer Cookies setzen und dann per Nutzer holen.
+			nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+			nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
 			boolean x = Window.confirm("Sind Sie sicher die Kontaktliste " + kl.getTitel() + " löschen zu wollen?");
 
 			if (x == true) {
-				// Nutzer Cookies setzen und dann per Nutzer holen.
-				nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
-				nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
-
+			
 				// Wenn man nicht der Owner ist wird erst die Berechtigung entfernt.
 				if (nutzer.getId() != kl.getOwnerId()) {
 
@@ -271,58 +268,25 @@ public class KontaktlisteForm extends VerticalPanel {
 					 * Es werden alle Berechtigungen geholt die mit dem Nutzer geteilt wurden und
 					 * wenn es eine Übereinstimmung gibt wird die Berechtigung entfernt.
 					 */
-					ev.getAllBerechtigungenByReceiver(nutzer.getId(), new AsyncCallback<Vector<Berechtigung>>() {
+					ev.deleteBerechtigungReceiverKontaktliste(kl, nutzer, new AsyncCallback<Void>() {
 
 						@Override
 						public void onFailure(Throwable caught) {
 							caught.getMessage().toString();
+							
 						}
 
 						@Override
-						public void onSuccess(Vector<Berechtigung> result) {
-							Vector<Berechtigung> berecht = result;
-
-							for (int i = 0; i < berecht.size(); i++) {
-
-								if (berecht.elementAt(i).getObjectId() == kl.getId()) {
-									Berechtigung b = new Berechtigung();
-									b.setObjectId(kl.getId());
-									b.setOwnerId(kl.getOwnerId());
-									b.setReceiverId(nutzer.getId());
-									b.setType(kl.getType());
-
-									ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
-										@Override
-										public void onFailure(Throwable caught) {
-											caught.getMessage().toString();
-
-										}
-
-										@Override
-										public void onSuccess(Void result) {
-
-											MessageBox.alertWidget("Hinweis",
-													"Die Teilhaberschaft wurde erfolgreich aufgelöst.");
-
-											// Nutzer Cookies holen.
-											Nutzer n = new Nutzer();
-											n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
-											n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
-
-											RootPanel.get("navigator").clear();
-											RootPanel.get("navigator").add(new Navigation(n));
-											RootPanel.get("content").clear();
-											RootPanel.get("contentHeader").clear();
-											RootPanel.get("content").add(new ShowKontakte(n));
-
-										}
-									});
-
-								}
-							}
-
+						public void onSuccess(Void result) {
+							//Div's leeren und neu laden
+							RootPanel.get("navigator").clear();
+							RootPanel.get("navigator").add(new Navigation(nutzer));
+							RootPanel.get("content").clear();
+							RootPanel.get("contentHeader").clear();
+							RootPanel.get("content").add(new ShowKontakte(nutzer));
+							MessageBox.alertWidget("Glückwunsch", "Sie haben die Teilhaberschaft zur Kontaktliste " + kl.getTitel()+" erfolgreich entfernt");
 						}
-
+						
 					});
 
 					// Ist man Owner der Kontaktliste wird die Kontaktliste direkt gelöscht.
@@ -347,17 +311,13 @@ public class KontaktlisteForm extends VerticalPanel {
 
 							@Override
 							public void onSuccess(Void result) {
-
-								// Nutzer Cookies holen.
-								Nutzer n = new Nutzer();
-								n.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
-								n.setEmailAddress(Cookies.getCookie("nutzerGMail"));
-
+								//Div's leeren und neu laden.
 								RootPanel.get("navigator").clear();
-								RootPanel.get("navigator").add(new Navigation(n));
+								RootPanel.get("navigator").add(new Navigation(nutzer));
 								RootPanel.get("content").clear();
 								RootPanel.get("contentHeader").clear();
-								RootPanel.get("content").add(new ShowKontakte(n));
+								RootPanel.get("content").add(new ShowKontakte(nutzer));
+								MessageBox.alertWidget("Glückwunsch", "Sie haben die Kontaktliste " + kl.getTitel()+" erfolgreich gelöscht");
 							}
 						});
 					}
@@ -467,6 +427,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 				}
 			});
+			
 			if (kl.getTitel() == "Meine Kontakte" && kl.getOwnerId() == nutzer.getId()
 					|| kl.getTitel() == "Mit mir geteilte Kontakte" && kl.getOwnerId() == nutzer.getId()) {
 				RootPanel.get("content").clear();
@@ -511,9 +472,7 @@ public class KontaktlisteForm extends VerticalPanel {
 									RootPanel.get("content").add(new KontaktlisteForm(kl));
 									MessageBox.alertWidget("Hinweis",
 											"Ihre Kontaktliste wurde erfolgreich aktualisiert.");
-									sontactTree.updateKontaktliste(kl);
-									sontactTree.setSelectedKontaktliste(kl);
-
+								
 								}
 
 							});
@@ -529,6 +488,20 @@ public class KontaktlisteForm extends VerticalPanel {
 				vp.add(BtnPanel);
 				RootPanel.get("content").add(vp);
 				selectedKontaktliste.setTitel(txtBox.getText());
+				
+				// Der TextBox einen KexDownHandler hinzufügen für Userfreundlicheren Umgang
+				txtBox.addKeyDownHandler(new KeyDownHandler() {
+
+					@Override
+					public void onKeyDown(KeyDownEvent event) {
+						if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+							saveBtn.click();
+
+						}
+					}
+
+				});
+				
 			}
 
 		}

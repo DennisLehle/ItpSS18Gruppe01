@@ -3,6 +3,7 @@ package de.hdm.itprojektss18.team01.sontact.client.gui;
 import java.util.Vector;
 
 import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.cell.client.ImageResourceCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -12,6 +13,7 @@ import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -86,9 +88,7 @@ public class Kontaktsuche extends VerticalPanel {
 	public Kontaktsuche(final Nutzer n, String auswahl, String eingabe) {
 		//Panels leeren und dem Header eine Ueberschrift geben und hinzufuegen
 		RootPanel.get("content").clear();
-		//hp3.clear();
 		RootPanel.get("contentHeader").add(new HTML("<h9>Ergebnis Ihrer Suche</h9>"));
-		//this.add(hp3);
 
 		// Methode die beim Start dieser Klasse aufgerufen wird.
 		onLoad(n, auswahl, eingabe);
@@ -235,6 +235,21 @@ public class Kontaktsuche extends VerticalPanel {
 				return (String) nachname.getNachname();
 			}
 		};
+		
+		Resources resources = GWT.create(Resources.class);
+
+		Column<Kontakt, ImageResource> imageColumn = new Column<Kontakt, ImageResource>(new ImageResourceCell()) {
+
+			@Override
+			public ImageResource getValue(Kontakt object) {
+				if (object.getOwnerId() != n.getId()) {
+					return resources.getImageResource1();
+				} else {
+					return null;
+				}
+
+			}
+		};
 
 		/**
 		 * Implementierung der Checkbox fürs auswählen von einem oder mehrere Kontakten
@@ -256,13 +271,15 @@ public class Kontaktsuche extends VerticalPanel {
 		searchTable.addColumn(nachnameColumn, "Nachname ");
 		nachnameColumn.setSortable(true);
 		
-		
+		searchTable.addColumn(imageColumn, "Teilungsstatus ");
+		nachnameColumn.setSortable(true);
 
 		searchTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		searchTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
 		searchTable.setWidth("80%", true);
 		searchTable.setColumnWidth(vornameColumn, "100px");
 		searchTable.setColumnWidth(nachnameColumn, "100px");
+		searchTable.setColumnWidth(imageColumn, "55px");
 
 		ListDataProvider<Kontakt> dataProvider = new ListDataProvider<Kontakt>();
 
@@ -332,10 +349,6 @@ public class Kontaktsuche extends VerticalPanel {
 				nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 				nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 				RootPanel.get("content").clear();
-//				hp3.clear();
-//				searchbar.clear();
-//				searchTable.removeFromParent();
-				//hp3.add(new ShowKontakte(nutzer));
 				RootPanel.get("contentHeader").clear();
 				RootPanel.get("content").add(new Kontaktsuche(nutzer, lb.getSelectedItemText(), tb.getText()));
 			}
@@ -355,8 +368,13 @@ public class Kontaktsuche extends VerticalPanel {
 						if(ko.capacity() == 0) {
 							MessageBox.alertWidget("Hinweis", "Bitte wählen Sie mindestens einen Kontakt aus.");
 						} else if(ko.capacity() >= 1){
-
-						RootPanel.get("content").add(new ShowKontaktliste(n, null, ko));
+							hp3.clear();
+							searchbar.clear();
+							searchTable.removeFromParent();
+							RootPanel.get("content").clear();
+							RootPanel.get("contentHeader").clear();
+							RootPanel.get("contentHeader").add(new HTML("<h2>Welcher Kontaktliste soll der Kontakt hinzugefügt werden?</h2>"));
+							RootPanel.get("content").add(new ShowKontaktliste(n, null, ko));
 						}
 		
 					}

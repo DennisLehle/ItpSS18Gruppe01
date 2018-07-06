@@ -36,6 +36,7 @@ public class Sontact implements EntryPoint {
 	
 	private LoginInfo loginInfo = null;
 	private Kontakt ownProfil = null;
+	private Label searchlb = new Label();
 	private VerticalPanel loginPanel = new VerticalPanel();
 	private 	Label profilLb = new Label();
 	private Label loginLabel = new Label("Herzlich Wilkommen auf Sontact. Um die Kontaktverwaltung nutzen zu können melden Sie sich bitte mit einem Google-Konto an, um fortfahren zu können.");
@@ -164,14 +165,25 @@ public class Sontact implements EntryPoint {
 				profilLb.addClickHandler(new ownProfilClickHandler());
 				profilLb.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);
 					
+				
+				//searchlb.setText("Suche");
+				searchlb.setText("Suche ");
+				searchlb.setTitle("Aufruf der Suchseite für eine gezielte Kontaktsuche");
+				searchlb.addClickHandler(new searchClickHandler());
+				searchlb.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);
 				// Leeren des NutzerMenu <div> containers.
 				RootPanel.get("nutzermenu").clear();
 
 				// Hier wird der Logout schon gesetzt.
 				HTML signOutLink = new HTML("<p><a href='" + loginInfo.getLogoutUrl() 
 						+ "'><span class='glyphicon glyphicon-log-out'></span></a></p>");
+				signOutLink.setTitle("Sontact Logout - Bis bald ");
 				
 				// Label und Logout werden dem NutzerMenu <div> Container hinzugefuegt.
+
+				RootPanel.get("nutzermenu").add(searchlb);
+				RootPanel.get("nutzermenu").add(new HTML("<p><span class='glyphicon glyphicon-search'></span> &nbsp;"));
+				RootPanel.get("nutzermenu").add(new HTML("  "));
 				RootPanel.get("nutzermenu").add(profilLb);
 				RootPanel.get("nutzermenu").add(new HTML("<p><span class='glyphicon glyphicon-user'></span> &nbsp;"));
 				RootPanel.get("nutzermenu").add(signOutLink);
@@ -235,6 +247,21 @@ public class Sontact implements EntryPoint {
 		public void onClick(ClickEvent event) {
 			RootPanel.get("content").clear();
 			new KontaktForm(ownProfil);
+			
+		}
+		
+	}
+	
+	class searchClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			Nutzer nutzer = new Nutzer();
+			nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
+			nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
+			RootPanel.get("content").clear();
+			RootPanel.get("contentHeader").clear();
+			RootPanel.get("content").add(new ShowKontakte(nutzer));
 			
 		}
 		

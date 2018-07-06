@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.view.client.ListDataProvider;
@@ -231,6 +232,7 @@ public class SontactTreeViewModel implements TreeViewModel {
 	public void updateKontaktliste(Kontaktliste kontaktliste) {
 		List<Kontaktliste> kontaktlisteList = this.kontaktlisteDataProvider.getList();
 		int i = 0;
+		Window.alert("lol");
 		for (Kontaktliste aktuell : kontaktlisteList) {
 			if (aktuell.getId() == kontaktliste.getId()) {
 				kontaktlisteList.set(i, kontaktliste);

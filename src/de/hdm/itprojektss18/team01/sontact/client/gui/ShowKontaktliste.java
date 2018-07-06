@@ -3,10 +3,12 @@ package de.hdm.itprojektss18.team01.sontact.client.gui;
 import java.util.Vector;
 
 import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.cell.client.ImageResourceCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -14,7 +16,6 @@ import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -58,11 +59,13 @@ public class ShowKontaktliste extends VerticalPanel {
 	 * @param ko Vector von Kontakt Objekten 
 	 */
 	public ShowKontaktliste(final Nutzer n, Kontakt k, Vector<Kontakt> ko) {
-		RootPanel.get("contentHeader").clear();
-		RootPanel.get("content").clear();
-		RootPanel.get("contentHeader")
-				.add(new HTML("<h2>Welcher Kontaktliste soll der Kontakt "+ k.getVorname() + " "+k.getNachname()+ "hinzugefügt werden?</h2>"));
+		
+//		RootPanel.get("contentHeader").clear();
+//		RootPanel.get("content").clear();
+//		RootPanel.get("contentHeader")
+//				.add(new HTML("<h2>Welcher Kontaktliste soll der Kontakt "+ k.getVorname() + " "+k.getNachname()+ "hinzugefügt werden?</h2>"));
 
+		
 		// Methode die beim Start dieser Klasse aufgerufen wird.
 		onLoad(n, k, ko);
 
@@ -125,6 +128,22 @@ public class ShowKontaktliste extends VerticalPanel {
 				return (String) kl.getTitel();
 			}
 		};
+		
+		Resources resources = GWT.create(Resources.class);
+
+		Column<Kontaktliste, ImageResource> imageColumn = new Column<Kontaktliste, ImageResource>(new ImageResourceCell()) {
+
+			@Override
+			public ImageResource getValue(Kontaktliste object) {
+				if (object.getOwnerId() != n.getId()) {
+					return resources.getImageResource2();
+				} else {
+					return null;
+				}
+
+			}
+		};
+		
 
 		/**
 		 * Implementierung der Checkbox fürs auswählen von einem oder mehrere Kontakten.
@@ -142,10 +161,14 @@ public class ShowKontaktliste extends VerticalPanel {
 		kontaktListenTable2.addColumn(NameDerKLColumn, "Kontaktlisten ");
 		NameDerKLColumn.setSortable(true);
 
+		kontaktListenTable2.addColumn(imageColumn, "Teilungsstatus ");
+		NameDerKLColumn.setSortable(true);
+		
 		kontaktListenTable2.setColumnWidth(checkColumn, 40, Unit.PX);
 		kontaktListenTable2.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
 		kontaktListenTable2.setWidth("97%", true);
 		kontaktListenTable2.setColumnWidth(NameDerKLColumn, "200px");
+		kontaktListenTable2.setColumnWidth(imageColumn, "55px");
 		kontaktListenTable2.setSelectionModel(selectionModel,
 				DefaultSelectionEventManager.<Kontaktliste>createDefaultManager());
 

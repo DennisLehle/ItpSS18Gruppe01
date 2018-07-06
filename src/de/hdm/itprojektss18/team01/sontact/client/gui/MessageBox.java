@@ -15,8 +15,6 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.client.Cookies;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -29,7 +27,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
@@ -43,6 +40,14 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Relatable;
 
+
+/**
+ * Die MessageBox Klasse wird als Hinweisanzeige fuer den
+ * Nutzer verwendet.
+ * 
+ * 
+ * @author Dennis Lehle
+ */
 public class MessageBox {
 
 	static EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
@@ -78,16 +83,6 @@ public class MessageBox {
 
 			}
 		});
-		
-		class MyWidget extends Widget {
-			  public MyWidget() {
-			    addDomHandler(new ClickHandler() {
-			      public void onClick(ClickEvent event) {
-			        // Do something with click
-			      }
-			    }, ClickEvent.getType());
-			  }
-			}
 
 		final Label emptyLabel = new Label("");
 		emptyLabel.setSize("auto", "25px");
@@ -452,37 +447,28 @@ public class MessageBox {
 				nutzer.removeAllElements();
 				nutzer.addAll(selectionModel.getSelectedSet());
 
-				for (int i = 0; i < nutzer.size(); i++) {
+				ev.deleteBerechtigungOwner(nutzer, null, k, n, new AsyncCallback<Void>() {
 
-					Berechtigung b = new Berechtigung();
-					b.setObjectId(k.getId());
-					b.setOwnerId(n.getId());
-					b.setReceiverId(nutzer.elementAt(i).getId());
-					b.setType(k.getType());
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.getMessage().toString();
+						
+					}
 
-					ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
-						@Override
-						public void onFailure(Throwable caught) {
-							caught.getMessage().toString();
-
-						}
-
-						@Override
-						public void onSuccess(Void result) {
-							MessageBox.alertWidget("Hinweis", "Die Teilhaberschaft an dem Kontakt " + k.getVorname()
-									+ k.getNachname() + " wurde erfolgreich gelöscht.");
-
-						}
-					});
-
-				}
-				//Divs leeren und neu laden für die Aktualisierung.
-				RootPanel.get("content").clear();
-				RootPanel.get("contentHeader").clear();
-				RootPanel.get("navigator").clear();
-				RootPanel.get("navigator").add(new Navigation(n));
-				RootPanel.get("content").add(new KontaktForm(k));
-				box.hide();
+					@Override
+					public void onSuccess(Void result) {
+						//Divs leeren und neu laden für die Aktualisierung.
+						RootPanel.get("content").clear();
+						RootPanel.get("contentHeader").clear();
+						RootPanel.get("navigator").clear();
+						RootPanel.get("navigator").add(new Navigation(n));
+						RootPanel.get("content").add(new KontaktForm(k));
+						box.hide();
+						MessageBox.alertWidget("Glückwunsch", "Die Teilhaberschaft wurde für den gewählten Nutzer erfolgreich aufgelöst.");
+						
+					}
+					
+				});
 
 			}
 
@@ -498,37 +484,27 @@ public class MessageBox {
 				nutzer.removeAllElements();
 				nutzer.addAll(selectionModel.getSelectedSet());
 
-				for (int i = 0; i <= nutzer.size(); i++) {
+				ev.deleteBerechtigungOwner(nutzer, kl, null, n, new AsyncCallback<Void>() {
 
-					Berechtigung b = new Berechtigung();
-					b.setObjectId(kl.getId());
-					b.setOwnerId(n.getId());
-					b.setReceiverId(nutzer.elementAt(i).getId());
-					b.setType(kl.getType());
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.getMessage().toString();
+						
+					}
 
-					ev.deleteBerechtigung(b, new AsyncCallback<Void>() {
-						@Override
-						public void onFailure(Throwable caught) {
-							caught.getMessage().toString();
-
-						}
-
-						@Override
-						public void onSuccess(Void result) {
-							MessageBox.alertWidget("Hinweis","Die Teilhaberschaft an der Kontaktliste " + kl.getTitel()
-									+ " wurde erfolgreich gelöscht.");
-
-						}
-					});
-
-				}
-				//Divs leeren und neu laden für die Aktualisierung.
-				RootPanel.get("content").clear();
-				RootPanel.get("contentHeader").clear();
-				RootPanel.get("navigator").clear();
-				RootPanel.get("navigator").add(new Navigation(n));
-				RootPanel.get("content").add(new KontaktlisteForm(kl));
-				box.hide();
+					@Override
+					public void onSuccess(Void result) {
+						//Divs leeren und neu laden für die Aktualisierung.
+						RootPanel.get("content").clear();
+						RootPanel.get("contentHeader").clear();
+						RootPanel.get("navigator").clear();
+						RootPanel.get("navigator").add(new Navigation(n));
+						RootPanel.get("content").add(new KontaktlisteForm(kl));
+						box.hide();
+						MessageBox.alertWidget("Glückwunsch", "Die Teilhaberschaft wurde für den gewählten Nutzer erfolgreich aufgelöst.");
+					}
+					
+				});
 				
 			}
 
@@ -637,7 +613,7 @@ public class MessageBox {
 
 			@Override
 			public String getValue(Nutzer nutzer) {
-				// TODO Auto-generated method stub
+			
 				return (String) nutzer.getEmailAddress();
 			}
 		};

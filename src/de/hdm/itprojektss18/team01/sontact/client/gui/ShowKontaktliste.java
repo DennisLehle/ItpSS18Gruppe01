@@ -35,7 +35,6 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
  * 
  * @author Ugur Bayrak, Kevin Batista, Dennis Lehle
  */
-
 public class ShowKontaktliste extends VerticalPanel {
 
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
@@ -50,9 +49,11 @@ public class ShowKontaktliste extends VerticalPanel {
 	ScrollPanel sp = new ScrollPanel();
 
 	/**
-	 * Konstruktor wird ausgeloest wenn ein Kontakt bereits existiert.
+	 * Konstruktor  der Klasse ShwoKontaktliste
+	 * Wird aufgerufen, wenn der Nutzer einen Kontakt
+	 * zu einer Kontaktliste hinzufuegen will.
 	 * 
-	 * @param n akteull eingeloggter Nutzer
+	 * @param n aktuell eingeloggter Nutzer
 	 * @param k ausgewaehlter Kontakt
 	 * @param ko Vector von Kontakt Objekten 
 	 */
@@ -60,7 +61,7 @@ public class ShowKontaktliste extends VerticalPanel {
 		RootPanel.get("contentHeader").clear();
 		RootPanel.get("content").clear();
 		RootPanel.get("contentHeader")
-				.add(new HTML("<h2>Welcher Kontaktliste soll der Kontakt hinzugefügt werden?</h2>"));
+				.add(new HTML("<h2>Welcher Kontaktliste soll der Kontakt "+ k.getVorname() + " "+k.getNachname()+ "hinzugefügt werden?</h2>"));
 
 		// Methode die beim Start dieser Klasse aufgerufen wird.
 		onLoad(n, k, ko);

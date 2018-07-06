@@ -9,6 +9,9 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -83,9 +86,9 @@ public class Kontaktsuche extends VerticalPanel {
 	public Kontaktsuche(final Nutzer n, String auswahl, String eingabe) {
 		//Panels leeren und dem Header eine Ueberschrift geben und hinzufuegen
 		RootPanel.get("content").clear();
-		hp3.clear();
-		hp3.add(new HTML("<h9>Ergebnis Ihrer Suche</h9>"));
-		this.add(hp3);
+		//hp3.clear();
+		RootPanel.get("contentHeader").add(new HTML("<h9>Ergebnis Ihrer Suche</h9>"));
+		//this.add(hp3);
 
 		// Methode die beim Start dieser Klasse aufgerufen wird.
 		onLoad(n, auswahl, eingabe);
@@ -137,7 +140,7 @@ public class Kontaktsuche extends VerticalPanel {
 				public void onSuccess(Vector<Kontakt> result) {
 					if (result.size() == 0) {
 						showKontaktButtonPanel.setVisible(false);
-						Window.alert("Fuer den gesuchten Kontakt " + eingabe + " gabe es keine treffer");
+						MessageBox.alertWidget("Schade","Fuer den gesuchten Kontakt " + eingabe + " gabe es keine treffer");
 						
 					} else {
 						searchTable.setVisible(true);
@@ -165,7 +168,7 @@ public class Kontaktsuche extends VerticalPanel {
 				public void onSuccess(Vector<Kontakt> result) {
 					if (result.size() == 0) {
 						showKontaktButtonPanel.setVisible(false);
-						Window.alert("Für die gesuchte Ausprägung " + eingabe + " gabe es keine treffer");
+						MessageBox.alertWidget("Schade","Für die gesuchte Ausprägung " + eingabe + " gabe es keine treffer");
 					
 					} else {
 						searchTable.setVisible(true);
@@ -193,7 +196,7 @@ public class Kontaktsuche extends VerticalPanel {
 				public void onSuccess(Vector<Kontakt> result) {
 					if (result.size() == 0) {
 						showKontaktButtonPanel.setVisible(false);
-						Window.alert("Für die gesuchte Eigenschaft " + eingabe + " gabe es keine treffer");
+						MessageBox.alertWidget("Schade","Für die gesuchte Eigenschaft " + eingabe + " gabe es keine treffer");
 					} else {
 						searchTable.setVisible(true);
 						sp.setVisible(true);
@@ -275,7 +278,6 @@ public class Kontaktsuche extends VerticalPanel {
 				"<image src='/images/kontaktliste.png' width='20px' height='20px' align='center' /> hinzufügen");
 		addKontaktToKontaktlisteStart.setStylePrimaryName("khunzufuegenKl");
 		addKontaktToKontaktlisteStart.setTitle("Kontakt/e einer Kontaktliste hinzufügen");
-		//this.showKontakt = new Button("<image src='/images/user.png' width='20px' height='20px' align='center' />  anzeigen");
 		
 		// ListBox mit Auswahlen befüllen.
 		lb.addItem("Name");
@@ -305,6 +307,18 @@ public class Kontaktsuche extends VerticalPanel {
 		this.add(sp);
 		this.add(showKontaktButtonPanel);
 		
+		//KeyDownHandler fuer die suche von Kontakten Button zu aktivieren
+		tb.addKeyDownHandler(new KeyDownHandler() {
+
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					search.click();
+
+				}
+			}
+
+		});
 		
 	
 
@@ -318,12 +332,12 @@ public class Kontaktsuche extends VerticalPanel {
 				nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 				nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 				RootPanel.get("content").clear();
-				sp.clear();
-				showKontaktButtonPanel.clear();
-				searchTable.removeFromParent();
-				searchbar.clear();
-				hp3.add(new ShowKontakte(nutzer));
-				//hp3.add(new Kontaktsuche(nutzer, lb.getSelectedItemText(), tb.getText()));
+//				hp3.clear();
+//				searchbar.clear();
+//				searchTable.removeFromParent();
+				//hp3.add(new ShowKontakte(nutzer));
+				RootPanel.get("contentHeader").clear();
+				RootPanel.get("content").add(new Kontaktsuche(nutzer, lb.getSelectedItemText(), tb.getText()));
 			}
 		});
 		

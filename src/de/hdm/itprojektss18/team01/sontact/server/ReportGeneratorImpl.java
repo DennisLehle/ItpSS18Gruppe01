@@ -494,7 +494,6 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 					receiv.add(k);
 
 				}
-
 			}
 		}
 
@@ -513,8 +512,17 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		// Reporttabelle
 		// hinzugefuegt
 		for (int i = 0; i < receiv.size(); i++) {
-			Vector<Relatable> auspraegungen = getEditorService()
-					.getAllAuspraegungenByKontaktRelatable(receiv.elementAt(i).getId());
+						
+			Vector<Relatable> auspraegungen = new Vector<Relatable>();
+
+			if (receiv.elementAt(i).getOwnerId() == n.getId()) {
+				auspraegungen
+						.addAll(getEditorService().getAllAuspraegungenByKontaktRelatable(receiv.elementAt(i).getId()));
+
+			} else if (receiv.elementAt(i).getOwnerId() != n.getId()) {
+				auspraegungen.addAll(
+						getEditorService().getAllSharedAuspraegungenByKontaktAndNutzer(receiv.elementAt(i), n));
+			}
 
 			Row kon = new Row();
 			kon.addColumn(new Column(receiv.elementAt(i).getVorname()));
@@ -535,26 +543,27 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 				zwischen.addColumn(new Column("Auspraegung:"));
 				report.addRow(zwischen);
 			}
+			
+			//Vector<Relatable> ausgabe = getEditorService().getAllSharedAuspraegungenByKontaktAndNutzer(receiv.elementAt(i), n);
 
 			// Aufruf der Kontakteigenschaften des Reports, sowie hinzufuegen der
 			// zusammengehoerigen Eigenschaften und Auspraegungen pro Zeile
 			for (int j = 0; j < auspraegungen.size(); j++) {
 				
+//				for (int l = 0; l < ausgabe.size(); l++) {
+				
+					
 				// Prüfung ob alle Auspraegungen dieses Kontakts geteilt wurden 
 				if (getEditorService().getStatusForObject(receiv.elementAt(i).getId(), 
 						receiv.elementAt(i).getType()) == true &&  
 						getEditorService().getStatusForObject(auspraegungen.elementAt(j).getId(), 
-								auspraegungen.elementAt(j).getType()) == false) {
-					
-					
-					Vector<Relatable> ausgabe = getEditorService().getAllSharedAuspraegungenByKontaktAndNutzer(receiv.elementAt(i), n);
-					
-					for (int l = 0; l < ausgabe.size(); l++) {
+								auspraegungen.elementAt(j).getType()) == true) {
+				
 					
 					Row e = new Row();
 
-					e.addColumn(new Column(ausgabe.elementAt(l).getBezeichnung()));
-					e.addColumn(new Column(ausgabe.elementAt(l).getWert()));
+					e.addColumn(new Column(auspraegungen.elementAt(j).getBezeichnung()));
+					e.addColumn(new Column(auspraegungen.elementAt(j).getWert()));
 					e.addColumn(new Column(""));
 					e.addColumn(new Column(""));
 					e.addColumn(new Column(""));
@@ -563,25 +572,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 					report.addRow(e);
 
 				}}
-				
-				// Ausgabe aller Auspraegungen da gesamtes Kontaktobjekt geteilt wurde 
-				else if (getEditorService().getStatusForObject(receiv.elementAt(i).getId(), 
-						receiv.elementAt(i).getType()) == true &&  
-						getEditorService().getStatusForObject(auspraegungen.elementAt(j).getId(), 
-								auspraegungen.elementAt(j).getType()) == true) { 
+
 			
-				Row e = new Row();
-
-				e.addColumn(new Column(auspraegungen.elementAt(j).getBezeichnung()));
-				e.addColumn(new Column(auspraegungen.elementAt(j).getWert()));
-				e.addColumn(new Column(""));
-				e.addColumn(new Column(""));
-				e.addColumn(new Column(""));
-
-				// Hinzufuegen der Zeile zum Report
-				report.addRow(e);
-				}
-			}
 		}
 		// Einzelne Zeile dem Report hinzufuegen
 

@@ -83,7 +83,7 @@ public class ShowKontaktliste extends VerticalPanel {
 	protected void onLoad(final Nutzer n, Kontakt k, Vector<Kontakt> ko) {
 
 		
-		 // Initialisierung des Labels und eines CellTabels für die Kontakte
+		 // Initialisierung des Labels und eines CellTabels fuer die Kontakte
 		kontaktListenTable2 = new CellTable<Kontaktliste>(10, tableRes);
 
 		// Auslesen aller Kontaktlisten die der Nutzer aktuell besitzt.
@@ -146,7 +146,7 @@ public class ShowKontaktliste extends VerticalPanel {
 		
 
 		/**
-		 * Implementierung der Checkbox fürs auswählen von einem oder mehrere Kontakten.
+		 * Implementierung der Checkbox fuers auswaehlen von einem oder mehrere Kontakten.
 		 */
 		Column<Kontaktliste, Boolean> checkColumn = new Column<Kontaktliste, Boolean>(new CheckboxCell(true, false)) {
 			@Override
@@ -156,7 +156,7 @@ public class ShowKontaktliste extends VerticalPanel {
 		};
 
 		/**
-		 * Hinzufuegen der Columns für die Darstellung der Kontaktlisten.
+		 * Hinzufuegen der Columns fuer die Darstellung der Kontaktlisten.
 		 */
 		kontaktListenTable2.addColumn(NameDerKLColumn, "Kontaktlisten ");
 		NameDerKLColumn.setSortable(true);
@@ -180,7 +180,7 @@ public class ShowKontaktliste extends VerticalPanel {
 
 		this.add(kontaktListenTable2);
 
-		// Groeße des ScrollPanels bestimmen, außerdem wird das ScrollPanel in die CellTable
+		// Groesse des ScrollPanels bestimmen, ausserdem wird das ScrollPanel in die CellTable
 		// hinzugefuegt.
 		sp.setSize("900px", "400px");
 		sp.add(kontaktListenTable2);
@@ -216,7 +216,7 @@ public class ShowKontaktliste extends VerticalPanel {
 									} else {
 										
 										// Es wird die selektierte Kontaktliste uebergeben und der Kontakt der zuvor
-										// ausgewaehlt wurde. (Kostruktor uebergabe)
+										// ausgewaehlt wurde. (Konstruktor uebergabe)
 										ev.addKontaktToKontaktliste(selectionModel.getSelectedObject(), ko.elementAt(i),
 												new AsyncCallback<Void>() {
 

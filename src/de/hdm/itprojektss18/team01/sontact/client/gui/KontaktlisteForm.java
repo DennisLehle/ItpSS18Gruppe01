@@ -22,9 +22,9 @@ import de.hdm.itprojektss18.team01.sontact.shared.bo.Kontaktliste;
 import de.hdm.itprojektss18.team01.sontact.shared.bo.Nutzer;
 
 /**
- * Klasse welche Formulare für Kontaktlisten darstellt, diese erlauben
- * Interaktionsmöglichkeiten um Kontaktlisten Anzuzeigen, zu Bearbeiten, zu
- * Löschen oder neu anzulegen.
+ * Klasse welche Formulare fuer Kontaktlisten darstellt, diese erlauben
+ * Interaktionsmoeglichkeiten um Kontaktlisten Anzuzeigen, zu Bearbeiten, zu
+ * Loeschen oder neu anzulegen.
  * 
  * @author Kevin Batista, Dennis Lehle, Ugur Bayrak
  */
@@ -61,8 +61,11 @@ public class KontaktlisteForm extends VerticalPanel {
 	public KontaktlisteForm(Kontaktliste kl) {
 		this.kl = kl;
 
+		// Leeren des Div's
 		RootPanel.get("content").clear();
 		RootPanel.get("contentHeader").clear();
+		
+		// Hinzufuegen des Kontaktlisten Titels
 		RootPanel.get("contentHeader").add(new HTML(kl.getTitel()));
 
 		// Setten des Nutzers durch Cookies.
@@ -76,30 +79,33 @@ public class KontaktlisteForm extends VerticalPanel {
 		Button editKontaktlisteBtn = new Button(
 				"<image src='/images/edit.png' width='20px' height='20px' align='center' /> bearbeiten");
 
+		
 		editKontaktlisteBtn.setStylePrimaryName("bearbeitenKlButton");
 		editKontaktlisteBtn.setTitle("Bearbeitung der Kontaktliste");
 
-		// ClickHandler f�r das Updaten einer Kontaktliste
+		// ClickHandler fuer das Updaten einer Kontaktliste
 		editKontaktlisteBtn.addClickHandler(new updateKontaktlisteClickHandler());
 		BtnPanel.add(editKontaktlisteBtn);
 
-		// L�sch-Button instanziieren und dem Panel zuweisen
+		// Loesch-Button instanziieren und dem Panel zuweisen
 		Button deleteKlBtn = new Button(
 				"<image src='/images/trash.png' width='20px' height='20px' align='center' />  löschen");
 
 		deleteKlBtn.setStylePrimaryName("deleteKlButton");
 		deleteKlBtn.setTitle("Löschen der Kontaktliste");
 
-		// ClickHandler f�r das L�schen einer Kontaktliste
+		// ClickHandler fuer das Loeschen einer Kontaktliste
 		deleteKlBtn.addClickHandler(new deleteClickHandler());
 		BtnPanel.add(deleteKlBtn);
 
+		// Erstellung des Buttons
 		Button addKontaktBtn = new Button(
 				"<image src='/images/user.png' width='20px' height='20px' align='center' /> hinzufügen");
 
 		addKontaktBtn.setStylePrimaryName("addKontaktToKlButton");
 		addKontaktBtn.setTitle("Hinzufügen eines Kontakts zu Kontaktliste");
 
+		// Hinzufuegen des ClickHandlers
 		addKontaktBtn.addClickHandler(new addKontaktClickHandler());
 		BtnPanel.add(addKontaktBtn);
 
@@ -107,7 +113,7 @@ public class KontaktlisteForm extends VerticalPanel {
 		infolb.setStylePrimaryName("infoLabel");
 		vp.add(infolb);
 
-		// ClickHandler zum Löschen von Kontaktlisten-Teilhaberschaften.
+		// ClickHandler zum Loeschen von Kontaktlisten-Teilhaberschaften.
 		Button deleteTeilhaber = new Button(
 				"<image src='/images/share.png' width='20px' height='20px' align='center' /> löschen");
 
@@ -118,7 +124,7 @@ public class KontaktlisteForm extends VerticalPanel {
 		BtnPanel.add(deleteTeilhaber);
 
 		/**
-		 * Prüfungs Methode ob der Nutzer der Owner
+		 * Pruefungs Methode ob der Nutzer der Owner
 		 * des Kontaktes ist um dementsprechen das Label
 		 * und die Images der Teilung zu setzen.
 		 */
@@ -132,8 +138,8 @@ public class KontaktlisteForm extends VerticalPanel {
 	}
 
 	/**
-	 * Methode die Prüft ob der Nutzer der Owner des Kontaktes ist
-	 * oder nicht um dementsprechen das Label und Image für die Teilung zu setzen.
+	 * Methode, die prueft, ob der Nutzer der Owner des Kontaktes ist
+	 * oder nicht um dementsprechen das Label und Image fuer die Teilung zu setzen.
 	 */
 	public void ownerPruefung() {
 		// Abfrage wer der Owner der Liste ist.
@@ -163,7 +169,7 @@ public class KontaktlisteForm extends VerticalPanel {
 			hp.add(ownerLb);
 		}
 
-		// Überprüft den Status eines Objektes ob es geteilt wurde.
+		// Ueberprueft den Status eines Objektes ob es geteilt wurde.
 		ev.getStatusForObject(kl.getId(), kl.getType(), new AsyncCallback<Boolean>() {
 
 			@Override
@@ -172,6 +178,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 			}
 
+			// Setzen des Titels der geteilten Kontaktliste
 			@Override
 			public void onSuccess(Boolean result) {
 				if (result == true) {
@@ -199,7 +206,7 @@ public class KontaktlisteForm extends VerticalPanel {
 		RootPanel.get("contentHeader").clear();
 		RootPanel.get("contentHeader").add(new HTML("<h2>Kontaktliste anlegen</h2>"));
 
-		// Button für den Abbruch der Erstellung.
+		// Button fuer den Abbruch der Erstellung.
 		Button quitBtn = new Button(
 				"<image src='/images/abbrechen.png' width='20px' height='20px' align='center'/> Abbrechen");
 		quitBtn.setTitle("Erstellung einer neuen Kontaktliste abbrechen");
@@ -215,6 +222,7 @@ public class KontaktlisteForm extends VerticalPanel {
 			}
 		});
 
+		// Erstellung des Buttons zum Speichern einer Kontaktliste
 		Button saveBtn = new Button(
 				"<image src='/images/save.png' width='20px' height='20px' align='center'/> Speichern");
 		saveBtn.setTitle("Neue Kontaktliste speichern");
@@ -230,7 +238,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 		RootPanel.get("content").add(vp);
 
-		// Der TextBox einen KexDownHandler hinzufügen für Userfreundlicheren Umgang
+		// Der TextBox einen KexDownHandler hinzufuegen fuer Userfreundlicheren Umgang
 		txtBox.addKeyDownHandler(new KeyDownHandler() {
 
 			@Override
@@ -289,10 +297,10 @@ public class KontaktlisteForm extends VerticalPanel {
 						
 					});
 
-					// Ist man Owner der Kontaktliste wird die Kontaktliste direkt gelöscht.
+					// Ist man Owner der Kontaktliste wird die Kontaktliste direkt geloescht.
 				} else {
 
-					// Zusätzliche Prüfung ob es sich um eines der default Kontaktlisten handelt.
+					// Zusaetzliche Pruefung ob es sich um eine der Default Kontaktlisten handelt.
 					if (kl.getTitel() == "Meine Kontakte" && kl.getOwnerId() == nutzer.getId()
 							|| kl.getTitel() == "Mit mir geteilte Kontakte" && kl.getOwnerId() == nutzer.getId()) {
 
@@ -301,7 +309,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 					} else {
 
-						// Wenn es sich nicht um eine Standard Liste handelt kann sie gelöscht werden.
+						// Wenn es sich nicht um eine Standard Liste handelt kann sie geloescht werden.
 						ev.deleteKontaktliste(kl, new AsyncCallback<Void>() {
 
 							@Override
@@ -340,6 +348,7 @@ public class KontaktlisteForm extends VerticalPanel {
 			nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 			nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
+			// Hinweis, dass Kontaktliste ein Name hinzugefuegt werden muss
 			if (txtBox.getText() == "") {
 				MessageBox.alertWidget("Hinweis", "Bitte geben Sie der Kontaktliste einen Namen");
 				txtBox.getElement().getStyle().setBorderColor("red");
@@ -354,7 +363,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 					@Override
 					public void onSuccess(Kontaktliste result) {
-						// Refresh der Seite für die Aktualisierug des Baumes.
+						// Refresh der Seite fuer die Aktualisierug des Baumes.
 						RootPanel.get("navigator").clear();
 						RootPanel.get("content").clear();
 						RootPanel.get("contentHeader").clear();
@@ -384,11 +393,12 @@ public class KontaktlisteForm extends VerticalPanel {
 	}
 
 	/**
-	 * ClickHandler zum löschen von Teilhaberschaften
+	 * ClickHandler zum loeschen von Teilhaberschaften
 	 */
 	private class deleteTeilhaberClickHandler implements ClickHandler {
 		public void onClick(ClickEvent event) {
 
+			// Um eine Teilhaberschaft zu entfernen, muss ein Kontakt ausgewaehlt werden
 			MessageBox.deleteTeilhaber("Teilhaberschaft entfernen",
 					"Wählen sie für die Löschung einer Teilhaberschaft eine EMail Adresse aus.", kl, null);
 
@@ -405,6 +415,7 @@ public class KontaktlisteForm extends VerticalPanel {
 		@Override
 		public void onClick(ClickEvent event) {
 
+			// Leeren des Div's
 			RootPanel.get("content").clear();
 			RootPanel.get("contentHeader").clear();
 			BtnPanel.clear();
@@ -413,6 +424,7 @@ public class KontaktlisteForm extends VerticalPanel {
 			RootPanel.get("contentHeader").add(new HTML(kl.getTitel()
 					+ " bearbeiten <image src='/images/edit.png' width='30px' height='30px' align='center'/></h2>"));
 
+			// Abbrechen-Button fuer das Bearbeiten eines Kontakts erstellen
 			Button cancelBtn = new Button(
 					"<image src='/images/abbrechen.png' width='20px' height='20px' align='center'/> Abbrechen");
 			cancelBtn.setTitle("Abbrechen der Bearbeitung");
@@ -428,8 +440,11 @@ public class KontaktlisteForm extends VerticalPanel {
 				}
 			});
 			
+			/* Pruefung, ob es sich bei der zu Bearbeitenden Kontaktliste 
+			um eine Default-Kontaktliste handelt */
 			if (kl.getTitel() == "Meine Kontakte" && kl.getOwnerId() == nutzer.getId()
-					|| kl.getTitel() == "Mit mir geteilte Kontakte" && kl.getOwnerId() == nutzer.getId()) {
+					|| kl.getTitel() == "Mit mir geteilte Kontakte" 
+					&& kl.getOwnerId() == nutzer.getId()) {
 				RootPanel.get("content").clear();
 				RootPanel.get("contentHeader").clear();
 				BtnPanel.clear();
@@ -452,11 +467,13 @@ public class KontaktlisteForm extends VerticalPanel {
 					public void onClick(ClickEvent event) {
 
 						if (txtBox.getText() == "") {
-							MessageBox.alertWidget("Hinweis", "Sie dürfen keine Kontaktliste ohne Namen erstellen");
+							MessageBox.alertWidget("Hinweis", "Sie dürfen keine Kontaktliste "
+									+ "ohne Namen erstellen");
 							txtBox.getElement().getStyle().setBorderColor("red");
 						} else {
 							kl.setTitel(txtBox.getText());
 
+							// Das Speichern der Kontaktliste
 							ev.saveKontaktliste(kl, new AsyncCallback<Void>() {
 
 								@Override
@@ -489,7 +506,7 @@ public class KontaktlisteForm extends VerticalPanel {
 				RootPanel.get("content").add(vp);
 				selectedKontaktliste.setTitel(txtBox.getText());
 				
-				// Der TextBox einen KexDownHandler hinzufügen für Userfreundlicheren Umgang
+				// Der TextBox einen KexDownHandler hinzufuegen fuer userfreundlicheren Umgang
 				txtBox.addKeyDownHandler(new KeyDownHandler() {
 
 					@Override
@@ -508,6 +525,7 @@ public class KontaktlisteForm extends VerticalPanel {
 
 	}
 
+	// Dem TreeViewModel die richtige Kontaktliste selektieren
 	public void setSelectedKontaktliste(Kontaktliste kl) {
 		if (kl != null) {
 			selectedKontaktliste = kl;

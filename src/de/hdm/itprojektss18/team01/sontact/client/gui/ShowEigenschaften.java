@@ -43,6 +43,7 @@ public class ShowEigenschaften extends VerticalPanel {
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
 	private CellTable.Resources tableRes = GWT.create(TableResources.class);
 
+	// Erstellung / Deklarierung von Objekten
 	private CellTable<Relatable> eigenschaftAuspraegungTable;
 	final MultiSelectionModel<Relatable> selectionModel = new MultiSelectionModel<Relatable>(getKeyProvider());
 	final ListDataProvider<Relatable> dataProvider = new ListDataProvider<Relatable>();
@@ -53,7 +54,7 @@ public class ShowEigenschaften extends VerticalPanel {
 	boolean sharedStatus = false;
 	Boolean x = new Boolean(false);
 
-
+	// Panels anlegen
 	HorizontalPanel hp3 = new HorizontalPanel();
 	HorizontalPanel hp = new HorizontalPanel();
 	HorizontalPanel head = new HorizontalPanel();
@@ -64,8 +65,8 @@ public class ShowEigenschaften extends VerticalPanel {
 	
 
 	/**
-	 * Konstruktor wird ausgelöst man einen Kontakt des Nutzers übergibt um die
-	 * Eigenschaften mit ihren Ausprägung anzeigen zu lassen.
+	 * Konstruktor wird ausgeloest man einen Kontakt des Nutzers uebergibt um die
+	 * Eigenschaften mit ihren Auspraegung anzeigen zu lassen.
 	 * 
 	 * @param n aktuell eingeloggter Nutzer
 	 * @param k Uebergebener Kontakt der ausgewaehlt wurde
@@ -76,7 +77,7 @@ public class ShowEigenschaften extends VerticalPanel {
 		RootPanel.get("contentHeader").clear();
 		
 		/**
-		 * Alle Nutzer holen für den Abgleich wer Eigentümer/Ersteller einer Eigenschaft ist.
+		 * Alle Nutzer holen fuer den Abgleich wer Eigentuemer/Ersteller einer Eigenschaft ist.
 		 */
 		ev.findAllNutzer(new AsyncCallback<Vector<Nutzer>>() {
 
@@ -96,7 +97,7 @@ public class ShowEigenschaften extends VerticalPanel {
 		});
 		
 		/*
-		 * Prüfungs Mehtode ob der Nutzer der Owner ist
+		 * Pruefungs Mehtode ob der Nutzer der Owner ist
 		 * fuer die Label Setzung.
 		 */
 		ownerPruefung(k,n);
@@ -113,9 +114,9 @@ public class ShowEigenschaften extends VerticalPanel {
 	 * Diese Methode wird durch den Konstruktor der Klasse aufgerufen.
 	 * 
 	 * @param n
-	 *            der Nutzer der übergeben wird
+	 *            der Nutzer der uebergeben wird
 	 * @param k
-	 *            der Kontakt der übergeben wird
+	 *            der Kontakt der uebergeben wird
 	 */
 	protected void onLoad(final Nutzer n, Kontakt k) {
 		
@@ -123,12 +124,12 @@ public class ShowEigenschaften extends VerticalPanel {
 		
 		RootPanel.get("contentHeader").add(new HTML(k.getVorname() + " " + k.getNachname()));
 		/**
-		 * Initialisierung des Labels und eines CellTabels für die Kontakte
+		 * Initialisierung des Labels und eines CellTabels fuer die Kontakte
 		 */
 		eigenschaftAuspraegungTable = new CellTable<Relatable>(10, tableRes);
 	
 		/**
-		 * Alle Nutzer holen für den Abgleich wer Eigentümer/Ersteller einer Eigenschaft ist.
+		 * Alle Nutzer holen fuer den Abgleich wer Eigentuemer/Ersteller einer Eigenschaft ist.
 		 */
 		ev.findAllNutzer(new AsyncCallback<Vector<Nutzer>>() {
 
@@ -148,7 +149,7 @@ public class ShowEigenschaften extends VerticalPanel {
 		});
 
 		
-		// Auslesen aller Ausprägungen eines Kontakts. Prüfung ob Nutzer der Owner ist.
+		// Auslesen aller Auspraegungen eines Kontakts. Pruefung ob Nutzer der Owner ist.
 		if (n.getId() == k.getOwnerId()) {
 			ev.getAllAuspraegungenByKontaktRelatable(k.getId(), new AsyncCallback<Vector<Relatable>>() {
 				
@@ -159,11 +160,12 @@ public class ShowEigenschaften extends VerticalPanel {
 				}
 
 				/**
-				 * Aufruf aller Ausprägungen die der Nutzer erstellt hat und bei denen der als
+				 * Aufruf aller Auspraegungen die der Nutzer erstellt hat und bei denen der als
 				 * Owner hinterlegt ist.
 				 */
 				
 				public void onSuccess(Vector<Relatable> result) {
+					//Hinzufuegen der Objekte
 					statusObjects.addAll(result);
 					
 				
@@ -187,8 +189,8 @@ public class ShowEigenschaften extends VerticalPanel {
 			});
 		} else {
 
-			// Wenn der Nutzer nicht der Eigentümer des Kontaktes ist werden die geteilten
-			// Ausprägungen abgefragt.
+			// Wenn der Nutzer nicht der Eigentuemer des Kontaktes ist werden die geteilten
+			// Auspraegungen abgefragt.
 			ev.getAllSharedAuspraegungenByKontaktAndNutzer(k, n, new AsyncCallback<Vector<Relatable>>() {
 
 				@Override
@@ -197,6 +199,7 @@ public class ShowEigenschaften extends VerticalPanel {
 
 				}
 
+				// Hinzufuegen der Objekte
 				@Override
 				public void onSuccess(Vector<Relatable> result) {
 					statusObjects.addAll(result);
@@ -232,7 +235,7 @@ public class ShowEigenschaften extends VerticalPanel {
 		}
 
 		/**
-		 * Tabelle Befüllen mit den aus der DB abgerufenen Kontakt Informationen.
+		 * Tabelle Befuellen mit den aus der DB abgerufenen Kontakt Informationen.
 		 */
 		TextColumn<Relatable> auspraegnungColumn = new TextColumn<Relatable>() {
 
@@ -243,6 +246,7 @@ public class ShowEigenschaften extends VerticalPanel {
 			}
 		};
 
+		// Neue Textspalte instanziieren
 		TextColumn<Relatable> eigenschaftColumn = new TextColumn<Relatable>() {
 
 			@Override
@@ -270,7 +274,9 @@ public class ShowEigenschaften extends VerticalPanel {
 
 		Resources resources = GWT.create(Resources.class);
 
-		Column<Relatable, ImageResource> imageColumn = new Column<Relatable, ImageResource>(new ImageResourceCell()) {
+		//Neue Spalte erzeugen
+		Column<Relatable, ImageResource> imageColumn = new Column<Relatable, 
+				ImageResource>(new ImageResourceCell()) {
 
 			@Override
 			public ImageResource getValue(Relatable object) {
@@ -285,8 +291,8 @@ public class ShowEigenschaften extends VerticalPanel {
 			
 
 		/**
-		 * Implementierung der Checkbox fürs auswählen von einem oder mehrere
-		 * Eigenschafen mit Ausprägungen.
+		 * Implementierung der Checkbox fuers auswaehlen von einem oder mehrere
+		 * Eigenschafen mit Auspraegungen.
 		 */
 		Column<Relatable, Boolean> checkColumn = new Column<Relatable, Boolean>(new CheckboxCell(true, false)) {
 			@Override
@@ -296,7 +302,7 @@ public class ShowEigenschaften extends VerticalPanel {
 		};
 
 		/**
-		 * Hinzufügen der Columns für die Darstellung der Kontaktlisten.
+		 * Hinzufuegen der Columns fuer die Darstellung der Kontaktlisten.
 		 */
 		eigenschaftAuspraegungTable.addColumn(eigenschaftColumn, "Eigenschaft ");
 		eigenschaftColumn.setSortable(true);
@@ -310,6 +316,7 @@ public class ShowEigenschaften extends VerticalPanel {
 		eigenschaftAuspraegungTable.addColumn(erstellerColumn, "Ersteller ");
 		imageColumn.setSortable(true);
 
+		// Styling der Columns
 		eigenschaftAuspraegungTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		eigenschaftAuspraegungTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
 		eigenschaftAuspraegungTable.setWidth("97%", true);
@@ -319,28 +326,30 @@ public class ShowEigenschaften extends VerticalPanel {
 		eigenschaftAuspraegungTable.setColumnWidth(erstellerColumn, "65px");
 		ListDataProvider<Relatable> dataProvider = new ListDataProvider<Relatable>();
 
+		// Erstellung des ListHandlers
 		ListHandler<Relatable> sort = new ListHandler<Relatable>(dataProvider.getList());
+		
 		dataProvider.addDataDisplay(eigenschaftAuspraegungTable);
 		eigenschaftAuspraegungTable.addColumnSortHandler(sort);
 		eigenschaftAuspraegungTable.setSelectionModel(selectionModel,
 				DefaultSelectionEventManager.<Relatable>createCheckboxManager());
 		this.add(eigenschaftAuspraegungTable);
 
-		// ClickHandler zum teilen von Kontakten mit ausgewählten Ausprägungen.
+		// ClickHandler zum teilen von Kontakten mit ausgewaehlten Auspraegungen.
 		Button shareKontakt = new Button(
 				"<image src='/images/share.png' width='20px' height='20px' align='center' /> teilen");
 		shareKontakt.setStylePrimaryName("teilunsButtons");
 		shareKontakt.setTitle("Kontakt teilen");
 
-		// Zum löschen einer Auspraegung aus dem Kontakt.
+		// Zum Loeschen einer Auspraegung aus dem Kontakt.
 		Button deleteAuspraegung = new Button(
 				"<image src='/images/user.png' width='20px' height='20px' align='center' />"
 						+ "<image src='/images/info.png' width='10px' height='10px' align='center' /> löschen");
 		deleteAuspraegung.setStyleName("infoloeschenButton");
 		deleteAuspraegung.setTitle("Löschen einer Eigenschaft mit seiner Ausprägung");
 
-		// Größe des ScrollPanels bestimmen plus in das ScrollPanel die CellTable
-		// hinzufügen.
+		// Groesse des ScrollPanels bestimmen plus in das ScrollPanel die CellTable
+		// hinzufuegen.
 		
 		sp.setSize("900px", "400px");
 		sp.add(eigenschaftAuspraegungTable);
@@ -352,12 +361,12 @@ public class ShowEigenschaften extends VerticalPanel {
 		this.add(sp);
 		this.add(hp3);
 
-		// ClickHandler für die persönliche suche von anderen Kontakten.
+		// ClickHandler fuer die persoenliche Suche von anderen Kontakten.
 		shareKontakt.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// Vector alle selektierten Eigenschaften/Ausprägungen mitgeben aber davor erst
+				// Vector alle selektierten Eigenschaften/Auspraegungen mitgeben aber davor erst
 				// leeren.
 				gewaehlteAuspraegung.removeAll(gewaehlteAuspraegung);
 				gewaehlteAuspraegung.addAll(selectionModel.getSelectedSet());
@@ -367,31 +376,31 @@ public class ShowEigenschaften extends VerticalPanel {
 			}
 		});
 
-		// ClickHandler zum löschen einer Auspraegung.
+		// ClickHandler zum Loeschen einer Auspraegung.
 		deleteAuspraegung.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// Vector alle selektierten Eigenschaften/Ausprägungen mitgeben aber davor erst leeren.
+				// Vector alle selektierten Eigenschaften/Auspraegungen mitgeben aber davor erst leeren.
 				gewaehlteAuspraegung.removeAll(gewaehlteAuspraegung);
 				gewaehlteAuspraegung.addAll(selectionModel.getSelectedSet());
 				
-				//Prüfung auf null Wert des Vectors
+				//Pruefung auf null Wert des Vectors
 				if(gewaehlteAuspraegung.size() == 0) {
 					MessageBox.alertWidget("Hinweis", "Wählen sie eine Eigenschaft aus um mit dem löschen Fortfahren zu können.");
 				} else {
-					//Wenn Vector nicht null, dann wird gefragt mit Anzahl ob EIgenschaften geloescht werden sollen.
+					//Wenn Vector nicht null, dann wird gefragt mit Anzahl ob Eigenschaften geloescht werden sollen.
 						x = Window.confirm("Sind sie sicher " +gewaehlteAuspraegung.capacity() + " Eigenschaften löschen zu wollen?");
 				}
-				//Prüfung ob Nutzer Ja angewählt hat damit die Löschoperation durchgeführt werden kann.
+				//Pruefung ob Nutzer Ja angewaehlt hat damit die Loeschoperation durchgefuehrt werden kann.
 				if(x == true) {
 				 if (n.getId() == k.getOwnerId()) {
 					 
-					// Geht die ausgewählten Auspraegungen durch und übergibt jede einzelne für die
-					// Löschung davon.
+					// Geht die ausgewaehlten Auspraegungen durch und uebergibt jede einzelne fuer die
+					// Loeschung davon.
 					for (int i = 0; i <= gewaehlteAuspraegung.size(); i++) {
 						
-						//Löschung der Berechtigung und dann wird die AUspraegung entfernt.
+						//Loeschung der Berechtigung und dann wird die Auspraegung entfernt.
 						ev.deleteAllBerechtigungenByOwner(n, gewaehlteAuspraegung.elementAt(i).getId(), new AsyncCallback<Void>() {
 
 							@Override
@@ -429,7 +438,7 @@ public class ShowEigenschaften extends VerticalPanel {
 
 						});		
 					
-						//Prüfung ob das letzte Element erreicht wurde damit die MessageBox mit der Anzahl von gelöschten Eigenschaften erzeugt wird.
+						// Pruefung ob das letzte Element erreicht wurde damit die MessageBox mit der Anzahl von geloeschten Eigenschaften erzeugt wird.
 						if(gewaehlteAuspraegung.elementAt(i) == gewaehlteAuspraegung.lastElement()) {
 						MessageBox.alertWidget("Hinweis", "Sie haben "+ gewaehlteAuspraegung.capacity()+ " Eigenschaften mit den dazugehörigen Ausprägungen erfolgreich gelöscht. ");
 						}
@@ -474,7 +483,7 @@ public class ShowEigenschaften extends VerticalPanel {
 	}
 	
 	/**
-	 * Methode zum pruefen wer der Eigentuemer ist fuer die
+	 * Methode zum Pruefen wer der Eigentuemer ist fuer die
 	 * Setzung des Labels des Eiegentuemers und des
 	 * Teilungsstatuses.
 	 * 

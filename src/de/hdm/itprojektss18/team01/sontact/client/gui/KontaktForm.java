@@ -81,7 +81,7 @@ public class KontaktForm extends VerticalPanel {
 	Label infoLb = new Label();
 	Label ownerlb = new Label();
 
-	// Flextables welche f�r das Anlegen eines neuen Kontakts ben�tigt werden
+	// Flextables welche fuer das Anlegen eines neuen Kontakts ben�tigt werden
 	FlexTable kontaktInfoTable = new FlexTable();
 	FlexTable eigeneEigenschaftenTable = new FlexTable();
 	FlexTable auswahlEigenschaftenTable = new FlexTable();
@@ -131,6 +131,7 @@ public class KontaktForm extends VerticalPanel {
 		nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 		nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
+		//Kontakt per Id aus der Datenbank holen
 		ev.getKontaktById(k.getId(), new AsyncCallback<Kontakt>() {
 
 			@Override
@@ -159,19 +160,23 @@ public class KontaktForm extends VerticalPanel {
 				sharedeleteBtn.setStylePrimaryName("teilunsDeleteButton");
 				sharedeleteBtn.setTitle("Löschen von Teilhaberschaften an einen Kontakt");
 
+				//Share Button einem ClickHandler zuweisen
 				sharedeleteBtn.addClickHandler(new shareKontaktlisteClickHandler());
 				btnPanel.add(sharedeleteBtn);
 
+				//Setzen eines Titels und Styling des Labels
 				infoLb.setText("Kontakt Interaktion");
 				infoLb.setStylePrimaryName("infoLabel");
 				btnPanel.add(infoLb);
 
+				//Datumsanzeige Formatieren
 				DateTimeFormat dateFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM);
 				erstellungsdatum.setText("Erstellungsdatum : " + dateFormat.format(selectedKontakt.getErstellDat()));
 				modifikationsdatum.setText("Modifikationsdatum : " + dateFormat.format(selectedKontakt.getModDat()));
 				erstellungsdatum.setStylePrimaryName("labelModPanel");
 				modifikationsdatum.setStylePrimaryName("labelModPanel");
 				
+				//Date dem DatePanel hinzufuegen
 				datePanel.add(erstellungsdatum);
 				datePanel.add(modifikationsdatum);
 				
@@ -240,7 +245,7 @@ public class KontaktForm extends VerticalPanel {
 
 					btnPanel.add(deleteNutzer);
 				}
-			
+				//Alle Panels dem RootPanel und dem Div-Container "content" zuweisen
 				RootPanel.get("content").add(vp);
 				RootPanel.get("content").add(new ShowEigenschaften(nutzer, k));
 				RootPanel.get("content").add(btnPanel);
@@ -259,22 +264,25 @@ public class KontaktForm extends VerticalPanel {
 	 * @param n Nutzer der eingeloggt ist.
 	 */
 	public KontaktForm(final Nutzer n) {
+		//Div's leeren
 		RootPanel.get("contentHeader").clear();
 		RootPanel.get("contentHeader").add(new HTML("Kontakt anlegen"));
 		RootPanel.get("content").add(new HTML("<image src='/images/info3.png' width='25px' height='25px' align='center'/> Sie können auch Eigenschaften für ihren Kontakt definieren."));
 
+		//Styling der Table
 		eigeneEigenschaftenTable.setStylePrimaryName("infoTable");
-
 		FlexTablePanel.setStylePrimaryName("infoTable");
 		flexPanelNeueEig.add(eigeneEigenschaftenTable);
 		FlexTablePanel.add(flexPanelKontaktInfo);
 		FlexTablePanel.add(flexPanelNeueEig);
+		
+		//FlexTabel dem ScrollPanel zuweisen
 		sp.add(FlexTablePanel);
 
 		// Groesse des ScrollPanels anpassen
 		sp.setSize("900px", "400px");
 
-		// Wir holen �ber einen Server-Request die Eigenschaften aus der DB um diese
+		// Wir holen ueber einen Server-Request die Eigenschaften aus der DB um diese
 		// bereit zu halten
 		ev.getEigenschaftAuswahl(new AsyncCallback<Vector<Eigenschaft>>() {
 
@@ -300,14 +308,14 @@ public class KontaktForm extends VerticalPanel {
 			}
 		});
 		
-
+		//Button fuer die Eigenschaftsdefinierung anlegen und stylen
 		Button createEigenschaftBtn = new Button("Eigenschaft definieren");
 		createEigenschaftBtn.setStylePrimaryName("eigeneEigButton");
 		createEigenschaftBtn.addClickHandler(new EigeneEigenschaftClickHandler());
 
+		//Button fuer das loeschen von Eigenschaften erstellen und dem btnPanel zuweisen
 		Button deleteEigenschaftBtn = new Button(
 				"<image src='/images/abbrechen.png' width='20px' height='20px' align='center'/> Eigenschaft");
-
 		deleteEigenschaftBtn.addClickHandler(new DeleteEigenschaftClickHandler());
 		deleteEigenschaftBtn.setStylePrimaryName("eigeneEigEntfernenButton");
 		btnPanelTop.add(deleteEigenschaftBtn);
@@ -331,36 +339,40 @@ public class KontaktForm extends VerticalPanel {
 
 			}
 		});
-
+		//Quit Button dem Panel hinzufuegen
 		btnPanelTop.add(quitBtn);
 
+		//Save Button fuers speichern erstellen und stylen und dem btnPanelTop zuweisen
 		Button saveBtn = new Button(
 				"<image src='/images/save.png' width='20px' height='20px' align='center'/> Speichern");
 		saveBtn.setStylePrimaryName("bearbeitungKSave");
 		saveBtn.setTitle("Neuen Kontakt speichern");
 		saveBtn.addClickHandler(new SpeichernKontaktClickHandler());
-
 		btnPanelTop.add(saveBtn);
 
+		//TextBoxen default Text zuweisen fuer den Nutzer
 		vornameTxtBox.getElement().setPropertyString("placeholder", "Vorname des Kontakts");
 		nachnameTxtBox.getElement().setPropertyString("placeholder", "Nachname des Kontakts");
 
+		//Labels stylen
 		vorname.setStylePrimaryName("label");
 		nachname.setStylePrimaryName("label");
 
+		//Kontakt Tabelle setzen mit Attributen
 		kontaktInfoTable.setWidget(0, 0, vorname);
 		kontaktInfoTable.setWidget(0, 1, vornameTxtBox);
 		kontaktInfoTable.setWidget(1, 0, nachname);
 		kontaktInfoTable.setWidget(1, 1, nachnameTxtBox);
 
+		//Table stylen 
 		kontaktInfoTable.setStylePrimaryName("infoTable");
 
+		//Alles dem VerticalPanel (Klasse selbst hinzufuegen)
 		kontaktinfo.add(kontaktInfoTable);
 		vp.add(kontaktinfo);
 		vp.add(btnPanelTop);
 		vp.add(sp);
 		vp.add(btnPanelBottom);
-
 		this.add(vp);
 
 	}
@@ -372,15 +384,19 @@ public class KontaktForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
+			//Neue TextBoxen anlegen
 			TextBox bezTb = new TextBox();
 			TextBox wertTb = new TextBox();
 
+			//Styling der TextBoxen
 			bezTb.setStylePrimaryName("tbRundung2");
 			wertTb.setStylePrimaryName("tbRundung2");
 
+			//Default Hinweise fuer Nutzer setzen
 			bezTb.getElement().setPropertyString("placeholder", "Eigenschaft...");
 			wertTb.getElement().setPropertyString("placeholder", "Auspraegung...");
 
+			//Row Count fuer die Tabel setzen
 			int count = eigeneEigenschaftenTable.getRowCount();
 			eigeneEigenschaftenTable.setWidget(count, 0, bezTb);
 			eigeneEigenschaftenTable.setWidget(count, 1, wertTb);
@@ -402,6 +418,7 @@ public class KontaktForm extends VerticalPanel {
 			nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 			nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
+			//Abfrage ob TextBoxen leeren sind 
 			if (vornameTxtBox.getText().isEmpty()) {
 				vornameTxtBox.getElement().getStyle().setBorderColor("red");
 				MessageBox.alertWidget("Hinweis", "Bitte geben Sie Ihrem Kontakt mindestens einen Vornamen.");
@@ -448,7 +465,7 @@ public class KontaktForm extends VerticalPanel {
 
 									}
 								}
-
+								//erstellen der Auspraegung fuer die Eigenschaft
 								ev.createAuspraegungForNewEigenschaft(eig, aus, k, nutzer.getId(),
 										new AsyncCallback<Void>() {
 
@@ -502,6 +519,7 @@ public class KontaktForm extends VerticalPanel {
 	private class shareKontaktlisteClickHandler implements ClickHandler {
 		public void onClick(ClickEvent event) {
 
+			//MessageBox mit dem Hinweis die Email fuer die Teilung anzugeben
 			MessageBox.deleteTeilhaber("Teilhaberschaft entfernen",
 					"Wählen sie für die Löschung einer Teilhaberschaft eine EMail Adresse aus.", null, selectedKontakt);
 
@@ -518,29 +536,25 @@ public class KontaktForm extends VerticalPanel {
 	private class updateKontaktClickHandler implements ClickHandler {
 		@Override
 		public void onClick(ClickEvent event) {
+			//Divs leeren
 			RootPanel.get("contentHeader").clear();
 			RootPanel.get("content").clear();
-		
-
+	
 			// Nutzer Cookies holen.
-
 			nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 			nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
-			/*
-			 * Tabelle fuer das Editieren vorbereiten
-			 */
+		
+			//Tabelle fuer das Editieren vorbereiten 
 			vornameTxtBox.setText(selectedKontakt.getVorname());
 			nachnameTxtBox.setText(selectedKontakt.getNachname());
 
+			//FlexTable setzen von 2 Labels und TextBoxen
 			kontaktInfoTable.setWidget(0, 0, vorname);
 			kontaktInfoTable.setWidget(0, 1, vornameTxtBox);
 			kontaktInfoTable.setWidget(1, 0, nachname);
 			kontaktInfoTable.setWidget(1, 1, nachnameTxtBox);
 
-			/*
-			 * Tabelle mit den Eigenschaften und den Auspraegungen des Nutzers befuellen
-			 */
-			// Holen der Auspraegungen des selektierten Kontakts
+			//Tabelle mit den Eigenschaften und den Auspraegungen des Nutzers befuellen
 			if (selectedKontakt.getOwnerId() == nutzer.getId()) {
 				ev.getAllAuspraegungenByKontaktRelatable(selectedKontakt.getId(),
 						new AsyncCallback<Vector<Relatable>>() {
@@ -561,12 +575,15 @@ public class KontaktForm extends VerticalPanel {
 									html.setStylePrimaryName("label");
 									RootPanel.get("content").add(html);
 									}
+								//Auspraegungs Tabelle durchgehen und befuellen
 								for (int i = 0; i < kontaktauspraegungen.size(); i++) {
-
+									//TextBox fuer die Auspraegung erstellen
 									TextBox auspraegung = new TextBox();
+									//TextBox Stylen und den Text fuer die Auspraegung setten
 									auspraegung.setStylePrimaryName("tbRundung");
 									auspraegung.setText(kontaktauspraegungen.elementAt(i).getWert());
 
+									//Label erstellen und stylen
 									Label eigenschaftLabel = new Label();
 									eigenschaftLabel.setStylePrimaryName("label");
 
@@ -581,6 +598,7 @@ public class KontaktForm extends VerticalPanel {
 							}
 						});
 			} else {
+				//ALle geteilten Auspraegungen fuer den Teilhaber holen
 				ev.getAllSharedAuspraegungenByKontaktAndNutzer(selectedKontakt, nutzer,
 						new AsyncCallback<Vector<Relatable>>() {
 
@@ -608,6 +626,7 @@ public class KontaktForm extends VerticalPanel {
 								}
 								for (int i = 0; i < kontaktauspraegungen.size(); i++) {
 
+									//TextBox und Label erstellen und stylen und mit Werten befuellen
 									TextBox auspraegung = new TextBox();
 									auspraegung.setStylePrimaryName("tbRundung");
 									auspraegung.setText(kontaktauspraegungen.elementAt(i).getWert());
@@ -626,16 +645,17 @@ public class KontaktForm extends VerticalPanel {
 						});
 			}
 
-			/*
-			 * Elemente zum Aufbau der Bearbeitungansicht
-			 */
+			
+			// Elemente zum Aufbau der Bearbeitungansicht	 
 			HorizontalPanel BtnPanel = new HorizontalPanel();
 			HorizontalPanel headerPanel = new HorizontalPanel();
 			ScrollPanel scc = new ScrollPanel();
 
+			//Dem Content Header eine HTML Seite zuweisen
 			RootPanel.get("contentHeader").add(new HTML(
 					"<h2>Kontaktinformationen bearbeiten <image src='/images/edit.png' width='30px' height='30px' align='center'/></h2>"));
 
+			//CancelButton erstellen und stylen plus ClickHandler zuweisen
 			Button cancelBtn = new Button(
 					"<image src='/images/abbrechen.png' width='20px' height='20px' align='center'/> Abbrechen");
 			cancelBtn.setStylePrimaryName("cancelKButton");
@@ -643,12 +663,14 @@ public class KontaktForm extends VerticalPanel {
 			cancelBtn.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
+					//Div's leeren und neue Klasse Instanziieren (KontaktForm)
 					RootPanel.get("content").clear();
 					RootPanel.get("contentHeader").clear();
 					RootPanel.get("content").add(new KontaktForm(selectedKontakt));
 				}
 			});
 
+			// Cancel Button dem BtnPanel hinzufuegen
 			BtnPanel.add(cancelBtn);
 			// ClickHandler zum entfernen von hinzugefügten Eigenschaften.
 			Button eigenschaftLoeschen = new Button(
@@ -658,15 +680,16 @@ public class KontaktForm extends VerticalPanel {
 			eigenschaftLoeschen.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-
+					//Eigenschaften wieder entfernbar
 					eigeneEigenschaftBearbeitungTable.removeRow(0);
 					eigeneEigenschaftBearbeitungTable.removeRow(1);
 
 				}
 			});
-
+			//Loeschung von Eigenschaften dem BtnPanel hinzufuegen
 			BtnPanel.add(eigenschaftLoeschen);
 
+			//FreieEigenschaften Button erstellen, stylen und einen ClickHandler zuweisen
 			Button freieEigenschaft = new Button("Eigenschaft definieren");
 			freieEigenschaft.setTitle("Selbstdefinierte Eigenschaften anlegen");
 			freieEigenschaft.setStylePrimaryName("eigeneEigButton");
@@ -675,16 +698,20 @@ public class KontaktForm extends VerticalPanel {
 
 				@Override
 				public void onClick(ClickEvent event) {
+					//Erstellen von TextBoxen
 					TextBox bezTb = new TextBox();
 					TextBox wertTb = new TextBox();
 
+					//Default Hinweise fuer Nutzer setten und stylen
 					bezTb.getElement().setPropertyString("placeholder", "Eigenschaft...");
 					wertTb.getElement().setPropertyString("placeholder", "Auspraegung...");
 					bezTb.setStylePrimaryName("tbRundung2");
 					wertTb.setStylePrimaryName("tbRundung2");
 
+					//Table stylen
 					eigeneEigenschaftBearbeitungTable.setStylePrimaryName("infoTable");
 
+					//RowCount erstellen um die richtige Anzahl an Rows zu erhalten
 					int count = eigeneEigenschaftBearbeitungTable.getRowCount();
 					eigeneEigenschaftBearbeitungTable.setWidget(count, 0, bezTb);
 					eigeneEigenschaftBearbeitungTable.setWidget(count, 1, wertTb);
@@ -694,6 +721,7 @@ public class KontaktForm extends VerticalPanel {
 
 			});
 
+			//Button dem BtnPanel hinzufuegen
 			BtnPanel.add(freieEigenschaft);
 
 			// Instanziierung Button zum Speichern der Aenderungen an dem selektierten
@@ -702,27 +730,31 @@ public class KontaktForm extends VerticalPanel {
 					"<image src='/images/save.png' width='20px' height='20px' align='center'/> Speichern");
 			saveBtn.setStylePrimaryName("bearbeitungKSave");
 			saveBtn.setTitle("Speichern der Änderungen");
-			/*
-			 * Nun werden die Aenderungen uebernommen bzw. gespeichert
-			 */
+				
+			// Nun werden die Aenderungen uebernommen bzw. gespeichert
 			saveBtn.addClickHandler(new ClickHandler() {
 
 				@Override
 				public void onClick(ClickEvent event) {
 
+					//TextBoxen erstellen
 					TextBox txtboxvorname = (TextBox) kontaktInfoTable.getWidget(0, 1);
 					TextBox txtboxnachname = (TextBox) kontaktInfoTable.getWidget(1, 1);
 
+					//Nutzer Cookies holen und im Nutzer Objekt setten
 					nutzer.setId(Integer.valueOf(Cookies.getCookie("nutzerID")));
 					nutzer.setEmailAddress(Cookies.getCookie("nutzerGMail"));
 
+					//Abfrage ob die TextBox leere ist oder befuellt
 					if (txtboxvorname.getText() == "") {
 						txtboxvorname.getElement().getStyle().setBorderColor("red");
 						MessageBox.alertWidget("Hinweis", "Bitte geben Sie dem Kontakt mindestens einen Vornamen");
 					} else {
+						//Ist sie befuellt werden die Werte aus den TextBoxen geholt
 						selectedKontakt.setVorname(txtboxvorname.getText());
 						selectedKontakt.setNachname(txtboxnachname.getText());
 
+						//Aenderungen an Kontakt speichern
 						ev.saveKontakt(selectedKontakt, new AsyncCallback<Kontakt>() {
 
 							@Override
@@ -733,6 +765,7 @@ public class KontaktForm extends VerticalPanel {
 
 							@Override
 							public void onSuccess(Kontakt result) {
+								//Vectoren leeren und alle Auspraegungen hinzufuegen
 								eig.removeAllElements();
 								aus.removeAllElements();
 
@@ -763,7 +796,7 @@ public class KontaktForm extends VerticalPanel {
 
 									}
 								}
-
+								//Erstellen der Auspraegungen fuer den Kontakt
 								ev.createAuspraegungForNewEigenschaft(eig, aus, result, nutzer.getId(),
 										new AsyncCallback<Void>() {
 
@@ -792,17 +825,17 @@ public class KontaktForm extends VerticalPanel {
 
 									}
 								}
-
+								//Vector von neunen Auspraegungen durchgehen
 								Vector<Auspraegung> neueAuspraegungen = new Vector<>();
 								for (int i = 0; i < kontaktauspraegungen.size(); i++) {
-
+								
 									Auspraegung a = new Auspraegung();
 									a.setWert(aus.elementAt(i));
 									a.setId(kontaktauspraegungen.elementAt(i).getId());
 									neueAuspraegungen.add(a);
 
 								}
-
+								//Ausraegungen speichern (Update)
 								ev.saveAuspraegung(neueAuspraegungen, new AsyncCallback<Void>() {
 
 									@Override
@@ -834,6 +867,7 @@ public class KontaktForm extends VerticalPanel {
 
 			});
 
+			//Table stylen und alles dem RootPanel "content" Container Div hinzufuegen
 			kontaktInfoTable.setStylePrimaryName("infoTable");
 			vorhandeneAuspraegungenTable.setStylePrimaryName("infoTable");
 			eigeneEigenschaftBearbeitungTable.setStylePrimaryName("infoTable");

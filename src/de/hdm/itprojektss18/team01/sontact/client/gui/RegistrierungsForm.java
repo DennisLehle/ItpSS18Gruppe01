@@ -77,6 +77,8 @@ public class RegistrierungsForm extends VerticalPanel {
 
 	/**
 	 * Konstruktor fuer die RegistrierungsForm-Klasse.
+	 * 
+	 * @param n nutzer der eigenloggt ist
 	 */
 	public RegistrierungsForm(Nutzer n) {
 

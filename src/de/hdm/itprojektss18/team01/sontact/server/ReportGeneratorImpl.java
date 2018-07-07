@@ -381,7 +381,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 			// zusammengehoerigen Eigenschaften und Auspraegungen pro Zeile
 			for (int j = 0; j < auspraegungen.size(); j++) {
 
-				// Prüfung ob alle Auspraegungen dieses Kontakts geteilt wurden
+				// Pruefung ob alle Auspraegungen dieses Kontakts geteilt wurden
 				if (getEditorService().getStatusForObject(receiv.elementAt(i).getId(),
 						receiv.elementAt(i).getType()) == true
 						&& getEditorService().getStatusForObject(auspraegungen.elementAt(j).getId(),
@@ -526,7 +526,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 				// for (int l = 0; l < ausgabe.size(); l++) {
 
-				// Prüfung ob alle Auspraegungen dieses Kontakts geteilt wurden
+				// Pruefung ob alle Auspraegungen dieses Kontakts geteilt wurden
 				if (getEditorService().getStatusForObject(receiv.elementAt(i).getId(),
 						receiv.elementAt(i).getType()) == true
 						&& getEditorService().getStatusForObject(auspraegungen.elementAt(j).getId(),

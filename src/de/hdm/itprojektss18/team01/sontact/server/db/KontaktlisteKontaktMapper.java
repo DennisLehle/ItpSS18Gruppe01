@@ -15,7 +15,7 @@ public class KontaktlisteKontaktMapper {
 	public static KontaktlisteKontaktMapper kontaktlisteKontaktMapper = null;
 
 	/**
-	 * Geschuetzter Konstruktor - verhindert die Moeglichkeit, mit <new> neue
+	 * Geschuetzter Konstruktor - verhindert die Moeglichkeit, mit neue
 	 * Instanzen dieser Klasse zu erzeugen.
 	 */
 	protected KontaktlisteKontaktMapper() {

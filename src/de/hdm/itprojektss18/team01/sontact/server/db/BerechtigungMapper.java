@@ -22,7 +22,7 @@ public class BerechtigungMapper {
 	private static BerechtigungMapper berechtigungMapper = null;
 
 	/**
-	 * Geschuetzter Konstruktor - verhindert die Moeglichkeit, mit <new> neue
+	 * Geschuetzter Konstruktor - verhindert die Moeglichkeit, mit neue
 	 * Instanzen dieser Klasse zu erzeugen.
 	 */
 	protected BerechtigungMapper() {

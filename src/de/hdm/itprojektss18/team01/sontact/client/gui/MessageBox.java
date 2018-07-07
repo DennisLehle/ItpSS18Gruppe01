@@ -61,6 +61,8 @@ public class MessageBox {
 	 * @return box MessageBox die als PopUp angezeigt wird.
 	 */
 	public static DialogBox alertWidget(final String header, final String content) {
+		
+		// Erstellen / Deklarieren von Objekten
 		final DialogBox box = new DialogBox();
 		final VerticalPanel panel = new VerticalPanel();
 		final Label lb = new Label(content);
@@ -72,6 +74,7 @@ public class MessageBox {
 		box.setGlassEnabled(true);
 		panel.add(new HTML(lb.toString()));
 
+		// Erstellung des Buttons
 		final Button buttonClose = new Button(
 				"<image src='/images/ok.png' width='30px' height='30px' align='center' />");
 		buttonClose.setStylePrimaryName("messageButtonStandard");
@@ -84,11 +87,20 @@ public class MessageBox {
 			}
 		});
 
+		// Erstellung des Labels
 		final Label emptyLabel = new Label("");
+		
+		// Styling des Labels
 		emptyLabel.setSize("auto", "25px");
+		
+		// Dem Panel das Laben hinzufuegen
 		panel.add(emptyLabel);
 		panel.add(emptyLabel);
+		
+		// Groesse des Buttons
 		buttonClose.setWidth("90px");
+		
+		// Dem Panel den Button hinzufuegen
 		panel.add(buttonClose);
 		panel.setCellHorizontalAlignment(buttonClose, HasAlignment.ALIGN_RIGHT);
 		box.add(panel);
@@ -107,13 +119,18 @@ public class MessageBox {
 	 * @return box MessageBox die als PopUp angezeigt wird.
 	 */
 	public static DialogBox shareAlert(final String header, final String content, Kontaktliste kl) {
+		
+		// Erstellung / Deklarieren von Objekten
 		final DialogBox box = new DialogBox();
 		TextBox tb = new TextBox();
 		Label lb = new Label(content);
 		lb.setStylePrimaryName("label1");
 
+		// Erzeugen der Panels
 		final VerticalPanel panel = new VerticalPanel();
 		final HorizontalPanel hp = new HorizontalPanel();
+		
+		
 		box.setStylePrimaryName("messageBoxKl");
 		box.setText(header);
 		box.setGlassEnabled(true);
@@ -122,11 +139,13 @@ public class MessageBox {
 		tb.setStylePrimaryName("textbMessage");
 		tb.getElement().setPropertyString("placeholder", "E-Mail des Empfängers...");
 
+		// Erstellen des Abbrechen-Buttons
 		final Button buttonClose = new Button(
 				"<image src='/images/abbrechen.png' width='13px' height='13px' align='center' />");
 		buttonClose.setStylePrimaryName("messageButtonshare");
 		buttonClose.setTitle("Abbrechen");
 
+		// Erstellen des Kontaktliste-Teilen-Buttons
 		final Button buttonShare = new Button(
 				"<image src='/images/share.png' width='20px' height='20px' align='center' /> Teilen");
 		buttonShare.setStylePrimaryName("messageButtonshare1");
@@ -166,7 +185,7 @@ public class MessageBox {
 						if (result != null) {
 							/*
 							 * Es wird vom Nutzer(Owner), vom gefundenen Nutzer(Receiver), die Kontaktlisten
-							 * id der Kontatkliste und der Typ('l') übergeben.
+							 * id der Kontatkliste und der Typ('l') uebergeben.
 							 */
 							ev.shareObject(n.getId(), result.getId(), kl.getId(), kl.getType(), null,
 									new AsyncCallback<Void>() {
@@ -201,7 +220,7 @@ public class MessageBox {
 		});
 
 
-		//KeyDownHandler fürs teilen.
+		//KeyDownHandler fuers teilen.
 		tb.addKeyDownHandler(new KeyDownHandler() {
 
 			@Override
@@ -214,10 +233,16 @@ public class MessageBox {
 
 		});
 		
+		// Erstellen des Labels
 		final Label emptyLabel = new Label("");
+		
+		// Styling des Labels
 		emptyLabel.setSize("auto", "25px");
+		
+		// Dem Panel das Label hinzufuegen
 		panel.add(emptyLabel);
 		panel.add(emptyLabel);
+		
 		panel.add(tb);
 
 		hp.add(buttonShare);
@@ -233,10 +258,10 @@ public class MessageBox {
 
 	/**
 	 * Diese MessageBox wird beim teilen eines Kontaktes angezeigt. Es wird eine
-	 * Email verlangt für wenn der Kontakt freigegeben werden soll.
+	 * Email verlangt fuer wenn der Kontakt freigegeben werden soll.
 	 * 
-	 * @param header Überschrift der Box
-	 * @param content die Information zur Email eingabe.         
+	 * @param header Ueberschrift der Box
+	 * @param content die Information zur Email Eingabe.         
 	 * @param k der Kontakt der geteilt wird.
 	 * @param avshare gewaehlte Eigenschaften
 	 *          
@@ -244,14 +269,17 @@ public class MessageBox {
 	 */
 	public static DialogBox shareAlertKontakt(final String header, final String content, Kontakt k,
 			Vector<Relatable> avshare) {
+		
+		// Erstellen / Deklarieren der Objekte
 		final DialogBox box = new DialogBox();
-
 		TextBox tb = new TextBox();
 		Label lb = new Label(content);
 		lb.setStylePrimaryName("label1");
-
+		
+		// Erstellen der Panels
 		final VerticalPanel panel = new VerticalPanel();
 		final HorizontalPanel hp = new HorizontalPanel();
+		
 		box.setStylePrimaryName("messageBox");
 		box.setText(header);
 		box.setGlassEnabled(true);
@@ -260,11 +288,13 @@ public class MessageBox {
 		tb.setStylePrimaryName("textbMessage");
 		tb.getElement().setPropertyString("placeholder", "E-Mail des Empfängers...");
 
+		// Erstellen des Abbrechen-Buttons
 		final Button buttonClose = new Button(
 				"<image src='/images/abbrechen.png' width='13px' height='13px' align='center' />");
 		buttonClose.setStylePrimaryName("messageButtonshare");
 		buttonClose.setTitle("Abbrechen");
 
+		// Erstellen des Kontakt-Teilen Buttons
 		final Button buttonShare = new Button(
 				"<image src='/images/share.png' width='20px' height='20px' align='center' /> Teilen");
 		buttonShare.setStylePrimaryName("messageButtonshare1");
@@ -303,8 +333,8 @@ public class MessageBox {
 
 						if (result != null) {
 							/*
-							 * Es werden für das Teilen des Kontaktes der Kontakt und seine ausgewählten
-							 * Ausprägungen übergeben.
+							 * Es werden fuer das Teilen des Kontaktes der Kontakt und seine ausgewaehlten
+							 * Auspraegungen uebergeben.
 							 */
 							ev.shareObject(n.getId(), result.getId(), k.getId(), k.getType(), avshare,
 									new AsyncCallback<Void>() {
@@ -351,8 +381,14 @@ public class MessageBox {
 			}
 
 		});
+		
+		// Erstellung des Labels
 		final Label emptyLabel = new Label("");
+		
+		// Styling des Labels
 		emptyLabel.setSize("auto", "25px");
+		
+		// Dem Panel das Label hinzufuegen
 		panel.add(emptyLabel);
 		panel.add(emptyLabel);
 		panel.add(tb);
@@ -369,12 +405,12 @@ public class MessageBox {
 	}
 
 	/**
-	 * Methode für die Löschung einer Teilhaberschaft einer Kontaktliste oder eines
-	 * Kontaktes. Diese Teilhaberschaftsauflösung wird vom Nutzer (Owner) initiiert,
+	 * Methode fuer die Loeschung einer Teilhaberschaft einer Kontaktliste oder eines
+	 * Kontaktes. Diese Teilhaberschaftsaufloesung wird vom Nutzer (Owner) initiiert,
 	 * wenn er einem oder mehreren Nutzern die Teilhaberschaft entziehen will.
 	 * 
-	 * @param header  Überschift des MessageBox.
-	 * @param content Erklärung für den Nutzer.
+	 * @param header  Ueberschift des MessageBox.
+	 * @param content Erklaerung fuer den Nutzer.
 	 * @param kl das Object Kontaktliste.
 	 * @param k das Object Kontakt.
 	 * 
@@ -382,7 +418,10 @@ public class MessageBox {
 	 */
 	public static DialogBox deleteTeilhaber(final String header, final String content, Kontaktliste kl, Kontakt k) {
 
+		// Erstellen / Deklarien der Objekte
 		final DialogBox box = new DialogBox();
+		
+		// Erstellung der Panels
 		final VerticalPanel panel = new VerticalPanel();
 		final HorizontalPanel hp = new HorizontalPanel();
 		final ScrollPanel sp = new ScrollPanel();
@@ -416,11 +455,13 @@ public class MessageBox {
 		buttonClose.setStylePrimaryName("messageButtonshareDel");
 		buttonClose.setTitle("Abbrechen");
 
+		// Buttons um Teilung Kontaktliste zu loeschen
 		final Button buttonDeleteKl = new Button(
 				"<image src='/images/share.png' width='20px' height='20px' align='center' /> löschen");
 		buttonDeleteKl.setStylePrimaryName("messageButtonshare1");
 		buttonDeleteKl.setTitle("Teilung der Kontaktliste löschen");
 
+		// Erstellung um Teilung Kontakt zu loeschen
 		final Button buttonDeleteK = new Button(
 				"<image src='/images/share.png' width='20px' height='20px' align='center' /> löschen");
 		buttonDeleteK.setStylePrimaryName("messageButtonshare1");
@@ -437,13 +478,13 @@ public class MessageBox {
 		});
 		
 
-		// Button zum löschen der Teilhaberschaft an einem Kontakt.
+		// Button zum loeschen der Teilhaberschaft an einem Kontakt.
 		buttonDeleteK.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 
-				// Gefundene Nutzer alle dem Vector hinzufügen für spätere Bearbeitung davor Vector leeren.
+				// Gefundene Nutzer alle dem Vector hinzufuegen fuer spaetere Bearbeitung davor Vector leeren.
 				nutzer.removeAllElements();
 				nutzer.addAll(selectionModel.getSelectedSet());
 
@@ -457,7 +498,7 @@ public class MessageBox {
 
 					@Override
 					public void onSuccess(Void result) {
-						//Divs leeren und neu laden für die Aktualisierung.
+						//Divs leeren und neu laden fuer die Aktualisierung.
 						RootPanel.get("content").clear();
 						RootPanel.get("contentHeader").clear();
 						RootPanel.get("navigator").clear();
@@ -474,13 +515,13 @@ public class MessageBox {
 
 		});
 
-		// Button zum löschen der Teilhaberschaft an einer Kontaktliste
+		// Button zum loeschen der Teilhaberschaft an einer Kontaktliste
 		buttonDeleteKl.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 
-				// Gefundene Nutzer alle dem Vector hinzufügen für spätere Bearbeitung davor Vector leeren.
+				// Gefundene Nutzer alle dem Vector hinzufuegen fuer spaetere Bearbeitung davor Vector leeren.
 				nutzer.removeAllElements();
 				nutzer.addAll(selectionModel.getSelectedSet());
 
@@ -494,7 +535,7 @@ public class MessageBox {
 
 					@Override
 					public void onSuccess(Void result) {
-						//Divs leeren und neu laden für die Aktualisierung.
+						//Divs leeren und neu laden fuer die Aktualisierung.
 						RootPanel.get("content").clear();
 						RootPanel.get("contentHeader").clear();
 						RootPanel.get("navigator").clear();
@@ -538,7 +579,7 @@ public class MessageBox {
 		////////////////// Table-von-Email-Adressen//////////////////////////
 
 		/*
-		 * Prüfen ob es sich um eine Kontaktliste handelt.
+		 * Pruefen ob es sich um eine Kontaktliste handelt.
 		 */
 		if (kl != null) {
 
@@ -573,7 +614,7 @@ public class MessageBox {
 			});
 
 			/*
-			 * Prüfen ob es sich um einen Kontakt handelt.
+			 * Pruefen ob es sich um einen Kontakt handelt.
 			 */
 		} else if (k != null) {
 			ev.sharedWith(k.getId(), k.getType(), n, new AsyncCallback<Vector<Nutzer>>() {
@@ -607,7 +648,7 @@ public class MessageBox {
 		}
 
 		/**
-		 * Tabelle Befüllen mit den aus der DB abgerufenen Nutzer Informationen.
+		 * Tabelle Befuellen mit den aus der DB abgerufenen Nutzer Informationen.
 		 */
 		TextColumn<Nutzer> nutzerColumn = new TextColumn<Nutzer>() {
 
@@ -619,8 +660,8 @@ public class MessageBox {
 		};
 
 		/**
-		 * Implementierung der Checkbox fürs auswählen von einem oder mehrere
-		 * Eigenschafen mit Ausprägungen.
+		 * Implementierung der Checkbox fuers auswaehlen von einem oder mehrere
+		 * Eigenschafen mit Auspraegungen.
 		 */
 		Column<Nutzer, Boolean> checkColumn = new Column<Nutzer, Boolean>(new CheckboxCell(true, false)) {
 			@Override
@@ -630,11 +671,12 @@ public class MessageBox {
 		};
 
 		/**
-		 * Hinzufügen der Columns für die Darstellung der Kontaktlisten.
+		 * Hinzufuegen der Columns fuer die Darstellung der Kontaktlisten.
 		 */
 		nutzerTable.addColumn(nutzerColumn, "EMail Adresse: ");
 		nutzerColumn.setSortable(true);
 
+		// Styling der Table
 		nutzerTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		nutzerTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
 		nutzerTable.setWidth("50%", true);
@@ -642,6 +684,7 @@ public class MessageBox {
 
 		ListDataProvider<Nutzer> dataProvider = new ListDataProvider<Nutzer>();
 
+		// Erstellen des ListHandlers
 		ListHandler<Nutzer> sort = new ListHandler<Nutzer>(dataProvider.getList());
 		dataProvider.addDataDisplay(nutzerTable);
 		nutzerTable.addColumnSortHandler(sort);
@@ -649,6 +692,7 @@ public class MessageBox {
 
 		//////////////////////////////////////////
 
+		// Erstellen des Labels
 		final Label emptyLabel = new Label("");
 		emptyLabel.setSize("auto", "25px");
 		panel.add(emptyLabel);
@@ -657,7 +701,7 @@ public class MessageBox {
 		sp.add(hp);
 		hp.add(nutzerTable);
 		/*
-		 * Prüfung um welches Objekt es sich handelt. Jenachdem werden die lösch Buttons
+		 * Pruefung um welches Objekt es sich handelt. Jenachdem werden die Loesch Buttons
 		 * ausgeblendet.
 		 */
 		if (k == null) {
@@ -679,12 +723,12 @@ public class MessageBox {
 	}
 
 	/**
-	 * Überprüfung bei Teilungsstatusabfrage von geteilten Ausprägungen/
-	 * Eigenschaften. Es werden die Sichten des Owners oder Receivers überprüft, da
-	 * der Receiver geteilte Ausprägungen/ Eigenschaften ebenso weiter teilen kann.
+	 * Ueberpruefung bei Teilungsstatusabfrage von geteilten Auspraegungen/
+	 * Eigenschaften. Es werden die Sichten des Owners oder Receivers ueberprueft, da
+	 * der Receiver geteilte Auspraegungen/ Eigenschaften ebenso weiter teilen kann.
 	 * 
-	 * @param header Info für den Nutzer          
-	 * @param content Aktionsbeschreibung für den Nutzer       
+	 * @param header Info fuer den Nutzer          
+	 * @param content Aktionsbeschreibung fuer den Nutzer       
 	 * @param sharedAus  Vektor der geteilten Auspraegungen       
 	 * @param b Vektor der Berechtigungen des aktuellen Nutzers.
 	 * @param k Kontakt in dem man den Status abgefragt hat
@@ -693,6 +737,8 @@ public class MessageBox {
 	 */
 	public static DialogBox statusAuspraegungTeilung(final String header, final String content,
 			Vector<Relatable> sharedAus, Vector<Berechtigung> b, Kontakt k) {
+		
+		// Erstellen / Deklarierung von Objekten
 		final DialogBox box = new DialogBox();
 		final VerticalPanel panel = new VerticalPanel();
 
@@ -700,6 +746,7 @@ public class MessageBox {
 		box.setGlassEnabled(true);
 		panel.add(new HTML(content));
 
+		// Erstellen des Buttons
 		final Button buttonClose = new Button(
 				"<image src='/images/ok.png' width='30px' height='30px' align='center' />");
 
@@ -716,20 +763,20 @@ public class MessageBox {
 
 			}
 		});
-		// Prüfung ob es sich um den Owner handelt.
+		// Pruefung ob es sich um den Owner handelt.
 		if (n.getId() == k.getOwnerId()) {
 			for (int i = 0; i < sharedAus.size(); i++) {
-				// Leere String Vektoren erstellen um geteilte Eigenschaften hinzuzufügen.
+				// Leere String Vektoren erstellen um geteilte Eigenschaften hinzuzufuegen.
 				Vector<String> bezeichnung = new Vector<String>();
 				Vector<String> wert = new Vector<String>();
 
-				// Hinzufügen der Eigenschaften zu den davor erstellten String Vektoren.
+				// Hinzufuegen der Eigenschaften zu den davor erstellten String Vektoren.
 				bezeichnung.addElement(sharedAus.elementAt(i).getBezeichnung());
 				wert.addElement(sharedAus.elementAt(i).getWert());
 
 				/*
-				 * Prüfen ob eine Teilung vorhanden ist. Bei true wird eine HTML erstellt und
-				 * die Eigenschaften mitdem Teilungssymbol hinzugefügt.
+				 * Pruefen ob eine Teilung vorhanden ist. Bei true wird eine HTML erstellt und
+				 * die Eigenschaften mitdem Teilungssymbol hinzugefuegt.
 				 */
 				ev.getStatusForObject(sharedAus.elementAt(i).getId(), 'a', new AsyncCallback<Boolean>() {
 
@@ -743,8 +790,8 @@ public class MessageBox {
 					public void onSuccess(Boolean bo) {
 
 						/*
-						 * Prüfung ob die Serverantwort geteilte Eigenschaften enthält in Form eines
-						 * booleans der dann "true" ergebit.
+						 * Pruefung ob die Serverantwort geteilte Eigenschaften enthaelt in Form eines
+						 * booleans der dann "true" ergibt.
 						 */
 						if (bo == true) {
 
@@ -762,11 +809,11 @@ public class MessageBox {
 
 			for (int j = 0; j < b.size(); j++) {
 				for (int i = 0; i < sharedAus.size(); i++) {
-					// Leere String Vektoren erstellen um geteilte Eigenschaften hinzuzufügen.
+					// Leere String Vektoren erstellen um geteilte Eigenschaften hinzuzufuegen.
 					Vector<String> bezeichnung = new Vector<String>();
 					Vector<String> wert = new Vector<String>();
 
-					// Hinzufügen der Eigenschaften zu den davor erstellten String Vektoren.
+					// Hinzufuegen der Eigenschaften zu den davor erstellten String Vektoren.
 					if (b.elementAt(j).getObjectId() == sharedAus.elementAt(i).getId()
 							&& b.elementAt(j).getOwnerId() == n.getId() && b.elementAt(j).getType() == 'a') {
 
@@ -781,11 +828,15 @@ public class MessageBox {
 			}
 
 		}
-
+		
+		// Erstellen des Labels
 		final Label emptyLabel = new Label("");
+		// Styling des Labels
 		emptyLabel.setSize("auto", "25px");
+		// Dem Panel das Label hinzufuegen
 		panel.add(emptyLabel);
 		panel.add(emptyLabel);
+		// Styling des Buttons
 		buttonClose.setWidth("90px");
 		panel.add(buttonClose);
 		panel.setCellHorizontalAlignment(buttonClose, HasAlignment.ALIGN_RIGHT);
@@ -796,7 +847,7 @@ public class MessageBox {
 	}
 
 	/**
-	 * KeyProvider für Identifizierung eines Nutzer-Objekts.
+	 * KeyProvider fuer Identifizierung eines Nutzer-Objekts.
 	 */
 	public static final ProvidesKey<Nutzer> KEY_PROVIDER = new ProvidesKey<Nutzer>() {
 
